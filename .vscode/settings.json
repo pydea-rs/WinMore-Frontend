@@ -1,6 +1,7 @@
 {
-  "cSpell.words": [
-    "Plinko",
-    "Winmore"
-  ]
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "cSpell.words": ["Plinko", "Winmore"]
 }

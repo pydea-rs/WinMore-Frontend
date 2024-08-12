@@ -1,11 +1,11 @@
-import { connectorsForWallets, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
-  rabbyWallet,
   metaMaskWallet,
   phantomWallet,
+  rabbyWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { createConfig, http } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 
 export const connectors = connectorsForWallets(
   [
@@ -14,7 +14,7 @@ export const connectors = connectorsForWallets(
       wallets: [rabbyWallet, metaMaskWallet, phantomWallet],
     },
   ],
-  { appName: "Winmore", projectId: "YOUR_PROJECT_ID" }
+  { appName: "Winmore", projectId: "YOUR_PROJECT_ID" },
 );
 
 export const config = createConfig({
