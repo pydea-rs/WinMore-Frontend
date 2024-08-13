@@ -1,23 +1,15 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import { useDispatch, useSelector } from "@/store/store";
-import { example } from "@/store/slices/auth.slice";
-import Wallets from "@/components/common/wallets/wallets";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-
-const inter = Inter({ subsets: ["latin"] });
+import { WalletModal } from "@/components/common/walletModal/walletModal";
+import { useState } from "react";
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-
-  dispatch(example());
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+      className={`flex min-h-screen flex-col items-center justify-between `}
     >
-      <ConnectButton />
+      <button onClick={() => setModalOpen(true)}>Connect Wallet</button>
+      <WalletModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </main>
   );
 }
