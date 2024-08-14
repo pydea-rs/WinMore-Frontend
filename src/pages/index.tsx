@@ -1,13 +1,11 @@
-import { WalletModal } from '@/components/common/walletModal/walletModal'
-import { useState } from 'react'
+import { triggerModal } from '@/store/slices/modal/modal.slice'
+import { useDispatch } from '@/store/store'
 
 export default function Home() {
-  const [modalOpen, setModalOpen] = useState(false)
-
+  const dispatch = useDispatch()
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between `}>
-      <button onClick={() => setModalOpen(true)}>Connect Wallet</button>
-      <WalletModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <button onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>Connect Wallet</button>
     </main>
   )
 }
