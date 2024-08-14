@@ -1,10 +1,10 @@
-import { config } from "@/configs/wagmi.config";
+import { config } from '@/configs/wagmi.config'
 // import theme from "@/styles/wallet/theme.json";
-import { IBaseProps } from "@/types/global.types";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { IBaseProps } from '@/types/global.types'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // import { ConnectKitProvider } from "connectkit";
-import { WagmiProvider } from "wagmi";
-const queryClient = new QueryClient();
+import { WagmiProvider } from 'wagmi'
+const queryClient = new QueryClient()
 
 export const Web3Provider = ({ children }: IBaseProps) => {
   return (
@@ -15,5 +15,5 @@ export const Web3Provider = ({ children }: IBaseProps) => {
         {/* </ConnectKitProvider> */}
       </QueryClientProvider>
     </WagmiProvider>
-  );
-};
+  )
+}

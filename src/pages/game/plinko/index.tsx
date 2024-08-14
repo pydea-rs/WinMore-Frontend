@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const Plinko = () => {
-  return <div>Plinko</div>;
-};
+  return <div>Plinko</div>
+}
 
-export default Plinko;
+export default Plinko

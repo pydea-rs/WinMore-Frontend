@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from 'axios'
 
-export interface IPostRequestOption<D>
-  extends Omit<AxiosRequestConfig<D>, "method"> {}
+export interface IPostRequestOption<D> extends Omit<AxiosRequestConfig<D>, 'method'> {}
