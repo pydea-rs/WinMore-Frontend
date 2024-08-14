@@ -1,7 +1,7 @@
 export function truncate(
   text: string,
   maxLength: number,
-  truncationStyle: "end" | "center" = "end"
+  truncationStyle: "end" | "center" = "end",
 ) {
   if (text.length <= maxLength) {
     return text;

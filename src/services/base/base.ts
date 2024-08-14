@@ -44,7 +44,7 @@ export async function sendRequest<T, D = any>({
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   try {

@@ -8,4 +8,3 @@ component.hook.ts
 component.styles.ts
 
 [name].[ext].[format]
-
