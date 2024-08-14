@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const Mine = () => {
-  return <div>Mine</div>;
-};
+  return <div>Mine</div>
+}
 
-export default Mine;
+export default Mine

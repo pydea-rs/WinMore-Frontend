@@ -1,19 +1,19 @@
-import store from "@/store/store";
-import "@/styles/globals.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import type { AppProps } from "next/app";
-import { Provider } from "react-redux";
-
-const queryClient = new QueryClient();
+import Modals from '@/components/common/modals/modals'
+import { Web3Provider } from '@/providers/wagmi.provider'
+import store from '@/store/store'
+import '@/styles/globals.css'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import type { AppProps } from 'next/app'
+import { Provider } from 'react-redux'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
+      <Web3Provider>
         <Component {...pageProps} />
+        <Modals />
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      </Web3Provider>
     </Provider>
-  );
+  )
 }

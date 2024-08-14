@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const Referral = () => {
-  return <div>Referral</div>;
-};
+  return <div>Referral</div>
+}
 
-export default Referral;
+export default Referral
