@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from 'axios'
 
-export interface IPatchRequestOption<D>
-  extends Omit<AxiosRequestConfig<D>, "method"> {}
+export interface IPatchRequestOption<D> extends Omit<AxiosRequestConfig<D>, 'method'> {}
