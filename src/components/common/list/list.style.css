@@ -4,11 +4,3 @@
 
   gap: var(--gap-x);
 }
-
-.list-item {
-}
-
-.list-link,
-.list-extra-link {
-  @apply inline-block text-sm p-[0.625rem] leading-[1.125rem] capitalize  no-underline;
-}
