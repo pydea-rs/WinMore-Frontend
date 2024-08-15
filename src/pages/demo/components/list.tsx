@@ -5,7 +5,7 @@ import ListLink from '@/components/common/list/listLink/listLink'
 
 const ListComponentDemo = () => {
   return (
-    <div className="container">
+    <div className="px-4 2xl:container">
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 sm:col-span-6 flex items-center">
           <List>
