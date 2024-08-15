@@ -1,5 +1,7 @@
 import { UseMutationOptions } from '@tanstack/react-query'
-import { PropsWithChildren } from 'react'
+import { NextPage } from 'next'
+import { AppProps } from 'next/app'
+import { PropsWithChildren, ReactElement, ReactNode } from 'react'
 
 export interface BaseProps<T = {}> extends React.FC<PropsWithChildren<T>> {}
 
@@ -18,4 +20,11 @@ export type QueryKey<T, Q> = [T] | [T, Q]
 
 export interface MutationOptionHook<TData = unknown, TError = unknown, TVariables = void, TContext = unknown> {
   options?: UseMutationOptions<TData, TError, TVariables, TContext>
+}
+
+type NextPageWithLayout = NextPage & {
+  layout?: (page: ReactElement) => ReactNode
+}
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
 }
