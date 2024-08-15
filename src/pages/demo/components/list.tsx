@@ -1,4 +1,7 @@
-import List, { ListExternalLink, ListItem, ListLink } from '@/components/common/list/list'
+import List from '@/components/common/list/list'
+import ListExternalLink from '@/components/common/list/listExternalLink/listExternalLink'
+import ListItem from '@/components/common/list/listItem/listItem'
+import ListLink from '@/components/common/list/listLink/listLink'
 
 const ListComponentDemo = () => {
   return (
