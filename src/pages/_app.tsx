@@ -1,4 +1,5 @@
 import Modals from '@/components/common/modals/modals'
+import MainLayout from '@/components/layouts/main.layout'
 import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
 import '@/styles/globals.css'
@@ -10,7 +11,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Web3Provider>
-        <Component {...pageProps} />
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
         <Modals />
         <ReactQueryDevtools initialIsOpen={false} />
       </Web3Provider>
