@@ -1,0 +1,6 @@
+.list {
+  --gap-x: 0.625rem;
+  @apply flex flex-wrap pl-0;
+
+  gap: var(--gap-x);
+}

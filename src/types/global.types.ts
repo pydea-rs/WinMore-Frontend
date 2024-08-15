@@ -1,9 +1,7 @@
 import { UseMutationOptions } from '@tanstack/react-query'
-import { ReactElement, ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 
-export interface IBaseProps {
-  children: ReactNode | ReactElement[]
-}
+export interface BaseProps<T = {}> extends React.FC<PropsWithChildren<T>> {}
 
 export interface HookOptions {
   options?: object
