@@ -1,3 +1,4 @@
+import { useGetNonce } from '@/services/authentication/useGetNounce/useGetNonce.hook'
 import { useState } from 'react'
 import { CreateConnectorFn, useConnect, useSignMessage } from 'wagmi'
 import { injected, metaMask } from 'wagmi/connectors'
@@ -10,6 +11,8 @@ interface WalletModalProps {
 export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => {
   const { connect } = useConnect()
   const [error, setError] = useState<string | null>(null)
+  const { data: nonceData } = useGetNonce({})
+
   const { signMessage } = useSignMessage({
     mutation: {
       onSuccess: (data) => {
@@ -17,9 +20,12 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
       },
     },
   })
+
+  if (!nonceData) {
+    return
+  }
   const handleConnect = (walletName: string, connector: CreateConnectorFn) => {
     setError(null) // Reset error state
-
     switch (walletName) {
       case 'MetaMask':
         if (!window.ethereum) {
@@ -48,7 +54,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
           onError: (error) => setError(error.message),
           onSettled: (data) => console.log(data),
           onSuccess: (data) => {
-            signMessage({ message: 'Theaseasdsdladasjdkh32123123' })
+            signMessage({ message: nonceData.data.nonce })
           },
         },
       )
