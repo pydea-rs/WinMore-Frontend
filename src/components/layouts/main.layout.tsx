@@ -1,13 +1,13 @@
 import { BaseProps } from '@/types/global.types'
+import Footer from '../templates/footer/footer'
 
 const MainLayout: BaseProps = (props) => {
   const { children } = props
   return (
-    <main className="w-full h-full min-h-svh flex flex-col">
-      <header className="w-full h-10">a placeholder for header</header>
-      <div className="flex-grow">{children}</div>
-      <footer className="w-full h-10">a placeholder for footer</footer>
-    </main>
+    <div className="flex flex-col min-h-[100vh]">
+      <main>{children}</main>
+      <Footer className="mt-auto" />
+    </div>
   )
 }
 
