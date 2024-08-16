@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
-import { IRequestOption, IResponse } from './request-interface'
 import { getCookie } from 'cookies-next'
+import { IRequestOption, IResponse } from './request-interface'
 
 export function successHandler<T>(response: IResponse<T>): void {}
 
@@ -9,9 +9,7 @@ export function errorHandler(error: any): void {
 }
 
 export async function sendRequest<T, D = any>({ headers, ...restOptions }: IRequestOption<D>): Promise<IResponse<T>> {
-  const baseURL: string = process.env.NEXT_PUBLIC_LANDING_BASE_URL || ''
-
-  const axiosInstance: AxiosInstance = axios.create({ baseURL })
+  const axiosInstance: AxiosInstance = axios.create({ baseURL: process.env.BASE_URL })
 
   axiosInstance.interceptors.request.use((config) => {
     const access_token = getCookie('session')

@@ -1,21 +1,25 @@
 import Modals from '@/components/common/modals/modals'
-import MainLayout from '@/components/layouts/main.layout'
+import AuthProvider from '@/providers/auth.provider'
 import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
 import '@/styles/globals.css'
+import { AppPropsWithLayout } from '@/types/global.types'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import type { AppProps } from 'next/app'
+import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const emptyPage = (page: ReactElement): ReactNode => page
+  const getLayout = Component.layout ?? emptyPage
+
   return (
     <Provider store={store}>
       <Web3Provider>
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
-        <Modals />
-        <ReactQueryDevtools initialIsOpen={false} />
+        <AuthProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <Modals />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </AuthProvider>
       </Web3Provider>
     </Provider>
   )
