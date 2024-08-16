@@ -2,12 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch as useAppDispatch, useSelector as useAppSelector } from 'react-redux'
 import { combineReducers } from 'redux'
 import authSlice from './slices/auth/auth.slice'
+import gamesSlice from './slices/games/games.slice'
 import modalSlice from './slices/modal/modal.slice'
 
 const rootReducer = combineReducers({
-  //   global: globalReducer,
   auth: authSlice,
   modal: modalSlice,
+  game: gamesSlice,
 })
 
 export const store = configureStore({

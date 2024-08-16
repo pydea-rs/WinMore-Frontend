@@ -1,8 +1,13 @@
 import GamesLayout from '@/components/layouts/games.layout'
+import MineGame from '@/components/pages/mine/mine.game'
 import { ReactElement } from 'react'
 
 const Mine = () => {
-  return <div>Mine</div>
+  return (
+    <>
+      <MineGame />
+    </>
+  )
 }
 
 Mine.layout = (page: ReactElement) => <GamesLayout>{page}</GamesLayout>
