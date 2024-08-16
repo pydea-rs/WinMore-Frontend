@@ -12,7 +12,20 @@ export default function MineGame() {
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
   const { mineConfig } = useSelector((state) => state.game)
 
-  const [gameData, setGameData] = useState<{ mines: number[]; isGameOver?: boolean }>({ mines: generateMines(2) })
+  const calculateGameMode = () => {
+    switch (mineConfig.mode) {
+      case 'easy':
+        return generateMines({ value: 2, total: mineConfig.rows * 4 })
+      case 'medium':
+        return generateMines({ value: 3, total: mineConfig.rows * 4 })
+      case 'hard':
+        return generateMines({ value: 4, total: mineConfig.rows * 4 })
+      default:
+        return generateMines({ value: 2, total: mineConfig.rows * 4 })
+    }
+  }
+
+  const [gameData, setGameData] = useState<{ mines: number[]; isGameOver?: boolean }>({ mines: calculateGameMode() })
 
   const [clickBlocks, setClickBlocks] = useState<number[]>([])
 
@@ -34,33 +47,16 @@ export default function MineGame() {
 
   const onRestart = useCallback(() => {
     setClickBlocks([])
-    setGameData((e) => ({ mines: generateMines(), isGameOver: false }))
+    setGameData((prev) => ({ mines: calculateGameMode(), isGameOver: false }))
     tile.play()
   }, [tile])
-
-  useEffect(() => {
-    switch (mineConfig.mode) {
-      case 'easy':
-        setGameData((prev) => ({ ...prev, mines: generateMines(2) }))
-        break
-      case 'medium':
-        setGameData((prev) => ({ ...prev, mines: generateMines(3) }))
-        break
-      case 'hard':
-        setGameData((prev) => ({ ...prev, mines: generateMines(4) }))
-        break
-
-      default:
-        break
-    }
-  }, [mineConfig.mode])
 
   return (
     <Fragment>
       <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <div className="w-full translucent shadow-xl p-4 rounded-lg">
-          <div className={`grid grid-cols-${4}`}>
-            {Array(4 * mineConfig.rows)
+          <div className={`grid grid-cols-4`}>
+            {Array(mineConfig.rows * 4)
               .fill(0)
               .map((_, i) => (
                 <motion.div
@@ -70,6 +66,7 @@ export default function MineGame() {
                   onClick={() => onCheckBlock(i)}
                   className={`${gameData?.isGameOver || clickBlocks.includes(i) ? (gameData?.mines.includes(i) ? 'tile-bomb' : 'tile-star') : 'tile-active'} transition-all`}
                 >
+                  {i}
                   {gameData?.isGameOver || clickBlocks.includes(i) ? (
                     <motion.div
                       key={`block-${i}`}

@@ -10,7 +10,7 @@ const GamesLayout: BaseProps = ({ children }) => {
   return (
     <main className="w-full h-full min-h-svh flex flex-col container">
       <header>a placeholder for header</header>
-      <div className="grid grid-cols-1 gap-5 h-[70vh] mb-16">
+      <div className="grid grid-cols-1 gap-5  mb-16">
         <section className="flex flex-col gap-4">
           <input
             className="text-violet-600"
