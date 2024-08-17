@@ -7,6 +7,7 @@
 @import '../components/common/list/listItem/listItem.style.css';
 @import '../components/common/list/listLink/listLink.style.css';
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
+@import url('mine/mine.css');
 
 ::root {
   --foreground-rgb: 0, 0, 0;

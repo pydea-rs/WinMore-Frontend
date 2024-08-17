@@ -18,14 +18,17 @@
     "classnames": "^2.5.1",
     "connectkit": "^1.8.2",
     "cookies-next": "^4.2.1",
+    "howler": "^2.2.4",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-easy-emoji": "^1.8.1",
     "react-redux": "^9.1.2",
     "viem": "2.x",
     "wagmi": "^2.12.5"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
