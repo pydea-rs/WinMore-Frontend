@@ -1,55 +1,52 @@
-import { useSelector } from '@/store/store'
+import { endMineGame, startMineGame, updateMineConfig } from '@/store/slices/games/games.slice'
+import { useDispatch, useSelector } from '@/store/store'
 import TileLogo from '@assets/games/mine/images/rock-1.svg'
 import BombLogo from '@assets/games/mine/images/rock-2.svg'
 import { motion } from 'framer-motion'
 import { Howl } from 'howler'
 import Image from 'next/image'
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { generateMines } from './lib/config'
+import { Fragment, useCallback, useMemo } from 'react'
 
 export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
   const { mineConfig } = useSelector((state) => state.game)
+  console.log(mineConfig)
+  const dispatch = useDispatch()
 
-  const calculateGameMode = () => {
-    switch (mineConfig.mode) {
-      case 'easy':
-        return generateMines({ value: 2, total: mineConfig.rows * 4 })
-      case 'medium':
-        return generateMines({ value: 3, total: mineConfig.rows * 4 })
-      case 'hard':
-        return generateMines({ value: 4, total: mineConfig.rows * 4 })
-      default:
-        return generateMines({ value: 2, total: mineConfig.rows * 4 })
+  const checkWinCondition = useCallback(() => {
+    const totalBlocks = mineConfig.rows * 4
+    const safeBlocks = totalBlocks - mineConfig.mines.length
+
+    if (mineConfig.selectedBlocks.length + 1 === safeBlocks) {
+      // User has selected all safe blocks, they win
+      dispatch(endMineGame({ isWin: true }))
+      alert('You Win!')
     }
-  }
-
-  const [gameData, setGameData] = useState<{ mines: number[]; isGameOver?: boolean }>({ mines: calculateGameMode() })
-
-  const [clickBlocks, setClickBlocks] = useState<number[]>([])
+  }, [mineConfig.selectedBlocks])
 
   const onCheckBlock = useCallback(
     (i: number) => {
-      if (!gameData.isGameOver && !clickBlocks.includes(i)) {
+      if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(i) && !mineConfig.isGameOver) {
         tile.play()
-        if (gameData.mines.includes(i)) {
+        if (mineConfig.mines.includes(i)) {
           bomb.play()
-          setGameData((e) => ({ ...e, isGameOver: true }))
-          setClickBlocks((e) => [...e, i])
+          dispatch(endMineGame({ isWin: false })) // Game over, user clicked on a mine
+          alert('Game Over! You clicked on a mine.')
         } else {
-          setClickBlocks((e) => [...e, i])
+          const newSelectedBlocks = [...mineConfig.selectedBlocks, i]
+          dispatch(updateMineConfig({ selectedBlocks: newSelectedBlocks }))
+          checkWinCondition()
         }
       }
     },
-    [bomb, clickBlocks, gameData.isGameOver, gameData.mines, tile],
+    [bomb, mineConfig, tile, dispatch, checkWinCondition],
   )
 
-  const onRestart = useCallback(() => {
-    setClickBlocks([])
-    setGameData((prev) => ({ mines: calculateGameMode(), isGameOver: false }))
+  const onStart = useCallback(() => {
+    dispatch(startMineGame({}))
     tile.play()
-  }, [tile])
+  }, [dispatch, tile])
 
   return (
     <Fragment>
@@ -64,10 +61,10 @@ export default function MineGame() {
                   whileHover={{ scale: 0.9 }}
                   whileTap={{ scale: 1.1 }}
                   onClick={() => onCheckBlock(i)}
-                  className={`${gameData?.isGameOver || clickBlocks.includes(i) ? (gameData?.mines.includes(i) ? 'tile-bomb' : 'tile-star') : 'tile-active'} transition-all`}
+                  className={`${mineConfig?.isGameOver || mineConfig.selectedBlocks.includes(i) ? (mineConfig?.mines.includes(i) ? 'tile-bomb' : 'tile-star') : 'tile-active'} transition-all`}
                 >
                   {i}
-                  {gameData?.isGameOver || clickBlocks.includes(i) ? (
+                  {mineConfig?.isStarted || mineConfig.selectedBlocks.includes(i) ? (
                     <motion.div
                       key={`block-${i}`}
                       initial={{ scale: 0.6 }}
@@ -76,12 +73,7 @@ export default function MineGame() {
                       transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
                       className="p-0.5 md:p-2"
                     >
-                      <Image
-                        src={gameData?.mines.includes(i) ? BombLogo : TileLogo}
-                        priority
-                        alt={gameData?.mines.includes(i) ? 'bomb' : 'tile'}
-                        className="object-cover w-full h-full"
-                      />
+                      <Image src={mineConfig?.isGameOver && mineConfig?.mines.includes(i) ? BombLogo : TileLogo} priority alt={'tile'} className="object-cover w-full h-full" />
                     </motion.div>
                   ) : null}
                 </motion.div>
@@ -89,11 +81,11 @@ export default function MineGame() {
           </div>
           <div className="flex flex-col mt-5 px-4">
             <motion.button
-              onClick={onRestart}
-              disabled={!gameData?.isGameOver}
+              onClick={onStart}
+              disabled={mineConfig.isStarted && !mineConfig.isGameOver}
               className="h-12 disabled:dark:bg-amber-600/10 disabled:cursor-not-allowed disabled:dark:text-zinc-500 w-full rounded-xl p-1 text-base font-semibold shadow transition-all dark:bg-amber-600 dark:focus:ring-2 dark:focus:ring-amber-600 dark:focus:ring-offset-1 dark:focus:ring-offset-secondary-dark"
             >
-              Restart
+              Start
             </motion.button>
           </div>
         </div>

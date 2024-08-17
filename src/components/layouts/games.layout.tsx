@@ -13,19 +13,21 @@ const GamesLayout: BaseProps = ({ children }) => {
       <div className="grid grid-cols-1 gap-5  mb-16">
         <section className="flex flex-col gap-4">
           <input
+            disabled={mineConfig.isStarted}
             className="text-violet-600"
             type="number"
             value={mineConfig.betAmount}
             onChange={(event) => {
-              dispatch(updateMineConfig({ betAmount: event.target.value }))
+              !mineConfig.isStarted ? dispatch(updateMineConfig({ betAmount: event.target.value })) : null
             }}
           />
           <input
+            disabled={mineConfig.isStarted}
             className="text-violet-600"
             type="number"
             value={mineConfig.numberOfBets}
             onChange={(event) => {
-              dispatch(updateMineConfig({ numberOfBets: +event.target.value }))
+              !mineConfig.isStarted ? dispatch(updateMineConfig({ numberOfBets: +event.target.value })) : null
             }}
           />
           <div className="flex gap-2">
@@ -34,6 +36,7 @@ const GamesLayout: BaseProps = ({ children }) => {
                 <div key={mode}>
                   <label htmlFor={`mode-${mode}`}>{mode}</label>
                   <input
+                    disabled={mineConfig.isStarted}
                     id={`mode-${mode}`}
                     type="radio"
                     name="mode"
@@ -41,7 +44,7 @@ const GamesLayout: BaseProps = ({ children }) => {
                     checked={mineConfig.mode === mode}
                     onChange={(event) => {
                       //@ts-ignore
-                      dispatch(updateMineConfig({ mode: event.target.value || 'easy' }))
+                      !mineConfig.isStarted ? dispatch(updateMineConfig({ mode: event.target.value || 'easy' })) : null
                     }}
                   />
                 </div>
@@ -54,13 +57,14 @@ const GamesLayout: BaseProps = ({ children }) => {
                 <div key={row}>
                   <label htmlFor={`row-${row}`}>{row}</label>
                   <input
+                    disabled={mineConfig.isStarted}
                     id={`row-${row}`}
                     type="radio"
                     name="row"
                     value={row}
                     checked={mineConfig.rows === row}
                     onChange={(event) => {
-                      dispatch(updateMineConfig({ rows: +event.target.value }))
+                      !mineConfig.isStarted ? dispatch(updateMineConfig({ rows: +event.target.value })) : null
                     }}
                   />
                 </div>

@@ -1,5 +1,4 @@
-export const generateMines = ({ total, value }: { value: number; total: number }): number[] => {
-  const mines = value ?? 5
+export const generateMines = ({ total, mines }: { mines: number; total: number }): number[] => {
   let numbers: Set<number> = new Set()
   while (numbers.size < mines) {
     let rand = Math.floor(Math.random() * total)
