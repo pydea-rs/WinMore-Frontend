@@ -11,13 +11,11 @@ export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
   const { mineConfig } = useSelector((state) => state.game)
-  console.log(mineConfig)
   const dispatch = useDispatch()
 
   const checkWinCondition = useCallback(() => {
     const totalBlocks = mineConfig.rows * 4
     const safeBlocks = totalBlocks - mineConfig.mines.length
-
     if (mineConfig.selectedBlocks.length + 1 === safeBlocks) {
       // User has selected all safe blocks, they win
       dispatch(endMineGame({ isWin: true }))
@@ -63,7 +61,6 @@ export default function MineGame() {
                   onClick={() => onCheckBlock(i)}
                   className={`${mineConfig?.isGameOver || mineConfig.selectedBlocks.includes(i) ? (mineConfig?.mines.includes(i) ? 'tile-bomb' : 'tile-star') : 'tile-active'} transition-all`}
                 >
-                  {i}
                   {mineConfig?.isStarted || mineConfig.selectedBlocks.includes(i) ? (
                     <motion.div
                       key={`block-${i}`}
