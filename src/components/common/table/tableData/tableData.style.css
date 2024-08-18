@@ -1,0 +1,7 @@
+.table-data {
+  @apply p-0;
+}
+
+.table-row:not(:last-child) .table-data {
+  @apply pb-4;
+}

@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '../components/templates/footer/footer.style.css';
+@import '../components/common/footer/footer.style.css';
+@import '../components/common/table/table.style.css';
+@import '../components/common/table/tableBody/tableBody.style.css';
+@import '../components/common/table/tableData/tableData.style.css';
+@import '../components/common/table/tableHeader/tableHeader.style.css';
+@import '../components/common/table/tableHeading/tableHeading.style.css';
+@import '../components/common/table/tableRow/tableRow.style.css';
+@import '../components/common/table/tableDataWrapper/tableDataWrapper.style.css';
 @import '../components/common/list/list.style.css';
 @import '../components/common/list/listItem/listItem.style.css';
 @import '../components/common/list/listLink/listLink.style.css';
