@@ -26,11 +26,11 @@ const config: Config = {
     function ({ addUtilities }: { addUtilities: any }) {
       const newUtilities = {
         '.filter-backdrop': {
-          backdropFilter: 'saturate(190%) blur(16px)',
+          backdropFilter: 'saturate(100%) blur(13px)',
         },
       }
 
-      addUtilities(newUtilities, ['responsive', 'hover'])
+      addUtilities(newUtilities, ['responsive'])
     },
   ],
 }

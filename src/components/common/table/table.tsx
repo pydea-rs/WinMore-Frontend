@@ -6,7 +6,7 @@ const Table: BaseProps<ITable> = (props) => {
   const { children, className } = props
 
   const classList = classNames({
-    [`overflow-x-auto`]: true,
+    [`table`]: true,
     [`${className}`]: className,
   })
 
