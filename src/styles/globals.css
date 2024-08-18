@@ -4,6 +4,11 @@
 
 @import '../components/common/footer/footer.style.css';
 @import '../components/common/footer/copyright/copyright.style.css';
+@import '../components/common/tab/tab.style.css';
+@import '../components/common/tab/tabBody/tabBody.style.css';
+@import '../components/common/tab/tabContent/tabContent.style.css';
+@import '../components/common/tab/tabHeader/tabHeader.style.css';
+@import '../components/common/tab/tabItem/tabItem.style.css';
 @import '../components/common/table/table.style.css';
 @import '../components/common/table/tableBody/tableBody.style.css';
 @import '../components/common/table/tableData/tableData.style.css';
@@ -33,10 +38,8 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
-  color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
-  background: rgba(15, 20, 26, 1);
+  background-color: rgba(15, 20, 26, 1);
+  overflow-x: hidden;
 }
 
 @layer utilities {

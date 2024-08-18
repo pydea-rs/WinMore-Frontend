@@ -6,8 +6,8 @@ const MainLayout: BaseProps = (props) => {
   const { children } = props
   return (
     <div className="flex flex-col min-h-[100vh]">
-      <main className="overflow-hidden">{children}</main>
-      <Footer className="mt-auto relative z-20">
+      <main className="flex flex-col flex-grow">{children}</main>
+      <Footer className="relative z-20 flex-grow-0">
         <Copyright className="relative" />
       </Footer>
     </div>

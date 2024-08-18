@@ -1,0 +1,7 @@
+.tab-item {
+  @apply p-2 font-medium text-sm border-b border-solid border-b-transparent transition;
+}
+
+.tab-item[data-selected] {
+  @apply text-[rgba(29,185,84,1)] border-b-[rgba(29,185,84,1)];
+}

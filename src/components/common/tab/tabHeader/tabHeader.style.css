@@ -1,0 +1,3 @@
+.tab-header {
+  @apply flex w-fit justify-end text-[rgba(71,87,102,1)] px-6 py-[10px] gap-x-2 bg-[rgba(17,24,32,1)] ml-auto rounded-t-2xl;
+}
