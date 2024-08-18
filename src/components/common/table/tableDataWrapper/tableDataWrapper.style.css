@@ -1,0 +1,11 @@
+.table-data-wrapper {
+  @apply py-4 h-full px-1 text-sm overflow-hidden leading-[16.8px] bg-[rgba(15,20,26,0.4)] border-solid border-y-[#1e1a25] border-y;
+}
+
+.table-data:last-child .table-data-wrapper {
+  @apply pr-4 rounded-r-2xl  border-r-[#1e1a25] border-r;
+}
+
+.table-data:first-child .table-data-wrapper {
+  @apply pl-4 rounded-l-2xl border-l-[#1e1a25] border-l;
+}

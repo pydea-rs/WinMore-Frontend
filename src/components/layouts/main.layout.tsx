@@ -1,5 +1,5 @@
 import { BaseProps } from '@/types/global.types'
-import Footer from '../templates/footer/footer'
+import Footer from '../common/footer/footer'
 
 const MainLayout: BaseProps = (props) => {
   const { children } = props
