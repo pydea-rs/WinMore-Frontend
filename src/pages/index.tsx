@@ -18,8 +18,10 @@ import { ReactElement } from 'react'
 export default function Home() {
   const dispatch = useDispatch()
   return (
-    <div className={``}>
-      <button onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>Connect Wallet</button>
+    <div>
+      <button onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))} className="font-dmSans">
+        Connect Wallet
+      </button>
       <div className="container relative z-10">
         <TableWrapper className="bg-[hsla(212,31%,10%,0.9)] p-[20px] rounded-2xl sm:filter-backdrop mb-8">
           <Table className="text-secondary w-full ">

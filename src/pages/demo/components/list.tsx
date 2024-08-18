@@ -37,16 +37,16 @@ const ListComponentDemo = () => {
                   <path
                     d="M11.795 17.3772L9.72995 19.3862C9.37195 19.7342 8.77295 19.5802 8.62795 19.1022L7.25195 14.5722"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M14.1041 11.3982C14.1041 11.3982 11.5151 13.7342 10.1871 14.9332C9.79008 15.2912 9.82308 15.9212 10.2531 16.2382L15.6311 20.2112C16.1601 20.6022 16.9161 20.3152 17.0531 19.6712L19.6941 7.22418C19.8221 6.62218 19.2311 6.11918 18.6571 6.34018L3.14208 12.3242C2.68508 12.5002 2.70708 13.1532 3.17408 13.2992L7.25108 14.5712"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </ListExternalLink>
@@ -54,17 +54,17 @@ const ListComponentDemo = () => {
             <ListItem>
               <ListExternalLink target="_blank" href="http://google.come" className="block text-white hover:text-cyan-300">
                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 7.5V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M16 7.5V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M12 7.5V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M16 7.5V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M16 7.5V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 7.5V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M19.707 13.793L16.293 17.207C16.105 17.395 15.851 17.5 15.586 17.5H12L8 21.5V17.5H5C4.448 17.5 4 17.052 4 16.5V7.914C4 7.649 4.105 7.394 4.293 7.207L7.707 3.793C7.895 3.605 8.149 3.5 8.414 3.5H19C19.552 3.5 20 3.948 20 4.5V13.086C20 13.351 19.895 13.605 19.707 13.793Z"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </ListExternalLink>
@@ -83,27 +83,27 @@ const ListComponentDemo = () => {
               <ListExternalLink target="_blank" href="http://google.come" className="block text-white hover:text-cyan-300">
                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M7.496 3.5H16.505C18.987 3.5 21 5.512 21 7.996V17.005C21 19.487 18.988 21.5 16.504 21.5H7.496C5.013 21.5 3 19.488 3 17.004V7.996C3 5.513 5.012 3.5 7.496 3.5V3.5Z"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M16.949 7.21304C16.763 7.21404 16.612 7.36504 16.612 7.55104C16.612 7.73704 16.764 7.88804 16.95 7.88804C17.136 7.88804 17.287 7.73704 17.287 7.55104C17.288 7.36404 17.136 7.21304 16.949 7.21304"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M14.5455 9.95444C15.9514 11.3603 15.9514 13.6397 14.5455 15.0456C13.1396 16.4515 10.8602 16.4515 9.45432 15.0456C8.04843 13.6397 8.04843 11.3603 9.45432 9.95444C10.8602 8.54855 13.1396 8.54855 14.5455 9.95444"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </ListExternalLink>

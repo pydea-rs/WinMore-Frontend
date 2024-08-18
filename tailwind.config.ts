@@ -4,6 +4,10 @@ const config: Config = {
   content: ['./src/pages/**/*.{js,ts,jsx,tsx,mdx}', './src/components/**/*.{js,ts,jsx,tsx,mdx}', './src/app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {
+        fractul: ['var(--font-fractul)'],
+        dmSans: ['var(--font-dm-sans)'],
+      },
       colors: { secondary: 'rgba(121, 137, 152, 1)' },
       screens: {
         sm: '540px',
