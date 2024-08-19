@@ -1,16 +1,16 @@
 import { getDefaultConfig } from 'connectkit'
 import { createConfig, http } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
+import { polygon } from 'wagmi/chains'
 
 export const config = createConfig(
   getDefaultConfig({
     chains: [
       // mainnet,
-      sepolia,
+      polygon,
     ],
     transports: {
       // [mainnet.id]: http(),
-      [sepolia.id]: http(),
+      [polygon.id]: http(),
     },
     ssr: true, // If your dApp uses server side rendering (SSR)
     // connectors,

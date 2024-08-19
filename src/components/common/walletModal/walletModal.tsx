@@ -1,4 +1,7 @@
 import { useGetNonce } from '@/services/authentication/useGetNounce/useGetNonce.hook'
+import { login } from '@/store/slices/auth/auth.slice'
+import { triggerModal } from '@/store/slices/modal/modal.slice'
+import { useDispatch } from '@/store/store'
 import { useState } from 'react'
 import { CreateConnectorFn, useConnect, useSignMessage } from 'wagmi'
 import { injected, metaMask } from 'wagmi/connectors'
@@ -12,11 +15,22 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
   const { connect } = useConnect()
   const [error, setError] = useState<string | null>(null)
   const { data: nonceData } = useGetNonce({})
-
-  const { signMessage } = useSignMessage({
+  const dispatch = useDispatch()
+  const { signMessage, isPending: isWaitingForSign } = useSignMessage({
     mutation: {
       onSuccess: (data) => {
-        alert(data)
+        dispatch(
+          login({
+            user: {
+              email: 'example@gmail.com',
+              jwt_token: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto explicabo fuga reiciendis nostrum? Amet est maiores sed vel molestiae minima?',
+              name: 'Max',
+              public_key: data,
+              signed: true,
+            },
+          }),
+        )
+        dispatch(triggerModal({ modal: 'login', trigger: false }))
       },
     },
   })
@@ -72,7 +86,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
             MetaMask
           </button>
           <button onClick={() => handleConnect('Phantom', injected({ target: 'phantom' }))} className="w-full px-4 py-2 text-white bg-purple-500 rounded hover:bg-purple-600">
-            Phantom
+            {isWaitingForSign ? 'loading...' : 'Phantom'}
           </button>
           <button onClick={() => handleConnect('Rabby', injected({ target: 'rabby' }))} className="w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
             Rabby

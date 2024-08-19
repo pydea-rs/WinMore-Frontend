@@ -17,19 +17,31 @@ import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import MainLayout from '@/components/layouts/main.layout'
+import { logout } from '@/store/slices/auth/auth.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { useDispatch } from '@/store/store'
+import { useDispatch, useSelector } from '@/store/store'
 import { TabPanel } from '@headlessui/react'
 import Image from 'next/image'
 import { ReactElement } from 'react'
+import { useDisconnect } from 'wagmi'
 
 export default function Home() {
   const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
+  const { disconnect } = useDisconnect()
+  const logoutHandler = () => {
+    dispatch(logout())
+    disconnect()
+  }
   return (
     <div className="flex flex-col flex-grow">
-      <button onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))} className="font-dmSans">
-        Connect Wallet
-      </button>
+      {!user ? (
+        <button onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))} className="font-dmSans">
+          Connect Wallet
+        </button>
+      ) : (
+        <button onClick={logoutHandler}>Logout {user.name}</button>
+      )}
 
       <div className="container relative z-10 overflow-x-visible">
         <div className="absolute left-4 top-0 hidden md:block">
