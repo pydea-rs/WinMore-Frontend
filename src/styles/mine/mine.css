@@ -1,9 +1,12 @@
 .tile-active {
-  @apply h-16 shadow-md rounded-md w-full dark:bg-[url('/assets/games/mine/images/rock-1.svg')] bg-contain bg-no-repeat bg-center flex justify-center items-center p-2 outline-none;
+  @apply h-16 shadow-md rounded-md w-full  border-4 bg-green-500/10 border-green-500 flex justify-center items-center p-2 outline-none;
 }
 .tile-star {
-  @apply h-16 shadow-md rounded-md w-full dark:bg-yellow-500/10 border-4 dark:border-yellow-500 flex justify-center items-center p-2 outline-none;
+  @apply h-16 shadow-md rounded-md w-full bg-[url('/assets/games/mine/images/rock-2.svg')] bg-contain bg-no-repeat bg-center bg-yellow-500/10 border-4  border-yellow-500 flex justify-center items-center p-2 outline-none;
 }
 .tile-bomb {
-  @apply h-16 shadow-md rounded-md w-full dark:bg-red-500/10 border-4 dark:border-red-500 flex justify-center items-center p-2 outline-none;
+  @apply h-16 shadow-md rounded-md w-full bg-[url('/assets/games/mine/images/rock-3.svg')] bg-contain bg-no-repeat bg-center bg-red-500/10 border-4  border-red-500 flex justify-center items-center p-2 outline-none;
+}
+.custom-cursor {
+  cursor: url('/assets/games/mine/images/pickaxe.png'), auto;
 }

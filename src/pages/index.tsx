@@ -132,12 +132,12 @@ export default function Home() {
             <TabPanel>Content 4</TabPanel>
           </TabBody>
         </Tab>
-        <Image alt="shape" src="assets/static/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20" />
+        <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20" />
       </div>
 
       <div className="2xl:container relative -z-1 hidden sm:block mt-auto">
         <div className="sm:-mb-[40px] lg:-mb-[64px]  sm:-mt-[100px]  lg:-mt-[260px]">
-          <img src="/assets/static/images/complex.svg" alt="complex" />
+          <img src="/assets/images/complex.svg" alt="complex" />
         </div>
       </div>
     </div>
