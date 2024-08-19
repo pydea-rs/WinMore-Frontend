@@ -720,7 +720,7 @@ const TableDemo = () => {
       </div>
       <div className="2xl:container relative -z-1 hidden sm:block">
         <div className="sm:-mb-[40px] lg:-mb-[60px]  sm:-mt-[100px]  lg:-mt-[260px]">
-          <img src="/assets/static/images/complex.svg" alt="complex" />
+          <img src="/assets/images/complex.svg" alt="complex" />
         </div>
       </div>
     </>

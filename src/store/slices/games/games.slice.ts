@@ -26,6 +26,8 @@ export const gamesSlice = createSlice({
     startMineGame: (state: StateType, action: PayloadAction<IStartMineGamePayload>) => {
       state.mineConfig.isStarted = true
       state.mineConfig.isGameOver = false // Reset game over state when starting a new game
+      state.mineConfig.selectedBlocks = []
+
       switch (state.mineConfig.mode) {
         case 'easy':
           state.mineConfig.mines = generateMines({ mines: 2, total: state.mineConfig.rows * 4 })
