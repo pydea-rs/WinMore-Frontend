@@ -1,0 +1,14 @@
+import _ from 'lodash'
+
+export const useMergeAttrs = (args: any) => {
+  let disabled = {}
+
+  if (args?.disabled) {
+    disabled = { tabIndex: '-1', ['aria-disabled']: 'true' }
+  }
+
+  return _({ ...args, ...disabled })
+    .omitBy(_.isUndefined)
+    .omitBy(_.isNull)
+    .value()
+}

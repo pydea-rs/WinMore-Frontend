@@ -8,7 +8,33 @@ const config: Config = {
         fractul: ['var(--font-fractul)'],
         dmSans: ['var(--font-dm-sans)'],
       },
-      colors: { secondary: 'rgba(121, 137, 152, 1)' },
+      colors: {
+        // Semantic Colors
+        primary: '#1db954',
+        secondary: '#111820', // Card
+        info: '#475766', // Heading
+        warning: '#E7AA2E',
+        success: '#1AA9FD',
+        danger: '#FF3B30',
+        main: '#798998', // Text
+        //  Colors
+        white: '#FEFEFE',
+        dark: '#0f141a', // Default BG
+        light: 'hsla(0, 0%, 100%, 0.3)',
+        navy: '1A1F25', // Border
+        yellow: {
+          500: '#FFD600',
+        },
+        // n: {
+        //   1: '#FEFEFE',
+        //   2: '#F3F5F7',
+        //   3: '#E8ECEF',
+        //   4: '#6C7275',
+        //   5: '#343839',
+        //   6: '#1A1F25',
+        //   7: '#0f141a',
+        // },
+      },
       screens: {
         sm: '540px',
         md: '720px',
@@ -23,6 +49,8 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-primary': 'linear-gradient(95.08deg, #32CD32 0%, #2ECC71 100%)',
+        'gradient-yellow-dark': 'linear-gradient(89.73deg, rgba(255, 230, 0, 0.3) 0.17%, rgba(255, 229, 0, 0) 115.55%)',
       },
     },
   },
@@ -31,6 +59,12 @@ const config: Config = {
       const newUtilities = {
         '.filter-backdrop': {
           backdropFilter: 'saturate(100%) blur(13px)',
+        },
+        '.absolute-center': {
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%,-50%)',
         },
       }
 
