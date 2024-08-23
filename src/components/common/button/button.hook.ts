@@ -1,7 +1,7 @@
 import { useMergeAttrs } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { UiSizes, UiVariants } from './../../../types/elements.types'
-import { ButtonGradientVariants, ButtonHook, ButtonPatternVariants, UIButton } from './button.type'
+import { ButtonGradientVariants, ButtonHook, ButtonPatternVariants, UIButton } from './button.types'
 
 export const useButtonHook = (baseClass: string, btnProps: ButtonHook) => {
   const { variant, size, className, pilled, disabled, onClick, full, kind, bordered, ...restAttrs } = btnProps

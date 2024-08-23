@@ -1,7 +1,7 @@
 import { useMergeAttrs } from '@/hooks/useBaseComponent'
 import { UiVariants } from '@/types/elements.types'
 import classNames from 'classnames'
-import { SpinnerHook, SpinnerKind } from './spinner.type'
+import { SpinnerHook, SpinnerKind } from './spinner.types'
 
 export const useSpinner = (baseClass: string, props: SpinnerHook) => {
   const { kind, variant, size, className, ...restAttrs } = props

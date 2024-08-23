@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import { useButtonHook } from './button.hook'
-import { ButtonProps } from './button.type'
+import { ButtonProps } from './button.types'
 
 export const Button: BaseProps<ButtonProps> = (props) => {
   const { children } = props
