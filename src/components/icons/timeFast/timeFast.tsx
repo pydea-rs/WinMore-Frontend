@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ITimeFastIcon } from './timeFast.type'
+import { ITimeFastIcon } from './timeFast.types'
 
 const TimeFastIcon: BaseProps<ITimeFastIcon> = (props) => {
   const { className } = props

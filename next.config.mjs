@@ -14,6 +14,10 @@ const nextConfig = {
         port: '8000',
         protocol: 'http',
       },
+      {
+        hostname: 'placehold.co',
+        protocol: 'https',
+      },
     ],
   },
   env: {
