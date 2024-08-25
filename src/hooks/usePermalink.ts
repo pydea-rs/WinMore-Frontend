@@ -6,6 +6,12 @@ export const usePermalink = () => {
         return '/'
       },
     },
+    blogs: {
+      slug: 'blogs',
+      get: function () {
+        return 'blogs'
+      },
+    },
     game: {
       slug: 'game',
       get: function (slug: string) {
