@@ -1,17 +1,39 @@
-import { updateMineConfig } from '@/store/slices/games/games.slice'
+import { startMineGame, updateMineConfig } from '@/store/slices/games/games.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
+import { motion } from 'framer-motion'
+import { useCallback, useMemo } from 'react'
 
-const GamesLayout: BaseProps = ({ children }) => {
+const MineLayout: BaseProps = ({ children }) => {
   const { mineConfig } = useSelector((state) => state.game)
   const dispatch = useDispatch()
-  const modes = ['easy', 'medium', 'hard']
+  const modes = [
+    {
+      label: 'Easy',
+      value: 4,
+    },
+    {
+      label: 'Medium',
+      value: 3,
+    },
+    {
+      label: 'Hard',
+      value: 2,
+    },
+  ]
   const rows = [4, 5, 6, 7, 8]
+  const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
+
+  const onStart = useCallback(() => {
+    dispatch(startMineGame({}))
+    tile.play()
+  }, [dispatch, tile])
+
   return (
     <main className="w-full h-full min-h-svh flex flex-col container">
       <header>a placeholder for header</header>
       <div className="grid grid-cols-1 gap-5  mb-16">
-        <section className="flex flex-col gap-4">
+        <aside className="flex flex-col gap-4">
           <input
             disabled={mineConfig.isStarted}
             className="text-violet-600"
@@ -31,20 +53,21 @@ const GamesLayout: BaseProps = ({ children }) => {
             }}
           />
           <div className="flex gap-2">
+            mode:
             {modes.map((mode) => {
               return (
-                <div key={mode}>
-                  <label htmlFor={`mode-${mode}`}>{mode}</label>
+                <div key={mode.value}>
+                  <label htmlFor={`mode-${mode.label}`}>{mode.label}</label>
                   <input
                     disabled={mineConfig.isStarted}
-                    id={`mode-${mode}`}
+                    id={`mode-${mode.label}`}
                     type="radio"
                     name="mode"
-                    value={mode}
-                    checked={mineConfig.mode === mode}
+                    value={mode.value}
+                    checked={mineConfig.mode === mode.value}
                     onChange={(event) => {
                       //@ts-ignore
-                      !mineConfig.isStarted ? dispatch(updateMineConfig({ mode: event.target.value || 'easy' })) : null
+                      !mineConfig.isStarted ? dispatch(updateMineConfig({ mode: +event.target.value || 4 })) : null
                     }}
                   />
                 </div>
@@ -71,7 +94,14 @@ const GamesLayout: BaseProps = ({ children }) => {
               )
             })}
           </div>
-        </section>
+          <motion.button
+            onClick={onStart}
+            disabled={mineConfig.isStarted && !mineConfig.isGameOver}
+            className="h-12 disabled:dark:bg-amber-600/10 disabled:cursor-not-allowed disabled:dark:text-zinc-500 w-full rounded-xl p-1 text-base font-semibold shadow transition-all dark:bg-amber-600 dark:focus:ring-2 dark:focus:ring-amber-600 dark:focus:ring-offset-1 dark:focus:ring-offset-secondary-dark"
+          >
+            Start
+          </motion.button>
+        </aside>
 
         <section className="">{children}</section>
       </div>
@@ -81,4 +111,4 @@ const GamesLayout: BaseProps = ({ children }) => {
   )
 }
 
-export default GamesLayout
+export default MineLayout
