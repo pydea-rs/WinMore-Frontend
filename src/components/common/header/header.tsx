@@ -10,6 +10,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useDisconnect } from 'wagmi'
 import { Button } from '../button/button'
+import List from '../list/list'
+import ListItem from '../list/listItem/listItem'
+import ListLink from '../list/listLink/listLink'
 import { IHeaderRoutes } from './header.types'
 
 const Header = () => {
@@ -57,22 +60,26 @@ const Header = () => {
           <Image src={'/assets/images/logo.svg'} alt="logo" width={180} height={50} />
         </Link>
 
-        <nav className="px-[20px] py-[10px] flex items-center gap-[10px]">
-          {headerRoutes.map((nav) => {
-            if (nav.disabled) {
+        <div className="col-span-12 sm:col-span-6 flex items-center">
+          <List>
+            {headerRoutes.map((nav) => {
+              // if (nav.disabled) {
+              //   return (
+              //     <ListItem key={nav.path}>
+              //       <span>{nav.title}</span>
+              //     </ListItem>
+              //   )
+              // }
               return (
-                <span key={nav.path} className="cursor-not-allowed text-sm font-medium">
-                  {nav.title}
-                </span>
+                <ListItem key={nav.path}>
+                  <ListLink href={nav.path} className="text-white transition">
+                    {nav.title}
+                  </ListLink>
+                </ListItem>
               )
-            }
-            return (
-              <Link key={nav.path} href={nav.path} className="text-sm font-medium">
-                {nav.title}
-              </Link>
-            )
-          })}
-        </nav>
+            })}
+          </List>
+        </div>
         {!user ? (
           <Button kind="pattern" bordered onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>
             <div className="flex items-center gap-x-2">
