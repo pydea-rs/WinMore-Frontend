@@ -19,6 +19,7 @@
 @import '../components/common/list/list.style.css';
 @import '../components/common/list/listItem/listItem.style.css';
 @import '../components/common/list/listLink/listLink.style.css';
+@import '../components/common/list/listText/listText.style.css';
 @import '../components/common/button/button.style.css';
 @import '../components/common/spinner/spinner.style.css';
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';

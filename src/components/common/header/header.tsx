@@ -13,6 +13,7 @@ import { Button } from '../button/button'
 import List from '../list/list'
 import ListItem from '../list/listItem/listItem'
 import ListLink from '../list/listLink/listLink'
+import ListText from '../list/listText/listText'
 import { IHeaderRoutes } from './header.types'
 
 const Header = () => {
@@ -63,16 +64,16 @@ const Header = () => {
         <div className="col-span-12 sm:col-span-6 flex items-center">
           <List>
             {headerRoutes.map((nav) => {
-              // if (nav.disabled) {
-              //   return (
-              //     <ListItem key={nav.path}>
-              //       <span>{nav.title}</span>
-              //     </ListItem>
-              //   )
-              // }
+              if (nav.disabled) {
+                return (
+                  <ListItem key={nav.path}>
+                    <ListText>{nav.title}</ListText>
+                  </ListItem>
+                )
+              }
               return (
                 <ListItem key={nav.path}>
-                  <ListLink href={nav.path} className="text-white transition">
+                  <ListLink href={'https://google.com'} className="text-white transition">
                     {nav.title}
                   </ListLink>
                 </ListItem>

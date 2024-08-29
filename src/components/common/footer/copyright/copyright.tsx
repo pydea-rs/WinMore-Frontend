@@ -86,7 +86,7 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             <List>
               {staticData.menu.quickAccess.map(({ link, title, id }) => (
                 <ListItem key={`quick-access-${id}`}>
-                  <ListLink href={link} className="text-white hover:text-cyan-300 transition">
+                  <ListLink href={link} className="text-white  transition">
                     {title}
                   </ListLink>
                 </ListItem>
@@ -97,7 +97,7 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             <List className="gap-x-[0.9rem]">
               {staticData.menu.socialMedia.map(({ link, title, Icon, id }) => (
                 <ListItem key={`social-media-${id}`}>
-                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white hover:text-cyan-300 transition">
+                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white  transition">
                     <Icon />
                   </ListExternalLink>
                 </ListItem>
