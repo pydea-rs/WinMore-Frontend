@@ -30,9 +30,9 @@
 @import '../components/common/form/label/label.style.css';
 /* @import '../components/common/form/otpInput/otpInput.style.css'; */
 @import '../components/common/form/textInput/textInput.style.css';
+@import '../components/common/form/numberInput/numberInput.style.css';
 @import '../components/common/form/formCheck/formCheck.style.css';
-@import '../components/common/form/textInputIcon/textInputIcon.style.css';
-@import '../components/common/form/textInputIcon/textInputIcon.style.css';
+@import '../components/common/form/inputIcon/inputIcon.style.css';
 @import '../components/common/form/textForm/textForm.style.css';
 @import '../components/common/form/radio/radio.style.css';
 @import '../components/common/form/radioCard/radioCard.style.css';

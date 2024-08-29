@@ -1,13 +1,13 @@
 import { Checkbox } from '@/components/common/form/checkbox/checkbox'
 import { FormCheck } from '@/components/common/form/formCheck/formCheck'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
+import { InputIcon } from '@/components/common/form/inputIcon/inputIcon'
 import { Label } from '@/components/common/form/label/label'
 import { NumberInput } from '@/components/common/form/numberInput/numberInput'
 import { Radio } from '@/components/common/form/radio/radio'
 import { RadioCard } from '@/components/common/form/radioCard/radioCard'
 import { TextForm } from '@/components/common/form/textForm/textForm'
-import { TextInput } from '@/components/common/form/textInput/textInput'
-import { TextInputIcon } from '@/components/common/form/textInputIcon/textInputIcon'
+import { Input } from '@/components/common/form/textInput/textInput'
 import CentIcon from '@/components/icons/cent/cent'
 import EmailIcon from '@/components/icons/email/email'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
@@ -26,7 +26,7 @@ const FormComponentDemo = () => {
     watch: numericFormWatch,
     setValue: numericFormSetValue,
     formState: { errors },
-  } = useForm<NumericForm>({ defaultValues: { simple: '0' } })
+  } = useForm<NumericForm>({ defaultValues: { simple: '0.00' } })
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
   const simpleCurrentValue = numericFormWatch('simple')
 
@@ -40,13 +40,13 @@ const FormComponentDemo = () => {
               <Label htmlFor="1-1" className="flex items-center gap-x-2">
                 <span>Name</span>
               </Label>
-              <TextInput placeholder="type here" id="1-1" />
+              <Input placeholder="type here" id="1-1" />
             </FormGroup>
             <FormGroup>
               <Label htmlFor="1-2" className="flex items-center gap-x-2">
                 <span>Email Address</span>
               </Label>
-              <TextInput placeholder="example@crypto.com" id="1-2" />
+              <Input placeholder="example@crypto.com" id="1-2" />
             </FormGroup>
           </div>
         </div>
@@ -58,20 +58,20 @@ const FormComponentDemo = () => {
                 <SingleUserIcon />
                 <span>Name</span>
               </Label>
-              <TextInputIcon>
-                <TextInput placeholder="type here" id="2-1" />
+              <InputIcon>
+                <Input placeholder="type here" id="2-1" />
                 <CentIcon className="text-warning" />
-              </TextInputIcon>
+              </InputIcon>
             </FormGroup>
             <FormGroup>
               <Label htmlFor="2-2" className="flex items-center gap-x-2">
                 <EmailIcon />
                 <span>Email Address</span>
               </Label>
-              <TextInputIcon>
-                <TextInput placeholder="example@crypto.com" id="2-2" />
+              <InputIcon>
+                <Input placeholder="example@crypto.com" id="2-2" />
                 <CentIcon className="text-warning" />
-              </TextInputIcon>
+              </InputIcon>
             </FormGroup>
           </div>
         </div>
@@ -82,19 +82,19 @@ const FormComponentDemo = () => {
               <Label htmlFor="3-1" className="flex items-center gap-x-2">
                 Focus and Auto Focus
               </Label>
-              <TextInput autoFocus placeholder="type here" id="3-1" />
+              <Input autoFocus placeholder="type here" id="3-1" />
             </FormGroup>
             <FormGroup>
               <Label htmlFor="3-2" className="flex items-center gap-x-2">
                 Valid Value
               </Label>
-              <TextInput valid placeholder="type here" id="3-2" />
+              <Input valid placeholder="type here" id="3-2" />
             </FormGroup>
             <FormGroup>
               <Label htmlFor="3-3" className="flex items-center gap-x-2">
                 Invalid Value
               </Label>
-              <TextInput invalid placeholder="type here" id="3-3" />
+              <Input invalid placeholder="type here" id="3-3" />
             </FormGroup>
           </div>
         </div>
@@ -105,21 +105,21 @@ const FormComponentDemo = () => {
               <Label htmlFor="4-1" className="flex items-center gap-x-2">
                 Password
               </Label>
-              <TextInput placeholder="*****" type="password" id="4-1" />
+              <Input placeholder="*****" type="password" id="4-1" />
               <TextForm>Your password must be 8-20 characters long</TextForm>
             </FormGroup>
             <FormGroup>
               <Label htmlFor="4-2" className="flex items-center gap-x-2">
                 Password
               </Label>
-              <TextInput placeholder="*****" type="password" id="4-2" />
+              <Input placeholder="*****" type="password" id="4-2" />
               <TextForm variant="valid">Your password must be 8-20 characters long</TextForm>
             </FormGroup>
             <FormGroup>
               <Label htmlFor="4-3" className="flex items-center gap-x-2">
                 Password
               </Label>
-              <TextInput placeholder="*****" type="password" id="4-3" />
+              <Input placeholder="*****" type="password" id="4-3" />
               <TextForm variant="invalid">Your password must be 8-20 characters long</TextForm>
             </FormGroup>
           </div>
@@ -249,14 +249,45 @@ const FormComponentDemo = () => {
                   <Label htmlFor="id-233">Numeric Input</Label>
                   <NumberInput
                     onChange={onChange}
-                    onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue), '1'))}
-                    onDecrease={() => numericFormSetValue('simple', subDecimalNumbers(formatNumber(simpleCurrentValue), '1'))}
+                    onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
+                    onDecrease={() => numericFormSetValue('simple', subDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
                     onBlur={onBlur}
                     value={value}
                     id="id-233"
                     placeholder="Placeholder"
                   />
                 </FormGroup>
+              )}
+            />
+
+            <Controller
+              name="simple"
+              control={numericFormController}
+              rules={{
+                required: { value: true, message: "It's require" },
+              }}
+              render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                <>
+                  <FormGroup>
+                    <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                      <EmailIcon />
+                      <span>Numeric Input with Icon </span>
+                    </Label>
+
+                    <InputIcon>
+                      <NumberInput
+                        onChange={onChange}
+                        onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
+                        onDecrease={() => numericFormSetValue('simple', subDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
+                        onBlur={onBlur}
+                        value={value}
+                        id="id-233"
+                        placeholder="Placeholder"
+                      />
+                      <CentIcon className="text-warning" />
+                    </InputIcon>
+                  </FormGroup>
+                </>
               )}
             />
           </div>
@@ -268,7 +299,7 @@ const FormComponentDemo = () => {
               <Label htmlFor="6-1" className="flex items-center gap-x-2">
                 Password
               </Label>
-              <TextInput placeholder="*****" type="password" id="4-1" disabled />
+              <Input placeholder="*****" type="password" id="4-1" disabled />
               <TextForm>Your password must be 8-20 characters long</TextForm>
             </FormGroup>
             <FormGroup>
@@ -276,10 +307,10 @@ const FormComponentDemo = () => {
                 <EmailIcon />
                 <span>Email Address</span>
               </Label>
-              <TextInputIcon>
-                <TextInput placeholder="example@crypto.com" id="6-2" disabled />
+              <InputIcon>
+                <Input placeholder="example@crypto.com" id="6-2" disabled />
                 <CentIcon className="text-warning" />
-              </TextInputIcon>
+              </InputIcon>
             </FormGroup>
             <FormCheck>
               <Checkbox id="6-3" disabled />

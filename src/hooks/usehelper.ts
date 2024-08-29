@@ -1,16 +1,16 @@
 export const useHelper = () => {
   const formatNumber = (input: string) => {
     const cleanedValue = input.replace(/,/g, '')
-    return cleanedValue
+    return Number(cleanedValue)
   }
 
-  const addDecimalNumbers = (num1: string, num2: string) => {
-    const sum = parseFloat(num1) + parseFloat(num2)
+  const addDecimalNumbers = (num1: number, num2: number) => {
+    const sum = parseFloat(num1.toString()) + parseFloat(num2.toString())
     return sum.toString()
   }
 
-  const subDecimalNumbers = (num1: string, num2: string) => {
-    const sum = parseFloat(num1) - parseFloat(num2)
+  const subDecimalNumbers = (num1: number, num2: number) => {
+    const sum = num1 < 1 ? 0 : parseFloat(num1.toString()) - parseFloat(num2.toString())
     return sum.toString()
   }
 

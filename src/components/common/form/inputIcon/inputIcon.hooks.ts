@@ -1,8 +1,8 @@
 import { useMergeAttrs } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
-import { TextInputIconHook } from './textInputIcon.types'
+import { InputIconHook } from './inputIcon.types'
 
-export const useTextInputIconHook = (baseClass: string, inputProps: TextInputIconHook) => {
+export const useInputIconHook = (baseClass: string, inputProps: InputIconHook) => {
   const { className, ...restAttrs } = inputProps
 
   const classes = classNames({
