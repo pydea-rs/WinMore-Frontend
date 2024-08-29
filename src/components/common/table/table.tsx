@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ITable } from './table.type'
+import { ITable } from './table.types'
 
 const Table: BaseProps<ITable> = (props) => {
   const { children, className } = props

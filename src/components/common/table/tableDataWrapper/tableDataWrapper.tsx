@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ITableDataWrapper } from './tableDataWrapper.type'
+import { ITableDataWrapper } from './tableDataWrapper.types'
 
 const TableDataWrapper: BaseProps<ITableDataWrapper> = (props) => {
   const { children, className } = props

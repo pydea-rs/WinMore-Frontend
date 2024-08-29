@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IMetaMaxIcon } from './metaMax.type'
+import { IMetaMaxIcon } from './metaMax.types'
 
 const MetaMaxIcon: BaseProps<IMetaMaxIcon> = (props) => {
   const { className } = props

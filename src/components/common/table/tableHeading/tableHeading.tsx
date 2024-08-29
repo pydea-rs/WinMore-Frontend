@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ITableHeading } from './tableHeading.type'
+import { ITableHeading } from './tableHeading.types'
 
 const TableHeading: BaseProps<ITableHeading> = (props) => {
   const { children, className } = props

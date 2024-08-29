@@ -1,0 +1,3 @@
+.form-text {
+  @apply inline-block text-sm mt-1 mb-0;
+}

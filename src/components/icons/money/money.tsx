@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IMoneyIcon } from './money.type'
+import { IMoneyIcon } from './money.types'
 
 const MoneyIcon: BaseProps<IMoneyIcon> = (props) => {
   const { className } = props

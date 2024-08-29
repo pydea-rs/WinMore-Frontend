@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IChevronDownIcon } from './chevronDown.type'
+import { IChevronDownIcon } from './chevronDown.types'
 
 const ChevronDownIcon: BaseProps<IChevronDownIcon> = (props) => {
   const { className } = props
