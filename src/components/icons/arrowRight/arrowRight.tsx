@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IArrowRightIcon } from './arrowRight.type'
+import { IArrowRightIcon } from './arrowRight.types'
 
 const ArrowRightIcon: BaseProps<IArrowRightIcon> = (props) => {
   const { className } = props

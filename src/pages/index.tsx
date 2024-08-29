@@ -1,3 +1,4 @@
+import { Button } from '@/components/common/button/button'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabContent from '@/components/common/tab/tabContent/tabContent'
@@ -11,6 +12,7 @@ import TableHeader from '@/components/common/table/tableHeader/tableHeader'
 import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
+import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
 import CentIcon from '@/components/icons/cent/cent'
 import Cent1Icon from '@/components/icons/cent1/cent1'
 import DicesIcon from '@/components/icons/dices/dices'
@@ -54,37 +56,31 @@ export default function Home() {
                         className="hidden- sm:block- pointer-events-none absolute -top-12 left-0 z-20"
                       />
                       <h2 className="text-relative2xl 2xl:text-[68px] font-bold leading-[82px] ">Plinko</h2>
-                      <button className="block p-4">Button</button>
-                      <Image
-                        alt="shape"
-                        src="/assets/images/polygon.svg"
-                        width={205}
-                        height={205}
-                        className="hidden- sm:block- pointer-events-none absolute -bottom-12 -right-2 z-20"
-                      />
+                      <Button kind="primary" variant="light" className="flex items-center gap-[10px] px-4" pilled>
+                        Play Plinko
+                        <ArrowRightIcon className="w-6 h-6" />
+                      </Button>
+                      <Image alt="shape" src="/assets/images/polygon.svg" width={205} height={205} className="block- pointer-events-none absolute -bottom-12 -right-2 z-20" />
                     </div>
-                    <Image alt="shape" src="/assets/images/gem-navy.svg" width={120} height={110} className="hidden md:block absolute -bottom-10 -left-[50px] z-20" />
+                    <Image
+                      alt="shape"
+                      src="/assets/images/gem-navy.svg"
+                      width={120}
+                      height={110}
+                      className="w-8 h-12 md:w-[120px] md:h-[110px] block absolute right-0 -top-10 md:right-[unset] md:top-[unset] md:-bottom-10 md:-left-[50px] z-20"
+                    />
                   </div>
                 </div>
                 <div className="col-span-12 md:col-span-6">
                   <div className="relative">
                     <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl bg-gradient-hot-pink h-[224px]">
-                      <Image
-                        alt="shape"
-                        src="/assets/images/square-pattern.svg"
-                        width={114}
-                        height={114}
-                        className="hidden- sm:block- pointer-events-none absolute -top-0 -right-0 z-20"
-                      />
+                      <Image alt="shape" src="/assets/images/square-pattern.svg" width={114} height={114} className="block- pointer-events-none absolute -top-0 -right-0 z-20" />
                       <h2 className="text-relative2xl 2xl:text-[68px] font-bold leading-[82px]">DREAM MINE</h2>
-                      <button className="block p-4">Button</button>
-                      <Image
-                        alt="shape"
-                        src="/assets/images/square-pattern-1.svg"
-                        width={128}
-                        height={110}
-                        className="hidden- sm:block- pointer-events-none absolute bottom-0 left-0 z-20"
-                      />
+                      <Button kind="primary" variant="light" className="flex items-center gap-[10px] px-4" pilled>
+                        Play Dream Mine
+                        <ArrowRightIcon className="w-6 h-6" />
+                      </Button>
+                      <Image alt="shape" src="/assets/images/square-pattern-1.svg" width={128} height={110} className="block- pointer-events-none absolute bottom-0 left-0 z-20" />
                     </div>
                     <Image alt="shape" src="/assets/images/gem-hot-pink.svg" width={120} height={100} className="hidden md:block absolute -top-14 -right-14 z-20" />
                   </div>
