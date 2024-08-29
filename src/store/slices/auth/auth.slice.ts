@@ -11,6 +11,9 @@ export const authSlice = createSlice({
     login: (state: AuthStateType, action: PayloadAction<AuthStateType>) => {
       state.user = action.payload.user
     },
+    logout: (state: AuthStateType) => {
+      state.user = null
+    },
     updateUser: (state: AuthStateType, action: PayloadAction<Partial<AuthStateType>>) => {
       if (state.user) {
         state.user = { ...state.user, ...action.payload.user }
@@ -19,6 +22,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { updateUser, login } = authSlice.actions
+export const { updateUser, login, logout } = authSlice.actions
 
 export default authSlice.reducer

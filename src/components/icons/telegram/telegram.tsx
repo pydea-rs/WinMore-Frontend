@@ -10,7 +10,7 @@ const TelegramIcon: BaseProps<ITelegramIcon> = (props) => {
   })
 
   return (
-    <svg className={classList} width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={classList} width="24" height="24" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M11.795 17.3772L9.72995 19.3862C9.37195 19.7342 8.77295 19.5802 8.62795 19.1022L7.25195 14.5722"
         stroke="currentColor"

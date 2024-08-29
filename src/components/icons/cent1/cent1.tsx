@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ICent1Icon } from './cent1.type'
+import { ICent1Icon } from './cent1.types'
 
 const Cent1Icon: BaseProps<ICent1Icon> = (props) => {
   const { className } = props
@@ -10,7 +10,7 @@ const Cent1Icon: BaseProps<ICent1Icon> = (props) => {
   })
 
   return (
-    <svg className={classList} width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={classList} width="24" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

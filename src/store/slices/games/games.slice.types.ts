@@ -1,12 +1,15 @@
 interface IMineGame {
-  mode: 'easy' | 'medium' | 'hard'
+  mode: 4 | 3 | 2
   rows: number
   betAmount: string
   numberOfBets: number
   isStarted: boolean
   isGameOver: boolean
-  mines: number[]
-  selectedBlocks: number[]
+  selectedBlocks: {
+    index: number
+    row: number
+  }[]
+  activeRow: number
 }
 
 export interface StateType {

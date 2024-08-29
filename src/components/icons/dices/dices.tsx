@@ -9,7 +9,7 @@ const DicesIcon: BaseProps<IDicesIcon> = (props) => {
     [`${className}`]: className,
   })
   return (
-    <svg className={classList} width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={classList} width="24" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="3.66284" y="8.99872" width="12.005" height="12.005" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <path
         d="M15.6679 15.0012H19.6696C20.7733 14.998 21.6672 14.1041 21.6704 13.0004V4.99705C21.6672 3.89336 20.7733 2.99945 19.6696 2.99622H11.6662C10.5625 2.99945 9.66864 3.89336 9.66541 4.99705V8.99872"

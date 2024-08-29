@@ -6,6 +6,7 @@ import DiscordIcon from '@/components/icons/discord/discord'
 import InstagramIcon from '@/components/icons/instagram/instagram'
 import TelegramIcon from '@/components/icons/telegram/telegram'
 import XIcon from '@/components/icons/x/x.icon'
+import { usePermalink } from '@/hooks/usePermalink'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
 import { useState } from 'react'
@@ -13,32 +14,33 @@ import { ICopyright } from './copyright.types'
 
 const Copyright: BaseProps<ICopyright> = (props) => {
   const { className } = props
+  const { internalLinks, externalLinks } = usePermalink()
   const [staticData] = useState({
     menu: {
       quickAccess: [
         {
           title: 'Home',
-          link: '',
+          link: internalLinks.home.get(),
           id: 'wm2339474',
         },
         {
           title: 'Help',
-          link: '',
+          link: internalLinks.help.get(),
           id: 'wm434545',
         },
         {
           title: 'FAQ',
-          link: '',
+          link: internalLinks.faq.get(),
           id: 'wm4354566',
         },
         {
           title: 'About Us',
-          link: '',
+          link: internalLinks.aboutUs.get(),
           id: 'wm6245465',
         },
         {
           title: 'Contact Us',
-          link: '',
+          link: internalLinks.contactUs.get(),
           id: 'wm5346564',
         },
       ],
@@ -46,25 +48,25 @@ const Copyright: BaseProps<ICopyright> = (props) => {
         {
           id: 'wm5673536',
           title: 'Telegram',
-          link: 'https://t.com/',
+          link: externalLinks.telegram.get(),
           Icon: TelegramIcon,
         },
         {
           id: 'wm5657333',
           title: 'Discord',
-          link: 'https://discord.com/',
+          link: externalLinks.discord.get(),
           Icon: DiscordIcon,
         },
         {
           id: 'wm5666463',
           title: 'X',
-          link: 'https://x.com/',
+          link: externalLinks.x.get(),
           Icon: XIcon,
         },
         {
           id: 'wm5556533',
           title: 'Instagram',
-          link: 'https://instagram.com/',
+          link: externalLinks.instagram.get(),
           Icon: InstagramIcon,
         },
       ],
@@ -84,7 +86,7 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             <List>
               {staticData.menu.quickAccess.map(({ link, title, id }) => (
                 <ListItem key={`quick-access-${id}`}>
-                  <ListLink href={link} className="text-white hover:text-cyan-300 transition">
+                  <ListLink href={link} className="text-white  transition">
                     {title}
                   </ListLink>
                 </ListItem>
@@ -95,7 +97,7 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             <List className="gap-x-[0.9rem]">
               {staticData.menu.socialMedia.map(({ link, title, Icon, id }) => (
                 <ListItem key={`social-media-${id}`}>
-                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white hover:text-cyan-300 transition">
+                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white  transition">
                     <Icon />
                   </ListExternalLink>
                 </ListItem>

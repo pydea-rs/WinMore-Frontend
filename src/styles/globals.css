@@ -19,8 +19,14 @@
 @import '../components/common/list/list.style.css';
 @import '../components/common/list/listItem/listItem.style.css';
 @import '../components/common/list/listLink/listLink.style.css';
+@import '../components/common/list/listText/listText.style.css';
+@import '../components/common/button/button.style.css';
+@import '../components/common/spinner/spinner.style.css';
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
 @import url('mine/mine.css');
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
 
 ::root {
   --foreground-rgb: 0, 0, 0;
@@ -46,4 +52,13 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+.swiper-pagination-bullet {
+  background-color: #d9d9d9;
+  /* transition: all ease-in 300ms; */
+  /* height: 6px; */
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  /* width: 15px; */
+  /* border-radius: 10px; */
 }

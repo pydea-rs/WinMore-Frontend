@@ -10,7 +10,7 @@ export const Web3Provider: BaseProps = (props) => {
   const { children } = props
 
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={config} reconnectOnMount>
       <QueryClientProvider client={queryClient}>
         {/* <ConnectKitProvider theme="rounded" customTheme={theme}> */}
         {children}

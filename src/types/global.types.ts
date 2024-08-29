@@ -5,10 +5,6 @@ import { PropsWithChildren, ReactElement, ReactNode } from 'react'
 
 export interface BaseProps<T = {}> extends React.FC<PropsWithChildren<T>> {}
 
-export interface HookOptions {
-  options?: object
-}
-
 export interface ErrorResponse extends Response {
   response: {
     data: {
@@ -19,6 +15,10 @@ export interface ErrorResponse extends Response {
 export type QueryKey<T, Q> = [T] | [T, Q]
 
 export interface MutationOptionHook<TData = unknown, TError = unknown, TVariables = void, TContext = unknown> {
+  options?: UseMutationOptions<TData, TError, TVariables, TContext>
+}
+
+export interface UseQueryOptions<TData = unknown, TError = unknown, TVariables = void, TContext = unknown> {
   options?: UseMutationOptions<TData, TError, TVariables, TContext>
 }
 
