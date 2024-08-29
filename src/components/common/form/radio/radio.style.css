@@ -1,0 +1,23 @@
+.form-radio-group {
+  @apply rounded-2xl;
+}
+
+.form-radio {
+  @apply appearance-none absolute;
+}
+
+.form-radio-label {
+  @apply block py-[18px] px-6 text-center text-main font-medium text-sm rounded-2xl border border-transparent bg-dark cursor-pointer;
+}
+
+.form-radio.form-radio-sm ~ .form-radio-label {
+  @apply py-2.5 px-4;
+}
+
+.form-radio:checked ~ .form-radio-label {
+  @apply text-primary border-primary bg-primary/[0.08];
+}
+
+.form-radio:disabled ~ .form-radio-label {
+  @apply opacity-70 cursor-not-allowed;
+}

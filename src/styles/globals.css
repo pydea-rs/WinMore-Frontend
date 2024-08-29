@@ -22,7 +22,21 @@
 @import '../components/common/list/listText/listText.style.css';
 @import '../components/common/button/button.style.css';
 @import '../components/common/spinner/spinner.style.css';
+
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
+
+@import '../components/common/form/checkbox/checkbox.style.css';
+@import '../components/common/form/formGroup/fromGroup.style.css';
+/* @import '../components/common/form/formValidation/formValidation.style.css'; */
+@import '../components/common/form/label/label.style.css';
+/* @import '../components/common/form/otpInput/otpInput.style.css'; */
+@import '../components/common/form/textInput/textInput.style.css';
+@import '../components/common/form/numberInput/numberInput.style.css';
+@import '../components/common/form/formCheck/formCheck.style.css';
+@import '../components/common/form/inputIcon/inputIcon.style.css';
+@import '../components/common/form/textForm/textForm.style.css';
+@import '../components/common/form/radio/radio.style.css';
+@import '../components/common/form/radioCard/radioCard.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';
@@ -40,6 +54,10 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+}
+
+::selection {
+  @apply text-primary bg-primary/10;
 }
 
 body {
@@ -61,4 +79,15 @@ body {
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
   /* width: 15px; */
   /* border-radius: 10px; */
+}
+
+.text-link::before {
+  @apply absolute bottom-0 block w-full h-[1px] bg-white;
+  content: '';
+}
+.text-link:hover {
+  @apply text-cyan-500;
+}
+.text-link:hover::before {
+  @apply bg-cyan-500;
 }

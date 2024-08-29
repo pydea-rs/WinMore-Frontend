@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IInstagramIcon } from './instagram.type'
+import { IInstagramIcon } from './instagram.types'
 
 const InstagramIcon: BaseProps<IInstagramIcon> = (props) => {
   const { className } = props

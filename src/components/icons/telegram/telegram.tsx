@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ITelegramIcon } from './telegram.type'
+import { ITelegramIcon } from './telegram.types'
 
 const TelegramIcon: BaseProps<ITelegramIcon> = (props) => {
   const { className } = props

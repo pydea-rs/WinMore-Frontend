@@ -1,0 +1,20 @@
+import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import classNames from 'classnames'
+import { CheckboxHook } from './checkbox.types'
+
+export const useCheckboxHook = (baseClass: string, checkoutProps: CheckboxHook) => {
+  const { className, disabled, ...restAttrs } = checkoutProps
+
+  const classes = classNames({
+    [baseClass]: baseClass,
+    'opacity-70': disabled,
+    [`${className}`]: className,
+  })
+
+  const mergedAttrs = useMergeAttrs({
+    ...{ ...restAttrs, disabled },
+    className: classes,
+  })
+
+  return mergedAttrs
+}

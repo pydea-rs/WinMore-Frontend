@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { ISphereIcon } from './sphere.type'
+import { ISphereIcon } from './sphere.types'
 
 const SphereIcon: BaseProps<ISphereIcon> = (props) => {
   const { className } = props

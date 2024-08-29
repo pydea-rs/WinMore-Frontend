@@ -25,15 +25,6 @@ const config: Config = {
         yellow: {
           500: '#FFD600',
         },
-        // n: {
-        //   1: '#FEFEFE',
-        //   2: '#F3F5F7',
-        //   3: '#E8ECEF',
-        //   4: '#6C7275',
-        //   5: '#343839',
-        //   6: '#1A1F25',
-        //   7: '#0f141a',
-        // },
       },
       screens: {
         sm: '540px',
@@ -71,6 +62,12 @@ const config: Config = {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%,-50%)',
+        },
+        '.text-link': {
+          display: 'inline-block',
+          position: 'relative',
+          marginRight: '3px',
+          marginLeft: '3px',
         },
       }
 

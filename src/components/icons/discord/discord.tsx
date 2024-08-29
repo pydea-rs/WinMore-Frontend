@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IDiscordIcon } from './discord.type'
+import { IDiscordIcon } from './discord.types'
 
 const DiscordIcon: BaseProps<IDiscordIcon> = (props) => {
   const { className } = props
