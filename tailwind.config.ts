@@ -46,11 +46,17 @@ const config: Config = {
         center: true,
         padding: '1rem',
       },
+      fontSize: {
+        relative2xl: 'calc(1.5rem + 2.8vmax)',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'gradient-primary': 'linear-gradient(95.08deg, #32CD32 0%, #2ECC71 100%)',
         'gradient-yellow-dark': 'linear-gradient(89.73deg, rgba(255, 230, 0, 0.3) 0.17%, rgba(255, 229, 0, 0) 115.55%)',
+        'gradient-navy': 'linear-gradient(90deg, rgba(45, 48, 93, 1),rgba(94, 101, 195, 1))',
+        'gradient-hot-pink': 'linear-gradient(90deg, rgba(199, 56, 184, 1),rgba(97, 27, 90, 1))',
+        'gradient-dark-purple': 'linear-gradient(0deg, rgba(45, 48, 93, 0.42), rgba(45, 48, 93, 0.42)),linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))',
       },
     },
   },
