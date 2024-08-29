@@ -48,7 +48,7 @@ export default function Home() {
                     <div className="relative flex flex-col justify-center items-center rounded-3xl bg-gradient-navy h-[224px] overflow-hidden">
                       <Image
                         alt="shape"
-                        src="assets/static/images/polygon-1.svg"
+                        src="/assets/images/polygon-1.svg"
                         width={205}
                         height={205}
                         className="hidden- sm:block- pointer-events-none absolute -top-12 left-0 z-20"
@@ -57,13 +57,13 @@ export default function Home() {
                       <button className="block p-4">Button</button>
                       <Image
                         alt="shape"
-                        src="assets/static/images/polygon.svg"
+                        src="/assets/images/polygon.svg"
                         width={205}
                         height={205}
                         className="hidden- sm:block- pointer-events-none absolute -bottom-12 -right-2 z-20"
                       />
                     </div>
-                    <Image alt="shape" src="assets/static/images/gem-navy.svg" width={120} height={110} className="hidden md:block absolute -bottom-10 -left-[50px] z-20" />
+                    <Image alt="shape" src="/assets/images/gem-navy.svg" width={120} height={110} className="hidden md:block absolute -bottom-10 -left-[50px] z-20" />
                   </div>
                 </div>
                 <div className="col-span-12 md:col-span-6">
@@ -71,7 +71,7 @@ export default function Home() {
                     <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl bg-gradient-hot-pink h-[224px]">
                       <Image
                         alt="shape"
-                        src="assets/static/images/square-pattern.svg"
+                        src="/assets/images/square-pattern.svg"
                         width={114}
                         height={114}
                         className="hidden- sm:block- pointer-events-none absolute -top-0 -right-0 z-20"
@@ -80,30 +80,24 @@ export default function Home() {
                       <button className="block p-4">Button</button>
                       <Image
                         alt="shape"
-                        src="assets/static/images/square-pattern-1.svg"
+                        src="/assets/images/square-pattern-1.svg"
                         width={128}
                         height={110}
                         className="hidden- sm:block- pointer-events-none absolute bottom-0 left-0 z-20"
                       />
                     </div>
-                    <Image alt="shape" src="assets/static/images/gem-hot-pink.svg" width={120} height={100} className="hidden md:block absolute -top-14 -right-14 z-20" />
+                    <Image alt="shape" src="/assets/images/gem-hot-pink.svg" width={120} height={100} className="hidden md:block absolute -top-14 -right-14 z-20" />
                   </div>
                 </div>
                 <div className="col-span-12 md:col-span-6">
                   <div className="relative">
-                    <Image
-                      alt="shape"
-                      src="assets/static/images/gem-blue-1.svg"
-                      width={86}
-                      height={86}
-                      className="hidden- sm:block- pointer-events-none absolute top-4 right-4 -z-20"
-                    />
+                    <Image alt="shape" src="/assets/images/gem-blue-1.svg" width={86} height={86} className="hidden- sm:block- pointer-events-none absolute top-4 right-4 -z-20" />
                     <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl h-[224px] bg-gradient-dark-purple filter-backdrop">
                       <h2 className="text-relative2xl 2xl:text-[68px] font-bold leading-[82px]">Coming Soon</h2>
                     </div>
                     <Image
                       alt="shape"
-                      src="assets/static/images/gem-blue-1.svg"
+                      src="/assets/images/gem-blue-1.svg"
                       width={86}
                       height={86}
                       className="hidden- sm:block- pointer-events-none absolute bottom-0 left-0 -z-20"
@@ -112,19 +106,13 @@ export default function Home() {
                 </div>
                 <div className="col-span-12 md:col-span-6">
                   <div className="relative">
-                    <Image
-                      alt="shape"
-                      src="assets/static/images/gem-gold-2.svg"
-                      width={80}
-                      height={80}
-                      className="hidden- sm:block- pointer-events-none absolute top-2 right-2 -z-20"
-                    />
+                    <Image alt="shape" src="/assets/images/gem-gold-2.svg" width={80} height={80} className="hidden- sm:block- pointer-events-none absolute top-2 right-2 -z-20" />
                     <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl h-[224px] bg-gradient-dark-purple filter-backdrop">
                       <h2 className="text-relative2xl 2xl:text-[68px] font-bold leading-[82px]">Coming Soon</h2>
                     </div>
                     <Image
                       alt="shape"
-                      src="assets/static/images/gem-gold-1.svg"
+                      src="/assets/images/gem-gold-1.svg"
                       width={80}
                       height={80}
                       className="hidden- sm:block- pointer-events-none absolute bottom-2 left-2 -z-20"
