@@ -29,7 +29,7 @@ const MainLayout: BaseProps = (props) => {
         style={{
           position: 'absolute',
           width: '100%',
-          height: '50svh',
+          height: '100vh',
           // zIndex: 2,
           // left: 0,
           // right: 0,
