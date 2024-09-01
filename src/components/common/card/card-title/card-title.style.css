@@ -1,0 +1,7 @@
+.card-title {
+  @apply flex w-fit justify-end text-info bg-secondary px-6 py-2.5 mr-auto rounded-t-2xl;
+}
+
+.card-title h3 {
+  @apply text-primary border-b-primary p-2 font-bold text-sm border-b border-solid;
+}

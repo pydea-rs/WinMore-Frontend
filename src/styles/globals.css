@@ -38,6 +38,9 @@
 @import '../components/common/form/radio/radio.style.css';
 @import '../components/common/form/radioCard/radioCard.style.css';
 @import '../components/common/card/card.style.css';
+@import '../components/common/card/card-header/card-header.style.css';
+@import '../components/common/card/card-title/card-title.style.css';
+@import '../components/common/card/card-body/card-body.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';
