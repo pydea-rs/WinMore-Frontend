@@ -52,8 +52,8 @@ const Casino: BaseProps<ICasinoIcon> = (props) => {
       <path fill="transparent" d="M6.64001 9.32L3.51001 7.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <path
         fill="transparent"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M12 15L14.75 12L12 9L9.25 12L12 15Z"
         stroke="currentColor"
         strokeWidth="1.5"

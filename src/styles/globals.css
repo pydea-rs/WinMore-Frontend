@@ -37,6 +37,7 @@
 @import '../components/common/form/textForm/textForm.style.css';
 @import '../components/common/form/radio/radio.style.css';
 @import '../components/common/form/radioCard/radioCard.style.css';
+@import '../components/common/card/card.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';

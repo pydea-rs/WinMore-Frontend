@@ -21,7 +21,7 @@ const config: Config = {
         white: '#FEFEFE',
         dark: '#0f141a', // Default BG
         light: 'hsla(0, 0%, 100%, 0.3)',
-        navy: '1A1F25', // Border
+        navy: '#1A1F25', // Border
         yellow: {
           500: '#FFD600',
         },
