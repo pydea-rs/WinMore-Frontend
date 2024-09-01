@@ -1,4 +1,5 @@
 import { Button } from '@/components/common/button/button'
+import { Card } from '@/components/common/card/card'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabContent from '@/components/common/tab/tabContent/tabContent'
@@ -137,95 +138,98 @@ export default function Home() {
                   <TabItem>MY BETS</TabItem>
                 </TabHeader>
 
-                <TabBody className="bg-[hsla(212,31%,10%,0.85)] p-[20px] rounded-2xl rounded-tr-none sm:filter-backdrop">
+                <TabBody>
                   <TabContent>
-                    <TableWrapper>
-                      <Table className="text-white w-full ">
-                        <TableHeader>
-                          <TableRow>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">Game Name</div>
-                            </TableHeading>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">Player Name</div>
-                            </TableHeading>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">Time</div>
-                            </TableHeading>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">WAGER</div>
-                            </TableHeading>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">MULTIPLIER</div>
-                            </TableHeading>
-                            <TableHeading className="w-[165px]">
-                              <div className="p-2">PAYOUT</div>
-                            </TableHeading>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {new Array(8).fill(null).map((_, inx) => (
-                            <TableRow className="text-center" key={inx}>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <DicesIcon className="w-6" />
-                                    <span>Dream Tower</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <SingleUserIcon className="w-6" />
-                                    <span>Macan</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <span>3m</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <Cent1Icon className="w-6 text-[rgba(255,170,0)]" />
-                                    <span>1.25</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <span>0.00.x</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
-                              <TableData>
-                                <TableDataWrapper>
-                                  <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
-                                    <CentIcon className="w-6 text-[rgba(255,170,0)]" />
-                                    <span>0.00</span>
-                                  </div>
-                                </TableDataWrapper>
-                              </TableData>
+                    {/* bg-[hsla(212,31%,10%,0.85)] */}
+                    <Card className="bg-opacity-60 rounded-tr-none sm:filter-backdrop" responsive>
+                      <TableWrapper>
+                        <Table className="w-full text-main">
+                          <TableHeader>
+                            <TableRow>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">Game Name</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">Player Name</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">Time</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">WAGER</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">MULTIPLIER</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
+                                <div className="p-2">PAYOUT</div>
+                              </TableHeading>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableWrapper>
+                          </TableHeader>
+                          <TableBody>
+                            {new Array(8).fill(null).map((_, inx) => (
+                              <TableRow className="text-center" key={inx}>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <DicesIcon className="w-6" />
+                                      <span>Dream Tower</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <SingleUserIcon className="w-6" />
+                                      <span>Macan</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <span>3m</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <Cent1Icon className="w-6 text-[rgba(255,170,0)]" />
+                                      <span>1.25</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <span>0.00.x</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                                <TableData>
+                                  <TableDataWrapper className="bg-opacity-40">
+                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
+                                      <CentIcon className="w-6 text-[rgba(255,170,0)]" />
+                                      <span>0.00</span>
+                                    </div>
+                                  </TableDataWrapper>
+                                </TableData>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableWrapper>
+                    </Card>
                   </TabContent>
                   <TabPanel>Content 2</TabPanel>
                   <TabPanel>Content 3</TabPanel>
                   <TabPanel>Content 4</TabPanel>
                 </TabBody>
               </Tab>
+              <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20" />
             </div>
           </section>
-          <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20" />
         </div>
 
         <div className="2xl:container relative -z-1 hidden sm:block mt-auto">

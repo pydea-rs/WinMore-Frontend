@@ -1,3 +1,4 @@
+import { Card } from '@/components/common/card/card'
 import { Checkbox } from '@/components/common/form/checkbox/checkbox'
 import { FormCheck } from '@/components/common/form/formCheck/formCheck'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
@@ -33,7 +34,7 @@ const FormComponentDemo = () => {
   return (
     <div className="px-4 2xl:container">
       <div className="flex gap-5 p-4 flex-wrap">
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4"> Text Input and Label </h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -49,8 +50,8 @@ const FormComponentDemo = () => {
               <Input placeholder="example@crypto.com" id="1-2" />
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        </Card>
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4"> Text Input and label with Icon</h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -74,8 +75,8 @@ const FormComponentDemo = () => {
               </InputIcon>
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        </Card>
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4"> Valid and invalid Text Input </h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -97,8 +98,8 @@ const FormComponentDemo = () => {
               <Input invalid placeholder="type here" id="3-3" />
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        </Card>
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4"> Text Form - Default - Valid - Invalid </h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -123,8 +124,8 @@ const FormComponentDemo = () => {
               <TextForm variant="invalid">Your password must be 8-20 characters long</TextForm>
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        </Card>
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4"> Checkbox</h1>
           <div className="flex flex-col items-start">
             <FormCheck>
@@ -144,9 +145,9 @@ const FormComponentDemo = () => {
               </Label>
             </FormCheck>
           </div>
-        </div>
+        </Card>
 
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[420px]">
+        <Card size="lg" className="w-[420px]">
           <h1 className="text-main mb-4">Radio</h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -201,8 +202,8 @@ const FormComponentDemo = () => {
               </div>
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[340px]">
+        </Card>
+        <Card size="lg" className="w-[340px]">
           <h1 className="text-main mb-4">Radio Card</h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -234,8 +235,8 @@ const FormComponentDemo = () => {
               </RadioCard>
             </FormGroup>
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[340px]">
+        </Card>
+        <Card size="lg" className="w-[340px]">
           <h1 className="text-main mb-4">Number Input</h1>
           <div className="flex flex-col items-start">
             <Controller
@@ -291,8 +292,8 @@ const FormComponentDemo = () => {
               )}
             />
           </div>
-        </div>
-        <div className="py-8 px-6 rounded-2xl bg-secondary w-[370px]">
+        </Card>
+        <Card size="lg" className="w-[370px]">
           <h1 className="text-main mb-4">Disabled Forms</h1>
           <div className="flex flex-col items-start">
             <FormGroup>
@@ -355,7 +356,7 @@ const FormComponentDemo = () => {
               </div>
             </RadioCard>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   )

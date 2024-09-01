@@ -9,10 +9,10 @@ export const NumberCustomInput: BaseProps<NumberInputProps> = (props) => {
   return <input {...props} />
 }
 export const NumberInput: BaseProps<NumberInputProps> = (props) => {
-  const { onDecrease, onIncrease } = props
+  const { onDecrease, onIncrease, ...restProps } = props
   // Base class for styling
   const baseClass = 'form-control-numeric'
-  const mergedAttrs = useNumberInputHook(baseClass, props)
+  const mergedAttrs = useNumberInputHook(baseClass, restProps)
 
   return (
     <div className="relative">
