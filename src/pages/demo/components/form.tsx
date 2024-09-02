@@ -2,6 +2,7 @@ import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
+import Container from '@/components/common/container/container'
 import { Checkbox } from '@/components/common/form/checkbox/checkbox'
 import { FormCheck } from '@/components/common/form/formCheck/formCheck'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
@@ -35,7 +36,7 @@ const FormComponentDemo = () => {
   const simpleCurrentValue = numericFormWatch('simple')
 
   return (
-    <div className="px-4 2xl:container">
+    <Container kind="fluid">
       <div className="flex gap-5 p-4 flex-wrap">
         <Card size="lg" className="w-[370px]">
           <CardHeader>
@@ -397,7 +398,7 @@ const FormComponentDemo = () => {
           </CardBody>
         </Card>
       </div>
-    </div>
+    </Container>
   )
 }
 

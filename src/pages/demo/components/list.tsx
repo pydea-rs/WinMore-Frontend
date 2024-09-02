@@ -1,3 +1,4 @@
+import Container from '@/components/common/container/container'
 import List from '@/components/common/list/list'
 import ListExternalLink from '@/components/common/list/listExternalLink/listExternalLink'
 import ListItem from '@/components/common/list/listItem/listItem'
@@ -5,7 +6,7 @@ import ListLink from '@/components/common/list/listLink/listLink'
 
 const ListComponentDemo = () => {
   return (
-    <div className="px-4 2xl:container">
+    <Container kind="fluid">
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 sm:col-span-6 flex items-center">
           <List>
@@ -111,7 +112,7 @@ const ListComponentDemo = () => {
           </List>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 

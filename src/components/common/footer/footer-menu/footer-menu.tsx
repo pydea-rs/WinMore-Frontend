@@ -10,9 +10,10 @@ import { usePermalink } from '@/hooks/usePermalink'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
 import { useState } from 'react'
-import { ICopyright } from './copyright.types'
+import Container from '../../container/container'
+import { IFooterMenu } from './footer-menu.types'
 
-const Copyright: BaseProps<ICopyright> = (props) => {
+const FooterMenu: BaseProps<IFooterMenu> = (props) => {
   const { className } = props
   const { internalLinks, externalLinks } = usePermalink()
   const [staticData] = useState({
@@ -74,19 +75,19 @@ const Copyright: BaseProps<ICopyright> = (props) => {
   })
 
   const classList = classNames({
-    [`footer-copyright`]: true,
+    [`footer-menu`]: true,
     [`${className}`]: className,
   })
 
   return (
     <div className={classList}>
-      <div className="px-4 2xl:container">
+      <Container kind="fluid">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 flex items-center">
             <List>
               {staticData.menu.quickAccess.map(({ link, title, id }) => (
                 <ListItem key={`quick-access-${id}`}>
-                  <ListLink href={link} className="text-white  transition">
+                  <ListLink href={link} className="text-white transition">
                     {title}
                   </ListLink>
                 </ListItem>
@@ -97,7 +98,7 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             <List className="gap-x-[0.9rem]">
               {staticData.menu.socialMedia.map(({ link, title, Icon, id }) => (
                 <ListItem key={`social-media-${id}`}>
-                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white  transition">
+                  <ListExternalLink target="_blank" href={link} title={title} className="p-[0.625rem] text-white transition">
                     <Icon />
                   </ListExternalLink>
                 </ListItem>
@@ -105,9 +106,9 @@ const Copyright: BaseProps<ICopyright> = (props) => {
             </List>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   )
 }
 
-export default Copyright
+export default FooterMenu
