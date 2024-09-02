@@ -5,7 +5,6 @@ import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
 import '@/styles/globals.css'
 import { AppPropsWithLayout } from '@/types/global.types'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { DM_Sans } from 'next/font/google'
 import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
@@ -70,7 +69,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           <AuthProvider>
             {getLayout(<Component {...pageProps} />)}
             <Modals />
-            <ReactQueryDevtools initialIsOpen={false} />
+            {/* <ReactQueryDevtools initialIsOpen={false}  /> */}
           </AuthProvider>
         </Web3Provider>
       </Provider>

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @import '../components/common/footer/footer.style.css';
-@import '../components/common/footer/copyright/copyright.style.css';
+@import '../components/common/footer/footer-menu/footer-menu.style.css';
 @import '../components/common/tab/tab.style.css';
 @import '../components/common/tab/tabBody/tabBody.style.css';
 @import '../components/common/tab/tabContent/tabContent.style.css';
@@ -41,6 +41,9 @@
 @import '../components/common/card/card-header/card-header.style.css';
 @import '../components/common/card/card-title/card-title.style.css';
 @import '../components/common/card/card-body/card-body.style.css';
+@import '../components/common/quickAccess/quickAccess.style.css';
+@import '../components/common/container/container.style.css';
+@import '../components/common/menu-sticky/menu-sticky.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';
@@ -75,6 +78,7 @@ body {
     text-wrap: balance;
   }
 }
+
 .swiper-pagination-bullet {
   background-color: #d9d9d9;
   /* transition: all ease-in 300ms; */
@@ -90,8 +94,8 @@ body {
   content: '';
 }
 .text-link:hover {
-  @apply text-cyan-500;
+  @apply text-primary;
 }
 .text-link:hover::before {
-  @apply bg-cyan-500;
+  @apply bg-primary;
 }

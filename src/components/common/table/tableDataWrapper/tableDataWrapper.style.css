@@ -1,6 +1,6 @@
 /* bg-[rgba(15,20,26,0.4)] */
 .table-data-wrapper {
-  @apply py-4 h-full px-1 text-sm overflow-hidden leading-[16.8px] bg-dark border-solid border-y-[#1e1a25] border-y;
+  @apply py-4 h-full px-1 text-main text-sm overflow-hidden leading-[16.8px] bg-dark border-solid border-y-[#1e1a25] border-y;
 }
 
 .table-data:last-child .table-data-wrapper {

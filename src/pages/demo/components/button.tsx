@@ -1,4 +1,5 @@
 import { Button } from '@/components/common/button/button'
+import Container from '@/components/common/container/container'
 import { Spinner } from '@/components/common/spinner/spinner'
 import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
@@ -15,7 +16,7 @@ import Image from 'next/image'
 const ButtonComponentDemo = () => {
   const isLoading = true
   return (
-    <div className="px-4 2xl:container">
+    <Container kind="fluid">
       <div className="flex gap-2 p-5 flex-wrap">
         <div className="p-2 rounded-xl bg-white w-80">
           <h1 className="text-main mb-4">Primary Button - Small</h1>
@@ -447,7 +448,7 @@ const ButtonComponentDemo = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 

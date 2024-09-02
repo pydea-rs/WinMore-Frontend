@@ -1,3 +1,3 @@
 import { ElementProps } from '@/types/elements.types'
 
-export interface ICopyright extends ElementProps {}
+export interface IHomeIcon extends ElementProps {}

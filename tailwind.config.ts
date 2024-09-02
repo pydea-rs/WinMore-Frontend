@@ -31,14 +31,15 @@ const config: Config = {
         md: '720px',
         lg: '960px',
         xl: '1142px',
-        // '2xl': '1142px',
+        '2xl': '1536px',
       },
       container: {
         center: true,
         padding: '1rem',
       },
       fontSize: {
-        relative2xl: 'calc(1.5rem + 2.8vmax)',
+        'relative-xl': 'calc(1.7rem + 2.4vmin)',
+        'relative-2xl': 'calc(2.4rem + 2.5vmin)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -1,3 +1,4 @@
+import Container from '@/components/common/container/container'
 import Table from '@/components/common/table/table'
 import TableBody from '@/components/common/table/tableBody/tableBody'
 import TableData from '@/components/common/table/tableData/tableData'
@@ -16,7 +17,7 @@ import { ReactElement } from 'react'
 const TableDemo = () => {
   return (
     <>
-      <div className="container relative z-10">
+      <Container className="z-10">
         <TableWrapper className="bg-[hsla(212,31%,10%,0.9)] p-[20px] rounded-2xl sm:filter-backdrop mb-8">
           <Table className="text-secondary w-full ">
             <TableHeader>
@@ -717,12 +718,12 @@ const TableDemo = () => {
             </TableBody>
           </Table>
         </TableWrapper>
-      </div>
-      <div className="2xl:container relative -z-1 hidden sm:block">
+      </Container>
+      <Container kind="fluid" className="-z-1 hidden sm:block">
         <div className="sm:-mb-[40px] lg:-mb-[60px]  sm:-mt-[100px]  lg:-mt-[260px]">
           <img src="/assets/images/complex.svg" alt="complex" />
         </div>
-      </div>
+      </Container>
     </>
   )
 }

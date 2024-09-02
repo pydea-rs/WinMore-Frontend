@@ -10,6 +10,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useDisconnect } from 'wagmi'
 import { Button } from '../button/button'
+import Container from '../container/container'
 import List from '../list/list'
 import ListItem from '../list/listItem/listItem'
 import ListLink from '../list/listLink/listLink'
@@ -54,52 +55,70 @@ const Header = () => {
     },
   ]
 
-  return (
-    <>
-      <header className="pt-8 flex items-center justify-between z-20">
-        <Link href={'/'}>
-          <Image src={'/assets/images/logo.svg'} alt="logo" width={180} height={50} />
-        </Link>
+  const brandRender = () => {
+    return (
+      <Link href={'/'}>
+        <Image src={'/assets/images/logo.svg'} alt="logo" width={140} height={50} className="w-36 lg:w-44" />
+      </Link>
+    )
+  }
 
-        <div className="col-span-12 sm:col-span-6 flex items-center">
-          <List>
-            {headerRoutes.map((nav) => {
-              if (nav.disabled) {
-                return (
-                  <ListItem key={nav.path}>
-                    <ListText>{nav.title}</ListText>
-                  </ListItem>
-                )
-              }
+  const menuRender = () => {
+    return (
+      <div className="hidden md:flex items-center col-span-12 sm:col-span-6">
+        <List>
+          {headerRoutes.map((nav) => {
+            if (nav.disabled) {
               return (
                 <ListItem key={nav.path}>
-                  <ListLink href={'https://google.com'} className="text-white transition">
-                    {nav.title}
-                  </ListLink>
+                  <ListText>{nav.title}</ListText>
                 </ListItem>
               )
-            })}
-          </List>
+            }
+            return (
+              <ListItem key={nav.path}>
+                <ListLink href={'https://google.com'} className="text-white transition">
+                  {nav.title}
+                </ListLink>
+              </ListItem>
+            )
+          })}
+        </List>
+      </div>
+    )
+  }
+
+  const userProfileRender = () => {
+    return !user ? (
+      <Button className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm" kind="pattern" pilled bordered onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>
+        <div className="flex items-center gap-x-2">
+          <CryptoCurrencyIcon className="flex-shrink-0" /> Connect Wallet
         </div>
-        {!user ? (
-          <Button kind="pattern" bordered onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>
-            <div className="flex items-center gap-x-2">
-              <CryptoCurrencyIcon className="flex-shrink-0" /> Connect Wallet
-            </div>
-          </Button>
-        ) : (
-          <Button
-            kind="pattern"
-            bordered
-            //  onClick={logoutHandler}
-          >
-            <div className="flex items-center gap-x-2">
-              <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
-            </div>
-          </Button>
-        )}
-      </header>
-    </>
+      </Button>
+    ) : (
+      <Button kind="pattern" bordered pilled className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm" onClick={logoutHandler}>
+        <div className="flex items-center gap-x-2">
+          <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
+        </div>
+      </Button>
+    )
+  }
+
+  return (
+    <header className="mb-10">
+      <Container kind="fluid">
+        <div className="pt-8 flex items-center justify-between z-20">
+          {/* START LOGO */}
+          {brandRender()}
+
+          {/* START MENU */}
+          {menuRender()}
+
+          {/* START LOGIN/PROFILE */}
+          {userProfileRender()}
+        </div>
+      </Container>
+    </header>
   )
 }
 
