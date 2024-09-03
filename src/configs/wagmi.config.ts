@@ -12,11 +12,9 @@ export const config = createConfig(
       // [mainnet.id]: http(),
       [polygon.id]: http(),
     },
-    ssr: true, // If your dApp uses server side rendering (SSR)
-    // connectors,
+    ssr: true,
     appName: 'WinMore',
-    appDescription:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, rerum ut? Ullam aspernatur beatae, aut quo excepturi quae, perspiciatis consectetur itaque suscipit culpa distinctio esse atque et impedit accusamus ea.',
+    appDescription: '',
     walletConnectProjectId: process.env.PROJECT_ID || '',
   }),
 )
