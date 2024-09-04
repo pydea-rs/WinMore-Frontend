@@ -1,6 +1,6 @@
-import Modals from '@/components/common/modals/modals'
 import MainLayout from '@/components/layouts/main.layout'
 import AuthProvider from '@/providers/auth.provider'
+import Modals from '@/providers/modals.provider'
 import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
 import '@/styles/globals.css'

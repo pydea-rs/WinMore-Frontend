@@ -44,6 +44,7 @@
 @import '../components/common/quickAccess/quickAccess.style.css';
 @import '../components/common/container/container.style.css';
 @import '../components/common/menu-sticky/menu-sticky.style.css';
+@import '../components/common/modal/modal.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';

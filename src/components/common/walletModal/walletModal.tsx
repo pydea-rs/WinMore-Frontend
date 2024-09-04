@@ -23,12 +23,13 @@ import { FormGroup } from '../form/formGroup/fromGroup'
 import { Label } from '../form/label/label'
 import { TextForm } from '../form/textForm/textForm'
 import { Input } from '../form/textInput/textInput'
+import Modal from '../modal/modal'
 import { Spinner } from '../spinner/spinner'
 import { AccountForm, WalletModalProps } from './walletModal.types'
 
-export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => {
+export const WalletModal: React.FC<WalletModalProps> = (props) => {
+  const { isOpen, onClose } = props
   // Start Form
-
   const {
     handleSubmit,
     control,
@@ -62,9 +63,6 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
     },
   })
 
-  if (!nonceData) {
-    return
-  }
   const handleConnect = (walletName: string, connector: CreateConnectorFn) => {
     setError(null) // Reset error state
     switch (walletName) {
@@ -88,6 +86,10 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
         break
     }
 
+    if (!nonceData) {
+      return
+    }
+
     if (!error) {
       connect(
         { connector },
@@ -102,10 +104,8 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50 flex gap-8 items-center justify-center bg-black bg-opacity-60 filter-backdrop">
+    <Modal isOpen={isOpen} onClose={onClose}>
       {/* CONNECT TO WALLET */}
       <Card size="lg" className="w-full max-w-[431px]">
         <CardHeader>
@@ -262,6 +262,6 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
           </form>
         </CardBody>
       </Card>
-    </div>
+    </Modal>
   )
 }

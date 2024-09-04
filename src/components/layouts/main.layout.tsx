@@ -21,24 +21,21 @@ const MainLayout: BaseProps = (props) => {
           top: '0',
           zIndex: 2,
         }}
+        className="pointer-events-none"
       />
       <Image
         src={'/assets/images/hero-bg.svg'}
         alt="header rectangle"
         width={500}
         height={500}
-        // className="bg-blue-300"
         style={{
           position: 'absolute',
           width: '100%',
           height: '100vh',
           top: 0,
           objectFit: 'cover',
-          // zIndex: 2,
-          // left: 0,
-          // right: 0,
-          // top: 0,
         }}
+        className="pointer-events-none"
       />
 
       <Header />
