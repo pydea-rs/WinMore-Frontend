@@ -57,6 +57,7 @@ const config: Config = {
       const newUtilities = {
         '.filter-backdrop': {
           backdropFilter: 'saturate(100%) blur(13px)',
+          '-webkit-backdrop-filter': 'saturate(100%) blur(13px)',
         },
         '.absolute-center': {
           position: 'absolute',

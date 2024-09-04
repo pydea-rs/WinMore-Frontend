@@ -1,6 +1,6 @@
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { WalletModal } from '../walletModal/walletModal'
+import { WalletModal } from '../components/common/walletModal/walletModal'
 
 const Modals = () => {
   const { modals } = useSelector((state) => state.modal)

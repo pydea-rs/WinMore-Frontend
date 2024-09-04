@@ -1,0 +1,3 @@
+.modal {
+  @apply relative z-50 focus:outline-none;
+}
