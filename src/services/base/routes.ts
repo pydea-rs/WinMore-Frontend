@@ -1,4 +1,4 @@
-export const useGetApiRoutes = (slug?: string) => {
+export const getApiRoute = (slug?: string) => {
   const routes = {
     auth: {
       nonce: '/auth/nonce',

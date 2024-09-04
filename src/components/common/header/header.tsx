@@ -20,6 +20,7 @@ const Header = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
   const { internalLinks } = usePermalink()
+  const { logoutAndDisconnect } = useAuth()
 
   const headerRoutes: IHeaderRoutes[] = [
     {
@@ -56,8 +57,6 @@ const Header = () => {
       </Link>
     )
   }
-
-  const { logoutAndDisconnect } = useAuth()
 
   const menuRender = () => {
     return (

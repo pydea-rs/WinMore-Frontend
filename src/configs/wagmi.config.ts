@@ -11,7 +11,15 @@ export const config = createConfig({
     // [mainnet.id]: http(),
     [polygon.id]: http(),
   },
-  connectors: [metaMask(), injected({ target: 'phantom' }), injected({ target: 'rabby' })],
+  connectors: [
+    metaMask({
+      dappMetadata: {
+        name: 'winmore',
+      },
+    }),
+    injected({ target: 'phantom' }),
+    injected({ target: 'rabby' }),
+  ],
   multiInjectedProviderDiscovery: false,
   ssr: true,
 })

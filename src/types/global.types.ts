@@ -18,8 +18,12 @@ export interface MutationOptionHook<TData = unknown, TError = unknown, TVariable
   options?: UseMutationOptions<TData, TError, TVariables, TContext>
 }
 
+export interface IBaseQueryOptions {
+  enabled?: boolean
+}
+
 export interface UseQueryOptions<TData = unknown, TError = unknown, TVariables = void, TContext = unknown> {
-  options?: UseMutationOptions<TData, TError, TVariables, TContext>
+  options?: IBaseQueryOptions
 }
 
 type NextPageWithLayout = NextPage & {
