@@ -28,3 +28,14 @@ type NextPageWithLayout = NextPage & {
 export type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
+
+export interface IWalletError {
+  code: number
+  data: unknown
+  details: string
+  docsPath: unknown
+  metaMessages: unknown
+  name: string
+  shortMessage: string
+  version: string
+}

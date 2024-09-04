@@ -1,5 +1,4 @@
 import MainLayout from '@/components/layouts/main.layout'
-import AuthProvider from '@/providers/auth.provider'
 import Modals from '@/providers/modals.provider'
 import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
@@ -9,6 +8,8 @@ import { DM_Sans } from 'next/font/google'
 import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
+import { Slide, ToastContainer } from 'react-toastify'
+
 export const Fractul = LocalFont({
   src: [
     {
@@ -66,13 +67,24 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <div className={`${Fractul.className} ${DMSans.variable}`}>
       <Provider store={store}>
         <Web3Provider>
-          <AuthProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <Modals />
-            {/* <ReactQueryDevtools initialIsOpen={false}  /> */}
-          </AuthProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <Modals />
+          {/* <ReactQueryDevtools initialIsOpen={false}  /> */}
         </Web3Provider>
       </Provider>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
     </div>
   )
 }

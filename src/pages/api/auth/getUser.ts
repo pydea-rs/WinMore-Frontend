@@ -5,7 +5,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     data: {
       user: {
         email: 'example@gmail.com',
-        jwt_token: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto explicabo fuga reiciendis nostrum? Amet est maiores sed vel molestiae minima?',
+        jwt_token: 'test_jwt_token',
         name: 'Max',
         signed: true,
       },

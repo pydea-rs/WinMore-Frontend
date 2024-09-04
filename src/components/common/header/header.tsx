@@ -2,13 +2,12 @@ import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 
 import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import { useAuth } from '@/hooks/useAuth'
 import { usePermalink } from '@/hooks/usePermalink'
-import { logout } from '@/store/slices/auth/auth.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useDisconnect } from 'wagmi'
 import { Button } from '../button/button'
 import Container from '../container/container'
 import List from '../list/list'
@@ -20,12 +19,7 @@ import { IHeaderRoutes } from './header.types'
 const Header = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
-  const { disconnect } = useDisconnect()
   const { internalLinks } = usePermalink()
-  const logoutHandler = () => {
-    dispatch(logout())
-    disconnect()
-  }
 
   const headerRoutes: IHeaderRoutes[] = [
     {
@@ -63,6 +57,8 @@ const Header = () => {
     )
   }
 
+  const { logoutAndDisconnect } = useAuth()
+
   const menuRender = () => {
     return (
       <div className="hidden md:flex items-center col-span-12 sm:col-span-6">
@@ -96,7 +92,7 @@ const Header = () => {
         </div>
       </Button>
     ) : (
-      <Button kind="pattern" bordered pilled className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm" onClick={logoutHandler}>
+      <Button kind="pattern" bordered pilled className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm" onClick={logoutAndDisconnect}>
         <div className="flex items-center gap-x-2">
           <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
         </div>
