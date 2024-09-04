@@ -1,17 +1,44 @@
+import DisabledIcon from '@/components/icons/disabled/disabled'
+import EmailIcon from '@/components/icons/email/email'
+import MetaMaxIcon from '@/components/icons/metaMax/metaMax'
+import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useGetNonce } from '@/services/authentication/useGetNounce/useGetNonce.hook'
 import { login } from '@/store/slices/auth/auth.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch } from '@/store/store'
+import classNames from 'classnames'
+import Image from 'next/image'
 import { useState } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { CreateConnectorFn, useConnect, useSignMessage } from 'wagmi'
 import { injected, metaMask } from 'wagmi/connectors'
-
-interface WalletModalProps {
-  isOpen: boolean
-  onClose: () => void
-}
+import { Button } from '../button/button'
+import { Card } from '../card/card'
+import { CardBody } from '../card/card-body/card-body'
+import { CardHeader } from '../card/card-header/card-header'
+import { CardTitle } from '../card/card-title/card-title'
+import { Checkbox } from '../form/checkbox/checkbox'
+import { FormCheck } from '../form/formCheck/formCheck'
+import { FormGroup } from '../form/formGroup/fromGroup'
+import { Label } from '../form/label/label'
+import { TextForm } from '../form/textForm/textForm'
+import { Input } from '../form/textInput/textInput'
+import { Spinner } from '../spinner/spinner'
+import { AccountForm, WalletModalProps } from './walletModal.types'
 
 export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => {
+  // Start Form
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<AccountForm>({ defaultValues: { confirm: false, email: '', name: '' } })
+
+  const onSubmit: SubmitHandler<AccountForm> = (data) => {
+    console.log(data)
+  }
+  // END Form
   const { connect } = useConnect()
   const [error, setError] = useState<string | null>(null)
   const { data: nonceData } = useGetNonce({})
@@ -78,39 +105,163 @@ export const WalletModal: React.FC<WalletModalProps> = ({ isOpen, onClose }) => 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-center mb-6">Connect Wallet</h2>
-        <div className="flex flex-col gap-4">
-          <button onClick={() => handleConnect('MetaMask', metaMask())} className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
-            MetaMask
+    <div className="fixed inset-0 z-50 flex gap-8 items-center justify-center bg-black bg-opacity-60 filter-backdrop">
+      {/* CONNECT TO WALLET */}
+      <Card size="lg" className="w-full max-w-[431px]">
+        <CardHeader>
+          <CardTitle>Login/Sign up</CardTitle>
+          <button
+            onClick={onClose}
+            className="appearance-none flex flex-col justify-center items-center p-2.5 focus:bg-primary focus:bg-opacity-60 hover:bg-primary hover:bg-opacity-60 active:bg-opacity-80 transition-all rounded-full "
+          >
+            <DisabledIcon />
           </button>
-          <button onClick={() => handleConnect('Phantom', injected({ target: 'phantom' }))} className="w-full px-4 py-2 text-white bg-purple-500 rounded hover:bg-purple-600">
-            {isWaitingForSign ? 'loading...' : 'Phantom'}
-          </button>
-          <button onClick={() => handleConnect('Rabby', injected({ target: 'rabby' }))} className="w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
-            Rabby
-          </button>
-        </div>
-
-        {error && (
-          <div className="mt-6 text-center text-red-500">
-            <p>{error}</p>
-            <a
-              href={error.includes('MetaMask') ? 'https://metamask.io/download/' : error.includes('Phantom') ? 'https://phantom.app/' : 'https://rabby.io/'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-block text-blue-500 hover:underline"
-            >
-              Install {error.includes('MetaMask') ? 'MetaMask' : error.includes('Phantom') ? 'Phantom' : 'Rabby'}
-            </a>
+        </CardHeader>
+        <CardBody>
+          <div className="flex flex-col items-center mb-5">
+            <Image src={'/assets/images/logo-brand.svg'} alt="Winmore logo-brand" width={48} height={34} className="mb-2" />
+            <h2 className="font-bold text-base leading-5 mb-2">WELCOME To WINMORE</h2>
+            <span className="text-sm font-light">Please Connect your wallet to join us</span>
           </div>
-        )}
+          <div className="flex flex-col gap-4 mb-4">
+            <Button kind="primary" variant="warning" size="lg" full onClick={() => handleConnect('MetaMask', metaMask())}>
+              <div className="flex items-center gap-x-2">
+                <MetaMaxIcon className="flex-shrink-0" /> Connect MetaMask
+              </div>
+            </Button>
 
-        <button onClick={onClose} className="mt-6 w-full px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300">
-          Close
-        </button>
-      </div>
+            <Button
+              kind="primary"
+              variant="warning"
+              className=""
+              size="lg"
+              full
+              onClick={() => handleConnect('Phantom', injected({ target: 'phantom' }))}
+              disabled={isWaitingForSign}
+            >
+              {isWaitingForSign && (
+                <div className="absolute-center">
+                  <Spinner />
+                </div>
+              )}
+              <div className={classNames({ invisible: isWaitingForSign, 'flex items-center gap-x-2': true })}>
+                <MetaMaxIcon className="flex-shrink-0" /> Connect Phantom
+              </div>
+            </Button>
+
+            <Button kind="primary" variant="warning" size="lg" full onClick={() => handleConnect('Rabby', injected({ target: 'rabby' }))}>
+              <div className="flex items-center gap-x-2">
+                <MetaMaxIcon className="flex-shrink-0" /> Connect Rabby
+              </div>
+            </Button>
+          </div>
+          <span className="text-sm text-white font-normal">
+            I agree to the collection of information in cookies, I agree with
+            <a className="text-link" href="#" target="_blank">
+              Privacy Policy
+            </a>
+            and with
+            <a className="text-link" href="#" target="_blank">
+              Terms of Use
+            </a>
+            , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
+          </span>
+
+          {error && (
+            <div className="mt-6 text-center text-red-500">
+              <p>{error}</p>
+              <a
+                href={error.includes('MetaMask') ? 'https://metamask.io/download/' : error.includes('Phantom') ? 'https://phantom.app/' : 'https://rabby.io/'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-blue-500 hover:underline"
+              >
+                Install {error.includes('MetaMask') ? 'MetaMask' : error.includes('Phantom') ? 'Phantom' : 'Rabby'}
+              </a>
+            </div>
+          )}
+        </CardBody>
+      </Card>
+
+      {/* START FORM */}
+      <Card size="lg" className="w-full max-w-[431px]">
+        <CardHeader>
+          <CardTitle>Complete your account</CardTitle>
+          <button className="appearance-none flex flex-col justify-center items-center p-2.5 focus:bg-primary focus:bg-opacity-60 hover:bg-primary hover:bg-opacity-60 active:bg-opacity-80 transition-all rounded-full ">
+            <DisabledIcon />
+          </button>
+        </CardHeader>
+        <CardBody>
+          <div className="flex flex-col items-center mb-5">
+            <Image src={'/assets/images/logo-brand.svg'} alt="Winmore logo-brand" width={48} height={34} className="mb-2" />
+            <h2 className="font-bold text-base leading-5 mb-2">WELCOME To WINMORE</h2>
+            <span className="text-sm font-light">{"We've saved your seat at the winning table."}</span>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col items-start">
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: true }}
+                render={({ field, fieldState }) => (
+                  <FormGroup>
+                    <Label htmlFor="2-1" className="flex items-center gap-x-2">
+                      <SingleUserIcon />
+                      <span>Name</span>
+                    </Label>
+                    <Input {...field} invalid={!!fieldState.error} placeholder="type here" id="2-1" />
+                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                  </FormGroup>
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                rules={{ required: true }}
+                render={({ field, fieldState }) => (
+                  <FormGroup>
+                    <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                      <EmailIcon />
+                      <span>Email Address</span>
+                    </Label>
+                    <Input {...field} invalid={!!fieldState.error} placeholder="example@crypto.com" id="2-2" />
+                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                  </FormGroup>
+                )}
+              />
+              <Controller
+                name="confirm"
+                control={control}
+                rules={{ required: true }}
+                render={({ field, fieldState }) => (
+                  <FormCheck className="flex-col">
+                    <div className="flex">
+                      <Checkbox {...field} id="6-3" />
+                      <Label htmlFor="6-3" className="flex items-center">
+                        <span className="inline-block text-white font-normal text-sm leading-5">
+                          I agree to the collection of information in cookies, I agree with
+                          <a className="text-link" href="#" target="_blank">
+                            Privacy Policy
+                          </a>
+                          and with
+                          <a className="text-link" href="#" target="_blank">
+                            Terms of Use
+                          </a>
+                          , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
+                        </span>
+                      </Label>
+                    </div>
+                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                  </FormCheck>
+                )}
+              />
+              <Button kind="gradient" size="lg" full type="submit">
+                Primary
+              </Button>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
     </div>
   )
 }
