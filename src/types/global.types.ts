@@ -18,8 +18,12 @@ export interface MutationOptionHook<TData = unknown, TError = unknown, TVariable
   options?: UseMutationOptions<TData, TError, TVariables, TContext>
 }
 
+export interface IBaseQueryOptions {
+  enabled?: boolean
+}
+
 export interface UseQueryOptions<TData = unknown, TError = unknown, TVariables = void, TContext = unknown> {
-  options?: UseMutationOptions<TData, TError, TVariables, TContext>
+  options?: IBaseQueryOptions
 }
 
 type NextPageWithLayout = NextPage & {
@@ -27,4 +31,15 @@ type NextPageWithLayout = NextPage & {
 }
 export type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
+}
+
+export interface IWalletError {
+  code: number
+  data: unknown
+  details: string
+  docsPath: unknown
+  metaMessages: unknown
+  name: string
+  shortMessage: string
+  version: string
 }

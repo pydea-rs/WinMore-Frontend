@@ -1,27 +1,29 @@
-import { useGetUserInfo } from '@/services/authentication/useGetUserInfo/useGetUserInfo.hook'
-import { login } from '@/store/slices/auth/auth.slice'
-import { useDispatch, useSelector } from '@/store/store'
+import { useAuth } from '@/hooks/useAuth'
+import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
+import { getCookie } from 'cookies-next'
 import { useEffect } from 'react'
-import { useWalletClient } from 'wagmi'
 
-const AuthProvider: BaseProps = (props) => {
-  const { children } = props
-  const userState = useSelector((state) => state.auth.user)
-  const { data: walletClient } = useWalletClient()
-  const { data: userInfo, mutateAsync: getUserMutate } = useGetUserInfo()
-  const dispatch = useDispatch()
+const AuthProvider: BaseProps = ({ children }) => {
+  const { user } = useSelector((state) => state.auth)
+  const { isWalletConnected, sendAuthSignature } = useAuth()
+  const token = getCookie('token')
 
   useEffect(() => {
-    console.log(walletClient, userState)
+    let timeout: NodeJS.Timeout | null = null // Initialize timeout as null
 
-    if (walletClient && !userState) {
-      const pubkey = walletClient.account.address
-      getUserMutate({ public_key: pubkey }).then((data) => {
-        dispatch(login({ user: { ...data.data.user, public_key: pubkey } }))
-      })
+    if (isWalletConnected && !user && token) {
+      timeout = setTimeout(() => {
+        sendAuthSignature()
+      }, 500)
     }
-  }, [walletClient])
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+    }
+  }, [isWalletConnected, user])
 
   return <>{children}</>
 }

@@ -49,6 +49,7 @@
 @import 'swiper/css';
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
+@import 'react-toastify/dist/ReactToastify.css';
 
 ::root {
   --foreground-rgb: 0, 0, 0;

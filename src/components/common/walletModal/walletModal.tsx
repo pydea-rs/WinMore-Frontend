@@ -1,17 +1,12 @@
 import DisabledIcon from '@/components/icons/disabled/disabled'
 import EmailIcon from '@/components/icons/email/email'
-import MetaMaxIcon from '@/components/icons/metaMax/metaMax'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
-import { useGetNonce } from '@/services/authentication/useGetNounce/useGetNonce.hook'
-import { login } from '@/store/slices/auth/auth.slice'
-import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { useDispatch } from '@/store/store'
+import { config } from '@/configs/wagmi.config'
+import { useAuth } from '@/hooks/useAuth'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { CreateConnectorFn, useConnect, useSignMessage } from 'wagmi'
-import { injected, metaMask } from 'wagmi/connectors'
+import { useConnectors, useSignMessage } from 'wagmi'
 import { Button } from '../button/button'
 import { Card } from '../card/card'
 import { CardBody } from '../card/card-body/card-body'
@@ -29,6 +24,8 @@ import { AccountForm, WalletModalProps } from './walletModal.types'
 
 export const WalletModal: React.FC<WalletModalProps> = (props) => {
   const { isOpen, onClose } = props
+  const connectors = useConnectors({ config: config })
+  const { connectWallet } = useAuth()
   // Start Form
   const {
     handleSubmit,
@@ -39,70 +36,7 @@ export const WalletModal: React.FC<WalletModalProps> = (props) => {
   const onSubmit: SubmitHandler<AccountForm> = (data) => {
     console.log(data)
   }
-  // END Form
-  const { connect } = useConnect()
-  const [error, setError] = useState<string | null>(null)
-  const { data: nonceData } = useGetNonce({})
-  const dispatch = useDispatch()
-  const { signMessage, isPending: isWaitingForSign } = useSignMessage({
-    mutation: {
-      onSuccess: (data) => {
-        dispatch(
-          login({
-            user: {
-              email: 'example@gmail.com',
-              jwt_token: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto explicabo fuga reiciendis nostrum? Amet est maiores sed vel molestiae minima?',
-              name: 'Max',
-              public_key: data,
-              signed: true,
-            },
-          }),
-        )
-        dispatch(triggerModal({ modal: 'login', trigger: false }))
-      },
-    },
-  })
-
-  const handleConnect = (walletName: string, connector: CreateConnectorFn) => {
-    setError(null) // Reset error state
-    switch (walletName) {
-      case 'MetaMask':
-        if (!window.ethereum) {
-          setError('MetaMask is not installed. Please install it to continue.')
-        }
-        break
-      case 'Phantom':
-        // @ts-ignore
-        if (!window.solana?.isPhantom) {
-          setError('Phantom is not installed. Please install it to continue.')
-        }
-        break
-      case 'Rabby':
-        if (!window.ethereum?.isRabby) {
-          setError('Rabby is not installed. Please install it to continue.')
-        }
-        break
-      default:
-        break
-    }
-
-    if (!nonceData) {
-      return
-    }
-
-    if (!error) {
-      connect(
-        { connector },
-        {
-          onError: (error) => setError(error.message),
-          onSettled: (data) => console.log(data),
-          onSuccess: (data) => {
-            signMessage({ message: nonceData.data.nonce })
-          },
-        },
-      )
-    }
-  }
+  const { isPending: isWaitingForSign } = useSignMessage()
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -124,36 +58,22 @@ export const WalletModal: React.FC<WalletModalProps> = (props) => {
             <span className="text-sm font-light">Please Connect your wallet to join us</span>
           </div>
           <div className="flex flex-col gap-4 mb-4">
-            <Button kind="primary" variant="warning" size="lg" full onClick={() => handleConnect('MetaMask', metaMask())}>
-              <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" /> Connect MetaMask
-              </div>
-            </Button>
-
-            <Button
-              kind="primary"
-              variant="warning"
-              className=""
-              size="lg"
-              full
-              onClick={() => handleConnect('Phantom', injected({ target: 'phantom' }))}
-              disabled={isWaitingForSign}
-            >
-              {isWaitingForSign && (
-                <div className="absolute-center">
-                  <Spinner />
-                </div>
-              )}
-              <div className={classNames({ invisible: isWaitingForSign, 'flex items-center gap-x-2': true })}>
-                <MetaMaxIcon className="flex-shrink-0" /> Connect Phantom
-              </div>
-            </Button>
-
-            <Button kind="primary" variant="warning" size="lg" full onClick={() => handleConnect('Rabby', injected({ target: 'rabby' }))}>
-              <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" /> Connect Rabby
-              </div>
-            </Button>
+            {connectors.map((wallet) => {
+              return (
+                <Button key={wallet.id} kind="primary" variant="warning" className="" size="lg" full onClick={() => connectWallet(wallet)} disabled={isWaitingForSign}>
+                  {isWaitingForSign && (
+                    <div className="absolute-center">
+                      <Spinner />
+                    </div>
+                  )}
+                  <div className={classNames({ invisible: isWaitingForSign, 'flex items-center gap-x-2': true })}>
+                    {/* <MetaMaxIcon className="flex-shrink-0" />  */}
+                    <img src={wallet.icon} alt={wallet.name} width={24} height={24} />
+                    Connect {wallet.name}
+                  </div>
+                </Button>
+              )
+            })}
           </div>
           <span className="text-sm text-white font-normal">
             I agree to the collection of information in cookies, I agree with
@@ -166,20 +86,6 @@ export const WalletModal: React.FC<WalletModalProps> = (props) => {
             </a>
             , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
           </span>
-
-          {error && (
-            <div className="mt-6 text-center text-red-500">
-              <p>{error}</p>
-              <a
-                href={error.includes('MetaMask') ? 'https://metamask.io/download/' : error.includes('Phantom') ? 'https://phantom.app/' : 'https://rabby.io/'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block text-blue-500 hover:underline"
-              >
-                Install {error.includes('MetaMask') ? 'MetaMask' : error.includes('Phantom') ? 'Phantom' : 'Rabby'}
-              </a>
-            </div>
-          )}
         </CardBody>
       </Card>
 

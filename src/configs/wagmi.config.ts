@@ -1,20 +1,25 @@
-import { getDefaultConfig } from 'connectkit'
 import { createConfig, http } from 'wagmi'
 import { polygon } from 'wagmi/chains'
+import { injected, metaMask } from 'wagmi/connectors'
 
-export const config = createConfig(
-  getDefaultConfig({
-    chains: [
-      // mainnet,
-      polygon,
-    ],
-    transports: {
-      // [mainnet.id]: http(),
-      [polygon.id]: http(),
-    },
-    ssr: true,
-    appName: 'WinMore',
-    appDescription: '',
-    walletConnectProjectId: process.env.PROJECT_ID || '',
-  }),
-)
+export const config = createConfig({
+  chains: [
+    // mainnet,
+    polygon,
+  ],
+  transports: {
+    // [mainnet.id]: http(),
+    [polygon.id]: http(),
+  },
+  connectors: [
+    metaMask({
+      dappMetadata: {
+        name: 'winmore',
+      },
+    }),
+    injected({ target: 'phantom' }),
+    injected({ target: 'rabby' }),
+  ],
+  multiInjectedProviderDiscovery: false,
+  ssr: true,
+})

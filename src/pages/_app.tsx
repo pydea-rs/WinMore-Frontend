@@ -5,10 +5,13 @@ import { Web3Provider } from '@/providers/wagmi.provider'
 import store from '@/store/store'
 import '@/styles/globals.css'
 import { AppPropsWithLayout } from '@/types/global.types'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { DM_Sans } from 'next/font/google'
 import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
+import { Slide, ToastContainer } from 'react-toastify'
+
 export const Fractul = LocalFont({
   src: [
     {
@@ -58,21 +61,34 @@ export const DMSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-dm-sans',
 })
+
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const defaultLayout = (page: ReactElement): ReactNode => <MainLayout>{page}</MainLayout>
   const getLayout = Component.layout ?? defaultLayout
-
   return (
     <div className={`${Fractul.className} ${DMSans.variable}`}>
-      <Provider store={store}>
-        <Web3Provider>
+      <Web3Provider>
+        <Provider store={store}>
           <AuthProvider>
             {getLayout(<Component {...pageProps} />)}
             <Modals />
-            {/* <ReactQueryDevtools initialIsOpen={false}  /> */}
           </AuthProvider>
-        </Web3Provider>
-      </Provider>
+        </Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Slide}
+        />
+      </Web3Provider>
     </div>
   )
 }
