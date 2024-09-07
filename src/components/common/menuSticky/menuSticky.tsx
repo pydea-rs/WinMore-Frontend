@@ -3,7 +3,7 @@ import HomeIcon from '@/components/icons/home/home.icon'
 import ProfileIcon from '@/components/icons/profile/profile.icon'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
-import { IMenuSticky } from './menu-sticky.types'
+import { IMenuSticky } from './menuSticky.types'
 
 const MenuSticky: BaseProps<IMenuSticky> = (props) => {
   const { className } = props

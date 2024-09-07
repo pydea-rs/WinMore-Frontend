@@ -30,6 +30,7 @@ export const gamesSlice = createSlice({
     endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean }>) => {
       state.mineConfig.isStarted = false
       state.mineConfig.isGameOver = true // Set game over state to true
+      state.mineConfig.selectedBlocks = []
       // You can handle win/lose-specific logic here, if needed
     },
   },
