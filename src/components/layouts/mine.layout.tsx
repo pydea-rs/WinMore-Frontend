@@ -13,6 +13,7 @@ import { InputIcon } from '../common/form/inputIcon/inputIcon'
 import { Label } from '../common/form/label/label'
 import { NumberInput } from '../common/form/numberInput/numberInput'
 import { Radio } from '../common/form/radio/radio'
+import { TextForm } from '../common/form/textForm/textForm'
 import GameHistory from '../common/gameHistory/gameHistory'
 import Header from '../common/header/header'
 import MenuSticky from '../common/menuSticky/menuSticky'
@@ -114,9 +115,12 @@ const MineLayout: BaseProps = ({ children }) => {
                           value={value}
                           id="id-233"
                           placeholder="0.00$"
+                          invalid={!!errors.betAmount}
                         />
                         <CentIcon className="text-warning" />
                       </InputIcon>
+
+                      <TextForm variant="invalid">{errors.betAmount?.message}</TextForm>
                     </FormGroup>
                   </>
                 )}

@@ -13,7 +13,7 @@ export const usePermalink = () => {
       },
     },
     game: {
-      slug: 'game',
+      slug: 'games',
       get: function (slug: string) {
         return `/${this.slug}/${slug}`
       },
