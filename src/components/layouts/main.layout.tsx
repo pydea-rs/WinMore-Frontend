@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Footer from '../common/footer/footer'
 import FooterMenu from '../common/footer/footer-menu/footer-menu'
 import Header from '../common/header/header'
-import MenuSticky from '../common/menu-sticky/menu-sticky'
+import MenuSticky from '../common/menuSticky/menuSticky'
 import QuickAccess from '../common/quickAccess/quickAccess'
 
 const MainLayout: BaseProps = (props) => {

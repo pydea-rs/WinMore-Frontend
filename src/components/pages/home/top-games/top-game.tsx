@@ -2,13 +2,16 @@ import { Button } from '@/components/common/button/button'
 import Container from '@/components/common/container/container'
 import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
 import GameControllerIcon from '@/components/icons/game-controller/game-controller'
+import { usePermalink } from '@/hooks/usePermalink'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const TopGames: React.FC<ElementProps> = (props) => {
   const { className } = props
-
+  const router = useRouter()
+  const { internalLinks } = usePermalink()
   const classList = classNames({
     [`${className}`]: className,
   })
@@ -66,7 +69,13 @@ const TopGames: React.FC<ElementProps> = (props) => {
                   className="w-20 h-20 sm:w-[114px] sm:h-[114px] pointer-events-none absolute -top-0 -right-0 z-20"
                 />
                 <h2 className="text-relative-xl lg:text-relative-2xl 2xl:text-[68px] font-bold lg:leading-[82px]">DREAM MINE</h2>
-                <Button kind="primary" variant="light" className="text-xs md:text-sm flex items-center gap-[10px] px-4" pilled>
+                <Button
+                  onClick={() => router.push(internalLinks.game.get('mine'))}
+                  kind="primary"
+                  variant="light"
+                  className="text-xs md:text-sm flex items-center gap-[10px] px-4"
+                  pilled
+                >
                   Play Dream Mine
                   <ArrowRightIcon className="w-6 h-6" />
                 </Button>

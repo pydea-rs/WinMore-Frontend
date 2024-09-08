@@ -1,5 +1,5 @@
 import MineLayout from '@/components/layouts/mine.layout'
-import MineGame from '@/components/pages/mine/mine.game'
+import MineGame from '@/components/pages/games/mine/mine.game'
 import { ReactElement } from 'react'
 
 const Mine = () => {
