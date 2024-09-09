@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { LabelHook } from './label.types'
 
@@ -10,7 +10,7 @@ export const useLabelHook = (baseClass: string, labelProps: LabelHook) => {
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })

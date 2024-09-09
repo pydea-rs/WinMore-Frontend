@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { CardHook, CardSizes } from './card.types'
 
@@ -28,7 +28,7 @@ export const useCardHook = (baseClass: string, cartProps: CardHook) => {
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })

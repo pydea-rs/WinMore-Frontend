@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import { UiVariants } from '@/types/elements.types'
 import classNames from 'classnames'
 import { SpinnerHook, SpinnerKind } from './spinner.types'
@@ -29,7 +29,7 @@ export const useSpinner = (baseClass: string, props: SpinnerHook) => {
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })

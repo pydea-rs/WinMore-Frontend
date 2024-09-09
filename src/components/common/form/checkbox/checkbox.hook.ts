@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { CheckboxHook } from './checkbox.types'
 
@@ -11,7 +11,7 @@ export const useCheckboxHook = (baseClass: string, checkoutProps: CheckboxHook) 
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...{ ...restAttrs, disabled },
     className: classes,
   })

@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { TextFormHook, TextFormVariants } from './textForm.types'
 
@@ -21,7 +21,7 @@ export const useTextFormHook = (baseClass: string, labelProps: TextFormHook) => 
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })

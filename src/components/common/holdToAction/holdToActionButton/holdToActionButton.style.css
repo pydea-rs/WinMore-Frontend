@@ -1,0 +1,11 @@
+.btn {
+  @apply relative inline-flex items-center justify-center text-sm leading-[1] py-2.5 px-5 rounded-2xl font-bold  disabled:opacity-40 disabled:pointer-events-none overflow-hidden;
+}
+
+.hold-to-action-overlay {
+  @apply btn bg-gradient-primary text-white rounded-2xl !absolute !top-0 !bottom-0 !-left-[100%] !m-0 w-full h-full ease-linear duration-[30ms];
+}
+
+.hold-to-action-btn {
+  @apply btn w-full overflow-hidden py-4 px-4 rounded-2xl !h-14 border border-primary;
+}

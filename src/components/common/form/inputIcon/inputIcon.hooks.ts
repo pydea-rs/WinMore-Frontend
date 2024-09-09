@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { InputIconHook } from './inputIcon.types'
 
@@ -9,7 +9,7 @@ export const useInputIconHook = (baseClass: string, inputProps: InputIconHook) =
     [baseClass]: baseClass,
     [`${className}`]: className,
   })
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })

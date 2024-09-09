@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export const useMergeAttrs = (args: any) => {
+export const useEnhancedProps = (args: any) => {
   let disabled = {}
 
   if (args?.disabled) {

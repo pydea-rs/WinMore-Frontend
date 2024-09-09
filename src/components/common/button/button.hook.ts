@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { UiSizes, UiVariants } from './../../../types/elements.types'
 import { ButtonGradientVariants, ButtonHook, ButtonPatternVariants, UIButton } from './button.types'
@@ -52,7 +52,7 @@ export const useButtonHook = (baseClass: string, btnProps: ButtonHook) => {
     onClick?.(e)
   }
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     disabled,
     onClick: onClickWrapper,
