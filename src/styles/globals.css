@@ -45,6 +45,8 @@
 @import '../components/common/container/container.style.css';
 @import '../components/common/menu-sticky/menu-sticky.style.css';
 @import '../components/common/modal/modal.style.css';
+@import '../components/icons/done/done.style.css';
+@import '../components/common//holdToAction/holdToActionButton/holdToActionButton.style.css';
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';

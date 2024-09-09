@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { RadioCardHook } from './radioCard.types'
 
@@ -10,7 +10,7 @@ export const useRadioHook = (baseClass: string, checkoutProps: RadioCardHook) =>
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...{ ...restAttrs, disabled },
     className: classes,
   })

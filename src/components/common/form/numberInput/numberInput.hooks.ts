@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { NumberInputHook } from './numberInput.types'
 
@@ -13,7 +13,7 @@ export const useNumberInputHook = (baseClass: string, inputProps: NumberInputHoo
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...{ ...restAttrs, autoFocus, disabled },
     value,
     className: classes,

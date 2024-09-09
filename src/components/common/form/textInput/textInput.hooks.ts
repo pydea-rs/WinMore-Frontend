@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { TextInputHook, TextInputTypes } from './textInput.types'
 
@@ -21,7 +21,7 @@ export const useTextInputHook = (baseClass: string, inputProps: TextInputHook) =
     return inputType
   }
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...{ ...restAttrs, autoFocus, disabled },
     type: getTextInputType(type),
     value,

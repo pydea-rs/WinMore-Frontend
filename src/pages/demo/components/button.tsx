@@ -1,11 +1,17 @@
 import { Button } from '@/components/common/button/button'
 import Container from '@/components/common/container/container'
+import { HoldToActionButton } from '@/components/common/holdToAction/holdToActionButton/holdToActionButton'
+import { HoldToActionComplete } from '@/components/common/holdToAction/holdToActionComplete/holdToActionComplete'
+import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
+import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
+import { useHoldToAction } from '@/components/common/holdToAction/holdToActionProvider.hook'
 import { Spinner } from '@/components/common/spinner/spinner'
 import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
 import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
 import DiceThreeIcon from '@/components/icons/diceThree/diceThree'
+import DoneIcon from '@/components/icons/done/done.icon'
 import MetaMaxIcon from '@/components/icons/metaMax/metaMax'
 import MoneyIcon from '@/components/icons/money/money'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
@@ -447,8 +453,143 @@ const ButtonComponentDemo = () => {
             </div>
           </div>
         </div>
+        <div className="p-2 rounded-xl bg-secondary w-80">
+          <h1 className="text-main mb-4">Hold to Action</h1>
+          <div className="flex flex-col items-start gap-y-2">
+            <HoldToActionProvider>
+              <HoldToActionButton
+                keepInitialContent
+                onFinish={() => {
+                  console.log("I'm firing!")
+                }}
+              >
+                <HoldToActionContent>Basic - keep Initial Content</HoldToActionContent>
+                <HoldToActionComplete>{" I'm not wanted here :( "}</HoldToActionComplete>
+              </HoldToActionButton>
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButton
+                disabled
+                onFinish={() => {
+                  console.log("I'm firing!")
+                }}
+              >
+                <HoldToActionContent>Disabled</HoldToActionContent>
+                <HoldToActionComplete>{" I'm not wanted here :( "}</HoldToActionComplete>
+              </HoldToActionButton>
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButton
+                onFinish={() => {
+                  console.log("I'm firing!")
+                }}
+              >
+                <HoldToActionContent>with success content</HoldToActionContent>
+                <HoldToActionComplete>
+                  <DoneIcon className={'absolute-center z-10'} />
+                </HoldToActionComplete>
+              </HoldToActionButton>
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButton
+                resetOnFinish
+                keepInitialContent
+                onFinish={() => {
+                  console.log("I'm firing!")
+                }}
+              >
+                <HoldToActionContent>Reset after done</HoldToActionContent>
+                <HoldToActionComplete>{' Me neither :( '}</HoldToActionComplete>
+              </HoldToActionButton>
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButton
+                resetOnFinish
+                onFinish={() => {
+                  console.log("I'm firing!")
+                }}
+              >
+                <HoldToActionContent>Reset after showing complete content</HoldToActionContent>
+                <HoldToActionComplete>
+                  <DoneIcon className={'absolute-center z-10'} />
+                </HoldToActionComplete>
+              </HoldToActionButton>
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButtonControlled />
+            </HoldToActionProvider>
+
+            <HoldToActionProvider>
+              <HoldToActionButtonControlledWithContent />
+            </HoldToActionProvider>
+          </div>
+        </div>
       </div>
     </Container>
+  )
+}
+
+const HoldToActionButtonControlled = () => {
+  const context = useHoldToAction()
+  if (!context) return null
+
+  return (
+    <div className="w-full flex flex-col border border-blue-300 p-4 gap-2">
+      <Button
+        variant="info"
+        kind="primary"
+        size="sm"
+        onClick={() => {
+          context.onReset()
+        }}
+      >
+        Reset my brother
+      </Button>
+      <HoldToActionButton
+        keepInitialContent
+        onFinish={() => {
+          console.log("I'm firing!")
+        }}
+      >
+        <HoldToActionContent>keep Initial Content</HoldToActionContent>
+        <HoldToActionComplete>No one sees me here</HoldToActionComplete>
+      </HoldToActionButton>
+    </div>
+  )
+}
+
+const HoldToActionButtonControlledWithContent = () => {
+  const context = useHoldToAction()
+  if (!context) return null
+
+  return (
+    <div className="w-full flex flex-col border border-blue-300 p-4 gap-2">
+      <Button
+        variant="info"
+        kind="primary"
+        size="sm"
+        onClick={() => {
+          context.onReset()
+        }}
+      >
+        Reset my brother
+      </Button>
+      <HoldToActionButton
+        onFinish={() => {
+          console.log("I'm firing!")
+        }}
+      >
+        <HoldToActionContent>with success content</HoldToActionContent>
+        <HoldToActionComplete>
+          <DoneIcon className={'absolute-center z-10'} />
+        </HoldToActionComplete>
+      </HoldToActionButton>
+    </div>
   )
 }
 

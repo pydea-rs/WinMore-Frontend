@@ -1,4 +1,4 @@
-import { useMergeAttrs } from '@/hooks/useBaseComponent'
+import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
 import { FromGroupHook } from './fromGroup.types'
 
@@ -11,7 +11,7 @@ export const useFormGroupHook = (baseClass: string, formGroupProps: FromGroupHoo
     [`${className}`]: className,
   })
 
-  const mergedAttrs = useMergeAttrs({
+  const mergedAttrs = useEnhancedProps({
     ...restAttrs,
     className: classes,
   })
