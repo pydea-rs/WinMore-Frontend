@@ -580,11 +580,12 @@ const HoldToActionButtonControlledWithContent = () => {
         Reset my brother
       </Button>
       <HoldToActionButton
+        duration={5000}
         onFinish={() => {
           console.log("I'm firing!")
         }}
       >
-        <HoldToActionContent>with success content</HoldToActionContent>
+        <HoldToActionContent>with success content + custom duration</HoldToActionContent>
         <HoldToActionComplete>
           <DoneIcon className={'absolute-center z-10'} />
         </HoldToActionComplete>

@@ -4,6 +4,7 @@ export interface HoldToActionState {
   progress: number
   isExiting?: boolean
   keepInitialContent?: boolean
+  duration: number
 }
 
 export interface HoldToActionEvents {
@@ -21,4 +22,5 @@ export interface HoldToActionContextType {
   onReset: () => void
   disableKeepInitialContent: () => void
   enableKeepInitialContent: () => void
+  setDuration: (duration: number) => void
 }

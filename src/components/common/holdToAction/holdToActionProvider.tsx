@@ -2,12 +2,13 @@ import { BaseProps } from '@/types/global.types'
 import { createContext, useRef, useState } from 'react'
 import { HoldToActionContextType, HoldToActionEvents, HoldToActionState } from './holdToActionProvider.types'
 
-const initialState: HoldToActionState = { progress: 0, isExiting: false, keepInitialContent: false }
+const initialState: HoldToActionState = { progress: 0, isExiting: false, keepInitialContent: false, duration: 1000 }
 export const HoldToActionContext = createContext<HoldToActionContextType | null>(null)
 
 export const HoldToActionProvider: BaseProps = ({ children }) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const [state, setState] = useState<HoldToActionState>(initialState)
+  const { duration, progress } = state
 
   const disableKeepInitialContent = () => {
     setState((prevState) => ({ ...prevState, keepInitialContent: true }))
@@ -15,6 +16,10 @@ export const HoldToActionProvider: BaseProps = ({ children }) => {
 
   const enableKeepInitialContent = () => {
     setState((prevState) => ({ ...prevState, keepInitialContent: true }))
+  }
+
+  const setDuration = (duration: number) => {
+    setState((prevState) => ({ ...prevState, duration }))
   }
 
   const reset = () => {
@@ -36,7 +41,7 @@ export const HoldToActionProvider: BaseProps = ({ children }) => {
       if (disabled || isFired) return
 
       const timeElapsed = Date.now() - startTime
-      const progressValue = Math.floor(Math.min((timeElapsed / 1000) * 100, 100))
+      const progressValue = Math.floor(Math.min((timeElapsed / duration) * 100, 100))
       const newProgress = progressValue === 100 ? 100 : progressValue
 
       setState((prevState) => ({ ...prevState, progress: newProgress }))
@@ -54,13 +59,13 @@ export const HoldToActionProvider: BaseProps = ({ children }) => {
   }
 
   const onStop = () => {
-    if (intervalRef.current && state.progress < 100) {
+    if (intervalRef.current && progress < 100) {
       reset()
     }
   }
 
   return (
-    <HoldToActionContext.Provider value={{ setState, state, onStop, onStart, onReset: reset, disableKeepInitialContent, enableKeepInitialContent }}>
+    <HoldToActionContext.Provider value={{ setState, state, onStop, onStart, onReset: reset, setDuration, disableKeepInitialContent, enableKeepInitialContent }}>
       {children}
     </HoldToActionContext.Provider>
   )

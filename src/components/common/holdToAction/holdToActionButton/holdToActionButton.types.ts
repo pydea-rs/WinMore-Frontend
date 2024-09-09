@@ -5,6 +5,7 @@ export type HoldToActionButton = {
   disabled?: boolean
   resetOnFinish?: boolean
   keepInitialContent?: boolean
+  duration?: number
   onFinish?: () => void
 }
 

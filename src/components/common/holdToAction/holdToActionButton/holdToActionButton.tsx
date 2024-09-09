@@ -5,8 +5,8 @@ import { useHoldToActionButton } from './holdToActionButton.hook'
 import { HoldToActionButtonProps } from './holdToActionButton.types'
 
 export const HoldToActionButton: BaseProps<HoldToActionButtonProps> = (props) => {
-  const { children, keepInitialContent, onFinish, resetOnFinish, ...restProps } = props
-  const { enableKeepInitialContent, onStart, onStop, state } = useHoldToAction?.()
+  const { children, keepInitialContent, onFinish, resetOnFinish, duration, ...restProps } = props
+  const { enableKeepInitialContent, onStart, onStop, state, setDuration } = useHoldToAction?.()
 
   // Base class for styling
   const baseClass = 'hold-to-action-btn'
@@ -17,6 +17,12 @@ export const HoldToActionButton: BaseProps<HoldToActionButtonProps> = (props) =>
       enableKeepInitialContent()
     }
   }, [keepInitialContent])
+
+  useEffect(() => {
+    if (duration) {
+      setDuration(duration)
+    }
+  }, [duration])
 
   const elementStyle = {
     transform: `translateX(${state.progress}%)`,

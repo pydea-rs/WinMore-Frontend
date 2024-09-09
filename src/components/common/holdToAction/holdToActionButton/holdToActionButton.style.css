@@ -3,7 +3,7 @@
 }
 
 .hold-to-action-overlay {
-  @apply btn bg-gradient-primary text-white rounded-2xl !absolute !top-0 !bottom-0 !-left-[100%] !m-0 w-full h-full;
+  @apply btn bg-gradient-primary text-white rounded-2xl !absolute !top-0 !bottom-0 !-left-[100%] !m-0 w-full h-full ease-linear duration-[30ms];
 }
 
 .hold-to-action-btn {
