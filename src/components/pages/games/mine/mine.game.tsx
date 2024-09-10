@@ -1,3 +1,5 @@
+import { Card } from '@/components/common/card/card'
+import { CardBody } from '@/components/common/card/card-body/card-body'
 import { HoldToActionButton } from '@/components/common/holdToAction/holdToActionButton/holdToActionButton'
 import { HoldToActionComplete } from '@/components/common/holdToAction/holdToActionComplete/holdToActionComplete'
 import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
@@ -8,7 +10,7 @@ import { useDispatch, useSelector } from '@/store/store'
 import { motion } from 'framer-motion'
 import { Howl } from 'howler'
 import Image from 'next/image'
-import { Fragment, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
@@ -50,8 +52,8 @@ export default function MineGame() {
   console.log(mineConfig)
 
   return (
-    <Fragment>
-      <div className="max-w-[324px]">
+    <Card className="w-full max-w-[390px]">
+      <CardBody>
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full translucent shadow-xl p-4 rounded-lg">
             {Array(mineConfig.rows)
@@ -117,7 +119,7 @@ export default function MineGame() {
             </HoldToActionButton>
           </HoldToActionProvider>
         </div>
-      </div>
-    </Fragment>
+      </CardBody>
+    </Card>
   )
 }

@@ -1,13 +1,12 @@
 import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
-import { FromCheckHook } from './formCheck.types'
+import { RadioCardGroupHook } from './radioCardGroup.types'
 
-export const useFormCheckHook = (baseClass: string, formGroupProps: FromCheckHook) => {
+export const useRadioCardGroupHook = (baseClass: string, formGroupProps: RadioCardGroupHook) => {
   const { className, ...restAttrs } = formGroupProps
 
   const classes = classNames({
     [baseClass]: baseClass,
-    'w-full': true,
     [`${className}`]: className,
   })
 

@@ -5,6 +5,10 @@ import { BaseProps } from '@/types/global.types'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { Card } from '../common/card/card'
+import { CardBody } from '../common/card/card-body/card-body'
+import { CardHeader } from '../common/card/card-header/card-header'
+import { CardTitle } from '../common/card/card-title/card-title'
 import Container from '../common/container/container'
 import Footer from '../common/footer/footer'
 import FooterMenu from '../common/footer/footer-menu/footer-menu'
@@ -13,6 +17,7 @@ import { InputIcon } from '../common/form/inputIcon/inputIcon'
 import { Label } from '../common/form/label/label'
 import { NumberInput } from '../common/form/numberInput/numberInput'
 import { Radio } from '../common/form/radio/radio'
+import { RadioGroup } from '../common/form/radioGroup/radioGroup'
 import { TextForm } from '../common/form/textForm/textForm'
 import GameHistory from '../common/gameHistory/gameHistory'
 import Header from '../common/header/header'
@@ -52,8 +57,8 @@ const MineLayout: BaseProps = ({ children }) => {
   }, [dispatch, tile])
 
   const {
-    control: numericFormController,
-    handleSubmit: numericFormHandleSubmit,
+    control: gameControl,
+    handleSubmit: gameFormHandleSubmit,
     watch,
     setValue: numericFormSetValue,
     formState: { errors },
@@ -88,109 +93,126 @@ const MineLayout: BaseProps = ({ children }) => {
     <main className="w-full h-full min-h-svh flex flex-col container">
       <Header />
       <QuickAccess />
-      <Container className="z-10 overflow-x-visible">
-        <div className="flex flex-wrap z-40">
-          <aside className="w-full lg:max-w-[431px] ">
-            <form onSubmit={numericFormHandleSubmit(handleSubmit)} className="flex flex-col gap-4">
-              <Controller
-                name="betAmount"
-                control={numericFormController}
-                rules={{
-                  required: { value: true, message: "It's require" },
-                }}
-                render={({ field: { onChange, onBlur, value }, fieldState }) => (
-                  <>
+
+      <section className="relative z-40 mb-20">
+        <Container className="z-10 overflow-x-visible">
+          <div className="flex flex-wrap">
+            <aside className="w-full lg:max-w-[430px] lg:pt-[6vmax]">
+              <Card>
+                <CardHeader>
+                  <CardTitle>MANUAL</CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <form onSubmit={gameFormHandleSubmit(handleSubmit)} className="flex flex-col gap-y-2">
                     <FormGroup>
-                      <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                      <Label htmlFor="id-233">
                         <span>Bet Amount </span>
                       </Label>
-
-                      <InputIcon>
-                        <NumberInput
-                          disabled={mineConfig.isStarted}
-                          onChange={onChange}
-                          onIncrease={() => numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
-                          onDecrease={() => numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
-                          onBlur={onBlur}
-                          value={value}
-                          id="id-233"
-                          placeholder="0.00$"
-                          invalid={!!errors.betAmount}
-                        />
-                        <CentIcon className="text-warning" />
-                      </InputIcon>
-
-                      <TextForm variant="invalid">{errors.betAmount?.message}</TextForm>
+                      <Controller
+                        name="betAmount"
+                        control={gameControl}
+                        rules={{
+                          required: { value: true, message: "It's require" },
+                        }}
+                        render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                          <>
+                            <InputIcon>
+                              <NumberInput
+                                disabled={mineConfig.isStarted}
+                                onChange={onChange}
+                                onIncrease={() => numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
+                                onDecrease={() => numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
+                                onBlur={onBlur}
+                                value={value}
+                                id="id-233"
+                                placeholder="0.00$"
+                                invalid={!!errors.betAmount}
+                              />
+                              <CentIcon className="text-warning" />
+                            </InputIcon>
+                            <TextForm variant="invalid">{errors.betAmount?.message}</TextForm>
+                          </>
+                        )}
+                      />
                     </FormGroup>
-                  </>
-                )}
-              />
-              <Controller
-                name="gameMode"
-                control={numericFormController}
-                rules={{
-                  required: { value: true, message: "It's require" },
-                }}
-                render={({ field }) => (
-                  <>
+
                     <FormGroup>
                       <Label>Game mode</Label>
-                      <div className="grid grid-cols-3 gap-x-2">
-                        {modes.map((mode) => {
-                          return (
-                            <Radio
-                              {...field}
-                              key={mode.value}
-                              id={`mode-${mode.value.toString()}`}
-                              name={'game-mode'}
-                              defaultChecked={mineConfig.mode === mode.value}
-                              value={mode.value.toString()}
-                            >
-                              {mode.label}
-                            </Radio>
-                          )
-                        })}
-                      </div>
+                      <RadioGroup>
+                        {modes.map((mode) => (
+                          <Controller
+                            key={mode.value}
+                            name="gameMode"
+                            control={gameControl}
+                            rules={{
+                              required: { value: true, message: "It's require" },
+                            }}
+                            render={({ field }) => (
+                              <Radio
+                                // new props
+                                checked={field.value === mode.value}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                blockClassName="w-[calc(100/3*1%)]"
+                                // new props end
+                                id={`mode-${mode.value.toString()}`}
+                                name={'game-mode'}
+                                value={mode.value.toString()}
+                              >
+                                {mode.label}
+                              </Radio>
+                            )}
+                          />
+                        ))}
+                      </RadioGroup>
                     </FormGroup>
-                  </>
-                )}
-              />
-              <Controller
-                name="gameRows"
-                control={numericFormController}
-                rules={{
-                  required: { value: true, message: "It's require" },
-                }}
-                render={({ field }) => (
-                  <>
+
                     <FormGroup>
-                      <Label>Rows </Label>
-                      <div className="grid grid-cols-5 gap-x-2">
+                      <RadioGroup>
                         {rows.map((row) => {
                           return (
-                            <Radio {...field} key={row} id={`row-${row.toString()}`} name="game-rows" defaultChecked={mineConfig.rows === row} value={row.toString()}>
-                              {row}
-                            </Radio>
+                            <Controller
+                              key={row}
+                              name="gameRows"
+                              control={gameControl}
+                              rules={{
+                                required: { value: true, message: "It's require" },
+                              }}
+                              render={({ field }) => (
+                                <Radio
+                                  // new props
+                                  checked={field.value === row}
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                  blockClassName="w-[calc(100/5*1%)]"
+                                  // new props ends
+                                  id={`row-${row.toString()}`}
+                                  name="game-rows"
+                                  value={row.toString()}
+                                >
+                                  {row}
+                                </Radio>
+                              )}
+                            />
                           )
                         })}
-                      </div>
+                      </RadioGroup>
                     </FormGroup>
-                  </>
-                )}
-              />
 
-              <motion.button
-                type="submit"
-                disabled={mineConfig.isStarted && !mineConfig.isGameOver}
-                className="h-12 disabled:dark:bg-amber-600/10 disabled:cursor-not-allowed disabled:dark:text-zinc-500 w-full rounded-xl p-1 text-base font-semibold shadow transition-all dark:bg-amber-600 dark:focus:ring-2 dark:focus:ring-amber-600 dark:focus:ring-offset-1 dark:focus:ring-offset-secondary-dark"
-              >
-                Start
-              </motion.button>
-            </form>
-          </aside>
-          <section className="flex justify-center flex-grow ">{children}</section>
-        </div>
-      </Container>
+                    <motion.button
+                      type="submit"
+                      disabled={mineConfig.isStarted && !mineConfig.isGameOver}
+                      className="h-12 disabled:dark:bg-amber-600/10 disabled:cursor-not-allowed disabled:dark:text-zinc-500 w-full rounded-xl p-1 text-base font-semibold shadow transition-all dark:bg-amber-600 dark:focus:ring-2 dark:focus:ring-amber-600 dark:focus:ring-offset-1 dark:focus:ring-offset-secondary-dark"
+                    >
+                      Start
+                    </motion.button>
+                  </form>
+                </CardBody>
+              </Card>
+            </aside>
+            <div className="flex justify-end flex-grow">{children}</div>
+          </div>
+        </Container>
+      </section>
+
       <section>
         <GameHistory />
       </section>

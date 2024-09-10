@@ -7,7 +7,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   value: string
   name: string
   size?: RadioSizes
-  groupClassName?: string
+  blockClassName?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 

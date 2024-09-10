@@ -13,16 +13,16 @@
 .form-radio-card.form-radio-card-sm ~ .form-radio-card-label {
   @apply py-2.5 px-4;
 }
-
-.form-radio-card:checked ~ .form-radio-card-label {
+/* */
+.form-radio-card-group .form-radio-card:checked ~ .form-radio-card-label {
   @apply text-primary border-primary bg-primary/[0.08];
 }
 
 .form-radio-card-checkbox {
   @apply flex-shrink-0 w-[18px] h-[18px] bg-white  bg-no-repeat bg-center appearance-none border border-[rgba(33,50,91,0.1)] cursor-pointer rounded-[4px];
 }
-
-.form-radio-card:checked ~ .form-radio-card-label .form-radio-card-checkbox {
+/*  */
+.form-radio-card-group .form-radio-card:checked ~ .form-radio-card-label .form-radio-card-checkbox {
   @apply bg-primary border-primary;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 }
