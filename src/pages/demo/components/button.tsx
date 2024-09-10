@@ -22,9 +22,9 @@ import Image from 'next/image'
 const ButtonComponentDemo = () => {
   const isLoading = true
   return (
-    <Container kind="fluid">
-      <div className="flex gap-2 p-5 flex-wrap">
-        <div className="p-2 rounded-xl bg-white w-80">
+    <Container>
+      <div className="flex gap-4 p-5 flex-wrap">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Small</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" size="sm" className="w-36" variant="primary">
@@ -53,7 +53,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Regular</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" className="w-36" variant="primary">
@@ -82,7 +82,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Large</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" className="w-36" size="lg" variant="primary">
@@ -111,7 +111,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - block</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" size="sm" full variant="primary">
@@ -140,7 +140,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - pilled</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" pilled className="w-36" variant="primary">
@@ -169,7 +169,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - disabled</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" disabled className="w-36" variant="primary">
@@ -198,7 +198,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Icon</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" className="w-36" variant="primary">
@@ -251,7 +251,7 @@ const ButtonComponentDemo = () => {
           </div>
         </div>
 
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Small</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" size="sm">
@@ -259,7 +259,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Regular</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36">
@@ -267,7 +267,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Large</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" size="lg">
@@ -275,7 +275,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Block</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" size="sm" full>
@@ -289,7 +289,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Pilled</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" pilled>
@@ -297,7 +297,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Disabled</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" disabled>
@@ -305,7 +305,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Gradient Button - Icon</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" className="w-36" size="sm">
@@ -328,7 +328,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Multiple Icon</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" variant="secondary" className="flex justify-between font-medium " full size="lg">
@@ -355,7 +355,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-secondary w-80">
+        <div className="p-4 rounded-xl bg-secondary w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Gradient with border</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="gradient" variant="yellow-dark" className="flex justify-between font-medium font-dmSans" pilled bordered>
@@ -370,7 +370,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-[#2D305D] w-80">
+        <div className="p-4 rounded-xl bg-[#2D305D] w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Light</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" variant="light" pilled>
@@ -381,7 +381,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-secondary w-80">
+        <div className="p-4 rounded-xl bg-secondary w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Pattern</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="pattern" variant="glitch">
@@ -396,7 +396,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-secondary w-80">
+        <div className="p-4 rounded-xl bg-secondary w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Custom</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="pattern" className="px-2.5" bordered pilled>
@@ -414,7 +414,7 @@ const ButtonComponentDemo = () => {
             </Button>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-white w-80">
+        <div className="p-4 rounded-xl bg-white w-80 flex-grow">
           <h1 className="text-main mb-4">Primary Button - Loading</h1>
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" className="w-36" variant="primary" disabled={isLoading}>
@@ -453,7 +453,7 @@ const ButtonComponentDemo = () => {
             </div>
           </div>
         </div>
-        <div className="p-2 rounded-xl bg-secondary w-80">
+        <div className="p-4 rounded-xl bg-secondary w-80 flex-grow">
           <h1 className="text-main mb-4">Hold to Action</h1>
           <div className="flex flex-col items-start gap-y-2">
             <HoldToActionProvider>

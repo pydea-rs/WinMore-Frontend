@@ -13,7 +13,7 @@ import { CardBody } from '../card/card-body/card-body'
 import { CardHeader } from '../card/card-header/card-header'
 import { CardTitle } from '../card/card-title/card-title'
 import { Checkbox } from '../form/checkbox/checkbox'
-import { FormCheck } from '../form/formCheck/formCheck'
+import { CheckboxGroup } from '../form/checkboxGroup/checkboxGroup'
 import { FormGroup } from '../form/formGroup/fromGroup'
 import { Label } from '../form/label/label'
 import { TextForm } from '../form/textForm/textForm'
@@ -140,7 +140,7 @@ export const WalletModal: React.FC<WalletModalProps> = (props) => {
                 control={control}
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
-                  <FormCheck className="flex-col">
+                  <CheckboxGroup className="flex-col">
                     <div className="flex">
                       <Checkbox {...field} id="6-3" />
                       <Label htmlFor="6-3" className="flex items-center">
@@ -158,7 +158,7 @@ export const WalletModal: React.FC<WalletModalProps> = (props) => {
                       </Label>
                     </div>
                     {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
-                  </FormCheck>
+                  </CheckboxGroup>
                 )}
               />
               <Button kind="gradient" size="lg" full type="submit">
