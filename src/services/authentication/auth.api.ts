@@ -4,13 +4,14 @@ import { getApiRoute } from '@/services/base/routes'
 import { login } from '@/store/slices/auth/auth.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { IGetNoncePayload, IGetNonceResponse, IGetUserInfoPayload, IGetUserInfoResponse } from '@/types/auth/auth.types'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { setCookie } from 'cookies-next'
+import axiosBaseQuery from '../base/axiosBaseQuery'
 
 // Define the API service
 export const authService = createApi({
   reducerPath: 'authService', // Specify the reducer path
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }), // Replace with your actual base URL
+  baseQuery: axiosBaseQuery(), // Replace with your actual base URL
   endpoints: (builder) => ({
     getNonce: builder.mutation<BaseResponse<IGetNonceResponse>, IGetNoncePayload>({
       query: (params) => {
@@ -18,6 +19,7 @@ export const authService = createApi({
         return {
           url: auth.nonce,
           method: 'GET',
+          sendAuthorization: false,
         }
       },
     }),
