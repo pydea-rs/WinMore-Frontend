@@ -4,14 +4,14 @@ import { useRadioHook } from './radioCard.hook'
 import { RadioCardProps } from './radioCard.types'
 
 export const RadioCard: BaseProps<RadioCardProps> = (props) => {
-  const { children, groupClassName, ...restProps } = props
+  const { children, groupClassName, controlled, active, ...restProps } = props
 
   const baseClass = 'form-radio-card'
   const optionGroupClassBase = 'form-radio-card-group'
   const mergedAttrs = useRadioHook(baseClass, restProps)
 
   const optionGroupClass = classNames({
-    [optionGroupClassBase]: baseClass,
+    [optionGroupClassBase]: true,
     [`${groupClassName}`]: groupClassName,
   })
 

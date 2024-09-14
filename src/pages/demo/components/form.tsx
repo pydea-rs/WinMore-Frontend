@@ -4,13 +4,15 @@ import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
 import Container from '@/components/common/container/container'
 import { Checkbox } from '@/components/common/form/checkbox/checkbox'
-import { FormCheck } from '@/components/common/form/formCheck/formCheck'
+import { CheckboxGroup } from '@/components/common/form/checkboxGroup/checkboxGroup'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
 import { InputIcon } from '@/components/common/form/inputIcon/inputIcon'
 import { Label } from '@/components/common/form/label/label'
 import { NumberInput } from '@/components/common/form/numberInput/numberInput'
 import { Radio } from '@/components/common/form/radio/radio'
 import { RadioCard } from '@/components/common/form/radioCard/radioCard'
+import { RadioCardGroup } from '@/components/common/form/radioCardGroup/radioCardGroup'
+import { RadioGroup } from '@/components/common/form/radioGroup/radioGroup'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Input } from '@/components/common/form/textInput/textInput'
 import CentIcon from '@/components/icons/cent/cent'
@@ -20,11 +22,68 @@ import { useHelper } from '@/hooks/usehelper'
 import Image from 'next/image'
 import { Controller, useForm } from 'react-hook-form'
 
+const mockRadioData1 = [
+  {
+    id: '33',
+    value: 'b1',
+    name: 'radio-1',
+    label: 'USDC',
+    amount: '0.00',
+    images: [
+      { src: '/assets/images/dollar.png', alt: 'dollar' },
+      { src: '/assets/images/tether.png', alt: 'tether' },
+    ],
+  },
+  {
+    id: '44',
+    value: 'c1',
+    label: 'USDT',
+    name: 'radio-1',
+    amount: '0.00',
+    images: [
+      { src: '/assets/images/dollar.png', alt: 'dollar' },
+      { src: '/assets/images/tether.png', alt: 'tether' },
+    ],
+  },
+]
+
+const mockRadioData2 = [
+  {
+    id: '55',
+    value: 'd1',
+    name: 'radio-2',
+    label: 'EASY',
+  },
+  {
+    id: '66',
+    value: 'h1',
+    label: 'MEDIUM',
+    name: 'radio-2',
+  },
+  {
+    id: '77',
+    value: 'g1',
+    label: 'HARD',
+    name: 'radio-2',
+  },
+]
+
 interface NumericForm {
   simple: string
 }
 
+export interface SelectCoinModalPropsForm {
+  chain: string
+  'radio-1': string
+  'radio-2': string
+  checkbox: boolean
+}
+
 const FormComponentDemo = () => {
+  const { control: controlControlledForm } = useForm<SelectCoinModalPropsForm>({
+    defaultValues: { chain: '', 'radio-1': 'c1', 'radio-2': 'h1', checkbox: true },
+  })
+
   const {
     control: numericFormController,
     handleSubmit: numericFormHandleSubmit,
@@ -36,122 +95,125 @@ const FormComponentDemo = () => {
   const simpleCurrentValue = numericFormWatch('simple')
 
   return (
-    <Container kind="fluid">
+    <Container>
       <div className="flex gap-5 p-4 flex-wrap">
-        <Card size="lg" className="w-[370px]">
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Text Input and Label</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label htmlFor="1-1" className="flex items-center gap-x-2">
-                  <span>Name</span>
-                </Label>
-                <Input placeholder="type here" id="1-1" />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="1-2" className="flex items-center gap-x-2">
-                  <span>Email Address</span>
-                </Label>
-                <Input placeholder="example@crypto.com" id="1-2" />
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <Label htmlFor="1-1" className="flex items-center gap-x-2">
+                <span>Name</span>
+              </Label>
+              <Input placeholder="type here" id="1-1" />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="1-2" className="flex items-center gap-x-2">
+                <span>Email Address</span>
+              </Label>
+              <Input placeholder="example@crypto.com" id="1-2" />
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[370px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle> Text Input and label with Icon</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label htmlFor="2-1" className="flex items-center gap-x-2">
-                  <SingleUserIcon />
-                  <span>Name</span>
-                </Label>
-                <InputIcon>
-                  <Input placeholder="type here" id="2-1" />
-                  <CentIcon className="text-warning" />
-                </InputIcon>
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="2-2" className="flex items-center gap-x-2">
-                  <EmailIcon />
-                  <span>Email Address</span>
-                </Label>
-                <InputIcon>
-                  <Input placeholder="example@crypto.com" id="2-2" />
-                  <CentIcon className="text-warning" />
-                </InputIcon>
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <Label htmlFor="2-1" className="flex items-center gap-x-2">
+                <SingleUserIcon />
+                <span>Name</span>
+              </Label>
+              <InputIcon>
+                <Input placeholder="type here" id="2-1" />
+                <CentIcon className="text-warning" />
+              </InputIcon>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                <EmailIcon />
+                <span>Email Address</span>
+              </Label>
+              <InputIcon>
+                <Input placeholder="example@crypto.com" id="2-2" />
+                <CentIcon className="text-warning" />
+              </InputIcon>
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[370px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Valid and invalid Text Input</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label htmlFor="3-1" className="flex items-center gap-x-2">
-                  Focus and Auto Focus
-                </Label>
-                <Input autoFocus placeholder="type here" id="3-1" />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="3-2" className="flex items-center gap-x-2">
-                  Valid Value
-                </Label>
-                <Input valid placeholder="type here" id="3-2" />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="3-3" className="flex items-center gap-x-2">
-                  Invalid Value
-                </Label>
-                <Input invalid placeholder="type here" id="3-3" />
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <Label htmlFor="3-1" className="flex items-center gap-x-2">
+                Focus and Auto Focus
+              </Label>
+              <Input autoFocus placeholder="type here" id="3-1" />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="3-2" className="flex items-center gap-x-2">
+                Valid Value
+              </Label>
+              <Input valid placeholder="type here" id="3-2" />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="3-3" className="flex items-center gap-x-2">
+                Invalid Value
+              </Label>
+              <Input invalid placeholder="type here" id="3-3" />
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[370px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Text Form - Default - Valid - Invalid </CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label htmlFor="4-1" className="flex items-center gap-x-2">
-                  Password
-                </Label>
-                <Input placeholder="*****" type="password" id="4-1" />
-                <TextForm>Your password must be 8-20 characters long</TextForm>
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="4-2" className="flex items-center gap-x-2">
-                  Password
-                </Label>
-                <Input placeholder="*****" type="password" id="4-2" />
-                <TextForm variant="valid">Your password must be 8-20 characters long</TextForm>
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="4-3" className="flex items-center gap-x-2">
-                  Password
-                </Label>
-                <Input placeholder="*****" type="password" id="4-3" />
-                <TextForm variant="invalid">Your password must be 8-20 characters long</TextForm>
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <Label htmlFor="4-1" className="flex items-center gap-x-2">
+                Password
+              </Label>
+              <Input placeholder="*****" type="password" id="4-1" />
+              <TextForm>Your password must be 8-20 characters long</TextForm>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="4-2" className="flex items-center gap-x-2">
+                Password
+              </Label>
+              <Input placeholder="*****" type="password" id="4-2" />
+              <TextForm variant="valid">Your password must be 8-20 characters long</TextForm>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="4-3" className="flex items-center gap-x-2">
+                Password
+              </Label>
+              <Input placeholder="*****" type="password" id="4-3" />
+              <TextForm variant="invalid">Your password must be 8-20 characters long</TextForm>
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[370px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Checkbox</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormCheck>
+            <FormGroup>
+              <Label>Checkbox</Label>
+              <CheckboxGroup>
                 <Checkbox id="5-1" />
                 <Label htmlFor="5-1" className="flex items-center">
                   <span className="text-white font-normal">
@@ -166,78 +228,94 @@ const FormComponentDemo = () => {
                     , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
                   </span>
                 </Label>
-              </FormCheck>
-            </div>
+              </CheckboxGroup>
+            </FormGroup>
           </CardBody>
         </Card>
 
-        <Card size="lg" className="w-[420px]">
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Radio</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label>Game mode</Label>
-                <div className="grid grid-cols-3 gap-x-2">
-                  <Radio id="1" name="1" value="1">
-                    EASY
-                  </Radio>
-                  <Radio id="2" name="1" value="2">
-                    MEDIUM
-                  </Radio>
-                  <Radio id="3" name="1" value="3">
-                    HARD
-                  </Radio>
-                </div>
-              </FormGroup>
-              <FormGroup>
-                <Label>Row </Label>
-                <div className="grid grid-cols-5 gap-x-2">
-                  <Radio id="21" name="2" value="21">
-                    8
-                  </Radio>
-                  <Radio id="22" name="2" value="22">
-                    9
-                  </Radio>
-                  <Radio id="23" name="2" value="23">
-                    10
-                  </Radio>
-                  <Radio id="24" name="2" value="24">
-                    11
-                  </Radio>
-                  <Radio id="25" name="2" value="25">
-                    12
-                  </Radio>
-                </div>
-              </FormGroup>
-              <FormGroup>
-                <Label>Small </Label>
-                <div className="flex items-center gap-x-2">
-                  <Radio id="71" name="3" value="31" size="sm">
-                    <div className="flex items-center gap-2">
-                      <Image src={'/assets/images/sol.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                      <span>USDC</span>
-                    </div>
-                  </Radio>
-                  <Radio id="72" name="3" value="31" size="sm">
-                    <div className="flex items-center gap-2">
-                      <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                      <span>USDT</span>
-                    </div>
-                  </Radio>
-                </div>
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <Label>Radio Normal</Label>
+              <RadioGroup>
+                <Radio id="21" name="2" value="21">
+                  8
+                </Radio>
+                <Radio id="22" name="2" value="22">
+                  9
+                </Radio>
+                <Radio id="23" name="2" value="23">
+                  10
+                </Radio>
+                <Radio id="24" name="2" value="24">
+                  11
+                </Radio>
+                <Radio id="25" name="2" value="25">
+                  12
+                </Radio>
+              </RadioGroup>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Radio flat</Label>
+              <RadioGroup>
+                <Radio id="1" name="1" value="1" blockClassName="w-[calc(100/3*1%)]">
+                  EASY
+                </Radio>
+                <Radio id="2" name="1" value="2" blockClassName="w-[calc(100/3*1%)]">
+                  MEDIUM
+                </Radio>
+                <Radio id="3" name="1" value="3" blockClassName="w-[calc(100/3*1%)]">
+                  HARD
+                </Radio>
+              </RadioGroup>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Size: Small</Label>
+              <RadioGroup>
+                <Radio id="71" name="3" value="31" size="sm">
+                  <div className="flex items-center gap-2">
+                    <Image src={'/assets/images/sol.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
+                    <span>USDC</span>
+                  </div>
+                </Radio>
+                <Radio id="72" name="3" value="31" size="sm">
+                  <div className="flex items-center gap-2">
+                    <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
+                    <span>USDT</span>
+                  </div>
+                </Radio>
+              </RadioGroup>
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[340px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Radio Card</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
+            <FormGroup>
+              <Label>Radio Card</Label>
+
+              <RadioCardGroup>
+                <RadioCard id="342" name="5" value="7">
+                  <div className="flex items-center">
+                    <div className="flex items-center">
+                      <Image src={'/assets/images/dollar.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
+                      <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />
+                    </div>
+                    <div className="flex items-center justify-between flex-grow px-2">
+                      <span className="font-medium">USDT</span>
+                      <span className="text-xs text-white font-normal ml-auto">0.00</span>
+                    </div>
+                  </div>
+                </RadioCard>
+
                 <RadioCard id="41" name="5" value="6">
                   <div className="flex items-center">
                     <div className="flex items-center">
@@ -250,30 +328,18 @@ const FormComponentDemo = () => {
                     </div>
                   </div>
                 </RadioCard>
-              </FormGroup>
-              <FormGroup>
-                <RadioCard id="342" name="5" value="7">
-                  <div className="flex items-center">
-                    <div className="flex items-center">
-                      <Image src={'/assets/images/dollar.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                      <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />
-                    </div>
-                    <div className="flex items-center justify-between flex-grow px-2">
-                      <span className="font-medium">USDT</span>
-                      <span className="text-xs text-white font-normal ml-auto"> 0.00</span>
-                    </div>
-                  </div>
-                </RadioCard>
-              </FormGroup>
-            </div>
+              </RadioCardGroup>
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[340px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Number Input</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
+            <FormGroup>
+              <Label htmlFor="id-233">Numeric Input</Label>
               <Controller
                 name="simple"
                 control={numericFormController}
@@ -281,8 +347,33 @@ const FormComponentDemo = () => {
                   required: { value: true, message: "It's require" },
                 }}
                 render={({ field: { onChange, onBlur, value }, fieldState }) => (
-                  <FormGroup>
-                    <Label htmlFor="id-233">Numeric Input</Label>
+                  <NumberInput
+                    onChange={onChange}
+                    onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
+                    onDecrease={() => numericFormSetValue('simple', subDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
+                    onBlur={onBlur}
+                    value={value}
+                    id="id-233"
+                    placeholder="Placeholder"
+                  />
+                )}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                <EmailIcon />
+                <span>Numeric Input with Icon </span>
+              </Label>
+
+              <Controller
+                name="simple"
+                control={numericFormController}
+                rules={{
+                  required: { value: true, message: "It's require" },
+                }}
+                render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                  <InputIcon>
                     <NumberInput
                       onChange={onChange}
                       onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
@@ -292,67 +383,41 @@ const FormComponentDemo = () => {
                       id="id-233"
                       placeholder="Placeholder"
                     />
-                  </FormGroup>
+                    <CentIcon className="text-warning" />
+                  </InputIcon>
                 )}
               />
-
-              <Controller
-                name="simple"
-                control={numericFormController}
-                rules={{
-                  required: { value: true, message: "It's require" },
-                }}
-                render={({ field: { onChange, onBlur, value }, fieldState }) => (
-                  <>
-                    <FormGroup>
-                      <Label htmlFor="2-2" className="flex items-center gap-x-2">
-                        <EmailIcon />
-                        <span>Numeric Input with Icon </span>
-                      </Label>
-
-                      <InputIcon>
-                        <NumberInput
-                          onChange={onChange}
-                          onIncrease={() => numericFormSetValue('simple', addDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
-                          onDecrease={() => numericFormSetValue('simple', subDecimalNumbers(formatNumber(simpleCurrentValue || '0'), 1))}
-                          onBlur={onBlur}
-                          value={value}
-                          id="id-233"
-                          placeholder="Placeholder"
-                        />
-                        <CentIcon className="text-warning" />
-                      </InputIcon>
-                    </FormGroup>
-                  </>
-                )}
-              />
-            </div>
+            </FormGroup>
           </CardBody>
         </Card>
-        <Card size="lg" className="w-[370px]">
+
+        <Card size="lg" className="w-[370px] flex-grow">
           <CardHeader>
             <CardTitle>Disabled Forms</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col items-start">
-              <FormGroup>
-                <Label htmlFor="6-1" className="flex items-center gap-x-2">
-                  Password
-                </Label>
-                <Input placeholder="*****" type="password" id="4-1" disabled />
-                <TextForm>Your password must be 8-20 characters long</TextForm>
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="6-2" className="flex items-center gap-x-2">
-                  <EmailIcon />
-                  <span>Email Address</span>
-                </Label>
-                <InputIcon>
-                  <Input placeholder="example@crypto.com" id="6-2" disabled />
-                  <CentIcon className="text-warning" />
-                </InputIcon>
-              </FormGroup>
-              <FormCheck>
+            <FormGroup>
+              <Label htmlFor="6-1" className="flex items-center gap-x-2">
+                Password
+              </Label>
+              <Input placeholder="*****" type="password" id="4-1" disabled />
+              <TextForm>Your password must be 8-20 characters long</TextForm>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="6-2" className="flex items-center gap-x-2">
+                <EmailIcon />
+                <span>Email Address</span>
+              </Label>
+              <InputIcon>
+                <Input placeholder="example@crypto.com" id="6-2" disabled />
+                <CentIcon className="text-warning" />
+              </InputIcon>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Checkbox</Label>
+              <CheckboxGroup>
                 <Checkbox id="6-3" disabled />
                 <Label htmlFor="6-3" className="flex items-center">
                   <span className="text-white font-normal">
@@ -367,21 +432,26 @@ const FormComponentDemo = () => {
                     , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
                   </span>
                 </Label>
-              </FormCheck>
-              <FormGroup>
-                <Label>Game mode</Label>
-                <div className="grid grid-cols-3 gap-x-2">
-                  <Radio id="61" name="1" value="61" disabled>
-                    EASY
-                  </Radio>
-                  <Radio id="62" name="1" value="62" disabled>
-                    MEDIUM
-                  </Radio>
-                  <Radio id="63" name="1" value="63" disabled>
-                    HARD
-                  </Radio>
-                </div>
-              </FormGroup>
+              </CheckboxGroup>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Radio</Label>
+              <RadioGroup>
+                <Radio id="61" name="1" value="61" disabled blockClassName="w-[calc(100/3*1%)]">
+                  EASY
+                </Radio>
+                <Radio id="62" name="1" value="62" disabled blockClassName="w-[calc(100/3*1%)]">
+                  MEDIUM
+                </Radio>
+                <Radio id="63" name="1" value="63" disabled blockClassName="w-[calc(100/3*1%)]">
+                  HARD
+                </Radio>
+              </RadioGroup>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Radio Card</Label>
               <RadioCard id="64" name="5" value="64" disabled>
                 <div className="flex items-center">
                   <div className="flex items-center">
@@ -394,7 +464,93 @@ const FormComponentDemo = () => {
                   </div>
                 </div>
               </RadioCard>
-            </div>
+            </FormGroup>
+          </CardBody>
+        </Card>
+
+        <Card size="lg" className="w-[370px] flex-grow">
+          <CardHeader>
+            <CardTitle>Controlled Component (by state or React form)</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <FormGroup>
+                <Label>Radio</Label>
+                <RadioGroup>
+                  {mockRadioData2.map(({ id, label, name, value }) => (
+                    <Controller
+                      key={id}
+                      name="radio-2"
+                      control={controlControlledForm}
+                      rules={{ required: true }}
+                      render={({ field }) => {
+                        return (
+                          <Radio id={id} name={name} value={value} checked={value === field.value} onChange={field.onChange} blockClassName="w-[calc(100/3*1%)]">
+                            {label}
+                          </Radio>
+                        )
+                      }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Radio Card</Label>
+                <RadioCardGroup>
+                  {mockRadioData1.map(({ amount, name, label, id, value, images }) => (
+                    <Controller
+                      key={id}
+                      name="radio-1"
+                      control={controlControlledForm}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <RadioCard name={name} id={id} value={value} checked={value === field.value} onChange={field.onChange}>
+                          <div className="flex items-center">
+                            <div className="flex items-center pl-2">
+                              {images?.map(({ alt, src }) => <Image key={src} src={src} alt={alt} width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />)}
+                            </div>
+                            <div className="flex items-center justify-between flex-grow px-2">
+                              <span className="font-medium">{label}</span>
+                              <span className="text-xs text-white font-normal ml-auto">{amount}</span>
+                            </div>
+                          </div>
+                        </RadioCard>
+                      )}
+                    />
+                  ))}
+                </RadioCardGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Checkbox</Label>
+                <Controller
+                  name="checkbox"
+                  control={controlControlledForm}
+                  rules={{ required: true }}
+                  render={({ field }) => {
+                    return (
+                      <CheckboxGroup>
+                        <Checkbox id="5-5" checked={field.value} onChange={field.onChange} />
+                        <Label htmlFor="5-5" className="flex items-center">
+                          <span className="text-white font-normal">
+                            I agree to the collection of information in cookies, I agree with
+                            <a className="text-link" href="#" target="_blank">
+                              Privacy Policy
+                            </a>
+                            and with
+                            <a className="text-link" href="#" target="_blank">
+                              Terms of Use
+                            </a>
+                            , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
+                          </span>
+                        </Label>
+                      </CheckboxGroup>
+                    )
+                  }}
+                />
+              </FormGroup>
+            </form>
           </CardBody>
         </Card>
       </div>
