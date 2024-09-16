@@ -13,13 +13,21 @@ import { Radio } from '@/components/common/form/radio/radio'
 import { RadioCard } from '@/components/common/form/radioCard/radioCard'
 import { RadioCardGroup } from '@/components/common/form/radioCardGroup/radioCardGroup'
 import { RadioGroup } from '@/components/common/form/radioGroup/radioGroup'
+import Select from '@/components/common/form/select/select'
+import SelectButton from '@/components/common/form/select/selectButton/selectButton'
+import SelectIcon from '@/components/common/form/select/selectIcon/selectIcon'
+import SelectList from '@/components/common/form/select/selectList/selectList'
+import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Input } from '@/components/common/form/textInput/textInput'
 import CentIcon from '@/components/icons/cent/cent'
 import EmailIcon from '@/components/icons/email/email'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useHelper } from '@/hooks/usehelper'
+import { TType } from '@/types/global.types'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 const mockRadioData1 = [
@@ -68,6 +76,14 @@ const mockRadioData2 = [
   },
 ]
 
+const people = [
+  { id: 1, name: 'Durward Reynolds', icon: '/assets/images/dollar.png' },
+  { id: 2, name: 'Kenton Towne', icon: '/assets/images/tether.png' },
+  { id: 3, name: 'Therese Wunsch', icon: '/assets/images/dollar.png' },
+  { id: 4, name: 'Benedict Kessler', icon: '/assets/images/tether.png' },
+  { id: 5, name: 'Katelyn Rohan', icon: '/assets/images/dollar.png' },
+]
+
 interface NumericForm {
   simple: string
 }
@@ -83,6 +99,8 @@ const FormComponentDemo = () => {
   const { control: controlControlledForm } = useForm<SelectCoinModalPropsForm>({
     defaultValues: { chain: '', 'radio-1': 'c1', 'radio-2': 'h1', checkbox: true },
   })
+
+  const [selected, setSelected] = useState<TType>(people[1])
 
   const {
     control: numericFormController,
@@ -551,6 +569,35 @@ const FormComponentDemo = () => {
                 />
               </FormGroup>
             </form>
+          </CardBody>
+        </Card>
+
+        <Card size="lg" className="w-[370px] flex-grow">
+          <CardHeader>
+            <CardTitle>Controlled Component (by state or React form)</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <Select value={selected} onChange={setSelected}>
+              <SelectButton className="flex items-center justify-between ">
+                <div className="flex items-center text-sm text-main font-medium gap-x-2">
+                  {selected.icon && <Image src={selected.icon} alt="flag" width={24} height={24} className="rounded-full" />}
+                  {selected.name}
+                </div>
+                <ChevronDownIcon className="pointer-events-none size-4 fill-white/60" aria-hidden="true" />
+              </SelectButton>
+              <SelectList>
+                {people.map(({ icon, id, name }) => (
+                  <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
+                    {icon && (
+                      <SelectIcon>
+                        <Image src={icon} alt="flag" width={24} height={24} />
+                      </SelectIcon>
+                    )}
+                    <div className="text-sm text-main font-medium">{name}</div>
+                  </SelectOption>
+                ))}
+              </SelectList>
+            </Select>
           </CardBody>
         </Card>
       </div>
