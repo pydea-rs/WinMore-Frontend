@@ -22,14 +22,10 @@
 @import '../components/common/list/listText/listText.style.css';
 @import '../components/common/button/button.style.css';
 @import '../components/common/spinner/spinner.style.css';
-
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
-
 @import '../components/common/form/checkbox/checkbox.style.css';
 @import '../components/common/form/formGroup/fromGroup.style.css';
-/* @import '../components/common/form/formValidation/formValidation.style.css'; */
 @import '../components/common/form/label/label.style.css';
-/* @import '../components/common/form/otpInput/otpInput.style.css'; */
 @import '../components/common/form/textInput/textInput.style.css';
 @import '../components/common/form/numberInput/numberInput.style.css';
 @import '../components/common/form/checkboxGroup/checkboxGroup.style.css';
@@ -39,16 +35,22 @@
 @import '../components/common/form/radioCard/radioCard.style.css';
 @import '../components/common/form/radioGroup/radioGroup.style.css';
 @import '../components/common/form/radioCardGroup/radioCardGroup.style.css';
+@import '../components/common/form/select/selectOption/selectOption.style.css';
 @import '../components/common/card/card.style.css';
 @import '../components/common/card/card-header/card-header.style.css';
+@import '../components/common/form/select/select.style.css';
+@import '../components/common/form/select/selectButton/selectButton.style.css';
+@import '../components/common/form/select/selectList/selectList.style.css';
+@import '../components/common/form/select/selectIcon/selectIcon.style.css';
 @import '../components/common/card/card-title/card-title.style.css';
 @import '../components/common/card/card-body/card-body.style.css';
 @import '../components/common/quickAccess/quickAccess.style.css';
 @import '../components/common/container/container.style.css';
 @import '../components/common/menuSticky/menuSticky.style.css';
 @import '../components/common/modal/modal.style.css';
-@import '../components/icons/done/done.style.css';
 @import '../components/common/holdToAction/holdToActionButton/holdToActionButton.style.css';
+@import '../components/icons/done/done.style.css';
+
 @import url('mine/mine.css');
 @import 'swiper/css';
 @import 'swiper/css/navigation';

@@ -43,3 +43,5 @@ export interface IWalletError {
   shortMessage: string
   version: string
 }
+
+export type TType = { id: number; name: string; icon?: string }
