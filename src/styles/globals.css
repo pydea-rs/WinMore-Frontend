@@ -47,6 +47,7 @@
 @import '../components/common/quickAccess/quickAccess.style.css';
 @import '../components/common/container/container.style.css';
 @import '../components/common/menuSticky/menuSticky.style.css';
+@import '../components/common/alert/alert.style.css';
 @import '../components/common/modal/modal.style.css';
 @import '../components/common/holdToAction/holdToActionButton/holdToActionButton.style.css';
 @import '../components/icons/done/done.style.css';
