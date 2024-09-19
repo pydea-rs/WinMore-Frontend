@@ -1,5 +1,5 @@
 import Container from '@/components/common/container/container'
-import GameHistory from '@/components/common/gameHistory/gameHistory'
+import GameHistory from '@/components/snippets/gameHistory/gameHistory'
 
 import MainLayout from '@/components/layouts/main.layout'
 import TopGames from '@/components/pages/home/top-games/top-game'
