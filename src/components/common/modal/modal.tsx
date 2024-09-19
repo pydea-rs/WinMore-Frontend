@@ -13,7 +13,7 @@ const Modal: BaseProps<ModalProps> = (props) => {
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <DialogBackdrop className="fixed inset-0 bg-dark bg-opacity-60 filter-backdrop" />
         <div className="flex flex-col items-center justify-end xl:justify-center min-h-full w-full p-4">
-          <DialogPanel transition className="duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
+          <DialogPanel transition className="duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 relative z-20">
             {children}
           </DialogPanel>
         </div>
