@@ -1,6 +1,8 @@
 import CardsIcon from '@/components/icons/cards/cards.icon'
 import HomeIcon from '@/components/icons/home/home.icon'
 import ProfileIcon from '@/components/icons/profile/profile.icon'
+import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
+import { dispatch } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
 import { IMenuSticky } from './menuSticky.types'
@@ -12,13 +14,17 @@ const MenuSticky: BaseProps<IMenuSticky> = (props) => {
     [`${className}`]: className,
   })
 
+  const handleOpenNavbar = () => {
+    dispatch(toggleNavbar())
+  }
+
   return (
     <div className={classList}>
       <ul className="p-4 bg-secondary border-t border-t-primary flex justify-between">
         <li className="flex justify-center flex-grow">
-          <button className="flex flex-col items-center justify-center py-2.5 px-4 text-primary hover:text-primary active:text-primary">
+          <button className="flex flex-col items-center justify-center py-2.5 px-4 text-primary hover:text-primary active:text-primary" onClick={handleOpenNavbar}>
             <HomeIcon className="mb-2" />
-            <span className="text-sm font-bold ">Home</span>
+            <span className="text-sm font-bold ">Menu</span>
           </button>
         </li>
         <li className="flex justify-center flex-grow">
