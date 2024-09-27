@@ -19,11 +19,11 @@ import { NumberInput } from '../common/form/numberInput/numberInput'
 import { Radio } from '../common/form/radio/radio'
 import { RadioGroup } from '../common/form/radioGroup/radioGroup'
 import { TextForm } from '../common/form/textForm/textForm'
-import GameHistory from '../common/gameHistory/gameHistory'
 import Header from '../common/header/header'
 import MenuSticky from '../common/menuSticky/menuSticky'
 import QuickAccess from '../common/quickAccess/quickAccess'
 import CentIcon from '../icons/cent/cent'
+import GameHistory from '../snippets/gameHistory/gameHistory'
 
 interface IGameForm {
   betAmount: string
