@@ -6,12 +6,14 @@ import { APIsReducers } from './api.reducers'
 import authSlice from './slices/auth/auth.slice'
 import gamesSlice from './slices/games/games.slice'
 import modalSlice from './slices/modal/modal.slice'
+import navbarSlice from './slices/navbar/navbar.slice'
 
 // Combine your slices with the RTK Query API service reducer
 const rootReducer = combineReducers({
   auth: authSlice,
   modal: modalSlice,
   game: gamesSlice,
+  navbar: navbarSlice,
   ...APIsReducers,
 })
 

@@ -51,6 +51,11 @@
 @import '../components/common/modal/modal.style.css';
 @import '../components/common/multipleStepModal/multipleStepModal.style.css';
 @import '../components/common/holdToAction/holdToActionButton/holdToActionButton.style.css';
+@import '../components/common/navbar/navbar.style.css';
+@import '../components/common/navbar/menu/menu.style.css';
+@import '../components/common/navbar/menuItem/menuItem.style.css';
+@import '../components/common/navbar/menuList/menuList.style.css';
+@import '../components/common/navbar/menuTitle/menuTitle.style.css';
 @import '../components/icons/done/done.style.css';
 
 @import url('mine/mine.css');
@@ -79,7 +84,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: rgba(15, 20, 26, 1);
+  background-color: #0f141a;
   overflow-x: hidden;
 }
 
