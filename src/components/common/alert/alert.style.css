@@ -1,0 +1,20 @@
+.alert {
+  @apply relative block border text-sm !leading-[16.8px] p-2 rounded-lg font-medium;
+}
+
+/* Primary Buttons */
+.alert-primary {
+  @apply alert bg-primary/25 border-primary text-primary fill-primary;
+}
+
+.alert-success {
+  @apply alert bg-success/25 border-success text-success fill-success;
+}
+
+.alert-danger {
+  @apply alert bg-danger/25 border-danger text-danger fill-danger;
+}
+
+.alert-warning {
+  @apply alert bg-warning/25 border-warning text-warning fill-warning;
+}
