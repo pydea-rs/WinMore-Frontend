@@ -58,10 +58,9 @@ const axiosBaseQuery =
   > =>
   async ({ url, headers = {}, sendAuthorization = true, method, data, params }, { getState }) => {
     try {
-      const token: string | null = (getState() as RootState).auth.user?.jwt_token || null
+      const token: string | null = (getState() as RootState).auth.token || null
       const auth = sendAuthorization ? { Authorization: `Bearer ${token}` } : {}
       const API_URL = baseUrl + url
-      console.log(API_URL)
       const result = await axiosInstance({
         url: API_URL,
         method,
@@ -72,13 +71,14 @@ const axiosBaseQuery =
           ...headers,
         },
       })
-      return {
-        data: {
-          data: result.data.data,
-          message: result.data.message,
-          status: result.data.status,
-        },
-      }
+      return result
+      // return {
+      //   data: {
+      //     data: result.data.data,
+      //     message: result.data.message,
+      //     status: result.data.status,
+      //   },
+      // }
     } catch (axiosError) {
       let err = axiosError as AxiosError
       // 👇️ ts-ignore ignores any ts errors on the next line

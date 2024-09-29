@@ -23,7 +23,6 @@ export default function MineGame() {
     setTimeout(() => {
       dispatch(endMineGame({ isWin: true }))
     }, 2000)
-    console.log('claim')
   }
 
   const onCheckBlock = async (i: number, row: number) => {
@@ -48,8 +47,6 @@ export default function MineGame() {
       winHandler()
     }
   }
-  console.log(mineConfig.activeRow < 2 && mineConfig.isGameOver && mineConfig.isStarted)
-  console.log(mineConfig)
 
   return (
     <Card className="w-full max-w-[390px]">

@@ -1,18 +1,15 @@
 import { useAuth } from '@/hooks/useAuth'
-import { useSelector } from '@/store/store'
+import { useGetUserInfoQuery } from '@/services/user/user.api'
 import { BaseProps } from '@/types/global.types'
-import { getCookie } from 'cookies-next'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 const AuthProvider: BaseProps = ({ children }) => {
-  const { user } = useSelector((state) => state.auth)
-  const { isWalletConnected, sendAuthSignature } = useAuth()
-  const token = getCookie('token')
+  const { isWalletConnected, sendAuthSignature, token } = useAuth()
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null // Initialize timeout as null
 
-    if (isWalletConnected && !user && token) {
+    if (isWalletConnected && !token) {
       timeout = setTimeout(() => {
         sendAuthSignature()
       }, 500)
@@ -23,9 +20,11 @@ const AuthProvider: BaseProps = ({ children }) => {
         clearTimeout(timeout)
       }
     }
-  }, [isWalletConnected, user])
+  }, [isWalletConnected, token])
 
-  return <>{children}</>
+  const { data } = useGetUserInfoQuery({}, { skip: !token })
+
+  return <Fragment>{children}</Fragment>
 }
 
 export default AuthProvider

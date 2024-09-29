@@ -1,27 +1,42 @@
+import { getDomain } from '@/utils/getDomain.util'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { AuthStateType } from './auth.slice.types'
+import { getCookie, setCookie } from 'cookies-next'
+import { jwtDecode } from 'jwt-decode'
+import { AuthStateType, IUser } from './auth.slice.types'
+
+const token = getCookie('token')
 
 const initialState: AuthStateType = {
+  token: token ?? null,
   user: null,
 }
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state: AuthStateType, action: PayloadAction<AuthStateType>) => {
-      state.user = action.payload.user
+    setToken: (state: AuthStateType, action: PayloadAction<string>) => {
+      const domain = getDomain()
+      const token = action.payload
+
+      // Decode the token to get the 'exp' property
+      const decodedToken: { exp: number } = jwtDecode(token)
+      // Convert 'exp' to milliseconds and set cookie expiration
+      const cookieExpiration = new Date(decodedToken.exp * 1000) // 'exp' is in seconds
+
+      setCookie('token', token, { domain, expires: cookieExpiration })
+      state.token = token
+    },
+    setUser: (state: AuthStateType, action: PayloadAction<IUser>) => {
+      state.user = action.payload
     },
     logout: (state: AuthStateType) => {
+      state.token = null
       state.user = null
-    },
-    updateUser: (state: AuthStateType, action: PayloadAction<Partial<AuthStateType>>) => {
-      if (state.user) {
-        state.user = { ...state.user, ...action.payload.user }
-      }
     },
   },
 })
 
-export const { updateUser, login, logout } = authSlice.actions
+export const { setToken, logout, setUser } = authSlice.actions
 
 export default authSlice.reducer

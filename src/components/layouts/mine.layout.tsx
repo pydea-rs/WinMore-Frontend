@@ -85,7 +85,6 @@ const MineLayout: BaseProps = ({ children }) => {
   }, [gameRowsWatch])
 
   const handleSubmit = (values: IGameForm) => {
-    console.log(values)
     onStart()
   }
 

@@ -1,17 +1,24 @@
-export interface IGetNoncePayload {}
+import { IAddress } from '../global.types'
 
-export interface IGetNonceResponse {
+export interface IGetMessagePayload {
+  address: IAddress
+}
+
+export interface ISIWEMessage {
+  address: IAddress
   nonce: string
-}
-export interface IGetUserInfoPayload {
-  public_key: string
+  version: string
+  statement: string
 }
 
-export interface IGetUserInfoResponse {
-  user: {
-    email: string
-    jwt_token: string
-    name: string
-    signed: boolean
-  }
+export interface IGetMessageResponse extends ISIWEMessage {}
+
+// Login
+export interface ILoginPayload {
+  message: string
+  signature: IAddress
+}
+export interface ILoginResponse {
+  status: number
+  token: string
 }

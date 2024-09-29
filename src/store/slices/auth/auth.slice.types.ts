@@ -1,10 +1,14 @@
+import { IAddress } from '@/types/global.types'
+
 export interface IUser {
-  public_key: string
-  jwt_token: string
-  name: string
-  email: string
-  signed: boolean
+  id: number
+  name: string | null
+  avatar: string | null
+  email: string | null
+  wallet: IAddress
 }
+
 export interface AuthStateType {
+  token: string | null
   user: IUser | null
 }

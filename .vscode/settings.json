@@ -3,5 +3,9 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-  "cSpell.words": ["Plinko", "Winmore"]
+  "cSpell.words": [
+    "ISIWE",
+    "Plinko",
+    "Winmore"
+  ]
 }
