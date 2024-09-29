@@ -7,20 +7,34 @@ import { IWalletError } from '@/types/global.types'
 import { getDomain } from '@/utils/getDomain.util'
 import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { SiweMessage } from 'siwe'
 import { Connector, useAccount, useChainId, useDisconnect, useSignMessage } from 'wagmi'
 
 export const useAuth = () => {
-  const { isConnected, address, status } = useAccount({ config: config })
+  const { isConnected, address } = useAccount({ config: config })
   const chainId = useChainId()
   const token = getCookie('token')
   const { disconnect } = useDisconnect({ config: config })
-  const [getMessageMutate] = useGetMessageMutation({})
-  const [login] = useGetAuthMutation()
+  const [getMessageMutate, { isLoading: isMessageLoading }] = useGetMessageMutation({})
+  const [login, { isLoading: isLoginLoading }] = useGetAuthMutation()
   const dispatch = useDispatch()
-  const { signMessageAsync } = useSignMessage()
+  const [isPendingForSign, setIsPendingForSign] = useState(false)
 
+  const { signMessageAsync } = useSignMessage({
+    mutation: {
+      onMutate: () => {
+        setIsPendingForSign(true)
+      },
+      onSuccess: () => {
+        setIsPendingForSign(false)
+      },
+      onError: () => {
+        setIsPendingForSign(false)
+      },
+    },
+  })
   const signMessageHandler = (message: ISIWEMessage) => {
     const domain = getHostName()
     const rawMessage = new SiweMessage({
@@ -74,5 +88,5 @@ export const useAuth = () => {
     window.location.reload()
   }
 
-  return { connectWallet, sendAuthSignature, isWalletConnected: isConnected, logoutAndDisconnect, token }
+  return { connectWallet, sendAuthSignature, isWalletConnected: isConnected, logoutAndDisconnect, token, isPendingForSign, isMessageLoading, isLoginLoading }
 }

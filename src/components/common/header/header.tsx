@@ -4,6 +4,7 @@ import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
 import { usePermalink } from '@/hooks/usePermalink'
+import { useGetUserInfoQuery } from '@/services/user/user.api'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import Image from 'next/image'
@@ -21,7 +22,7 @@ const Header = () => {
   const { user } = useSelector((state) => state.auth)
   const { internalLinks } = usePermalink()
   const { logoutAndDisconnect } = useAuth()
-
+  const { isLoading } = useGetUserInfoQuery({})
   const headerRoutes: IHeaderRoutes[] = [
     {
       path: internalLinks.home.get(),
@@ -85,7 +86,14 @@ const Header = () => {
 
   const userProfileRender = () => {
     return !user ? (
-      <Button className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm" kind="pattern" pilled bordered onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}>
+      <Button
+        className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm"
+        kind="pattern"
+        pilled
+        bordered
+        disabled={isLoading}
+        onClick={() => dispatch(triggerModal({ modal: 'login', trigger: true }))}
+      >
         <div className="flex items-center gap-x-2">
           <CryptoCurrencyIcon className="flex-shrink-0" /> Connect Wallet
         </div>
