@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useGetUserInfoQuery } from '@/services/user/user.api'
 import { BaseProps } from '@/types/global.types'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 const AuthProvider: BaseProps = ({ children }) => {
   const { isWalletConnected, sendAuthSignature, token } = useAuth()
@@ -24,7 +24,7 @@ const AuthProvider: BaseProps = ({ children }) => {
 
   const { data } = useGetUserInfoQuery({}, { skip: !token })
 
-  return <>{children}</>
+  return <Fragment>{children}</Fragment>
 }
 
 export default AuthProvider

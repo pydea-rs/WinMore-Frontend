@@ -13,6 +13,7 @@ import DisabledIcon from '@/components/icons/disabled/disabled'
 import EmailIcon from '@/components/icons/email/email'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import Image from 'next/image'
+import { Fragment } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { CompleteUserDataProps, UserForm } from './completeUserData.types'
 
@@ -58,10 +59,10 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 control={control}
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
-                  <>
+                  <Fragment>
                     <Input {...field} invalid={!!fieldState.error} placeholder="type here" id="2-1" />
                     {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
-                  </>
+                  </Fragment>
                 )}
               />
             </FormGroup>
@@ -76,21 +77,21 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 control={control}
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
-                  <>
+                  <Fragment>
                     <Input {...field} invalid={!!fieldState.error} placeholder="example@crypto.com" id="2-2" />
                     {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
-                  </>
+                  </Fragment>
                 )}
               />
             </FormGroup>
 
-            <Controller
-              name="confirm"
-              control={control}
-              rules={{ required: true }}
-              render={({ field, fieldState }) => (
-                <CheckboxGroup className="flex-col">
-                  <div className="flex">
+            <FormGroup>
+              <Controller
+                name="confirm"
+                control={control}
+                rules={{ required: true }}
+                render={({ field, fieldState }) => (
+                  <CheckboxGroup>
                     <Checkbox {...field} id="6-3" />
                     <Label htmlFor="6-3" className="flex items-center">
                       <span className="inline-block text-white font-normal text-sm leading-5">
@@ -105,11 +106,11 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                         , Gambling isnt forbidden by my local authorities and Im at least 18 years old.
                       </span>
                     </Label>
-                  </div>
-                  {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
-                </CheckboxGroup>
-              )}
-            />
+                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                  </CheckboxGroup>
+                )}
+              />
+            </FormGroup>
 
             <Button kind="gradient" size="lg" full type="submit">
               Primary
