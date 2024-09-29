@@ -9,16 +9,17 @@ import { config } from '@/configs/wagmi.config'
 import { useAuth } from '@/hooks/useAuth'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useConnectors, useSignMessage } from 'wagmi'
+import { useAccount, useConnectors, useSignMessage } from 'wagmi'
 import { ConnectToWalletCardProps } from './connectToWallet.types'
 
 export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
   const connectors = useConnectors({ config: config })
   const { connectWallet } = useAuth()
-
+  const { isConnecting, isReconnecting, status } = useAccount()
+  console.log(status)
   const { isPending: isWaitingForSign } = useSignMessage()
-
+  const isLoading = isWaitingForSign || isConnecting || isReconnecting
   return (
     <Card size="lg" className="w-full max-w-[431px]">
       <CardHeader>
@@ -49,16 +50,16 @@ export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) =
                 onClick={() => {
                   connectWallet(wallet)
                 }}
-                disabled={isWaitingForSign}
+                disabled={isLoading}
               >
-                {isWaitingForSign && (
+                {isLoading && (
                   <div className="absolute-center">
                     <Spinner />
                   </div>
                 )}
                 <div className={classNames({ invisible: isWaitingForSign, 'flex items-center gap-x-2': true })}>
                   {/* <MetaMaxIcon className="flex-shrink-0" />  */}
-                  <img src={wallet.icon} alt={wallet.name} width={24} height={24} />
+                  <Image src={`/assets/images/wallets/${wallet.name}.svg` || ''} alt={wallet.name} width={24} height={24} />
                   Connect {wallet.name}
                 </div>
               </Button>
