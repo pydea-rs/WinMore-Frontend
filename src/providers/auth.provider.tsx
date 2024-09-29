@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/useAuth'
-import { useGetUserInfoQuery } from '@/services/user/user.api'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { BaseProps } from '@/types/global.types'
 import { Fragment, useEffect } from 'react'
 

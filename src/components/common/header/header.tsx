@@ -4,7 +4,7 @@ import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
 import { usePermalink } from '@/hooks/usePermalink'
-import { useGetUserInfoQuery } from '@/services/user/user.api'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import Image from 'next/image'

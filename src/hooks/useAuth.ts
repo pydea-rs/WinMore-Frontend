@@ -1,5 +1,5 @@
 import { config } from '@/configs/wagmi.config'
-import { useGetAuthMutation, useGetMessageMutation } from '@/services/authentication/auth.api'
+import { useGetAuthMutation, useGetMessageMutation } from '@/services/authentication/auth.service'
 import { logout } from '@/store/slices/auth/auth.slice'
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'

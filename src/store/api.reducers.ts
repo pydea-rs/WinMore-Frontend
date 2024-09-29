@@ -1,5 +1,5 @@
-import { authService } from '@/services/authentication/auth.api'
-import { userService } from '@/services/user/user.api'
+import { authService } from '@/services/authentication/auth.service'
+import { userService } from '@/services/user/user.service'
 
 export const APIsReducers = {
   [authService.reducerPath]: authService.reducer,

@@ -6,7 +6,7 @@ import { IGetMessagePayload, IGetMessageResponse, ILoginPayload, ILoginResponse 
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { toast } from 'react-toastify'
 import axiosBaseQuery from '../base/axiosBaseQuery'
-import { userService } from '../user/user.api'
+import { userService } from '../user/user.service'
 
 // Define the API service
 export const authService = createApi({
