@@ -5,6 +5,7 @@ import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
 import { IWalletError } from '@/types/global.types'
 import { getDomain } from '@/utils/getDomain.util'
+import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
 import { toast } from 'react-toastify'
 import { SiweMessage } from 'siwe'
@@ -21,14 +22,16 @@ export const useAuth = () => {
   const { signMessageAsync } = useSignMessage()
 
   const signMessageHandler = (message: ISIWEMessage) => {
+    const domain = getHostName()
+    console.log(process.env.NODE_ENV)
     const rawMessage = new SiweMessage({
       address: message.address,
       nonce: message.nonce,
       version: message.version,
       statement: message.statement,
-      domain: 'localhost:3000',
+      domain: process.env.NODE_ENV === 'development' ? `${domain}:3000` : domain,
       chainId,
-      uri: 'localhost:3000',
+      uri: process.env.NODE_ENV === 'development' ? `${domain}:3000` : domain,
     })
 
     const preparedMessage = rawMessage.prepareMessage()
