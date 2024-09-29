@@ -12,6 +12,7 @@ import { Input } from '@/components/common/form/textInput/textInput'
 import DisabledIcon from '@/components/icons/disabled/disabled'
 import EmailIcon from '@/components/icons/email/email'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import { useRegisterUserMutation } from '@/services/user/user.api'
 import Image from 'next/image'
 import { Fragment } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -25,9 +26,12 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
     control,
     formState: { errors },
   } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '' } })
-
+  const [registerMutation, {}] = useRegisterUserMutation()
   const onSubmit: SubmitHandler<UserForm> = (data) => {
-    console.log(data)
+    registerMutation({
+      email: data.email,
+      name: data.name,
+    })
   }
 
   return (

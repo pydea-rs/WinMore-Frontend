@@ -1,8 +1,3 @@
-interface IRoute {
-  path: string
-  get: (slug: string) => string
-}
-type IRoutes = Record<string, IRoute>
 export const getApiRoute = () => {
   const routes = {
     auth: {
@@ -26,7 +21,12 @@ export const getApiRoute = () => {
           return `/${this.path}/${slug}`
         },
       },
-      register: '/user/register',
+      register: {
+        path: 'user/register',
+        get(slug: string) {
+          return `/${this.path}/${slug}`
+        },
+      },
     },
   }
   return routes

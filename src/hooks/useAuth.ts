@@ -1,6 +1,6 @@
 import { config } from '@/configs/wagmi.config'
 import { useGetAuthMutation, useGetMessageMutation } from '@/services/authentication/auth.api'
-import { logout, setToken } from '@/store/slices/auth/auth.slice'
+import { logout } from '@/store/slices/auth/auth.slice'
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
 import { IWalletError } from '@/types/global.types'
@@ -35,14 +35,7 @@ export const useAuth = () => {
     signMessageAsync({ message: preparedMessage })
       .then((res) => {
         const payload = { message: preparedMessage, signature: res }
-        login(payload)
-          .then((res) => {
-            if (res.data) {
-              dispatch(setToken(res.data.data.token))
-              toast.success('Logged in Successfully')
-            }
-          })
-          .catch((err) => toast.error(err.message))
+        login(payload).catch((err) => toast.error(err.message))
       })
       .catch((err) => {
         toast.error(err.details)

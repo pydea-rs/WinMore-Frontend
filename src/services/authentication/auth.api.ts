@@ -1,9 +1,12 @@
 // Import necessary RTK Query methods
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
+import { setToken } from '@/store/slices/auth/auth.slice'
 import { IGetMessagePayload, IGetMessageResponse, ILoginPayload, ILoginResponse } from '@/types/auth/auth.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { toast } from 'react-toastify'
 import axiosBaseQuery from '../base/axiosBaseQuery'
+import { userService } from '../user/user.api'
 
 // Define the API service
 export const authService = createApi({
@@ -30,6 +33,12 @@ export const authService = createApi({
           sendAuthorization: false,
           data: params,
         }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(setToken(data.data.token))
+        toast.success('Logged in Successfully')
+        dispatch(userService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
       },
     }),
   }),

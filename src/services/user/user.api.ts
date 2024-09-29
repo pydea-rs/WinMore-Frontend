@@ -3,7 +3,7 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { setUser } from '@/store/slices/auth/auth.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { IGetUserInfoPayload, IGetUserInfoResponse } from '@/types/auth/auth.types'
+import { IGetUserInfoPayload, IGetUserInfoResponse, IRegisterUserPayload, IRegisterUserResponse } from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 
@@ -21,7 +21,6 @@ export const userService = createApi({
           sendAuthorization: true,
         }
       },
-
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled
@@ -41,8 +40,27 @@ export const userService = createApi({
         } catch (err) {}
       },
     }),
+    registerUser: builder.mutation<BaseResponse<IRegisterUserResponse>, IRegisterUserPayload>({
+      query: (args) => {
+        const { user } = getApiRoute()
+        return {
+          url: user.register.path,
+          method: 'POST',
+          data: args,
+          sendAuthorization: true,
+        }
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+
+          dispatch(triggerModal({ modal: 'login', trigger: false }))
+
+          dispatch(userService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
+        } catch (err) {}
+      },
+    }),
   }),
 })
 
-// Export the auto-generated hook for the `getNonce` query
-export const { useGetUserInfoQuery } = userService
+export const { useGetUserInfoQuery, useRegisterUserMutation } = userService
