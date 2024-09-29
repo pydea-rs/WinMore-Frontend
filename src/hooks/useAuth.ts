@@ -23,7 +23,6 @@ export const useAuth = () => {
 
   const signMessageHandler = (message: ISIWEMessage) => {
     const domain = getHostName()
-    console.log(process.env.NODE_ENV)
     const rawMessage = new SiweMessage({
       address: message.address,
       nonce: message.nonce,
