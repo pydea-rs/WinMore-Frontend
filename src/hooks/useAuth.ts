@@ -53,7 +53,7 @@ export const useAuth = () => {
       })
   }
 
-  const connectWallet = (connector: Connector) => {
+  const connectWallet = async (connector: Connector) => {
     connector
       .connect()
       .then((res) => {
@@ -69,6 +69,7 @@ export const useAuth = () => {
     deleteCookie('token', { domain })
     dispatch(logout())
     disconnect()
+    window.location.reload()
   }
 
   return { connectWallet, sendAuthSignature, isWalletConnected: isConnected, logoutAndDisconnect, token }

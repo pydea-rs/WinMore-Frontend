@@ -16,7 +16,8 @@ export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) =
   const { isOpenModal, onCloseModal, onComplete } = props
   const connectors = useConnectors({ config: config })
   const { connectWallet } = useAuth()
-  const { isConnecting, isReconnecting } = useAccount()
+  const { isConnecting, isReconnecting, status } = useAccount()
+  console.log(status)
   const { isPending: isWaitingForSign } = useSignMessage()
   const isLoading = isWaitingForSign || isConnecting || isReconnecting
   return (
