@@ -3,7 +3,7 @@ import { startMineGame, updateMineConfig } from '@/store/slices/games/games.slic
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { motion } from 'framer-motion'
-import { useCallback, useEffect, useMemo } from 'react'
+import { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Card } from '../common/card/card'
 import { CardBody } from '../common/card/card-body/card-body'
@@ -114,7 +114,7 @@ const MineLayout: BaseProps = ({ children }) => {
                           required: { value: true, message: "It's require" },
                         }}
                         render={({ field: { onChange, onBlur, value }, fieldState }) => (
-                          <>
+                          <Fragment>
                             <InputIcon>
                               <NumberInput
                                 disabled={mineConfig.isStarted}
@@ -130,7 +130,7 @@ const MineLayout: BaseProps = ({ children }) => {
                               <CentIcon className="text-warning" />
                             </InputIcon>
                             <TextForm variant="invalid">{errors.betAmount?.message}</TextForm>
-                          </>
+                          </Fragment>
                         )}
                       />
                     </FormGroup>

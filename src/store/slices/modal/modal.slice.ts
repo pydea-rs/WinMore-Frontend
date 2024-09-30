@@ -4,6 +4,8 @@ import { ITriggerModalPayload, StateType } from './modal.slice.types'
 const initialState: StateType = {
   modals: {
     login: false,
+    deposit: false,
+    selectCoin: false,
   },
 }
 

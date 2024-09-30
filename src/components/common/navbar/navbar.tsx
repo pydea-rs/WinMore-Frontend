@@ -1,7 +1,11 @@
+import { triggerModal } from '@/store/slices/modal/modal.slice'
+import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
+import { useDispatch } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { Avatar } from '../avatar/avatar'
 import { Button } from '../button/button'
 import Menu from './menu/menu'
 import MenuItem from './menuItem/menuItem'
@@ -11,10 +15,21 @@ import { INavbar } from './navbar.type'
 
 const Navbar: BaseProps<INavbar> = (props) => {
   const { isOpen } = props
+  const dispatch = useDispatch()
 
   const variants = {
     open: { opacity: 1, x: 0 },
     closed: { opacity: 1, x: '-100%' },
+  }
+
+  const handleOpenSelectCoinModal = () => {
+    dispatch(toggleNavbar())
+    dispatch(triggerModal({ modal: 'selectCoin', trigger: true }))
+  }
+
+  const handleOpenDepositModal = () => {
+    dispatch(toggleNavbar())
+    dispatch(triggerModal({ modal: 'deposit', trigger: true }))
   }
 
   return (
@@ -42,9 +57,9 @@ const Navbar: BaseProps<INavbar> = (props) => {
             <MenuTitle>Coin</MenuTitle>
             <MenuList>
               <MenuItem className="mb-4">
-                <Button variant="dark" kind="primary" className="bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
+                <Button variant="dark" kind="primary" className="bg-opacity-40 border text-main border-[#1A1F25]" full size="lg" onClick={handleOpenSelectCoinModal}>
                   <div className="flex justify-between items-center gap-x-2 w-full">
-                    <Image src={'/assets/images/tether.png'} width={30} height={30} alt="tether" />
+                    <Avatar src={'/assets/images/tether.png'} size="lg" alt="tether" />
                     <div className="flex items-center gap-x-4">
                       <div className="flex items-center gap-x-1 font-normal text-xs">
                         <span className="text-main">Balance:</span>
@@ -61,7 +76,14 @@ const Navbar: BaseProps<INavbar> = (props) => {
           <Menu>
             <MenuList className="gap-y-4">
               <MenuItem>
-                <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
+                <Button
+                  kind="primary"
+                  variant="dark"
+                  className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]"
+                  full
+                  size="lg"
+                  onClick={handleOpenDepositModal}
+                >
                   Deposit
                   <ChevronRightIcon className="flex-shrink-0 w-4" />
                 </Button>
