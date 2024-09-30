@@ -57,6 +57,7 @@
 @import '../components/common/navbar/menuList/menuList.style.css';
 @import '../components/common/navbar/menuTitle/menuTitle.style.css';
 @import '../components/icons/done/done.style.css';
+@import '../components/common/avatar/avatar.style.css';
 
 @import url('mine/mine.css');
 @import 'swiper/css';
