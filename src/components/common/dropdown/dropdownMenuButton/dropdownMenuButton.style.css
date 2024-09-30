@@ -1,0 +1,4 @@
+.dropdown-menu-button {
+  @apply inline-flex items-center text-sm/6 font-semibold focus:outline-none;
+  /* data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white*/
+}
