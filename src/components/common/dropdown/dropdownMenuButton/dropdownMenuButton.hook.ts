@@ -1,8 +1,8 @@
 import { useEnhancedProps } from '@/hooks/useBaseComponent'
 import classNames from 'classnames'
-import { DropdownButtonHook } from './dropdownButton.types'
+import { DropdownMenuButtonHook } from './dropdownMenuButton.types'
 
-export const useDropdownButtonHook = (baseClass: string, props: DropdownButtonHook) => {
+export const useDropdownButtonHook = (baseClass: string, props: DropdownMenuButtonHook) => {
   const { className, ...restAttrs } = props
 
   const classList = classNames({

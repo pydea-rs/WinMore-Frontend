@@ -8,11 +8,7 @@ const Dropdown: BaseProps<DropdownProps> = (props) => {
   const baseClass = 'dropdown'
   const mergedAttrs = useDropdownHook(baseClass, props)
 
-  return (
-    <Menu as={'div'} {...mergedAttrs}>
-      {children}
-    </Menu>
-  )
+  return <Menu {...mergedAttrs}>{children}</Menu>
 }
 
 export default Dropdown
