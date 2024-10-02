@@ -5,7 +5,7 @@ import { ConnectToWalletCard } from '@/components/snippets/cards/connectToWallet
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { WalletModalGroupProps } from './walletModalGroup.types'
 
 const WalletModalGroup: BaseProps<WalletModalGroupProps> = (props) => {
@@ -26,12 +26,12 @@ const WalletModalGroup: BaseProps<WalletModalGroupProps> = (props) => {
   }, [user])
 
   return (
-    <>
+    <Fragment>
       <MultipleStepModalGroup>
         <ConnectToWalletCard isOpenModal={isOpen} onCloseModal={onClose} onComplete={next} />
         <CompleteUserDataCard isOpenModal={isOpen} onCloseModal={onClose} onComplete={next} />
       </MultipleStepModalGroup>
-    </>
+    </Fragment>
   )
 }
 

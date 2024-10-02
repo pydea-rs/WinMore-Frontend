@@ -12,11 +12,11 @@ import Cent1Icon from '@/components/icons/cent1/cent1'
 import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import MainLayout from '@/components/layouts/main.layout'
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 
 const TableDemo = () => {
   return (
-    <>
+    <Fragment>
       <Container className="z-10">
         <TableWrapper className="bg-[hsla(212,31%,10%,0.9)] p-[20px] rounded-2xl sm:filter-backdrop mb-8">
           <Table className="text-secondary w-full ">
@@ -724,7 +724,7 @@ const TableDemo = () => {
           <img src="/assets/images/complex.svg" alt="complex" />
         </div>
       </Container>
-    </>
+    </Fragment>
   )
 }
 
