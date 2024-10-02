@@ -17,14 +17,16 @@ export const NumberInput: BaseProps<NumberInputProps> = (props) => {
   return (
     <div className="relative">
       <NumericFormat maxLength={9} thousandSeparator decimalScale={2} allowNegative={false} {...mergedAttrs} customInput={NumberCustomInput} />
-      <div className="absolute top-1/2 -translate-y-1/2 !left-auto !right-4 flex flex-col">
-        <button onClick={onIncrease} className="text-main hover:bg-white/10 active:bg-white/20">
-          <ChevronUpIcon className="numeric-arrow" />
-        </button>
-        <button onClick={onDecrease} className="text-main hover:bg-white/10 active:bg-white/20">
-          <ChevronDownIcon className="numeric-arrow" />
-        </button>
-      </div>
+      {onIncrease && onDecrease && (
+        <div className="absolute top-1/2 -translate-y-1/2 !left-auto !right-4 flex flex-col">
+          <button type="button" onClick={onIncrease} className="text-main hover:bg-white/10 active:bg-white/20">
+            <ChevronUpIcon className="numeric-arrow" />
+          </button>
+          <button type="button" onClick={onDecrease} className="text-main hover:bg-white/10 active:bg-white/20">
+            <ChevronDownIcon className="numeric-arrow" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,5 +1,7 @@
 interface IModals {
   login: boolean
+  selectCoin: boolean
+  deposit: boolean
 }
 
 export interface StateType {

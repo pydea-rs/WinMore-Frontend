@@ -33,10 +33,10 @@ const DropdownComponentDemo = () => {
       link: '/',
     },
   ]
+
   return (
     <Container>
       <div className="flex gap-4 p-5 flex-wrap">
-        <div className="w-[380px] px-4"></div>
         <div className="w-[380px] px-4">
           <Card>
             <CardHeader>
