@@ -1,6 +1,6 @@
 import { IAvailableTokens } from '@/types/global.types'
 
-export type IMineGameStatuses = 'ONGOING'
+export type IMineGameStatuses = 'ONGOING' | 'LOST'
 
 export type IMineModeVariants = 'EASY' | 'MEDIUM' | 'HARD'
 

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ICoefficients, ICurrentMineGame, IStartMineGamePayload, IUpdateMineConfig, StateType } from './mine.slice.types'
+import { ICoefficients, ICurrentMineGame, IUpdateMineConfig, StateType } from './mine.slice.types'
 
 export const CURRENT_MINE = 'mine_game'
 
@@ -40,17 +40,24 @@ export const mineSlice = createSlice({
       }
     },
 
-    startMineGame: (state: StateType, action: PayloadAction<IStartMineGamePayload>) => {
+    startMineGame: (state: StateType) => {
       state.mineConfig.isStarted = true
       state.mineConfig.isGameOver = false // Reset game over state when starting a new game
-      state.mineConfig.selectedBlocks = []
+      state.mineConfig.selectedBlocks = initialState.mineConfig.selectedBlocks
     },
     endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean }>) => {
-      if (action.payload.isWin) {
-        state.currentGame = initialState.currentGame
-        state.mineConfig = initialState.mineConfig
-        localStorage.removeItem(CURRENT_MINE)
-      }
+      // if (action.payload.isWin) {
+      //   state.currentGame = initialState.currentGame
+      //   state.mineConfig = initialState.mineConfig
+      //   localStorage.removeItem(CURRENT_MINE)
+      // }else{
+      //   state.currentGame = initialState.currentGame
+      //   state.mineConfig = initialState.mineConfig
+      //   localStorage.removeItem(CURRENT_MINE)
+      // }
+      state.currentGame = initialState.currentGame
+      state.mineConfig = initialState.mineConfig
+      localStorage.removeItem(CURRENT_MINE)
     },
     updateCurrentGame: (state: StateType, action: PayloadAction<ICurrentMineGame | null>) => {
       state.currentGame = action.payload

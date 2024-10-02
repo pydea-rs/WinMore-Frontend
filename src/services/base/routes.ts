@@ -36,6 +36,12 @@ export const getApiRoute = () => {
         bet: {
           path: 'dream-mine/bet',
         },
+        mineBlock: {
+          path: 'dream-mine/mine/',
+          get(id: string) {
+            return `${this.path}${id}`
+          },
+        },
       },
     },
   }

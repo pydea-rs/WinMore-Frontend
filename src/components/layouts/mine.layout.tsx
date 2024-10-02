@@ -5,9 +5,9 @@ import { IMineMode } from '@/store/slices/mine/mine.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { createNumberArray } from '@/utils/createNumberArray.util'
-import { motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { Button } from '../common/button/button'
 import { Card } from '../common/card/card'
 import { CardBody } from '../common/card/card-body/card-body'
 import { CardHeader } from '../common/card/card-header/card-header'
@@ -57,16 +57,13 @@ const MineLayout: BaseProps = ({ children }) => {
       coefficient: data?.data.coefficients.hard || [],
     },
   ]
-  const [mineBetMutation] = usePostMineBetMutation()
+  const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
 
   const onStart = useCallback(() => {
-    dispatch(startMineGame({}))
-    const betAmount = mineConfig.betAmount.split(',').join('')
-
-    mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows })
+    dispatch(startMineGame())
     tile.play()
-  }, [mineConfig])
+  }, [mineConfig, data])
   const rows = createNumberArray(data?.data.minRows || 0, data?.data.maxRows || 4)
 
   const {
@@ -112,7 +109,9 @@ const MineLayout: BaseProps = ({ children }) => {
     return () => {}
   }, [])
 
-  const handleSubmit = (values: IGameForm) => {
+  const handleSubmit = async (values: IGameForm) => {
+    const betAmount = mineConfig.betAmount.split(',').join('')
+    await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows })
     onStart()
   }
 
@@ -236,13 +235,9 @@ const MineLayout: BaseProps = ({ children }) => {
                         </RadioGroup>
                       </FormGroup>
 
-                      <motion.button
-                        type="submit"
-                        disabled={mineConfig.isStarted && !mineConfig.isGameOver}
-                        className="h-12 disabled:dark:bg-amber-600/10 disabled:cursor-not-allowed disabled:dark:text-zinc-500 w-full rounded-xl p-1 text-base font-semibold shadow transition-all dark:bg-amber-600 dark:focus:ring-2 dark:focus:ring-amber-600 dark:focus:ring-offset-1 dark:focus:ring-offset-secondary-dark"
-                      >
-                        Start
-                      </motion.button>
+                      <Button kind="primary" type="submit" disabled={mineConfig.isStarted && !mineConfig.isGameOver && !isLoading}>
+                        {isLoading ? <Spinner /> : 'Start'}
+                      </Button>
                     </form>
                   </CardBody>
                 </Card>

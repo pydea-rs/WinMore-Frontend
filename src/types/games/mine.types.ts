@@ -1,4 +1,5 @@
-import { ICoefficients } from '@/store/slices/mine/mine.slice.types'
+import { ICoefficients, IMineGameStatuses, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
+import { IAvailableTokens } from '../global.types'
 
 export interface IGetMineRulesPayload {}
 export interface IGetMineRulesResponse {
@@ -13,4 +14,25 @@ export interface IPlaceMineBetPayload {
   betAmount: number
   mode: string
   rows: number
+}
+
+export interface IMineBlockPayload {
+  id: string
+}
+
+export interface IMineBlockResponse {
+  betToken: IAvailableTokens
+  createdAt: string
+  currentRow: number
+  finishedAt: null
+  id: string
+  initialBet: number
+  mode: IMineModeVariants
+  rowsCount: number
+  stake: number
+  startedAt: null
+  status: IMineGameStatuses
+  success: false
+  updatedAt: string
+  userId: number
 }

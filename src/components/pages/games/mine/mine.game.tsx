@@ -5,6 +5,7 @@ import { HoldToActionComplete } from '@/components/common/holdToAction/holdToAct
 import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import DoneIcon from '@/components/icons/done/done.icon'
+import { useMineBlockMutation } from '@/services/games/mine/mine.service'
 import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { motion } from 'framer-motion'
@@ -15,27 +16,31 @@ import { Fragment, useMemo, useState } from 'react'
 export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
-  const { mineConfig } = useSelector((state) => state.mine)
+  const { mineConfig, currentGame } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
   const [bombBlock, setBombBlock] = useState<{ index: number; row: number }[]>([])
+  const [mineBlockMutation] = useMineBlockMutation()
+
   const winHandler = () => {
     dispatch(endMineGame({ isWin: true }))
+  }
+  const lostHandler = () => {
+    dispatch(endMineGame({ isWin: false }))
   }
 
   const onCheckBlock = async (i: number, row: number) => {
     const block = { index: i, row }
-    if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(block) && !mineConfig.isGameOver) {
+    if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(block) && !mineConfig.isGameOver && currentGame) {
       tile.play()
-      //todo: if it was bomb
-      const isMine = false
-      if (isMine) {
+      const { data } = await mineBlockMutation({ id: currentGame.id }).unwrap()
+
+      if (!data.success) {
         bomb.play()
         setBombBlock([...bombBlock, block])
-        // dispatch(endMineGame({ isWin: false })) // Game over, user clicked on a mine
+        lostHandler()
       } else {
         dispatch(updateMineConfig({ selectedBlocks: [...mineConfig.selectedBlocks, block] }))
         dispatch(updateMineConfig({ activeRow: mineConfig.activeRow + 1 }))
-        // checkWinCondition()
       }
     }
   }
@@ -62,7 +67,7 @@ export default function MineGame() {
                         className={`grid gap-3 custom-cursor flex-grow-1 ${row === mineConfig.activeRow ? '' : 'inactive'} `}
                         style={{
                           gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
-                          // opacity: `${row <= mineConfig.activeRow ? '100%' : `${row + 90 - (row * mineConfig.rows + 10)}%`}`,
+                          opacity: `${row <= mineConfig.activeRow ? '100%' : `${80 - (row * mineConfig.rows + 10)}%`}`,
                         }}
                       >
                         {Array(+mineConfig.mode.value)
