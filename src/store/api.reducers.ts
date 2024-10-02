@@ -1,7 +1,9 @@
-import { authService } from '@/services/authentication/auth.service'
-import { userService } from '@/services/user/user.service'
+import { AuthService } from '@/services/authentication/auth.service'
+import { MineService } from '@/services/games/mine/mine.service'
+import { UserService } from '@/services/user/user.service'
 
 export const APIsReducers = {
-  [authService.reducerPath]: authService.reducer,
-  [userService.reducerPath]: userService.reducer,
+  [AuthService.reducerPath]: AuthService.reducer,
+  [UserService.reducerPath]: UserService.reducer,
+  [MineService.reducerPath]: MineService.reducer,
 }

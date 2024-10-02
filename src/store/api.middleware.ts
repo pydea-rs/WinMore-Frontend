@@ -1,4 +1,5 @@
-import { authService } from '@/services/authentication/auth.service'
-import { userService } from '@/services/user/user.service'
+import { AuthService } from '@/services/authentication/auth.service'
+import { MineService } from '@/services/games/mine/mine.service'
+import { UserService } from '@/services/user/user.service'
 
-export const apiMiddleware = [authService.middleware, userService.middleware]
+export const apiMiddleware = [AuthService.middleware, UserService.middleware, MineService.middleware]

@@ -5,24 +5,21 @@ import { HoldToActionComplete } from '@/components/common/holdToAction/holdToAct
 import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import DoneIcon from '@/components/icons/done/done.icon'
-import { endMineGame, updateMineConfig } from '@/store/slices/games/games.slice'
+import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { motion } from 'framer-motion'
 import { Howl } from 'howler'
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
-  const { mineConfig } = useSelector((state) => state.game)
+  const { mineConfig } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
   const [bombBlock, setBombBlock] = useState<{ index: number; row: number }[]>([])
-
   const winHandler = () => {
-    setTimeout(() => {
-      dispatch(endMineGame({ isWin: true }))
-    }, 2000)
+    dispatch(endMineGame({ isWin: true }))
   }
 
   const onCheckBlock = async (i: number, row: number) => {
@@ -58,49 +55,53 @@ export default function MineGame() {
               .map((item, rowIndex) => {
                 const row = rowIndex + 1
                 return (
-                  <div
-                    key={rowIndex}
-                    className={`grid gap-3 custom-cursor  ${row === mineConfig.activeRow ? '' : 'inactive'} `}
-                    style={{
-                      gridTemplateColumns: `repeat(${mineConfig.mode}, minmax(0, 1fr))`,
-                      opacity: `${row <= mineConfig.activeRow ? '100%' : `${90 - (row * mineConfig.rows + 10)}%`}`,
-                    }}
-                  >
-                    {Array(+mineConfig.mode)
-                      .fill(0)
-                      .map((_, blockIndex) => {
-                        const isItemSelected = mineConfig.selectedBlocks.find((rows) => rows.row === row)?.index === blockIndex
-                        const isBlockMine = bombBlock.find((rows) => rows.row === row)?.index === blockIndex
+                  <Fragment key={rowIndex}>
+                    <div className="flex items-center gap-5 ">
+                      <span>{mineConfig.coefficients[rowIndex]}</span>
+                      <div
+                        className={`grid gap-3 custom-cursor flex-grow-1 ${row === mineConfig.activeRow ? '' : 'inactive'} `}
+                        style={{
+                          gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
+                          // opacity: `${row <= mineConfig.activeRow ? '100%' : `${row + 90 - (row * mineConfig.rows + 10)}%`}`,
+                        }}
+                      >
+                        {Array(+mineConfig.mode.value)
+                          .fill(0)
+                          .map((_, blockIndex) => {
+                            const isItemSelected = mineConfig.selectedBlocks.find((rows) => rows.row === row)?.index === blockIndex
+                            const isBlockMine = bombBlock.find((rows) => rows.row === row)?.index === blockIndex
 
-                        const imageSrc = isBlockMine
-                          ? `/assets/games/mine/images/bomb.svg`
-                          : isItemSelected
-                            ? `/assets/games/mine/images/gold.svg`
-                            : `/assets/games/mine/images/rock-${blockIndex + 1}.svg`
+                            const imageSrc = isBlockMine
+                              ? `/assets/games/mine/images/bomb.svg`
+                              : isItemSelected
+                                ? `/assets/games/mine/images/gold.svg`
+                                : `/assets/games/mine/images/rock-${blockIndex + 1}.svg`
 
-                        return (
-                          <motion.div
-                            key={blockIndex}
-                            // whileTap={{ scale: 1.1 }}
-                            onClick={() => {
-                              row === mineConfig.activeRow ? onCheckBlock(blockIndex, row) : null
-                            }}
-                            className={`transition-all`}
-                          >
-                            <motion.div
-                              key={`block-${blockIndex}`}
-                              initial={{ scale: 0.6 }}
-                              animate={{ scale: 1 }}
-                              exit={{ scale: 0.6 }}
-                              transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
-                              className="p-0.5 md:p-2"
-                            >
-                              <Image src={imageSrc} alt="block" width={50} height={50} />
-                            </motion.div>
-                          </motion.div>
-                        )
-                      })}
-                  </div>
+                            return (
+                              <motion.div
+                                key={blockIndex}
+                                // whileTap={{ scale: 1.1 }}
+                                onClick={() => {
+                                  row === mineConfig.activeRow ? onCheckBlock(blockIndex, row) : null
+                                }}
+                                className={`transition-all`}
+                              >
+                                <motion.div
+                                  key={`block-${blockIndex}`}
+                                  initial={{ scale: 0.6 }}
+                                  animate={{ scale: 1 }}
+                                  exit={{ scale: 0.6 }}
+                                  transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
+                                  className="p-0.5 md:p-2"
+                                >
+                                  <Image src={imageSrc} alt="block" width={50} height={50} />
+                                </motion.div>
+                              </motion.div>
+                            )
+                          })}
+                      </div>
+                    </div>
+                  </Fragment>
                 )
               })}
           </div>
@@ -109,7 +110,7 @@ export default function MineGame() {
         <div className="flex flex-col mt-5 px-4">
           <HoldToActionProvider>
             <HoldToActionButton onFinish={onClaim} resetOnFinish duration={3000} disabled={!mineConfig.isStarted || (mineConfig.activeRow < 2 && !mineConfig.isGameOver)}>
-              <HoldToActionContent> Claim</HoldToActionContent>
+              <HoldToActionContent> Claim {mineConfig.activeRow > 1 ? +mineConfig.betAmount * mineConfig.coefficients[mineConfig.activeRow - 2] : ''}</HoldToActionContent>
               <HoldToActionComplete>
                 <DoneIcon className={'absolute-center z-10'} />
               </HoldToActionComplete>
