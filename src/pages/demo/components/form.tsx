@@ -1,3 +1,4 @@
+import { Avatar } from '@/components/common/avatar/avatar'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
@@ -26,7 +27,6 @@ import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useHelper } from '@/hooks/usehelper'
 import { TType } from '@/types/global.types'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import Image from 'next/image'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -297,13 +297,13 @@ const FormComponentDemo = () => {
               <RadioGroup>
                 <Radio id="71" name="3" value="31" size="sm">
                   <div className="flex items-center gap-2">
-                    <Image src={'/assets/images/sol.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
+                    <Avatar size="md" src="/assets/images/sol.png" alt="sol" />
                     <span>USDC</span>
                   </div>
                 </Radio>
                 <Radio id="72" name="3" value="31" size="sm">
                   <div className="flex items-center gap-2">
-                    <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
+                    <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
                     <span>USDT</span>
                   </div>
                 </Radio>
@@ -324,8 +324,8 @@ const FormComponentDemo = () => {
                 <RadioCard id="342" name="5" value="7">
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      <Image src={'/assets/images/dollar.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                      <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />
+                      <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
+                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
                     </div>
                     <div className="flex items-center justify-between flex-grow px-2">
                       <span className="font-medium">USDT</span>
@@ -337,8 +337,8 @@ const FormComponentDemo = () => {
                 <RadioCard id="41" name="5" value="6">
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      <Image src={'/assets/images/dollar.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                      <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />
+                      <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
+                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
                     </div>
                     <div className="flex items-center justify-between flex-grow px-2">
                       <span className="font-medium">USDC</span>
@@ -473,8 +473,8 @@ const FormComponentDemo = () => {
               <RadioCard id="64" name="5" value="64" disabled>
                 <div className="flex items-center">
                   <div className="flex items-center">
-                    <Image src={'/assets/images/dollar.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0" />
-                    <Image src={'/assets/images/tether.png'} alt="sol" width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />
+                    <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
+                    <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
                   </div>
                   <div className="flex items-center justify-between flex-grow px-2">
                     <span className="font-medium">USDT</span>
@@ -525,9 +525,7 @@ const FormComponentDemo = () => {
                       render={({ field }) => (
                         <RadioCard name={name} id={id} value={value} checked={value === field.value} onChange={field.onChange}>
                           <div className="flex items-center">
-                            <div className="flex items-center pl-2">
-                              {images?.map(({ alt, src }) => <Image key={src} src={src} alt={alt} width={'24'} height={'24'} className="rounded-full flex-shrink-0 -ml-2" />)}
-                            </div>
+                            <div className="flex items-center pl-2">{images?.map(({ alt, src }) => <Avatar key={src} src={src} alt={alt} className="-ml-2" />)}</div>
                             <div className="flex items-center justify-between flex-grow px-2">
                               <span className="font-medium">{label}</span>
                               <span className="text-xs text-white font-normal ml-auto">{amount}</span>
@@ -580,7 +578,7 @@ const FormComponentDemo = () => {
             <Select value={selected} onChange={setSelected}>
               <SelectButton className="flex items-center justify-between ">
                 <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                  {selected.icon && <Image src={selected.icon} alt="flag" width={24} height={24} className="rounded-full" />}
+                  {selected.icon && <Avatar src={selected.icon} alt="flag" />}
                   {selected.name}
                 </div>
                 <ChevronDownIcon className="pointer-events-none size-4 fill-white/60" aria-hidden="true" />
@@ -590,7 +588,7 @@ const FormComponentDemo = () => {
                   <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
                     {icon && (
                       <SelectIcon>
-                        <Image src={icon} alt="flag" width={24} height={24} />
+                        <Avatar className="flex-shrink-0 -ml-2" size="md" src={icon} alt="flag" />
                       </SelectIcon>
                     )}
                     <div className="text-sm text-main font-medium">{name}</div>

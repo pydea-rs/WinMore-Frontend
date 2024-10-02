@@ -55,8 +55,13 @@
 @import '../components/common/navbar/menu/menu.style.css';
 @import '../components/common/navbar/menuItem/menuItem.style.css';
 @import '../components/common/navbar/menuList/menuList.style.css';
-@import '../components/common/navbar/menuTitle/menuTitle.style.css';
+@import '../components/common/dropdown/dropdown.style.css';
+@import '../components/common/dropdown/dropdownMenuButton/dropdownMenuButton.style.css';
+@import '../components/common/dropdown/dropdownButton/dropdownItem.style.css';
+@import '../components/common/dropdown/dropdownItem/dropdownItem.style.css';
+@import '../components/common/dropdown/dropdownList/dropdownList.style.css';
 @import '../components/icons/done/done.style.css';
+@import '../components/common/avatar/avatar.style.css';
 
 @import url('mine/mine.css');
 @import 'swiper/css';
