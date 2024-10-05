@@ -119,3 +119,24 @@ body {
 .text-link:hover::before {
   @apply bg-primary;
 }
+
+.toastify_custom {
+  @apply !relative !block !border !text-sm !leading-[16.8px] !p-2 !rounded-lg  !font-medium !font-fractul;
+}
+
+.Toastify__toast-body {
+  align-items: self-start;
+}
+
+.Toastify__toast--info {
+  @apply toastify_custom bg-success/35 border-success text-success fill-success;
+}
+.Toastify__toast--success {
+  @apply toastify_custom bg-primary/35 border-primary text-primary fill-primary;
+}
+.Toastify__toast--warning {
+  @apply toastify_custom bg-warning/35 border-warning text-warning fill-warning;
+}
+.Toastify__toast--error {
+  @apply toastify_custom bg-danger/35 border-danger text-danger fill-danger;
+}
