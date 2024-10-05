@@ -1,10 +1,3 @@
-/*
- *  create by Amin
- *  date 9/25/2021
- *  axiosBaseQuery
- *  customizing basicQuery for RTKToolkit query with axios
- */
-
 import { RootState } from '@/store/store'
 import { BaseQueryFn } from '@reduxjs/toolkit/query'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
@@ -83,24 +76,25 @@ const axiosBaseQuery =
       let err = axiosError as AxiosError
       // 👇️ ts-ignore ignores any ts errors on the next line
       // @ts-ignore
-      const keysError = err.response?.data?.errors
-      const defaultError = 'متاسفانه خطایی پیش آمده لطفا دوباره تلاش کنید.'
-      return {
-        data: {
-          status: err.response?.status,
-          data: err.response?.data || err.message,
-          message:
-            (keysError?.length > 0
-              ? // 👇️ ts-ignore ignores any ts errors on the next line
-                // @ts-ignore
-                err.response?.data?.errors[keysError[0]][0]
-              : null) ||
-            // 👇️ ts-ignore ignores any ts errors on the next line
-            // @ts-ignore
-            err.response?.data?.message ||
-            defaultError,
-        },
-      }
+      // const keysError = err.response?.data?.errors
+      // const defaultError = 'متاسفانه خطایی پیش آمده لطفا دوباره تلاش کنید.'
+      // return {
+      //   data: {
+      //     status: err.response?.status,
+      //     data: err.response?.data || err.message,
+      //     message:
+      //       (keysError?.length > 0
+      //         ? // 👇️ ts-ignore ignores any ts errors on the next line
+      //           // @ts-ignore
+      //           err.response?.data?.errors[keysError[0]][0]
+      //         : null) ||
+      //       // 👇️ ts-ignore ignores any ts errors on the next line
+      //       // @ts-ignore
+      //       err.response?.data?.message ||
+      //       defaultError,
+      //   },
+      // }
+      throw err
     }
   }
 

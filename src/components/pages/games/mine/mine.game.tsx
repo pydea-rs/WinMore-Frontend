@@ -4,6 +4,7 @@ import { HoldToActionButton } from '@/components/common/holdToAction/holdToActio
 import { HoldToActionComplete } from '@/components/common/holdToAction/holdToActionComplete/holdToActionComplete'
 import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
+import { Spinner } from '@/components/common/spinner/spinner'
 import DoneIcon from '@/components/icons/done/done.icon'
 import { useMineBlockMutation } from '@/services/games/mine/mine.service'
 import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
@@ -16,10 +17,11 @@ import { Fragment, useMemo, useState } from 'react'
 export default function MineGame() {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
-  const { mineConfig, currentGame } = useSelector((state) => state.mine)
+  const { mineConfig } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
   const [bombBlock, setBombBlock] = useState<{ index: number; row: number }[]>([])
-  const [mineBlockMutation] = useMineBlockMutation()
+  const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
+  const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
 
   const winHandler = () => {
     dispatch(endMineGame({ isWin: true }))
@@ -30,26 +32,34 @@ export default function MineGame() {
 
   const onCheckBlock = async (i: number, row: number) => {
     const block = { index: i, row }
-    if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(block) && !mineConfig.isGameOver && currentGame) {
-      tile.play()
-      const { data } = await mineBlockMutation({ id: currentGame.id }).unwrap()
 
-      if (!data.success) {
-        bomb.play()
-        setBombBlock([...bombBlock, block])
-        lostHandler()
-      } else {
-        dispatch(updateMineConfig({ selectedBlocks: [...mineConfig.selectedBlocks, block] }))
-        dispatch(updateMineConfig({ activeRow: mineConfig.activeRow + 1 }))
+    if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(block) && !mineConfig.isGameOver && !!mineConfig.currentGameId) {
+      setLoadingBlock(block) // Set the loading block
+
+      tile.play()
+
+      try {
+        const { data } = await mineBlockMutation({ id: mineConfig.currentGameId }).unwrap()
+
+        if (!data.success) {
+          bomb.play()
+          setBombBlock([...bombBlock, block])
+          lostHandler()
+        } else {
+          dispatch(updateMineConfig({ selectedBlocks: [...mineConfig.selectedBlocks, block] }))
+          dispatch(updateMineConfig({ activeRow: mineConfig.activeRow + 1 }))
+        }
+      } finally {
+        setLoadingBlock(null) // Clear the loading block
       }
     }
   }
+
   const onClaim = () => {
     if (!mineConfig.isGameOver) {
       winHandler()
     }
   }
-
   return (
     <Card className="w-full max-w-[390px]">
       <CardBody>
@@ -67,7 +77,7 @@ export default function MineGame() {
                         className={`grid gap-3 custom-cursor flex-grow-1 ${row === mineConfig.activeRow ? '' : 'inactive'} `}
                         style={{
                           gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
-                          opacity: `${row <= mineConfig.activeRow ? '100%' : `${80 - (row * mineConfig.rows + 10)}%`}`,
+                          // opacity: `${row <= mineConfig.activeRow ? '100%' : `${80 - (row * mineConfig.rows + 10)}%`}`,
                         }}
                       >
                         {Array(+mineConfig.mode.value)
@@ -75,6 +85,7 @@ export default function MineGame() {
                           .map((_, blockIndex) => {
                             const isItemSelected = mineConfig.selectedBlocks.find((rows) => rows.row === row)?.index === blockIndex
                             const isBlockMine = bombBlock.find((rows) => rows.row === row)?.index === blockIndex
+                            const isLoading = loadingBlock?.index === blockIndex && loadingBlock?.row === row
 
                             const imageSrc = isBlockMine
                               ? `/assets/games/mine/images/bomb.svg`
@@ -85,7 +96,7 @@ export default function MineGame() {
                             return (
                               <motion.div
                                 key={blockIndex}
-                                // whileTap={{ scale: 1.1 }}
+                                whileTap={{ scale: 1.1 }}
                                 onClick={() => {
                                   row === mineConfig.activeRow ? onCheckBlock(blockIndex, row) : null
                                 }}
@@ -99,7 +110,7 @@ export default function MineGame() {
                                   transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
                                   className="p-0.5 md:p-2"
                                 >
-                                  <Image src={imageSrc} alt="block" width={50} height={50} />
+                                  {isLoading ? <Spinner /> : <Image src={imageSrc} alt="block" width={50} height={50} />}
                                 </motion.div>
                               </motion.div>
                             )

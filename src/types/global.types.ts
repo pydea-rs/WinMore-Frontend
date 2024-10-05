@@ -49,3 +49,5 @@ export type TType = { id: number; name: string; icon?: string }
 export type IAddress = `0x${string}`
 
 export type IAvailableTokens = 'USDC' | 'USDT'
+
+export type Nullable<T> = T | null

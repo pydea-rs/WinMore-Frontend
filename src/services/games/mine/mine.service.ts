@@ -1,7 +1,7 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { updateCoefficients, updateCurrentGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
 import { IGetMineRulesPayload, IGetMineRulesResponse, IMineBlockPayload, IMineBlockResponse, IPlaceMineBetPayload } from '@/types/games/mine.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
@@ -37,7 +37,8 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(updateCurrentGame(data.data))
+        // dispatch(updateCurrentGame(data.data))
+        dispatch(updateMineConfig({ currentGameId: data.data.id }))
       },
     }),
     mineBlock: builder.mutation<BaseResponse<IMineBlockResponse>, IMineBlockPayload>({

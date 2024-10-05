@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ICoefficients, ICurrentMineGame, IUpdateMineConfig, StateType } from './mine.slice.types'
+import { ICoefficients, IUpdateMineConfig, StateType } from './mine.slice.types'
 
 export const CURRENT_MINE = 'mine_game'
 
 const initialState: StateType = {
   mineConfig: {
-    betAmount: '0.00',
+    betAmount: '',
     mode: {
       coefficient: [],
       label: 'EASY',
@@ -17,8 +17,10 @@ const initialState: StateType = {
     selectedBlocks: [],
     isStarted: false,
     isGameOver: false,
+    currentGameId: null,
+    currentGameStatus: null,
+    stake: null,
   },
-  currentGame: null,
 }
 
 export const mineSlice = createSlice({
@@ -55,25 +57,12 @@ export const mineSlice = createSlice({
       //   state.mineConfig = initialState.mineConfig
       //   localStorage.removeItem(CURRENT_MINE)
       // }
-      state.currentGame = initialState.currentGame
+
       state.mineConfig = initialState.mineConfig
-      localStorage.removeItem(CURRENT_MINE)
-    },
-    updateCurrentGame: (state: StateType, action: PayloadAction<ICurrentMineGame | null>) => {
-      state.currentGame = action.payload
-      if (action.payload) {
-        localStorage.setItem(CURRENT_MINE, JSON.stringify(action.payload))
-        state.mineConfig.betAmount = action.payload.initialBet.toString()
-        state.mineConfig.rows = action.payload.rowsCount
-        state.mineConfig.activeRow = action.payload.currentRow + 1
-        state.mineConfig.isStarted = true
-      } else {
-        localStorage.removeItem(CURRENT_MINE)
-      }
     },
   },
 })
 
-export const { updateMineConfig, startMineGame, endMineGame, updateCoefficients, updateCurrentGame } = mineSlice.actions
+export const { updateMineConfig, startMineGame, endMineGame, updateCoefficients } = mineSlice.actions
 
 export default mineSlice.reducer

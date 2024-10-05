@@ -1,4 +1,4 @@
-import { IAvailableTokens } from '@/types/global.types'
+import { IAvailableTokens, Nullable } from '@/types/global.types'
 
 export type IMineGameStatuses = 'ONGOING' | 'LOST'
 
@@ -21,6 +21,9 @@ interface IMineGame {
     row: number
   }[]
   activeRow: number
+  currentGameId: Nullable<string>
+  stake: Nullable<number>
+  currentGameStatus: Nullable<IMineGameStatuses>
 }
 
 export interface ICoefficients {
@@ -45,7 +48,6 @@ export interface ICurrentMineGame {
 }
 export interface StateType {
   mineConfig: IMineGame
-  currentGame: ICurrentMineGame | null
 }
 export interface IUpdateMineConfig extends Partial<IMineGame> {}
 export interface IStartMineGamePayload {}
