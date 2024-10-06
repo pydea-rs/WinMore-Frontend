@@ -36,3 +36,8 @@ export interface IMineBlockResponse {
   updatedAt: string
   userId: number
 }
+
+export interface IBackoffMineResponse {}
+export interface IBackoffMinePayload {
+  id: string
+}

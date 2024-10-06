@@ -6,7 +6,7 @@ import { HoldToActionContent } from '@/components/common/holdToAction/holdToActi
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import { Spinner } from '@/components/common/spinner/spinner'
 import DoneIcon from '@/components/icons/done/done.icon'
-import { useMineBlockMutation } from '@/services/games/mine/mine.service'
+import { useBackoffMineMutation, useMineBlockMutation } from '@/services/games/mine/mine.service'
 import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { motion } from 'framer-motion'
@@ -22,8 +22,10 @@ export default function MineGame() {
   const [bombBlock, setBombBlock] = useState<{ index: number; row: number }[]>([])
   const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
   const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
+  const [backoffMine, { isLoading: isClaiming }] = useBackoffMineMutation()
 
   const winHandler = () => {
+    backoffMine({ id: mineConfig.currentGameId as string })
     dispatch(endMineGame({ isWin: true }))
   }
   const lostHandler = () => {

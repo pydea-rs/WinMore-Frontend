@@ -21,7 +21,6 @@ import { createNumberArray } from '@/utils/createNumberArray.util'
 import { Howl } from 'howler'
 import { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { IGameForm } from './mineConfigForm.types'
 const MineConfigForm = () => {
   const { mineConfig } = useSelector((state) => state.mine)
@@ -59,42 +58,26 @@ const MineConfigForm = () => {
   const {
     control: gameControl,
     handleSubmit: gameFormHandleSubmit,
-    watch,
     setValue: numericFormSetValue,
     formState: { errors },
-  } = useForm<IGameForm>()
+  } = useForm<IGameForm>({
+    defaultValues: {
+      betAmount: mineConfig.betAmount,
+      gameMode: mineConfig.mode.value,
+      gameRows: mineConfig.rows,
+    },
+  })
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
-
-  const betAmountWatch = watch('betAmount')
-  const gameRowsWatch = watch('gameRows')
-
-  //   useEffect(() => {
-  //     if (rulesData) {
-  //       numericFormSetValue('gameRows', rulesData.data.minRows)
-  //     }
-
-  //     return () => {}
-  //   }, [rulesData])
-
-  //   useEffect(() => {
-  //     dispatch(updateMineConfig({ betAmount: betAmountWatch }))
-  //     return () => {}
-  //   }, [betAmountWatch])
-
-  //   useEffect(() => {
-  //     dispatch(updateMineConfig({ rows: +gameRowsWatch }))
-  //     return () => {}
-  //   }, [gameRowsWatch])
 
   const handleSubmit = async (values: IGameForm) => {
     const betAmount = mineConfig.betAmount.split(',').join('')
     try {
-      await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows })
+      await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows }).unwrap()
       onStart()
     } catch (error) {
-      console.log({ error })
-      toast.error('error')
+      // toast.error(error.message)
+      // console.log(first)
     }
   }
 
@@ -124,8 +107,8 @@ const MineConfigForm = () => {
                         dispatch(updateMineConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}
-                      onIncrease={() => numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
-                      onDecrease={() => numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(betAmountWatch || '0'), 1))}
+                      onIncrease={() => numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(value || '0'), 1))}
+                      onDecrease={() => numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(value || '0'), 1))}
                       onBlur={onBlur}
                       value={value}
                       id="id-233"

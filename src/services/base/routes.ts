@@ -42,6 +42,12 @@ export const getApiRoute = () => {
             return `${this.path}${id}`
           },
         },
+        backoffMine: {
+          path: 'dream-mine/backoff/',
+          get(id: string) {
+            return `${this.path}${id}`
+          },
+        },
       },
     },
   }

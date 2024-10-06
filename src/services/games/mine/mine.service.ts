@@ -3,7 +3,15 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
-import { IGetMineRulesPayload, IGetMineRulesResponse, IMineBlockPayload, IMineBlockResponse, IPlaceMineBetPayload } from '@/types/games/mine.types'
+import {
+  IBackoffMinePayload,
+  IBackoffMineResponse,
+  IGetMineRulesPayload,
+  IGetMineRulesResponse,
+  IMineBlockPayload,
+  IMineBlockResponse,
+  IPlaceMineBetPayload,
+} from '@/types/games/mine.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 
 export const MineService = createApi({
@@ -51,7 +59,17 @@ export const MineService = createApi({
         }
       },
     }),
+    backoffMine: builder.mutation<BaseResponse<IBackoffMineResponse>, IBackoffMinePayload>({
+      query(payload) {
+        const { games } = getApiRoute()
+        return {
+          method: 'POST',
+          url: games.mine.backoffMine.get(payload.id),
+          sendAuthorization: true,
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation } = MineService
+export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation } = MineService
