@@ -37,7 +37,6 @@ export const useAuth = () => {
   })
   const signMessageHandler = (message: ISIWEMessage) => {
     const domain = getHostName()
-    console.log('Domain:', domain) // Log the domain
 
     if (!domain) {
       console.error('Domain is undefined')
@@ -47,7 +46,6 @@ export const useAuth = () => {
 
     const protocol = 'https://' // Assuming you're using HTTPS
     const fullDomain = `${protocol}${domain}`
-    console.log('Full Domain:', fullDomain) // Log the full domain
 
     const rawMessage = new SiweMessage({
       address: message.address,
