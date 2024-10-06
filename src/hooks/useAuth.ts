@@ -7,7 +7,7 @@ import { IWalletError } from '@/types/global.types'
 import { getDomain } from '@/utils/getDomain.util'
 import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { SiweMessage } from 'siwe'
 import { Connector, useAccount, useChainId, useDisconnect, useSignMessage } from 'wagmi'
@@ -21,7 +21,7 @@ export const useAuth = () => {
   const [login, { isLoading: isLoginLoading }] = useGetAuthMutation()
   const dispatch = useDispatch()
   const [isPendingForSign, setIsPendingForSign] = useState(false)
-
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(isConnected && !!token)
   const { signMessageAsync } = useSignMessage({
     mutation: {
       onMutate: () => {
@@ -97,6 +97,13 @@ export const useAuth = () => {
     disconnect()
     window.location.reload()
   }
+  useEffect(() => {
+    if (isConnected && !!token) {
+      setIsAuthorized(true)
+    }
 
-  return { connectWallet, sendAuthSignature, isWalletConnected: isConnected, logoutAndDisconnect, token, isPendingForSign, isMessageLoading, isLoginLoading }
+    return () => {}
+  }, [token, isConnected])
+
+  return { connectWallet, sendAuthSignature, isWalletConnected: isConnected, logoutAndDisconnect, token, isPendingForSign, isMessageLoading, isLoginLoading, isAuthorized }
 }

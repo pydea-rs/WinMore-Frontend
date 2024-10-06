@@ -29,8 +29,8 @@ const HeaderComponent = () => {
   const dispatch = useDispatch()
   const { user: isAuthenticated } = useSelector((state) => state.auth)
   const { internalLinks } = usePermalink()
-  const { logoutAndDisconnect } = useAuth()
-  const { isLoading } = useGetUserInfoQuery({})
+  const { logoutAndDisconnect, isAuthorized } = useAuth()
+  const { isLoading } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const headerRoutes = [
     {

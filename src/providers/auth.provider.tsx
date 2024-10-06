@@ -5,7 +5,7 @@ import { BaseProps } from '@/types/global.types'
 import { Fragment, useEffect } from 'react'
 
 const AuthProvider: BaseProps = ({ children }) => {
-  const { isWalletConnected, sendAuthSignature, token } = useAuth()
+  const { isWalletConnected, sendAuthSignature, token, isAuthorized } = useAuth()
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null // Initialize timeout as null
@@ -23,7 +23,7 @@ const AuthProvider: BaseProps = ({ children }) => {
     }
   }, [isWalletConnected, token])
 
-  const { data } = useGetUserInfoQuery({}, { skip: !token })
+  const { data } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   return (
     <Fragment>

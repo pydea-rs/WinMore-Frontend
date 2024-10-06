@@ -12,19 +12,23 @@ import { RadioGroup } from '@/components/common/form/radioGroup/radioGroup'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Spinner } from '@/components/common/spinner/spinner'
 import CentIcon from '@/components/icons/cent/cent'
+import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IMineMode } from '@/store/slices/mine/mine.slice.types'
+import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray } from '@/utils/createNumberArray.util'
 import { Howl } from 'howler'
 import { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { IGameForm } from './mineConfigForm.types'
+
 const MineConfigForm = () => {
   const { mineConfig } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
+  const { isAuthorized } = useAuth()
   const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
 
   const modes: IMineMode[] = [
@@ -53,7 +57,7 @@ const MineConfigForm = () => {
     tile.play()
   }, [mineConfig, rulesData])
 
-  const rows = createNumberArray(rulesData?.data.minRows || 0, rulesData?.data.maxRows || 4)
+  const rows = createNumberArray(rulesData?.data.minRows || 8, rulesData?.data.maxRows || 12)
 
   const {
     control: gameControl,
@@ -71,6 +75,10 @@ const MineConfigForm = () => {
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
 
   const handleSubmit = async (values: IGameForm) => {
+    if (!isAuthorized) {
+      dispatch(triggerModal({ modal: 'login', trigger: true }))
+      return
+    }
     const betAmount = mineConfig.betAmount.split(',').join('')
     try {
       await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows }).unwrap()
@@ -102,13 +110,13 @@ const MineConfigForm = () => {
                 <>
                   <InputIcon>
                     <NumberInput
-                      disabled={mineConfig.isStarted}
+                      disabled={mineConfig.isStarted || !isAuthorized}
                       onChange={(event) => {
                         dispatch(updateMineConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}
-                      onIncrease={() => numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(value || '0'), 1))}
-                      onDecrease={() => numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(value || '0'), 1))}
+                      onIncrease={() => (!isAuthorized ? null : numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(value || '0'), 1)))}
+                      onDecrease={() => (!isAuthorized ? null : numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(value || '0'), 1)))}
                       onBlur={onBlur}
                       value={value}
                       id="id-233"
@@ -137,7 +145,7 @@ const MineConfigForm = () => {
                   render={({ field }) => (
                     <>
                       <Radio
-                        disabled={mineConfig.isStarted}
+                        disabled={mineConfig.isStarted || !isAuthorized}
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
@@ -174,7 +182,7 @@ const MineConfigForm = () => {
                     }}
                     render={({ field }) => (
                       <Radio
-                        disabled={mineConfig.isStarted}
+                        disabled={mineConfig.isStarted || !isAuthorized}
                         // new props
                         checked={field.value === row}
                         onChange={(e) => {

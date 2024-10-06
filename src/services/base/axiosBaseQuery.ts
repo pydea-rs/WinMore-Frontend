@@ -75,7 +75,10 @@ const axiosBaseQuery =
       // }
     } catch (axiosError) {
       let err = axiosError as AxiosError<{ data: null; message: string[] }>
-      toast.error(err.response?.data.message[0])
+      if (err.response?.status !== 401) {
+        toast.error(err.response?.data.message[0])
+      }
+      toast.error(err.response?.data.message)
       throw err
     }
   }
