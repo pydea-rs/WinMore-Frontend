@@ -28,6 +28,28 @@ export const getApiRoute = () => {
         },
       },
     },
+    games: {
+      mine: {
+        rules: {
+          path: 'dream-mine/rules',
+        },
+        bet: {
+          path: 'dream-mine/bet',
+        },
+        mineBlock: {
+          path: 'dream-mine/mine/',
+          get(id: string) {
+            return `${this.path}${id}`
+          },
+        },
+        backoffMine: {
+          path: 'dream-mine/backoff/',
+          get(id: string) {
+            return `${this.path}${id}`
+          },
+        },
+      },
+    },
   }
   return routes
 }

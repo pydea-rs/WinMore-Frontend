@@ -23,6 +23,12 @@
 @import '../components/common/button/button.style.css';
 @import '../components/common/spinner/spinner.style.css';
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
+@import '../components/common/data/data.style.css';
+@import '../components/common/data/dataBody/dataBody.style.css';
+@import '../components/common/data/dataCol/dataCol.style.css';
+@import '../components/common/data/dataHeader/dataHeader.style.css';
+@import '../components/common/data/dataHeading/dataHeading.style.css';
+@import '../components/common/data/dataRow/dataRow.style.css';
 @import '../components/common/form/checkbox/checkbox.style.css';
 @import '../components/common/form/formGroup/fromGroup.style.css';
 @import '../components/common/form/label/label.style.css';
@@ -55,8 +61,13 @@
 @import '../components/common/navbar/menu/menu.style.css';
 @import '../components/common/navbar/menuItem/menuItem.style.css';
 @import '../components/common/navbar/menuList/menuList.style.css';
-@import '../components/common/navbar/menuTitle/menuTitle.style.css';
+@import '../components/common/dropdown/dropdown.style.css';
+@import '../components/common/dropdown/dropdownMenuButton/dropdownMenuButton.style.css';
+@import '../components/common/dropdown/dropdownButton/dropdownItem.style.css';
+@import '../components/common/dropdown/dropdownItem/dropdownItem.style.css';
+@import '../components/common/dropdown/dropdownList/dropdownList.style.css';
 @import '../components/icons/done/done.style.css';
+@import '../components/common/avatar/avatar.style.css';
 
 @import url('mine/mine.css');
 @import 'swiper/css';
@@ -113,4 +124,25 @@ body {
 }
 .text-link:hover::before {
   @apply bg-primary;
+}
+
+.toastify_custom {
+  @apply !relative !block !border !text-sm !leading-[16.8px] !p-2 !rounded-lg  !font-medium !font-fractul;
+}
+
+.Toastify__toast-body {
+  align-items: self-start;
+}
+
+.Toastify__toast--info {
+  @apply toastify_custom bg-success/35 border-success text-success fill-success;
+}
+.Toastify__toast--success {
+  @apply toastify_custom bg-primary/35 border-primary text-primary fill-primary;
+}
+.Toastify__toast--warning {
+  @apply toastify_custom bg-warning/35 border-warning text-warning fill-warning;
+}
+.Toastify__toast--error {
+  @apply toastify_custom bg-danger/35 border-danger text-danger fill-danger;
 }

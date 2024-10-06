@@ -56,7 +56,7 @@
 }
 
 .btn-dark {
-  @apply btn bg-dark text-white fill-white hover:bg-dark/90;
+  @apply btn bg-dark text-white fill-white hover:bg-dark/80 active:bg-dark/80 focus:bg-dark/80;
 }
 
 .btn-dark.btn-bordered {

@@ -47,7 +47,7 @@ const MainLayout: BaseProps = (props) => {
   const isScrollDisabled = [navbar.open].every(Boolean)
 
   return (
-    <div className={classNames({ 'relative flex flex-col mb-28 md:mb-0': true, 'overflow-hidden h-[100vh] !mb-0': isScrollDisabled })}>
+    <div className={classNames({ 'relative flex flex-col mb-28 md:mb-0 min-h-[100vh]': true, 'overflow-hidden h-[100vh] !mb-0': isScrollDisabled })}>
       <Image
         src={'/assets/images/header-rectangle.svg'}
         alt="header rectangle"

@@ -5,13 +5,13 @@ import MainLayout from '@/components/layouts/main.layout'
 import TopGames from '@/components/pages/home/top-games/top-game'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 
 const Hero = dynamic(() => import('../components/pages/home/hero/hero'), { ssr: false })
 
 export default function Home() {
   return (
-    <>
+    <Fragment>
       <Head>
         <title>Winmore | Home</title>
       </Head>
@@ -25,7 +25,7 @@ export default function Home() {
           </div>
         </Container>
       </div>
-    </>
+    </Fragment>
   )
 }
 

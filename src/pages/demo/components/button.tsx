@@ -1,3 +1,4 @@
+import { Avatar } from '@/components/common/avatar/avatar'
 import { Button } from '@/components/common/button/button'
 import Container from '@/components/common/container/container'
 import { HoldToActionButton } from '@/components/common/holdToAction/holdToActionButton/holdToActionButton'
@@ -17,7 +18,6 @@ import MoneyIcon from '@/components/icons/money/money'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import SphereIcon from '@/components/icons/sphere/sphere'
 import classNames from 'classnames'
-import Image from 'next/image'
 
 const ButtonComponentDemo = () => {
   const isLoading = true
@@ -401,7 +401,7 @@ const ButtonComponentDemo = () => {
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="pattern" className="px-2.5" bordered pilled>
               <div className="flex justify-between items-center gap-x-2">
-                <Image src={'/assets/images/tether.png'} width={24} height={24} alt="tether" />
+                <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
                 <div className="flex items-center gap-x-1 font-normal text-xs">
                   <span className="text-main">Balance:</span>
                   <span className="text-white">0.000</span>
@@ -442,7 +442,8 @@ const ButtonComponentDemo = () => {
                 )}
 
                 <div className={classNames({ 'flex justify-between items-center gap-x-2': true, invisible: isLoading })}>
-                  <Image src={'/assets/images/tether.png'} width={24} height={24} alt="tether" />
+                  <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+
                   <div className="flex items-center gap-x-1 font-normal text-xs">
                     <span className="text-main">Balance:</span>
                     <span className="text-white">0.000</span>

@@ -1,5 +1,6 @@
+import { Spinner } from '@/components/common/spinner/spinner'
 import { useAuth } from '@/hooks/useAuth'
-import { useGetUserInfoQuery } from '@/services/user/user.api'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { BaseProps } from '@/types/global.types'
 import { Fragment, useEffect } from 'react'
 
@@ -24,7 +25,18 @@ const AuthProvider: BaseProps = ({ children }) => {
 
   const { data } = useGetUserInfoQuery({}, { skip: !token })
 
-  return <Fragment>{children}</Fragment>
+  return (
+    <Fragment>
+      {isWalletConnected && !token ? (
+        <div className="flex justify-center items-center h-[100vh] w-screen flex-col">
+          <Spinner />
+          Waiting for sign
+        </div>
+      ) : (
+        children
+      )}
+    </Fragment>
+  )
 }
 
 export default AuthProvider

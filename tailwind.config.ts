@@ -15,13 +15,16 @@ const config: Config = {
         info: '#475766', // Heading
         warning: '#E7AA2E',
         success: '#1AA9FD',
-        danger: '#FF3B30',
+        danger: '#F40F46',
         main: '#798998', // Text
         //  Colors
         white: '#FEFEFE',
         dark: '#0f141a', // Default BG
         light: 'hsla(0, 0%, 100%, 0.3)',
         navy: '#1A1F25', // Border
+        red: {
+          500: '#FF3B30',
+        },
         yellow: {
           500: '#FFD600',
         },

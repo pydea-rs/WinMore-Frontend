@@ -1,3 +1,4 @@
+import { Avatar } from '@/components/common/avatar/avatar'
 import { Button } from '@/components/common/button/button'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
@@ -59,7 +60,7 @@ export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) =
                 )}
                 <div className={classNames({ invisible: isPendingForSign, 'flex items-center gap-x-2': true })}>
                   {/* <MetaMaxIcon className="flex-shrink-0" />  */}
-                  <Image src={`/assets/images/wallets/${wallet.name}.svg` || ''} alt={wallet.name} width={24} height={24} />
+                  <Avatar size="md" src={`/assets/images/wallets/${wallet.name}.svg` || ''} alt={wallet.name} />
                   Connect {wallet.name}
                 </div>
               </Button>
