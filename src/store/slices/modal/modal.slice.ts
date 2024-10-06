@@ -15,7 +15,6 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     triggerModal: (state: StateType, action: PayloadAction<ITriggerModalPayload>) => {
-      console.log(action.payload.trigger)
       state.modals = { ...state.modals, [action.payload.modal]: action.payload.trigger }
     },
   },
