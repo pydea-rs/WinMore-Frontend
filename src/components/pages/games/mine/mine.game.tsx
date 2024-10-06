@@ -1,3 +1,4 @@
+import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { HoldToActionButton } from '@/components/common/holdToAction/holdToActionButton/holdToActionButton'
@@ -66,7 +67,7 @@ export default function MineGame() {
     <Card className="w-full max-w-[390px]">
       <CardBody>
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <div className="w-full translucent shadow-xl p-4 rounded-lg">
+          <div className="w-full relative translucent shadow-xl p-4 rounded-lg">
             {Array(mineConfig.rows)
               .fill('')
               .map((item, rowIndex) => {
@@ -122,9 +123,9 @@ export default function MineGame() {
                   </Fragment>
                 )
               })}
+            <BorderBeam duration={3} size={300} borderWidth={5} />
           </div>
         </motion.main>
-
         <div className="flex flex-col mt-5 px-4">
           <HoldToActionProvider>
             <HoldToActionButton onFinish={onClaim} resetOnFinish duration={3000} disabled={!mineConfig.isStarted || (mineConfig.activeRow < 2 && !mineConfig.isGameOver)}>
