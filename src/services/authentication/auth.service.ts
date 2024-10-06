@@ -6,10 +6,10 @@ import { IGetMessagePayload, IGetMessageResponse, ILoginPayload, ILoginResponse 
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { toast } from 'react-toastify'
 import axiosBaseQuery from '../base/axiosBaseQuery'
-import { userService } from '../user/user.api'
+import { UserService } from '../user/user.service'
 
 // Define the API service
-export const authService = createApi({
+export const AuthService = createApi({
   reducerPath: 'authService', // Specify the reducer path
   baseQuery: axiosBaseQuery(), // Replace with your actual base URL
   endpoints: (builder) => ({
@@ -38,11 +38,11 @@ export const authService = createApi({
         const { data } = await queryFulfilled
         dispatch(setToken(data.data.token))
         toast.success('Logged in Successfully')
-        dispatch(userService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
+        dispatch(UserService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
       },
     }),
   }),
 })
 
 // Export the auto-generated hook for the `getNonce` query
-export const { useGetMessageMutation, useGetAuthMutation } = authService
+export const { useGetMessageMutation, useGetAuthMutation } = AuthService

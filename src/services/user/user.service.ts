@@ -8,7 +8,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 
 // Define the API service
-export const userService = createApi({
+export const UserService = createApi({
   reducerPath: 'userService', // Specify the reducer path
   baseQuery: axiosBaseQuery(), // Replace with your actual base URL
   endpoints: (builder) => ({
@@ -56,11 +56,11 @@ export const userService = createApi({
 
           dispatch(triggerModal({ modal: 'login', trigger: false }))
 
-          dispatch(userService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
+          dispatch(UserService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
         } catch (err) {}
       },
     }),
   }),
 })
 
-export const { useGetUserInfoQuery, useRegisterUserMutation } = userService
+export const { useGetUserInfoQuery, useRegisterUserMutation } = UserService

@@ -1,10 +1,32 @@
-import MineLayout from '@/components/layouts/mine.layout'
+import Container from '@/components/common/container/container'
+import MainLayout from '@/components/layouts/main.layout'
 import MineGame from '@/components/pages/games/mine/mine.game'
+import MineConfigForm from '@/components/pages/games/mine/mineConfigForm/mineConfigForm'
+import GameHistory from '@/components/snippets/gameHistory/gameHistory'
 import { ReactElement } from 'react'
 
 const Mine = () => {
-  return <MineGame />
+  return (
+    <main>
+      <section className="relative z-40 mb-20">
+        <Container className="z-10 overflow-x-visible">
+          <div className="flex flex-wrap">
+            <aside className="w-full lg:max-w-[430px] lg:pt-[6vmax]">
+              <MineConfigForm />
+            </aside>
+            <div className="flex justify-end flex-grow">
+              <MineGame />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section>
+        <GameHistory />
+      </section>
+    </main>
+  )
 }
 
-Mine.layout = (page: ReactElement) => <MineLayout>{page}</MineLayout>
+Mine.layout = (page: ReactElement) => <MainLayout>{page}</MainLayout>
 export default Mine

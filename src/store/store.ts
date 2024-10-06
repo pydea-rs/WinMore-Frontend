@@ -4,7 +4,7 @@ import { combineReducers } from 'redux'
 import { apiMiddleware } from './api.middleware'
 import { APIsReducers } from './api.reducers'
 import authSlice from './slices/auth/auth.slice'
-import gamesSlice from './slices/games/games.slice'
+import gamesSlice from './slices/mine/mine.slice'
 import modalSlice from './slices/modal/modal.slice'
 import navbarSlice from './slices/navbar/navbar.slice'
 
@@ -12,7 +12,7 @@ import navbarSlice from './slices/navbar/navbar.slice'
 const rootReducer = combineReducers({
   auth: authSlice,
   modal: modalSlice,
-  game: gamesSlice,
+  mine: gamesSlice,
   navbar: navbarSlice,
   ...APIsReducers,
 })
@@ -29,7 +29,7 @@ export const store = configureStore({
 type Store = typeof store
 export type RootState = ReturnType<Store['getState']>
 export type AppDispatch = Store['dispatch']
-export const { dispatch } = store
+
 export const useDispatch = () => useAppDispatch<AppDispatch>()
 export const useSelector: TypedUseSelectorHook<RootState> = useAppSelector
 
