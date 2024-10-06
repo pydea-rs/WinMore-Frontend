@@ -72,7 +72,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
   const handleSubmit = (values: DepositForm) => {}
 
   return (
-    <Card size="lg" className="w-full max-w-[380px]">
+    <Card size="lg" className="w-full max-w-[430px]">
       <CardHeader>
         <CardTitle>Deposit</CardTitle>
         <button
@@ -103,7 +103,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                       </SelectIcon>
                     ) : (
                       <SelectIcon>
-                        <div className="w-6 h-6 bg-dark rounded-full" />
+                        <div className="w-6 h-6 bg-black rounded-full" />
                       </SelectIcon>
                     )}
                     <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
@@ -139,7 +139,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                         </SelectIcon>
                       ) : (
                         <SelectIcon>
-                          <div className="w-6 h-6 bg-dark rounded-full" />
+                          <div className="w-6 h-6 bg-black rounded-full" />
                         </SelectIcon>
                       )}
                       <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
@@ -193,7 +193,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             <Label className="flex items-center justify-between">
               Enter Deposit Amount
               <span className="text-main">
-                Avaibel: <span className="text-white">10.22</span>
+                Available: <span className="text-white">10.22</span>
               </span>
             </Label>
             <Controller

@@ -102,7 +102,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
                     </SelectIcon>
                   ) : (
                     <SelectIcon>
-                      <div className="w-6 h-6 bg-dark rounded-full" />
+                      <div className="w-6 h-6 bg-black rounded-full" />
                     </SelectIcon>
                   )}
                   <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
