@@ -53,6 +53,16 @@ const config: Config = {
         'gradient-hot-pink': 'linear-gradient(90deg, rgba(199, 56, 184, 1),rgba(97, 27, 90, 1))',
         'gradient-dark-purple': 'linear-gradient(0deg, rgba(45, 48, 93, 0.42), rgba(45, 48, 93, 0.42)),linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))',
       },
+      animation: {
+        'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
+      },
+      keyframes: {
+        'border-beam': {
+          '100%': {
+            'offset-distance': '100%',
+          },
+        },
+      },
     },
   },
   plugins: [

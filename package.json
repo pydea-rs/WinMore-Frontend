@@ -34,6 +34,7 @@
     "react-toastify": "^10.0.5",
     "siwe": "^2.3.2",
     "swiper": "^11.1.10",
+    "tailwind-merge": "^2.5.3",
     "utility-types": "^3.11.0",
     "viem": "2.x",
     "wagmi": "^2.12.8"
