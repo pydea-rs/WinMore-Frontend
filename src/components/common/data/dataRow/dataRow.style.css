@@ -1,0 +1,3 @@
+.data-row {
+  @apply flex flex-wrap gap-y-2 md:flex-nowrap md:gap-y-0  md:gap-x-4 items-center p-4 w-full bg-dark rounded-2xl;
+}

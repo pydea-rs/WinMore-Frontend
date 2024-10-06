@@ -23,6 +23,12 @@
 @import '../components/common/button/button.style.css';
 @import '../components/common/spinner/spinner.style.css';
 @import '../components/common/list/listExternalLink/listExternalLink.style.css';
+@import '../components/common/data/data.style.css';
+@import '../components/common/data/dataBody/dataBody.style.css';
+@import '../components/common/data/dataCol/dataCol.style.css';
+@import '../components/common/data/dataHeader/dataHeader.style.css';
+@import '../components/common/data/dataHeading/dataHeading.style.css';
+@import '../components/common/data/dataRow/dataRow.style.css';
 @import '../components/common/form/checkbox/checkbox.style.css';
 @import '../components/common/form/formGroup/fromGroup.style.css';
 @import '../components/common/form/label/label.style.css';
