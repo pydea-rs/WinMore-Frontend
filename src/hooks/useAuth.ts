@@ -37,14 +37,16 @@ export const useAuth = () => {
   })
   const signMessageHandler = (message: ISIWEMessage) => {
     const domain = getHostName()
+    const protocol = 'https://' // Assuming you're using HTTPS
+    const fullDomain = `${protocol}${domain}`
     const rawMessage = new SiweMessage({
       address: message.address,
       nonce: message.nonce,
       version: message.version,
       statement: message.statement,
-      domain: process.env.NODE_ENV === 'development' ? `${domain}:3000` : domain,
+      domain: process.env.NODE_ENV === 'development' ? `${domain}:3000` : fullDomain,
       chainId,
-      uri: process.env.NODE_ENV === 'development' ? `${domain}:3000` : domain,
+      uri: process.env.NODE_ENV === 'development' ? `${domain}:3000` : fullDomain,
     })
 
     const preparedMessage = rawMessage.prepareMessage()
