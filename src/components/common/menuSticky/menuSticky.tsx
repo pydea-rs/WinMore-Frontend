@@ -2,13 +2,14 @@ import CardsIcon from '@/components/icons/cards/cards.icon'
 import HomeIcon from '@/components/icons/home/home.icon'
 import ProfileIcon from '@/components/icons/profile/profile.icon'
 import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
-import { dispatch } from '@/store/store'
+import { useDispatch } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
 import { IMenuSticky } from './menuSticky.types'
 
 const MenuSticky: BaseProps<IMenuSticky> = (props) => {
   const { className } = props
+  const dispatch = useDispatch()
   const classList = classNames({
     [`menu-sticky`]: true,
     [`${className}`]: className,

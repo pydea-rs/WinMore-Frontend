@@ -1,5 +1,5 @@
 import { closeNavbar } from '@/store/slices/navbar/navbar.slice'
-import { dispatch, useSelector } from '@/store/store'
+import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -15,6 +15,7 @@ const MainLayout: BaseProps = (props) => {
   const { children } = props
   const [isShowQuickAccess, setIsShowQuickAccess] = useState(false)
   const { navbar } = useSelector((state) => state.navbar)
+  const dispatch = useDispatch()
 
   const handleCloseNavbar = () => {
     if (navbar.open && window.innerWidth > 720) {
