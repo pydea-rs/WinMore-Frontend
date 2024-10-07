@@ -9,6 +9,7 @@ import { usePermalink } from '@/hooks/usePermalink'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
+import { IGetUserInfoResponse } from '@/types/auth/user.types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -30,7 +31,7 @@ const HeaderComponent = () => {
   const { user: isAuthenticated } = useSelector((state) => state.auth)
   const { internalLinks } = usePermalink()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
-  const { isLoading } = useGetUserInfoQuery({}, { skip: !isAuthorized })
+  const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const headerRoutes = [
     {
@@ -119,13 +120,13 @@ const HeaderComponent = () => {
     </Button>
   )
 
-  const renderUserProfileDropdown = () => (
+  const renderUserProfileDropdown = (user: IGetUserInfoResponse) => (
     <Fragment>
       <Dropdown>
         <DropdownMenuButton as="div">
           <Button kind="pattern" bordered pilled className="py-5 px-5 !text-xs md:text-sm">
             <div className="flex items-center gap-x-2">
-              <SingleUserIcon className="flex-shrink-0" /> Macan <ChevronDownIcon />
+              <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
             </div>
           </Button>
         </DropdownMenuButton>
@@ -136,19 +137,19 @@ const HeaderComponent = () => {
             style={{ backgroundImage: `url(/assets/images/glitch.png)` }}
           />
           <div className="flex gap-x-2 ">
-            <Avatar src="/assets/images/macan.png" size="xl" alt="macan" />
+            <Avatar src={user.profile.avatar || '/assets/images/profile/user-1.jpg'} size="xl" alt={user.name || ''} />
             <div className="pt-1">
-              <span className="inline-block text-[22px] font-bold">Macan</span>
-              <span className="inline-block text-sm font-normal">Macanforreal@email.com</span>
+              <span className="block text-[22px] font-bold">{user.name}</span>
+              <span className="block text-sm font-normal">{user.email}</span>
             </div>
           </div>
           {/* User's points */}
-          <Button kind="gradient" variant="yellow-dark" className="flex justify-between font-medium font-dmSans">
+          {/* <Button kind="gradient" variant="yellow-dark" className="flex justify-between font-medium font-dmSans">
             <div className="flex items-center justify-between gap-x-2 w-full">
               <MoneyIcon className="flex-shrink-0 text-yellow-500" />
               13941
             </div>
-          </Button>
+          </Button> */}
           {/* Menu items */}
           {profileMenuItems.map((item) => (
             <DropdownItem key={item.id}>
@@ -184,12 +185,12 @@ const HeaderComponent = () => {
         <Button kind="pattern" className="px-2" bordered pilled onClick={handleOpenDepositModal}>
           <div className="flex rounded-full justify-between items-center gap-x-2 bg-gradient-primary px-3 py-2">Deposit</div>
         </Button>
-        <Button kind="gradient" variant="yellow-dark" className="flex justify-between font-medium font-dmSans" pilled bordered onClick={handleOpenPointsModal}>
+        {/* <Button kind="gradient" variant="yellow-dark" className="flex justify-between font-medium font-dmSans" pilled bordered onClick={handleOpenPointsModal}>
           <div className="flex items-center gap-x-2">
             <MoneyIcon className="flex-shrink-0 text-yellow-500" />
             13941
           </div>
-        </Button>
+        </Button> */}
       </div>
     )
   }
@@ -208,11 +209,11 @@ const HeaderComponent = () => {
     <header className="mb-10">
       <Container kind="fluid">
         <div className="pt-8 flex items-center justify-between z-20">
-          {isAuthenticated ? (
+          {isAuthenticated && UserData ? (
             <Fragment>
               {renderBrandLogo()}
               {renderActions()}
-              {renderUserProfileDropdown()}
+              {renderUserProfileDropdown(UserData.data)}
             </Fragment>
           ) : (
             <Fragment>
