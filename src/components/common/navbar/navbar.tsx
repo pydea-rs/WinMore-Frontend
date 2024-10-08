@@ -59,7 +59,7 @@ const Navbar: BaseProps<INavbar> = (props) => {
               <MenuItem className="mb-4">
                 <Button variant="dark" kind="primary" className="bg-opacity-40 border text-main border-[#1A1F25]" full size="lg" onClick={handleOpenSelectCoinModal}>
                   <div className="flex justify-between items-center gap-x-2 w-full">
-                    <Avatar src={'/assets/images/tether.png'} size="lg" alt="tether" />
+                    <Avatar src={'/assets/images/tokens/USDT.png'} size="lg" alt="tether" />
                     <div className="flex items-center gap-x-4">
                       <div className="flex items-center gap-x-1 font-normal text-xs">
                         <span className="text-main">Balance:</span>

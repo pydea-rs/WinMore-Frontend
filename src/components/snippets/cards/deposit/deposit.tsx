@@ -16,38 +16,20 @@ import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
-import { TType } from '@/types/global.types'
-import { useState } from 'react'
+import { networks } from '@/constants/networks'
+import useGetWalletBalance from '@/hooks/useGetWalletBalance'
+import useSendWalletTransaction from '@/hooks/useSendTransaction'
+import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
+import { useDispatch, useSelector } from '@/store/store'
+import { INetwork, IToken, TType } from '@/types/global.types'
 import { Controller, useForm } from 'react-hook-form'
+import { useAccount } from 'wagmi'
 import { DepositCardProps, DepositForm } from './deposit.types'
-
-const chainList: Array<TType> = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Ethereum', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'Polygon', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'Binance Coin', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'Avalanche', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'Doge', icon: '/assets/images/dollar.png' },
-]
-
-const coinList: Array<TType> = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Bitcoin', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'ETH', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'SOL', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'USDT', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
-]
-
-const suggestedCoinList: Array<TType> = [
-  { id: 4, name: 'USDT', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
-]
 
 export const DepositCard: React.FC<DepositCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
-  const [selectedChian, setSelectChain] = useState<TType>(coinList[0])
-  const [selectedCoin, setSelectCoin] = useState<TType>(coinList[0])
+  const { network, token } = useSelector((state) => state.currency)
+  const { address } = useAccount()
 
   const {
     control: depositFormController,
@@ -55,22 +37,25 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
     watch: depositFormWatch,
     setValue: depositFormSetValue,
     formState: { errors },
-  } = useForm<DepositForm>({ defaultValues: { simple: '0.00' } })
+  } = useForm<DepositForm>({ defaultValues: { amount: '0.00' } })
+  const dispatch = useDispatch()
+  const balance = useGetWalletBalance()
+  const { sendTransaction } = useSendWalletTransaction()
 
   const handleChangeChain = (value: TType) => {
-    setSelectChain(value)
+    const selectedNetwork = networks.find((net) => net.chainId === value.id) as INetwork
+    dispatch(updateNetwork({ network: selectedNetwork }))
+    dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
 
-  const handleChangeCoin = (value: TType) => {
-    setSelectCoin(value)
+  const handleChangeCoin = (newToken: TType) => {
+    const selectedToken = network.tokens.find((t) => t.id === newToken.id) as IToken
+    dispatch(updateToken({ token: selectedToken }))
   }
 
-  const handleOnChangeSuggestedCoin = (value: TType) => {
-    setSelectCoin(value)
+  const handleSubmit = (values: DepositForm) => {
+    sendTransaction({ amount: values.amount, decimals: balance.decimals })
   }
-
-  const handleSubmit = (values: DepositForm) => {}
-
   return (
     <Card size="lg" className="w-full max-w-[430px]">
       <CardHeader>
@@ -86,29 +71,33 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
         <form onSubmit={depositFormHandleSubmit(handleSubmit)}>
           <FormGroup>
             <Label>NETWORK</Label>
-            <Select value={selectedChian} onChange={handleChangeChain}>
+            <Select value={{ id: network.chainId, name: network.name }} onChange={handleChangeChain}>
               <SelectButton className="flex items-center justify-between ">
                 <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                  {selectedChian.icon ? <Avatar src={selectedChian.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
-                  {selectedChian.name}
+                  {/* {network.icon ? <Avatar src={selectedChian.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />} */}
+                  <div className="w-6 h-6 bg-black rounded-full" />
+                  {network.name}
                 </div>
                 <ChevronDownIcon className="pointer-events-none size-6 fill-white/60" aria-hidden="true" />
               </SelectButton>
               <SelectList>
-                {chainList.map(({ icon, id, name }) => (
-                  <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
-                    {icon ? (
-                      <SelectIcon>
-                        <Avatar className="flex-shrink-0" size="md" src={icon} alt="flag" />
-                      </SelectIcon>
-                    ) : (
+                {networks.map((net) => {
+                  const { chainId, name } = net
+                  return (
+                    <SelectOption value={{ id: chainId, name }} key={chainId} className="flex items-center">
+                      {/* {icon ? (
+                        <SelectIcon>
+                          <Avatar className="flex-shrink-0" size="md" src={icon} alt="flag" />
+                        </SelectIcon>
+                      ) : ( */}
                       <SelectIcon>
                         <div className="w-6 h-6 bg-black rounded-full" />
                       </SelectIcon>
-                    )}
-                    <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
-                  </SelectOption>
-                ))}
+                      {/* )} */}
+                      <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
+                    </SelectOption>
+                  )
+                })}
               </SelectList>
             </Select>
           </FormGroup>
@@ -116,22 +105,22 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
           <FormGroup>
             <Label>Select Coin</Label>
             <div className="mb-2">
-              <Select value={selectedCoin} onChange={handleChangeCoin}>
+              <Select value={{ id: token.id, name: token.name, icon: token.icon }} onChange={handleChangeCoin}>
                 <SelectButton className="flex items-center justify-between">
                   <div className="flex items-center text-sm text-main font-medium gap-x-2 w-full">
-                    {selectedCoin.icon ? <Avatar src={selectedCoin.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
-                    <span>{selectedCoin.name}</span>
+                    {token.icon ? <Avatar src={token.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
+                    <span>{token.name}</span>
                     <div className="flex ml-auto gap-x-1">
                       <div className="flex items-center gap-x-1 font-normal text-xs">
                         <span className="text-main">Balance:</span>
-                        <span className="text-white">0.000</span>
+                        <span className="text-white">123123123123</span>
                       </div>
                       <ChevronDownIcon className="pointer-events-none size-6 text-white" aria-hidden="true" />
                     </div>
                   </div>
                 </SelectButton>
                 <SelectList>
-                  {coinList.map(({ icon, id, name }) => (
+                  {network.tokens.map(({ icon, id, name }) => (
                     <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
                       {icon ? (
                         <SelectIcon>
@@ -156,18 +145,17 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
               </Select>
             </div>
 
-            <RadioGroup>
-              {suggestedCoinList.map((coin) => (
+            <RadioGroup className="flex-wrap">
+              {network.tokens.map((coin) => (
                 <Radio
                   key={coin.id}
                   name="suggestedCoin"
                   size="sm"
-                  id={`prefix-${coin.id.toString()}`}
+                  id={`prefix-${coin.id}`}
                   value={coin.id.toString()}
-                  checked={selectedCoin.id === coin.id}
+                  checked={token.id === coin.id}
                   onClick={() => {
-                    console.log({ coin })
-                    handleOnChangeSuggestedCoin(coin)
+                    handleChangeCoin(coin)
                   }}
                 >
                   <div className="flex items-center gap-4">
@@ -182,22 +170,18 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
           <FormGroup>
             <Label>Your Current Connected Wallet</Label>
             <pre className="px-4 py-2.5 rounded-2xl bg-dark text-sm font-medium text-main">
-              <span>
-                {'7Brh4EFzgPn7dyAdzbU9JBjvj9a9mXmPw3C4ogtXQQXu'.substring(0, 32)}
-                <br />
-                {'7Brh4EFzgPn7dyAdzbU9JBjvj9a9mXmPw3C4ogtXQQXu'.substring(32)}
-              </span>
+              <span>{address}</span>
             </pre>
           </FormGroup>
           <FormGroup>
             <Label className="flex items-center justify-between">
               Enter Deposit Amount
               <span className="text-main">
-                Available: <span className="text-white">10.22</span>
+                Available: <span className="text-white">{balance.formattedValue}</span>
               </span>
             </Label>
             <Controller
-              name="simple"
+              name="amount"
               control={depositFormController}
               rules={{
                 required: { value: true, message: "It's require" },
@@ -207,12 +191,18 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                   <button
                     className="appearance-none w-10 h-10 text-sm font-medium text-main absolute left-3 z-10 top-2.5 active:opacity-70 rounded-full active:bg-white/20"
                     type="button"
+                    onClick={() => {
+                      depositFormSetValue('amount', '0.1')
+                    }}
                   >
                     Min.
                   </button>
                   <button
                     className="appearance-none w-10 h-10 text-sm font-medium text-primary absolute right-3 top-2.5 z-10 active:opacity-70 rounded-full active:bg-white/20"
                     type="button"
+                    onClick={() => {
+                      depositFormSetValue('amount', balance.formattedValue.toString())
+                    }}
                   >
                     Max
                   </button>

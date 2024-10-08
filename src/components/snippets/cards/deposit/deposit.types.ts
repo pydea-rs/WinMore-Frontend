@@ -5,5 +5,5 @@ export interface DepositCardProps {
 }
 
 export interface DepositForm {
-  simple: string
+  amount: string
 }
