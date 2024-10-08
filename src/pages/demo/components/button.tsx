@@ -401,7 +401,7 @@ const ButtonComponentDemo = () => {
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="pattern" className="px-2.5" bordered pilled>
               <div className="flex justify-between items-center gap-x-2">
-                <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                 <div className="flex items-center gap-x-1 font-normal text-xs">
                   <span className="text-main">Balance:</span>
                   <span className="text-white">0.000</span>
@@ -442,7 +442,7 @@ const ButtonComponentDemo = () => {
                 )}
 
                 <div className={classNames({ 'flex justify-between items-center gap-x-2': true, invisible: isLoading })}>
-                  <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                  <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
 
                   <div className="flex items-center gap-x-1 font-normal text-xs">
                     <span className="text-main">Balance:</span>

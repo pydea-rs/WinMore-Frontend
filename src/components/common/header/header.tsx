@@ -2,9 +2,9 @@ import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
 import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
 import LogoutIcon from '@/components/icons/logout/logout'
-import MoneyIcon from '@/components/icons/money/money'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
+import useGetWalletBalance from '@/hooks/useGetWalletBalance'
 import { usePermalink } from '@/hooks/usePermalink'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
@@ -29,6 +29,8 @@ import ListText from '../list/listText/listText'
 const HeaderComponent = () => {
   const dispatch = useDispatch()
   const { user: isAuthenticated } = useSelector((state) => state.auth)
+  const { token } = useSelector((state) => state.currency)
+
   const { internalLinks } = usePermalink()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
   const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
@@ -168,16 +170,19 @@ const HeaderComponent = () => {
       </Dropdown>
     </Fragment>
   )
+  const balance = useGetWalletBalance()
 
   const renderActions = () => {
     return (
       <div className="hidden md:flex gap-x-4 ">
         <Button kind="pattern" className="px-2.5" bordered pilled onClick={handleOpenSelectCoinModal}>
           <div className="flex justify-between items-center gap-x-2">
-            <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+            <Avatar size="md" src={token.icon} alt={token.name} />
             <div className="flex items-center gap-x-1 font-normal text-xs">
               <span className="text-main">Balance:</span>
-              <span className="text-white">0.000</span>
+              <span className="text-white">
+                {balance.formattedValue} {balance.symbol}
+              </span>
             </div>
             <ChevronDownIcon />
           </div>

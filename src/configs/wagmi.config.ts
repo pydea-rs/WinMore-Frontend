@@ -1,15 +1,12 @@
 import { createConfig, http } from 'wagmi'
-import { polygon } from 'wagmi/chains'
+import { polygon, sepolia } from 'wagmi/chains' // Import polygonMumbai for Devnet
 import { injected, metaMask } from 'wagmi/connectors'
 
 export const config = createConfig({
-  chains: [
-    // mainnet,
-    polygon,
-  ],
+  chains: [polygon, sepolia], // Include both mainnet and devnet
   transports: {
-    // [mainnet.id]: http(),
     [polygon.id]: http(),
+    [sepolia.id]: http(),
   },
   connectors: [
     metaMask({

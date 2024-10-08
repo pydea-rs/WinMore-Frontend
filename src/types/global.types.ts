@@ -51,3 +51,18 @@ export type IAddress = `0x${string}`
 export type IAvailableTokens = 'USDC' | 'USDT'
 
 export type Nullable<T> = T | null
+
+export type INetwork = {
+  chainId: number
+  name: string
+  rpcUrl: string
+  tokens: IToken[]
+}
+export type IToken = {
+  id: number
+  symbol: string
+  name: string
+  contractAddress: IAddress
+  icon: string
+  isNativeToken: boolean
+}

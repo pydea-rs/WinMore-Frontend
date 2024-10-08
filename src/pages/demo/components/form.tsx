@@ -38,8 +38,8 @@ const mockRadioData1 = [
     label: 'USDC',
     amount: '0.00',
     images: [
-      { src: '/assets/images/dollar.png', alt: 'dollar' },
-      { src: '/assets/images/tether.png', alt: 'tether' },
+      { src: '/assets/images/tokens/USDC.png', alt: 'dollar' },
+      { src: '/assets/images/tokens/USDT.png', alt: 'tether' },
     ],
   },
   {
@@ -49,8 +49,8 @@ const mockRadioData1 = [
     name: 'radio-1',
     amount: '0.00',
     images: [
-      { src: '/assets/images/dollar.png', alt: 'dollar' },
-      { src: '/assets/images/tether.png', alt: 'tether' },
+      { src: '/assets/images/tokens/USDC.png', alt: 'dollar' },
+      { src: '/assets/images/tokens/USDT.png', alt: 'tether' },
     ],
   },
 ]
@@ -77,11 +77,11 @@ const mockRadioData2 = [
 ]
 
 const people = [
-  { id: 1, name: 'Durward Reynolds', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'Kenton Towne', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'Therese Wunsch', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'Benedict Kessler', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'Katelyn Rohan', icon: '/assets/images/dollar.png' },
+  { id: 1, name: 'Durward Reynolds', icon: '/assets/images/tokens/USDC.png' },
+  { id: 2, name: 'Kenton Towne', icon: '/assets/images/tokens/USDT.png' },
+  { id: 3, name: 'Therese Wunsch', icon: '/assets/images/tokens/USDC.png' },
+  { id: 4, name: 'Benedict Kessler', icon: '/assets/images/tokens/USDT.png' },
+  { id: 5, name: 'Katelyn Rohan', icon: '/assets/images/tokens/USDC.png' },
 ]
 
 interface NumericForm {
@@ -303,7 +303,7 @@ const FormComponentDemo = () => {
                 </Radio>
                 <Radio id="72" name="3" value="31" size="sm">
                   <div className="flex items-center gap-2">
-                    <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                    <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                     <span>USDT</span>
                   </div>
                 </Radio>
@@ -324,8 +324,8 @@ const FormComponentDemo = () => {
                 <RadioCard id="342" name="5" value="7">
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
-                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
+                      <Avatar size="md" src="/assets/images/tokens/USDC.png" alt="dollar" />
+                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                     </div>
                     <div className="flex items-center justify-between flex-grow px-2">
                       <span className="font-medium">USDT</span>
@@ -337,8 +337,8 @@ const FormComponentDemo = () => {
                 <RadioCard id="41" name="5" value="6">
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
-                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
+                      <Avatar size="md" src="/assets/images/tokens/USDC.png" alt="dollar" />
+                      <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                     </div>
                     <div className="flex items-center justify-between flex-grow px-2">
                       <span className="font-medium">USDC</span>
@@ -473,8 +473,8 @@ const FormComponentDemo = () => {
               <RadioCard id="64" name="5" value="64" disabled>
                 <div className="flex items-center">
                   <div className="flex items-center">
-                    <Avatar size="md" src="/assets/images/dollar.png" alt="dollar" />
-                    <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tether.png" alt="tether" />
+                    <Avatar size="md" src="/assets/images/tokens/USDC.png" alt="dollar" />
+                    <Avatar className="flex-shrink-0 -ml-2" size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                   </div>
                   <div className="flex items-center justify-between flex-grow px-2">
                     <span className="font-medium">USDT</span>

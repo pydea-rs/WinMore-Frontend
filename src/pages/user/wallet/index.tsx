@@ -40,20 +40,20 @@ import { Fragment, useState } from 'react'
 
 const selectData = [
   { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Durward', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'Kenton', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'Therese', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'Benedict', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'Katelyn', icon: '/assets/images/dollar.png' },
+  { id: 1, name: 'Durward', icon: '/assets/images/tokens/USDC.png' },
+  { id: 2, name: 'Kenton', icon: '/assets/images/tokens/USDT.png' },
+  { id: 3, name: 'Therese', icon: '/assets/images/tokens/USDC.png' },
+  { id: 4, name: 'Benedict', icon: '/assets/images/tokens/USDT.png' },
+  { id: 5, name: 'Katelyn', icon: '/assets/images/tokens/USDC.png' },
 ]
 
 const selectChainData = [
   { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Durward', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'Kenton', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'Therese', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'Benedict', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'Katelyn', icon: '/assets/images/dollar.png' },
+  { id: 1, name: 'Durward', icon: '/assets/images/tokens/USDC.png' },
+  { id: 2, name: 'Kenton', icon: '/assets/images/tokens/USDT.png' },
+  { id: 3, name: 'Therese', icon: '/assets/images/tokens/USDC.png' },
+  { id: 4, name: 'Benedict', icon: '/assets/images/tokens/USDT.png' },
+  { id: 5, name: 'Katelyn', icon: '/assets/images/tokens/USDC.png' },
 ]
 
 const data_fake = [
@@ -143,14 +143,14 @@ const Wallet = () => {
                               <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
                                 <DataHeading className="md:hidden">Chain</DataHeading>
                                 <div className="flex items-center justify-center gap-x-2">
-                                  <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                                  <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                                   <span>{chain}</span>
                                 </div>
                               </DataCol>
                               <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
                                 <DataHeading className="md:hidden">Coin</DataHeading>
                                 <div className="flex items-center justify-center gap-x-2">
-                                  <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                                  <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                                   <span>{coin}</span>
                                 </div>
                               </DataCol>
@@ -298,7 +298,7 @@ const Wallet = () => {
                                   <TableDataWrapper className="text-white bg-opacity-40">
                                     <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
                                       <div className="flex items-center justify-center gap-x-2">
-                                        <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                                        <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                                         <span>USDC</span>
                                       </div>
                                     </div>
@@ -308,7 +308,7 @@ const Wallet = () => {
                                   <TableDataWrapper className="text-white bg-opacity-40">
                                     <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
                                       <div className="flex items-center justify-center gap-x-2">
-                                        <Avatar size="md" src="/assets/images/tether.png" alt="tether" />
+                                        <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
                                         <span>USDT</span>
                                       </div>
                                     </div>

@@ -1,8 +1,9 @@
 import MainLayout from '@/components/layouts/main.layout'
 import AuthProvider from '@/providers/auth.provider'
+import ChainProvider from '@/providers/chain.provider'
 import Modals from '@/providers/modals.provider'
 import { Web3Provider } from '@/providers/wagmi.provider'
-import store from '@/store/store'
+import { persistor, store } from '@/store/store'
 import '@/styles/globals.css'
 import { AppPropsWithLayout } from '@/types/global.types'
 
@@ -11,6 +12,7 @@ import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { Slide, ToastContainer } from 'react-toastify'
+import { PersistGate } from 'redux-persist/integration/react'
 
 export const Fractul = LocalFont({
   src: [
@@ -67,30 +69,34 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.layout ?? defaultLayout
   return (
     <div className={`${Fractul.className} ${DMSans.variable}`}>
-      <Web3Provider>
-        <Provider store={store}>
-          <AuthProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <Modals />
-          </AuthProvider>
-        </Provider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Web3Provider>
+            <ChainProvider>
+              <AuthProvider>
+                {getLayout(<Component {...pageProps} />)}
+                <Modals />
+              </AuthProvider>
+            </ChainProvider>
+          </Web3Provider>
+        </PersistGate>
+      </Provider>
 
-        <ToastContainer
-          position="top-right"
-          className="!z-[10000] !font-fractul"
-          autoClose={5000}
-          closeButton={false}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-          transition={Slide}
-        />
-      </Web3Provider>
+      <ToastContainer
+        position="top-right"
+        className="!z-[10000] !font-fractul"
+        autoClose={5000}
+        closeButton={false}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
     </div>
   )
 }

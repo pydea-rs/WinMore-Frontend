@@ -27,24 +27,24 @@ import { WithdrawCardProps, WithdrawForm } from './withdraw.types'
 
 const chainList: Array<TType> = [
   { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Ethereum', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'Polygon', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'Binance Coin', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'Avalanche', icon: '/assets/images/tether.png' },
-  { id: 5, name: 'Doge', icon: '/assets/images/dollar.png' },
+  { id: 1, name: 'Ethereum', icon: '/assets/images/tokens/USDC.png' },
+  { id: 2, name: 'Polygon', icon: '/assets/images/tokens/USDT.png' },
+  { id: 3, name: 'Binance Coin', icon: '/assets/images/tokens/USDC.png' },
+  { id: 4, name: 'Avalanche', icon: '/assets/images/tokens/USDT.png' },
+  { id: 5, name: 'Doge', icon: '/assets/images/tokens/USDC.png' },
 ]
 
 const coinList: Array<TType> = [
   { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Bitcoin', icon: '/assets/images/dollar.png' },
-  { id: 2, name: 'ETH', icon: '/assets/images/tether.png' },
-  { id: 3, name: 'SOL', icon: '/assets/images/dollar.png' },
-  { id: 4, name: 'USDT', icon: '/assets/images/tether.png' },
+  { id: 1, name: 'Bitcoin', icon: '/assets/images/tokens/USDC.png' },
+  { id: 2, name: 'ETH', icon: '/assets/images/tokens/USDT.png' },
+  { id: 3, name: 'SOL', icon: '/assets/images/tokens/USDC.png' },
+  { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
   { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
 ]
 
 const suggestedCoinList: Array<TType> = [
-  { id: 4, name: 'USDT', icon: '/assets/images/tether.png' },
+  { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
   { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
 ]
 
