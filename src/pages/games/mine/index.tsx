@@ -1,7 +1,7 @@
 import Container from '@/components/common/container/container'
 import MainLayout from '@/components/layouts/main.layout'
-import MineGame from '@/components/pages/games/mine/mine.game'
-import MineConfigForm from '@/components/pages/games/mine/mineConfigForm/mineConfigForm'
+import MineGame from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
+import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
 import GameHistory from '@/components/snippets/gameHistory/gameHistory'
 import { ReactElement } from 'react'
 

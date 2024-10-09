@@ -73,7 +73,7 @@ const MineConfigForm = () => {
   })
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
-
+  const { network, token } = useSelector((state) => state.currency)
   const handleSubmit = async (values: IGameForm) => {
     if (!isAuthorized) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
@@ -81,7 +81,7 @@ const MineConfigForm = () => {
     }
     const betAmount = mineConfig.betAmount.split(',').join('')
     try {
-      await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows }).unwrap()
+      await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
       onStart()
     } catch (error) {
       // toast.error(error.message)
@@ -149,7 +149,6 @@ const MineConfigForm = () => {
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-
                           dispatch(updateMineConfig({ mode: mode }))
                           dispatch(updateMineConfig({ coefficients: mode.coefficient }))
                         }}

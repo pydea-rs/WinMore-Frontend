@@ -9,6 +9,12 @@ export interface IMineMode {
   value: number
   coefficient: number[]
 }
+
+export interface IBlock {
+  index: number
+  row: number
+  status: 'GOLD' | 'MINE'
+}
 interface IMineGame {
   mode: IMineMode
   rows: number
@@ -16,10 +22,7 @@ interface IMineGame {
   isStarted: boolean
   isGameOver: boolean
   coefficients: number[]
-  selectedBlocks: {
-    index: number
-    row: number
-  }[]
+  selectedBlocks: IBlock[]
   activeRow: number
   currentGameId: Nullable<string>
   stake: Nullable<number>

@@ -46,19 +46,18 @@ export const mineSlice = createSlice({
       state.mineConfig.isStarted = true
       state.mineConfig.isGameOver = false // Reset game over state when starting a new game
       state.mineConfig.selectedBlocks = initialState.mineConfig.selectedBlocks
+      state.mineConfig.activeRow = 1
     },
     endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean }>) => {
-      // if (action.payload.isWin) {
-      //   state.currentGame = initialState.currentGame
-      //   state.mineConfig = initialState.mineConfig
-      //   localStorage.removeItem(CURRENT_MINE)
-      // }else{
-      //   state.currentGame = initialState.currentGame
-      //   state.mineConfig = initialState.mineConfig
-      //   localStorage.removeItem(CURRENT_MINE)
-      // }
+      if (action.payload.isWin) {
+        // state.mineConfig.isGameOver = true // Reset game over state when starting a new game
+        state.mineConfig = initialState.mineConfig
+      } else {
+        state.mineConfig.isGameOver = true // Reset game over state when starting a new game
+      }
+      // state.mineConfig.isStarted = false
 
-      state.mineConfig = initialState.mineConfig
+      // state.mineConfig = initialState.mineConfig
     },
   },
 })

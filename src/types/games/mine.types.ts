@@ -14,16 +14,20 @@ export interface IPlaceMineBetPayload {
   betAmount: number
   mode: string
   rows: number
+  token: string
+  chainId: number
 }
 
 export interface IMineBlockPayload {
   id: string
+  choice: number
 }
 
 export interface IMineBlockResponse {
   betToken: IAvailableTokens
   createdAt: string
   currentRow: number
+  golds: number[]
   finishedAt: null
   id: string
   initialBet: number

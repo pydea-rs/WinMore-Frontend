@@ -55,6 +55,7 @@ export const MineService = createApi({
         return {
           method: 'POST',
           url: games.mine.mineBlock.get(payload.id),
+          data: { choice: payload.choice },
           sendAuthorization: true,
         }
       },

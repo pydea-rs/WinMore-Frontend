@@ -24,6 +24,7 @@ const config: Config = {
         navy: '#1A1F25', // Border
         red: {
           500: '#FF3B30',
+          700: '#F94040',
         },
         yellow: {
           500: '#FFD600',

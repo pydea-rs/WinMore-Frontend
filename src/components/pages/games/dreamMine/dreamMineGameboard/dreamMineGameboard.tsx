@@ -7,67 +7,43 @@ import { HoldToActionContent } from '@/components/common/holdToAction/holdToActi
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import { Spinner } from '@/components/common/spinner/spinner'
 import DoneIcon from '@/components/icons/done/done.icon'
-import { useBackoffMineMutation, useMineBlockMutation } from '@/services/games/mine/mine.service'
-import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
-import { useDispatch, useSelector } from '@/store/store'
 import { motion } from 'framer-motion'
-import { Howl } from 'howler'
 import Image from 'next/image'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment } from 'react'
+import useDreamMineGameBoardHelper from './dreamMineGameboard.hook'
 
-export default function MineGame() {
-  const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
-  const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
-  const { mineConfig } = useSelector((state) => state.mine)
-  const dispatch = useDispatch()
-  const [bombBlock, setBombBlock] = useState<{ index: number; row: number }[]>([])
-  const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
-  const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
-  const [backoffMine, { isLoading: isClaiming }] = useBackoffMineMutation()
-
-  const winHandler = () => {
-    backoffMine({ id: mineConfig.currentGameId as string })
-    dispatch(endMineGame({ isWin: true }))
-  }
-  const lostHandler = () => {
-    dispatch(endMineGame({ isWin: false }))
-  }
-
-  const onCheckBlock = async (i: number, row: number) => {
-    const block = { index: i, row }
-
-    if (mineConfig.isStarted && !mineConfig.selectedBlocks.includes(block) && !mineConfig.isGameOver && !!mineConfig.currentGameId) {
-      setLoadingBlock(block) // Set the loading block
-
-      tile.play()
-
-      try {
-        const { data } = await mineBlockMutation({ id: mineConfig.currentGameId }).unwrap()
-
-        if (!data.success) {
-          bomb.play()
-          setBombBlock([...bombBlock, block])
-          lostHandler()
-        } else {
-          dispatch(updateMineConfig({ selectedBlocks: [...mineConfig.selectedBlocks, block] }))
-          dispatch(updateMineConfig({ activeRow: mineConfig.activeRow + 1 }))
-        }
-      } finally {
-        setLoadingBlock(null) // Clear the loading block
-      }
-    }
-  }
-
-  const onClaim = () => {
-    if (!mineConfig.isGameOver) {
-      winHandler()
-    }
-  }
+export default function DreamMineGameBoard() {
+  const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading } = useDreamMineGameBoardHelper()
   return (
     <Card className="w-full max-w-[390px]">
       <CardBody>
-        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <div className="w-full relative translucent shadow-xl p-4 rounded-lg">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <div className="w-full relative overflow-hidden translucent shadow-xl p-4 rounded-lg">
+            {mineConfig.isStarted ? (
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: 'red',
+                  top: `${mineConfig.activeRow * 68}px`,
+                  left: '15px',
+                  right: '15px',
+                  bottom: '20px',
+                  background: 'linear-gradient(179.79deg, rgba(22, 26, 31, 0) 0%, #111820 100%)',
+                  backdropFilter: 'blur(4px)',
+                  zIndex: 2,
+                }}
+              ></div>
+            ) : (
+              <></>
+            )}
+            {mineConfig.isStarted && mineConfig.isGameOver ? (
+              <div className="absolute inset-1/2 z-10 w-fit h-fit -translate-x-[50%]">
+                <span className="block whitespace-nowrap text-red-700 font-bold text-2xl">Game Over</span>
+              </div>
+            ) : (
+              <></>
+            )}
+
             {Array(mineConfig.rows)
               .fill('')
               .map((item, rowIndex) => {
@@ -80,28 +56,25 @@ export default function MineGame() {
                         className={`grid gap-3 custom-cursor flex-grow-1 ${row === mineConfig.activeRow ? '' : 'inactive'} `}
                         style={{
                           gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
-                          // opacity: `${row <= mineConfig.activeRow ? '100%' : `${80 - (row * mineConfig.rows + 10)}%`}`,
                         }}
                       >
                         {Array(+mineConfig.mode.value)
                           .fill(0)
                           .map((_, blockIndex) => {
-                            const isItemSelected = mineConfig.selectedBlocks.find((rows) => rows.row === row)?.index === blockIndex
-                            const isBlockMine = bombBlock.find((rows) => rows.row === row)?.index === blockIndex
+                            const currentRowSelectedItem = mineConfig.selectedBlocks.find((item) => item.row === row && item.index === blockIndex)
                             const isLoading = loadingBlock?.index === blockIndex && loadingBlock?.row === row
-
-                            const imageSrc = isBlockMine
-                              ? `/assets/games/mine/images/bomb.svg`
-                              : isItemSelected
+                            const imageSrc = !currentRowSelectedItem
+                              ? `/assets/games/mine/images/rock-${blockIndex + 1}.svg`
+                              : currentRowSelectedItem.status === 'GOLD'
                                 ? `/assets/games/mine/images/gold.svg`
-                                : `/assets/games/mine/images/rock-${blockIndex + 1}.svg`
+                                : `/assets/games/mine/images/bomb.svg`
 
                             return (
                               <motion.div
                                 key={blockIndex}
                                 whileTap={{ scale: 1.1 }}
                                 onClick={() => {
-                                  row === mineConfig.activeRow ? onCheckBlock(blockIndex, row) : null
+                                  row === mineConfig.activeRow && !isMineBlockLoading ? onCheckBlock(blockIndex, row) : null
                                 }}
                                 className={`transition-all`}
                               >
@@ -123,12 +96,17 @@ export default function MineGame() {
                   </Fragment>
                 )
               })}
-            <BorderBeam duration={3} size={300} borderWidth={5} />
           </div>
-        </motion.main>
+          <BorderBeam duration={3} size={300} borderWidth={5} />
+        </motion.div>
         <div className="flex flex-col mt-5 px-4">
           <HoldToActionProvider>
-            <HoldToActionButton onFinish={onClaim} resetOnFinish duration={3000} disabled={!mineConfig.isStarted || (mineConfig.activeRow < 2 && !mineConfig.isGameOver)}>
+            <HoldToActionButton
+              onFinish={onClaim}
+              resetOnFinish
+              duration={3000}
+              disabled={(!mineConfig.isStarted && mineConfig.activeRow !== 1) || mineConfig.isGameOver || mineConfig.activeRow < 2}
+            >
               <HoldToActionContent> Claim {mineConfig.activeRow > 1 ? +mineConfig.betAmount * mineConfig.coefficients[mineConfig.activeRow - 2] : ''}</HoldToActionContent>
               <HoldToActionComplete>
                 <DoneIcon className={'absolute-center z-10'} />
