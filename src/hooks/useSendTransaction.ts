@@ -1,3 +1,5 @@
+import { triggerModal } from '@/store/slices/modal/modal.slice'
+import { useDispatch } from '@/store/store'
 import { IAddress } from '@/types/global.types'
 import { toast } from 'react-toastify'
 import { useSendTransaction as useWAGMITransaction } from 'wagmi'
@@ -10,7 +12,7 @@ interface ISendTransactionPayload {
 
 const useSendWalletTransaction = () => {
   const { sendTransactionAsync: WagmiSendTransaction } = useWAGMITransaction()
-
+  const dispatch = useDispatch()
   const sendTransaction = async (params: ISendTransactionPayload) => {
     const { amount, to, decimals } = params
 
@@ -21,7 +23,11 @@ const useSendWalletTransaction = () => {
       value: amountBigInt, // BigInt value for the amount
       to, // Using the address from IAddress interface
     })
-      .then((res) => res)
+      .then((res) => {
+        toast.success(`Deposit Successful:
+          ${res}`)
+        dispatch(triggerModal({ modal: 'deposit', trigger: false }))
+      })
       .catch((err) => toast.error(err.message))
   }
 

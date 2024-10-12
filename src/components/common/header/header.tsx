@@ -181,7 +181,7 @@ const HeaderComponent = () => {
             <div className="flex items-center gap-x-1 font-normal text-xs">
               <span className="text-main">Balance:</span>
               <span className="text-white">
-                {balance.formattedValue} {balance.symbol}
+                {balance.formattedValue.toFixed(6)} {balance.symbol}
               </span>
             </div>
             <ChevronDownIcon />

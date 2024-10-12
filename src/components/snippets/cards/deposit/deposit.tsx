@@ -54,7 +54,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
   }
 
   const handleSubmit = (values: DepositForm) => {
-    sendTransaction({ amount: values.amount, decimals: balance.decimals })
+    sendTransaction({ amount: values.amount, decimals: balance.decimals, to: address })
   }
   return (
     <Card size="lg" className="w-full max-w-[430px]">
@@ -177,7 +177,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             <Label className="flex items-center justify-between">
               Enter Deposit Amount
               <span className="text-main">
-                Available: <span className="text-white">{balance.formattedValue}</span>
+                Available: <span className="text-white">{balance.formattedValue.toFixed(6)}</span>
               </span>
             </Label>
             <Controller

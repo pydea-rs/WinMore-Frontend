@@ -16,7 +16,7 @@ export const NumberInput: BaseProps<NumberInputProps> = (props) => {
 
   return (
     <div className="relative">
-      <NumericFormat maxLength={9} thousandSeparator decimalScale={2} allowNegative={false} {...mergedAttrs} customInput={NumberCustomInput} />
+      <NumericFormat maxLength={9} thousandSeparator decimalScale={6} allowNegative={false} {...mergedAttrs} customInput={NumberCustomInput} />
       {onIncrease && onDecrease && (
         <div className="absolute top-1/2 -translate-y-1/2 !left-auto !right-4 flex flex-col">
           <button type="button" onClick={onIncrease} className="text-main hover:bg-white/10 active:bg-white/20">
