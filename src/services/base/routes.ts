@@ -48,6 +48,12 @@ export const getApiRoute = () => {
             return `${this.path}${id}`
           },
         },
+        isPlaying: {
+          path: 'dream-mine/is-playing',
+        },
+        mineGamesList: {
+          path: 'dream-mine',
+        },
       },
     },
   }

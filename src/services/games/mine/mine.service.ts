@@ -1,18 +1,22 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
-import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
+import { updateCoefficients, updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { IBlock, ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
+
+import { createApi } from '@reduxjs/toolkit/query/react'
 import {
   IBackoffMinePayload,
   IBackoffMineResponse,
+  IGetMineGamesListPayload,
+  IGetMineGamesListResponse,
   IGetMineRulesPayload,
   IGetMineRulesResponse,
+  IIsPlayingMinePayload,
   IMineBlockPayload,
   IMineBlockResponse,
   IPlaceMineBetPayload,
-} from '@/types/games/mine.types'
-import { createApi } from '@reduxjs/toolkit/query/react'
+} from './mine.service.types'
 
 export const MineService = createApi({
   reducerPath: 'mineService',
@@ -70,7 +74,52 @@ export const MineService = createApi({
         }
       },
     }),
+    mineGamesList: builder.query<BaseResponse<IGetMineGamesListResponse>, IGetMineGamesListPayload>({
+      query(arg) {
+        const { games } = getApiRoute()
+        return {
+          method: 'GET',
+          url: games.mine.mineGamesList.path,
+          params: arg,
+          sendAuthorization: true,
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        if (!data.data.length) {
+          return
+        }
+        const currentGame = data.data[0]
+        console.log(currentGame)
+
+        const currentGameSelectedBlocks: IBlock[] = currentGame.golds.map((gold, rowIndex) => ({ index: gold, row: rowIndex + 1, status: 'GOLD' }))
+        console.log(currentGameSelectedBlocks)
+        dispatch(
+          updateMineConfig({
+            activeRow: currentGame.currentRow + 1,
+            betAmount: currentGame.initialBet.toString(),
+            rows: currentGame.rowsCount,
+            isStarted: true,
+            currentGameId: currentGame.id,
+            currentGameStatus: currentGame.status,
+            selectedBlocks: currentGameSelectedBlocks,
+            stake: currentGame.stake,
+          }),
+        )
+        dispatch(updateMinConfigMode(currentGame.mode))
+      },
+    }),
+    isPlayingMine: builder.query<BaseResponse<boolean>, IIsPlayingMinePayload>({
+      query(arg) {
+        const { games } = getApiRoute()
+        return {
+          method: 'GET',
+          url: games.mine.isPlaying.path,
+          sendAuthorization: true,
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation } = MineService
+export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useIsPlayingMineQuery, useMineGamesListQuery } = MineService

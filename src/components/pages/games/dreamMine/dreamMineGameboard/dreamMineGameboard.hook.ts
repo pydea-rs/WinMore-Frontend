@@ -27,7 +27,7 @@ const useDreamMineGameBoardHelper = () => {
       tile.play()
 
       try {
-        const { data } = await mineBlockMutation({ id: mineConfig.currentGameId, choice: i + 1 }).unwrap()
+        const { data } = await mineBlockMutation({ id: mineConfig.currentGameId, choice: i }).unwrap()
         const block: IBlock = { index: i, row, status: data.success ? 'GOLD' : 'MINE' }
 
         if (!data.success) {

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ICoefficients, IUpdateMineConfig, StateType } from './mine.slice.types'
+import { ICoefficients, IMineModeVariants, IUpdateMineConfig, StateType } from './mine.slice.types'
 
 export const CURRENT_MINE = 'mine_game'
 
@@ -13,7 +13,11 @@ const initialState: StateType = {
     },
     rows: 8,
     activeRow: 1,
-    coefficients: [],
+    coefficients: {
+      easy: [],
+      hard: [],
+      medium: [],
+    },
     selectedBlocks: [],
     isStarted: false,
     isGameOver: false,
@@ -31,17 +35,36 @@ export const mineSlice = createSlice({
       state.mineConfig = { ...state.mineConfig, ...action.payload }
     },
     updateCoefficients: (state: StateType, action: PayloadAction<ICoefficients>) => {
+      state.mineConfig.coefficients = action.payload
       if (state.mineConfig.mode.label === 'EASY') {
-        state.mineConfig.coefficients = action.payload.easy
+        state.mineConfig.mode.coefficient = action.payload.easy
       }
       if (state.mineConfig.mode.label === 'MEDIUM') {
-        state.mineConfig.coefficients = action.payload.medium
+        state.mineConfig.mode.coefficient = action.payload.medium
       }
       if (state.mineConfig.mode.label === 'HARD') {
-        state.mineConfig.coefficients = action.payload.hard
+        state.mineConfig.mode.coefficient = action.payload.hard
       }
     },
-
+    updateMinConfigMode: (state: StateType, action: PayloadAction<IMineModeVariants>) => {
+      switch (action.payload) {
+        case 'EASY':
+          state.mineConfig.mode = {
+            label: 'EASY',
+            value: 4,
+            coefficient: state.mineConfig.coefficients.easy,
+          }
+          break
+        case 'MEDIUM':
+          state.mineConfig.mode = { label: 'MEDIUM', value: 3, coefficient: state.mineConfig.coefficients.medium }
+          break
+        case 'HARD':
+          state.mineConfig.mode = { label: 'HARD', value: 2, coefficient: state.mineConfig.coefficients.hard }
+        default:
+          state.mineConfig.mode = { label: 'EASY', value: 4, coefficient: state.mineConfig.coefficients.easy }
+          break
+      }
+    },
     startMineGame: (state: StateType) => {
       state.mineConfig.isStarted = true
       state.mineConfig.isGameOver = false // Reset game over state when starting a new game
@@ -62,6 +85,6 @@ export const mineSlice = createSlice({
   },
 })
 
-export const { updateMineConfig, startMineGame, endMineGame, updateCoefficients } = mineSlice.actions
+export const { updateMineConfig, startMineGame, endMineGame, updateCoefficients, updateMinConfigMode } = mineSlice.actions
 
 export default mineSlice.reducer
