@@ -7,6 +7,7 @@ const nextConfig = {
       ssr: false,
     },
   },
+  compress: true,
   images: {
     remotePatterns: [
       {

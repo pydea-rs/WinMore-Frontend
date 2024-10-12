@@ -20,7 +20,7 @@ export default function DreamMineGameBoard() {
   return (
     <Card className="w-full max-w-[390px]">
       <CardBody>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full relative overflow-hidden translucent shadow-xl p-4 rounded-lg">
             {mineConfig.isStarted ? (
               <div

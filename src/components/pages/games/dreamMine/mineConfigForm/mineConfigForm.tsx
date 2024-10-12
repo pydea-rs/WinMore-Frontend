@@ -150,7 +150,6 @@ const MineConfigForm = () => {
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
                           dispatch(updateMineConfig({ mode: mode }))
-                          dispatch(updateMineConfig({ coefficients: mode.coefficient }))
                         }}
                         blockClassName="w-[calc(100/3*1%)]"
                         // new props end
@@ -203,7 +202,7 @@ const MineConfigForm = () => {
             </RadioGroup>
           </FormGroup>
 
-          <Button kind="primary" type="submit" disabled={mineConfig.isStarted && !mineConfig.isGameOver && !isLoading}>
+          <Button kind="primary" type="submit" disabled={(mineConfig.isStarted && !mineConfig.isGameOver && !isLoading) || !isAuthorized}>
             {isLoading ? <Spinner /> : 'Start'}
           </Button>
         </form>

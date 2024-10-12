@@ -63,6 +63,14 @@ export const MineService = createApi({
           sendAuthorization: true,
         }
       },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(
+          updateMineConfig({
+            stake: data.data.stake,
+          }),
+        )
+      },
     }),
     backoffMine: builder.mutation<BaseResponse<IBackoffMineResponse>, IBackoffMinePayload>({
       query(payload) {
@@ -99,11 +107,11 @@ export const MineService = createApi({
             activeRow: currentGame.currentRow + 1,
             betAmount: currentGame.initialBet.toString(),
             rows: currentGame.rowsCount,
-            isStarted: true,
             currentGameId: currentGame.id,
             currentGameStatus: currentGame.status,
             selectedBlocks: currentGameSelectedBlocks,
             stake: currentGame.stake,
+            isStarted: true,
           }),
         )
         dispatch(updateMinConfigMode(currentGame.mode))

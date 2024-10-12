@@ -4,12 +4,14 @@ import MainLayout from '@/components/layouts/main.layout'
 import MineGame from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
 import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
 import GameHistory from '@/components/snippets/gameHistory/gameHistory'
+import { useAuth } from '@/hooks/useAuth'
 import { useIsPlayingMineQuery, useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { ReactElement } from 'react'
 
 const Mine = () => {
-  const { isLoading } = useIsPlayingMineQuery({})
-  const { isLoading: IsGamesListLoading } = useMineGamesListQuery({ status: 'ONGOING' })
+  const { isAuthorized } = useAuth()
+  const { isLoading } = useIsPlayingMineQuery({}, { skip: !isAuthorized })
+  const { isLoading: IsGamesListLoading } = useMineGamesListQuery({ status: 'ONGOING' }, { skip: !isAuthorized })
   return (
     <>
       {isLoading || IsGamesListLoading ? (
