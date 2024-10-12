@@ -1,5 +1,4 @@
 import { Alert } from '@/components/common/alert/alert'
-import { Avatar } from '@/components/common/avatar/avatar'
 import { Button } from '@/components/common/button/button'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
@@ -20,32 +19,20 @@ import DisabledIcon from '@/components/icons/disabled/disabled'
 import FinanceIcon from '@/components/icons/finance/finance.icon'
 import WalletIcon from '@/components/icons/wallet/walet.icon'
 import WarningIcon from '@/components/icons/warning/warning'
+import { networks } from '@/constants/networks'
+import { useSelector } from '@/store/store'
 import { TType } from '@/types/global.types'
 import { Fragment } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { WithdrawCardProps, WithdrawForm } from './withdraw.types'
 
-const chainList: Array<TType> = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Ethereum', icon: '/assets/images/tokens/USDC.png' },
-  { id: 2, name: 'Polygon', icon: '/assets/images/tokens/USDT.png' },
-  { id: 3, name: 'Binance Coin', icon: '/assets/images/tokens/USDC.png' },
-  { id: 4, name: 'Avalanche', icon: '/assets/images/tokens/USDT.png' },
-  { id: 5, name: 'Doge', icon: '/assets/images/tokens/USDC.png' },
-]
-
-const coinList: Array<TType> = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Bitcoin', icon: '/assets/images/tokens/USDC.png' },
-  { id: 2, name: 'ETH', icon: '/assets/images/tokens/USDT.png' },
-  { id: 3, name: 'SOL', icon: '/assets/images/tokens/USDC.png' },
-  { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
-  { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
-]
-
-const suggestedCoinList: Array<TType> = [
-  { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
-  { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
+const gasList: Array<TType> = [
+  { id: 0, name: 'Medium (Fee: 0.00900000 USDC)', icon: undefined },
+  // { id: 1, name: 'Bitcoin', icon: '/assets/images/tokens/USDC.png' },
+  // { id: 2, name: 'ETH', icon: '/assets/images/tokens/USDT.png' },
+  // { id: 3, name: 'SOL', icon: '/assets/images/tokens/USDC.png' },
+  // { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
+  // { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
 ]
 
 function arrayToObject(array: TType[]): Record<number, TType> {
@@ -57,7 +44,7 @@ function arrayToObject(array: TType[]): Record<number, TType> {
 
 export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
-
+  const { network, token } = useSelector((state) => state.currency)
   const {
     control: withdrawFormController,
     handleSubmit: withdrawFormHandleSubmit,
@@ -70,8 +57,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
     console.log(values)
   }
 
-  const coinObject: any = arrayToObject(coinList)
-  const chainObject: any = arrayToObject(chainList)
+  const gasListOBJ: any = arrayToObject(gasList)
 
   return (
     <Card size="lg" className="w-full max-w-[430px]">
@@ -100,7 +86,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Select
-                  value={chainObject[value]}
+                  value={{ id: network.chainId, name: network.name }}
                   onChange={(op) => {
                     onChange(op.id.toString())
                     console.log('chain', op.id)
@@ -108,23 +94,24 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                 >
                   <SelectButton className="flex items-center justify-between ">
                     <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                      {chainObject[value]?.icon ? <Avatar src={chainObject[value]?.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
-                      {chainObject[value]?.name}
+                      {/* {network?.icon ? <Avatar src={network?.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />} */}
+                      <div className="w-6 h-6 bg-black rounded-full" />
+                      {network.name}
                     </div>
                     <ChevronDownIcon className="pointer-events-none size-6 fill-white/60" aria-hidden="true" />
                   </SelectButton>
                   <SelectList>
-                    {chainList.map(({ icon, id, name }) => (
-                      <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
-                        {icon ? (
+                    {networks.map(({ chainId: id, name }) => (
+                      <SelectOption value={{ id, name }} key={id} className="flex items-center">
+                        {/* {icon ? (
                           <SelectIcon>
                             <Avatar className="flex-shrink-0" size="md" src={icon} alt="flag" />
                           </SelectIcon>
-                        ) : (
-                          <SelectIcon>
-                            <div className="w-6 h-6 bg-black rounded-full" />
-                          </SelectIcon>
-                        )}
+                        ) : ( */}
+                        <SelectIcon>
+                          <div className="w-6 h-6 bg-black rounded-full" />
+                        </SelectIcon>
+                        {/* )} */}
                         <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
                       </SelectOption>
                     ))}
@@ -185,7 +172,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Select
-                  value={coinObject[value]}
+                  value={gasListOBJ[value]}
                   onChange={(op) => {
                     console.log(op.id)
                     onChange(op.id.toString())
@@ -193,14 +180,14 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                 >
                   <SelectButton className="flex items-center justify-between">
                     <div className="flex items-center text-sm text-main font-medium gap-x-2 w-full">
-                      <span>{coinObject[value]?.name}</span>
+                      <span>{gasListOBJ[value]?.name}</span>
                       <div className="flex ml-auto gap-x-1">
                         <ChevronDownIcon className="pointer-events-none size-6 text-white" aria-hidden="true" />
                       </div>
                     </div>
                   </SelectButton>
                   <SelectList>
-                    {coinList.map(({ icon, id, name }) => (
+                    {gasList.map(({ icon, id, name }) => (
                       <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
                         <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
                         <div className="flex ml-auto gap-x-1">
