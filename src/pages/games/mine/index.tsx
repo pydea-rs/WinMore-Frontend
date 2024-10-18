@@ -11,7 +11,7 @@ import { ReactElement } from 'react'
 const Mine = () => {
   const { isAuthorized } = useAuth()
   const { isLoading } = useIsPlayingMineQuery({}, { skip: !isAuthorized })
-  const { isLoading: IsGamesListLoading } = useMineGamesListQuery({ status: 'ONGOING' }, { skip: !isAuthorized })
+  const { isLoading: IsGamesListLoading } = useMineGamesListQuery({}, { skip: !isAuthorized })
   return (
     <>
       {isLoading || IsGamesListLoading ? (
