@@ -16,6 +16,8 @@ export interface IMineGameDetail {
   status: IMineGameStatuses
   success: false
   updatedAt: string
+  time: number
+  multiplier: number
   userId: number
 }
 
@@ -51,10 +53,11 @@ export interface IBackoffMinePayload {
 // is playing
 
 export interface IIsPlayingMinePayload {}
+export type IIsPlayingMineResponse = IMineGameDetail | null
 
 // Mine Games List
 
 export type IGetMineGamesListResponse = IMineGameDetail[]
 export interface IGetMineGamesListPayload {
-  status: IMineGameStatuses
+  status?: IMineGameStatuses
 }

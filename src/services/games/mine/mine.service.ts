@@ -13,6 +13,7 @@ import {
   IGetMineRulesPayload,
   IGetMineRulesResponse,
   IIsPlayingMinePayload,
+  IIsPlayingMineResponse,
   IMineBlockPayload,
   IMineBlockResponse,
   IPlaceMineBetPayload,
@@ -92,16 +93,23 @@ export const MineService = createApi({
           sendAuthorization: true,
         }
       },
+    }),
+    isPlayingMine: builder.query<BaseResponse<IIsPlayingMineResponse>, IIsPlayingMinePayload>({
+      query(arg) {
+        const { games } = getApiRoute()
+        return {
+          method: 'GET',
+          url: games.mine.isPlaying.path,
+          sendAuthorization: true,
+        }
+      },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        if (!data.data.length) {
+        if (!data.data) {
           return
         }
-        const currentGame = data.data[0]
-        console.log(currentGame)
-
+        const currentGame = data.data
         const currentGameSelectedBlocks: IBlock[] = currentGame.golds.map((gold, rowIndex) => ({ index: gold, row: rowIndex + 1, status: 'GOLD' }))
-        console.log(currentGameSelectedBlocks)
         dispatch(
           updateMineConfig({
             activeRow: currentGame.currentRow + 1,
@@ -115,16 +123,6 @@ export const MineService = createApi({
           }),
         )
         dispatch(updateMinConfigMode(currentGame.mode))
-      },
-    }),
-    isPlayingMine: builder.query<BaseResponse<boolean>, IIsPlayingMinePayload>({
-      query(arg) {
-        const { games } = getApiRoute()
-        return {
-          method: 'GET',
-          url: games.mine.isPlaying.path,
-          sendAuthorization: true,
-        }
       },
     }),
   }),
