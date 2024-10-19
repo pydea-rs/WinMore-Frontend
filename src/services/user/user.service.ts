@@ -2,8 +2,16 @@
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { setUser } from '@/store/slices/auth/auth.slice'
+import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { IGetUserInfoPayload, IGetUserInfoResponse, IRegisterUserPayload, IRegisterUserResponse } from '@/types/auth/user.types'
+import {
+  IGetUserBalanceResponse,
+  IGetUserCurrentBalancePayload,
+  IGetUserInfoPayload,
+  IGetUserInfoResponse,
+  IRegisterUserPayload,
+  IRegisterUserResponse,
+} from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 
@@ -60,7 +68,23 @@ export const UserService = createApi({
         } catch (err) {}
       },
     }),
+    getUserCurrentBalance: builder.query<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'GET',
+          url: user.currentBalance.get(arg.token),
+          params: {
+            chain: arg.chain,
+          },
+        }
+      },
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        const { data } = await queryFulfilled
+        dispatch(updateCurrentTokenBalance(data.data))
+      },
+    }),
   }),
 })
 
-export const { useGetUserInfoQuery, useRegisterUserMutation } = UserService
+export const { useGetUserInfoQuery, useRegisterUserMutation, useGetUserCurrentBalanceQuery } = UserService

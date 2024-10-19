@@ -4,9 +4,8 @@ import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency
 import LogoutIcon from '@/components/icons/logout/logout'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
-import useGetWalletBalance from '@/hooks/useGetWalletBalance'
 import { usePermalink } from '@/hooks/usePermalink'
-import { useGetUserInfoQuery } from '@/services/user/user.service'
+import { useGetUserCurrentBalanceQuery, useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { IGetUserInfoResponse } from '@/types/auth/user.types'
@@ -25,14 +24,17 @@ import List from '../list/list'
 import ListItem from '../list/listItem/listItem'
 import ListLink from '../list/listLink/listLink'
 import ListText from '../list/listText/listText'
+import { Spinner } from '../spinner/spinner'
 
 const HeaderComponent = () => {
   const dispatch = useDispatch()
-  const { user: isAuthenticated } = useSelector((state) => state.auth)
-  const { token } = useSelector((state) => state.currency)
-
+  const { token, network, currentTokenBalance } = useSelector((state) => state.currency)
   const { internalLinks } = usePermalink()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
+  const { isLoading: IsLoadingCurrentBalance, isFetching: isFetchingCurrentBalance } = useGetUserCurrentBalanceQuery(
+    { chain: network.chainId, token: token.symbol },
+    { skip: !isAuthorized },
+  )
   const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const headerRoutes = [
@@ -170,7 +172,7 @@ const HeaderComponent = () => {
       </Dropdown>
     </Fragment>
   )
-  const balance = useGetWalletBalance()
+  // const balance = useGetWalletBalance()
 
   const renderActions = () => {
     return (
@@ -180,9 +182,7 @@ const HeaderComponent = () => {
             <Avatar size="md" src={token.icon} alt={token.name} />
             <div className="flex items-center gap-x-1 font-normal text-xs">
               <span className="text-main">Balance:</span>
-              <span className="text-white">
-                {balance.formattedValue.toFixed(6)} {balance.symbol}
-              </span>
+              {IsLoadingCurrentBalance || isFetchingCurrentBalance ? <Spinner size="sm" /> : <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>}
             </div>
             <ChevronDownIcon />
           </div>
@@ -214,7 +214,7 @@ const HeaderComponent = () => {
     <header className="mb-10">
       <Container kind="fluid">
         <div className="pt-8 flex items-center justify-between z-20">
-          {isAuthenticated && UserData ? (
+          {isAuthorized && UserData ? (
             <Fragment>
               {renderBrandLogo()}
               {renderActions()}
