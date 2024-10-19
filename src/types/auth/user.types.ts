@@ -26,3 +26,10 @@ export interface IRegisterUserPayload {
   email: string
 }
 export interface IRegisterUserResponse {}
+
+// Get User Current Balance
+export type IGetUserBalanceResponse = number
+export interface IGetUserCurrentBalancePayload {
+  token: string
+  chain: number
+}

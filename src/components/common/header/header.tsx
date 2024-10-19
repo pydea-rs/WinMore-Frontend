@@ -4,7 +4,6 @@ import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency
 import LogoutIcon from '@/components/icons/logout/logout'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
-import useGetWalletBalance from '@/hooks/useGetWalletBalance'
 import { usePermalink } from '@/hooks/usePermalink'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
@@ -170,7 +169,8 @@ const HeaderComponent = () => {
       </Dropdown>
     </Fragment>
   )
-  const balance = useGetWalletBalance()
+  // const balance = useGetWalletBalance()
+  const { currentTokenBalance } = useSelector((state) => state.currency)
 
   const renderActions = () => {
     return (
@@ -180,9 +180,7 @@ const HeaderComponent = () => {
             <Avatar size="md" src={token.icon} alt={token.name} />
             <div className="flex items-center gap-x-1 font-normal text-xs">
               <span className="text-main">Balance:</span>
-              <span className="text-white">
-                {balance.formattedValue.toFixed(6)} {balance.symbol}
-              </span>
+              <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>
             </div>
             <ChevronDownIcon />
           </div>

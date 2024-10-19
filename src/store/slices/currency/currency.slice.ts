@@ -9,6 +9,7 @@ const defaultToken: IToken = networks[0].tokens[0] //USDT
 const initialState: ICurrencyState = {
   network: defaultNetwork,
   token: defaultToken,
+  currentTokenBalance: 0,
 }
 
 export const currencySlice = createSlice({
@@ -21,9 +22,12 @@ export const currencySlice = createSlice({
     updateNetwork: (state: ICurrencyState, action: PayloadAction<Omit<ICurrencyState, 'token'>>) => {
       state.network = action.payload.network
     },
+    updateCurrentTokenBalance: (state: ICurrencyState, action: PayloadAction<number>) => {
+      state.currentTokenBalance = action.payload
+    },
   },
 })
 
-export const { updateToken, updateNetwork } = currencySlice.actions
+export const { updateToken, updateNetwork, updateCurrentTokenBalance } = currencySlice.actions
 
 export default currencySlice.reducer

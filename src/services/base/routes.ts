@@ -27,6 +27,12 @@ export const getApiRoute = () => {
           return `/${this.path}/${slug}`
         },
       },
+      currentBalance: {
+        path: 'user/balance',
+        get(slug: string) {
+          return `/${this.path}/${slug}`
+        },
+      },
     },
     games: {
       mine: {
