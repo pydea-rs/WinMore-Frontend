@@ -1,5 +1,6 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useBackoffMineMutation, useMineBlockMutation, useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useGetUserCurrentBalanceQuery } from '@/services/user/user.service'
 import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
@@ -8,6 +9,7 @@ import { useMemo, useState } from 'react'
 const useDreamMineGameBoardHelper = () => {
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
+  const { network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
@@ -15,17 +17,20 @@ const useDreamMineGameBoardHelper = () => {
   const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
   const { refetch: refetchList } = useMineGamesListQuery({}, { skip: !isAuthorized })
   const [backoffMine] = useBackoffMineMutation()
+  const { refetch: refetchBalance } = useGetUserCurrentBalanceQuery({ chain: network.chainId, token: token.symbol }, { skip: !isAuthorized })
 
   const winHandler = async () => {
     await backoffMine({ id: mineConfig.currentGameId as string })
       .unwrap()
       .then((res) => {
         refetchList()
+        refetchBalance()
       })
     dispatch(endMineGame({ isWin: true }))
   }
   const lostHandler = () => {
     dispatch(endMineGame({ isWin: false }))
+    refetchBalance()
   }
 
   const onCheckBlock = async (i: number, row: number) => {

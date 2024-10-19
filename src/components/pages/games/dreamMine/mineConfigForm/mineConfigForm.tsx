@@ -15,6 +15,7 @@ import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
+import { useGetUserCurrentBalanceQuery } from '@/services/user/user.service'
 import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IMineMode } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
@@ -26,10 +27,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { IGameForm } from './mineConfigForm.types'
 
 const MineConfigForm = () => {
+  const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
+  const { refetch: refetchBalance } = useGetUserCurrentBalanceQuery({ chain: network.chainId, token: token.symbol }, { skip: !isAuthorized })
 
   const modes: IMineMode[] = [
     {
@@ -73,7 +76,6 @@ const MineConfigForm = () => {
   })
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
-  const { network, token } = useSelector((state) => state.currency)
   const handleSubmit = async (values: IGameForm) => {
     if (!isAuthorized) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
@@ -82,6 +84,7 @@ const MineConfigForm = () => {
     const betAmount = mineConfig.betAmount.split(',').join('')
     try {
       await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
+      refetchBalance()
       onStart()
     } catch (error) {
       // toast.error(error.message)
@@ -105,6 +108,7 @@ const MineConfigForm = () => {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's require" },
+                validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>

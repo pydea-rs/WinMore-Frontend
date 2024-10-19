@@ -16,10 +16,10 @@ export const currencySlice = createSlice({
   name: 'currency',
   initialState,
   reducers: {
-    updateToken: (state: ICurrencyState, action: PayloadAction<Omit<ICurrencyState, 'network'>>) => {
+    updateToken: (state: ICurrencyState, action: PayloadAction<{ token: IToken }>) => {
       state.token = action.payload.token
     },
-    updateNetwork: (state: ICurrencyState, action: PayloadAction<Omit<ICurrencyState, 'token'>>) => {
+    updateNetwork: (state: ICurrencyState, action: PayloadAction<{ network: INetwork }>) => {
       state.network = action.payload.network
     },
     updateCurrentTokenBalance: (state: ICurrencyState, action: PayloadAction<number>) => {
