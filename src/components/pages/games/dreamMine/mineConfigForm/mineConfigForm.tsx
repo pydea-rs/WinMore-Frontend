@@ -89,11 +89,8 @@ const MineConfigForm = () => {
       onStart()
     } catch (error) {
       // toast.error(error.message)
-      // console.log(first)
     }
   }
-
-  console.log('first', mineConfig.isStarted)
 
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">

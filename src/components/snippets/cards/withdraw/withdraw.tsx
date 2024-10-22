@@ -89,7 +89,6 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                   value={{ id: network.chainId, name: network.name }}
                   onChange={(op) => {
                     onChange(op.id.toString())
-                    console.log('chain', op.id)
                   }}
                 >
                   <SelectButton className="flex items-center justify-between ">
@@ -174,7 +173,6 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                 <Select
                   value={gasListOBJ[value]}
                   onChange={(op) => {
-                    console.log(op.id)
                     onChange(op.id.toString())
                   }}
                 >

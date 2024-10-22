@@ -56,9 +56,10 @@ const useDreamMineGameBoardHelper = () => {
       .then((res) => {
         refetchList()
         refetchBalance()
+        dispatch(updateMineConfig({ currentGameStatus: 'WON' }))
         fireworks()
+        dispatch(endMineGame({ isWin: true }))
       })
-    dispatch(endMineGame({ isWin: true }))
   }
   const lostHandler = () => {
     dispatch(endMineGame({ isWin: false }))

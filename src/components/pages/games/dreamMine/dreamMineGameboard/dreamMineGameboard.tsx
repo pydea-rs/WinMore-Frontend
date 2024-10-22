@@ -73,7 +73,7 @@ export default function DreamMineGameBoard() {
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full relative overflow-hidden translucent shadow-xl p-4 rounded-lg">
             <div className="relative flex flex-col gap-y-4">
-              {mineConfig.isStarted ? (
+              {mineConfig.isStarted || (!mineConfig.isStarted && mineConfig.isGameOver) ? (
                 <div
                   className="absolute inset-0"
                   style={{
@@ -90,7 +90,7 @@ export default function DreamMineGameBoard() {
               ) : (
                 <></>
               )}
-              {mineConfig.isStarted && mineConfig.isGameOver ? (
+              {!mineConfig.isStarted && mineConfig.isGameOver ? (
                 <div className="absolute inset-1/2 z-10 w-fit h-fit -translate-x-[50%]">
                   <span className="block whitespace-nowrap text-red-700 font-bold text-2xl">Game Over</span>
                 </div>
@@ -99,7 +99,6 @@ export default function DreamMineGameBoard() {
               )}
 
               {rows.map((row) => {
-                console.log({ row: row, mineConfig: mineConfig.activeRow })
                 return (
                   <Fragment key={row}>
                     <div className="flex items-center gap-x-4 sm:gap-x-5">

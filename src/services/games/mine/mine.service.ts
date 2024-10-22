@@ -69,6 +69,7 @@ export const MineService = createApi({
         dispatch(
           updateMineConfig({
             stake: data.data.stake,
+            currentGameStatus: data.data.status,
           }),
         )
       },
