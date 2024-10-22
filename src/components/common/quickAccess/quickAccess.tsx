@@ -1,15 +1,20 @@
 import CasinoIcon from '@/components/icons/casino/casino'
 import ConstructionTool from '@/components/icons/constructionTool/constructionTool'
-import { ElementProps } from '@/types/elements.types'
+import { usePermalink } from '@/hooks/usePermalink'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button } from '../button/button'
 import Container from '../container/container'
+import { QuickAccessProps } from './quickAccess.type'
 
-const QuickAccess: React.FC<ElementProps> = (props) => {
+const QuickAccess: React.FC<QuickAccessProps> = (props) => {
   const { className } = props
   const [isScrolled, setIsScrolled] = useState(false)
+  const router = useRouter()
+  const { internalLinks } = usePermalink()
 
   const variants = {
     open: { top: '20px' },
@@ -37,29 +42,40 @@ const QuickAccess: React.FC<ElementProps> = (props) => {
     }
   }, [])
 
+  const checkGameName = (url: string, valueToMatch: string) => {
+    const urlToArr = url.split('/')
+    const gameName = urlToArr[urlToArr.length - 1]
+
+    return gameName === valueToMatch
+  }
+
   return (
-    <motion.aside
-      initial={{ top: '140px' }}
-      animate={isScrolled ? 'open' : 'closed'}
-      variants={variants}
-      className={classList}
-      transition={{
-        ease: 'easeInOut',
-        duration: 0.3,
-        delay: 0,
-      }}
-    >
-      <Container kind="fluid">
-        <div className="w-fit flex flex-col gap-4">
-          <Button kind="primary" variant="info" className="w-14 h-14 hover:bg-primary/90">
-            <CasinoIcon className="w-6 h-6" />
-          </Button>
-          <Button kind="primary" variant="info" className="w-14 h-14 hover:bg-primary/90">
-            <ConstructionTool className="w-6 h-6" />
-          </Button>
+    <Container kind="fluid">
+      <motion.aside
+        initial={{ top: '140px' }}
+        animate={isScrolled ? 'open' : 'closed'}
+        variants={variants}
+        className={classList}
+        transition={{
+          ease: 'easeInOut',
+          duration: 0.3,
+          delay: 0,
+        }}
+      >
+        <div className="w-fit flex flex-col gap-4 ">
+          <Link href={internalLinks.game.get('mine')}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'mine') ? '!bg-gradient-gray' : ''}`}>
+              <CasinoIcon className="w-6 h-6" />
+            </Button>
+          </Link>
+          <Link href={internalLinks.game.get('plinko')}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'plinko') ? '!bg-gradient-gray' : ''}`}>
+              <ConstructionTool className="w-6 h-6" />
+            </Button>
+          </Link>
         </div>
-      </Container>
-    </motion.aside>
+      </motion.aside>
+    </Container>
   )
 }
 

@@ -1,5 +1,5 @@
 .quick-access {
-  @apply hidden fixed left-2 top-[114px] w-full;
+  @apply hidden fixed top-[115px] z-[200];
 }
 @media screen and (min-width: 1300px) {
   .quick-access {

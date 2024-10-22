@@ -69,22 +69,22 @@ const HeaderComponent = () => {
     {
       id: '1',
       title: 'Profile',
-      link: '/',
+      link: internalLinks.user.get(),
     },
     {
       id: '2',
       title: 'Wallet',
-      link: '/',
+      link: internalLinks.userWallet.get(),
     },
     {
       id: '3',
       title: 'Messages',
-      link: '/',
+      link: internalLinks.userMessages.get(),
     },
   ]
 
   const renderBrandLogo = () => (
-    <Link href={'/'}>
+    <Link href={internalLinks.home.get()}>
       <Image src={'/assets/images/logo.svg'} alt="logo" width={140} height={50} className="w-36 lg:w-44" />
     </Link>
   )
@@ -111,7 +111,7 @@ const HeaderComponent = () => {
 
   const renderConnectWalletButton = () => (
     <Button
-      className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm"
+      className="px-2 py-4 md:px-2.5 md:py-5 !text-xs md:text-sm min-w-[165px]"
       kind="pattern"
       pilled
       bordered
@@ -128,13 +128,13 @@ const HeaderComponent = () => {
     <Fragment>
       <Dropdown>
         <DropdownMenuButton as="div">
-          <Button kind="pattern" bordered pilled className="py-5 px-5 !text-xs md:text-sm">
+          <Button kind="pattern" bordered pilled className="py-5 px-5 !text-xs md:text-sm min-w-[165px]">
             <div className="flex items-center gap-x-2">
               <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
             </div>
           </Button>
         </DropdownMenuButton>
-        <DropdownList className="relative flex flex-col w-[310px] p-6 gap-y-2.5 z-50 mt-2">
+        <DropdownList className="relative flex flex-col w-[310px] p-6 gap-y-2.5 z-[10000] mt-2">
           {/* Background Layer */}
           <div
             className="absolute top-0 left-0 w-full h-full z-10 bg-cover bg-repeat opacity-20 pointer-events-none"
@@ -142,9 +142,9 @@ const HeaderComponent = () => {
           />
           <div className="flex gap-x-2 ">
             <Avatar src={user.profile.avatar || '/assets/images/profile/user-1.jpg'} size="xl" alt={user.name || ''} />
-            <div className="pt-1">
-              <span className="block text-[22px] font-bold">{user.name}</span>
-              <span className="block text-sm font-normal">{user.email}</span>
+            <div className="flex flex-col pt-1 gap-y-1">
+              <span className="text-[22px] font-bold">{user.name}</span>
+              <span className="text-sm font-normal">{user.email}</span>
             </div>
           </div>
           {/* User's points */}
@@ -177,7 +177,7 @@ const HeaderComponent = () => {
   const renderActions = () => {
     return (
       <div className="hidden md:flex gap-x-4 ">
-        <Button kind="pattern" className="px-2.5" bordered pilled onClick={handleOpenSelectCoinModal}>
+        <Button kind="pattern" className="px-2.5 !min-w-[165px]" bordered pilled onClick={handleOpenSelectCoinModal}>
           <div className="flex justify-between items-center gap-x-2">
             <Avatar size="md" src={token.icon} alt={token.name} />
             <div className="flex items-center gap-x-1 font-normal text-xs">
@@ -211,8 +211,32 @@ const HeaderComponent = () => {
   const handleOpenPointsModal = () => {}
 
   return (
-    <header className="mb-10">
-      <Container kind="fluid">
+    <header className="mb-10 relative z-[10000000000000]">
+      <Container kind="fluid" className="relative">
+        <Image
+          src={'/assets/images/header-rectangle.svg'}
+          alt="header rectangle"
+          width={180}
+          height={100}
+          style={{
+            position: 'absolute',
+            top: '0',
+            zIndex: 2,
+          }}
+          className="pointer-events-none"
+        />
+        <Image
+          src={'/assets/images/header-rectangle.svg'}
+          alt="header rectangle"
+          width={180}
+          height={100}
+          style={{
+            position: 'absolute',
+            top: '0',
+            zIndex: 2,
+          }}
+          className="pointer-events-none"
+        />
         <div className="pt-8 flex items-center justify-between z-20">
           {isAuthorized && UserData ? (
             <Fragment>

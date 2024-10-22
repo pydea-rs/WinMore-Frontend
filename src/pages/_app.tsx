@@ -1,4 +1,5 @@
 import MainLayout from '@/components/layouts/main.layout'
+import SettingsLayout from '@/components/layouts/settings.layout'
 import AuthProvider from '@/providers/auth.provider'
 import ChainProvider from '@/providers/chain.provider'
 import Modals from '@/providers/modals.provider'
@@ -6,12 +7,12 @@ import { Web3Provider } from '@/providers/wagmi.provider'
 import { persistor, store } from '@/store/store'
 import '@/styles/globals.css'
 import { AppPropsWithLayout } from '@/types/global.types'
+import { PagesProgressBar as ProgressBar } from 'next-nprogress-bar'
 
 import { DM_Sans } from 'next/font/google'
 import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
-import { Slide, ToastContainer } from 'react-toastify'
 import { PersistGate } from 'redux-persist/integration/react'
 
 export const Fractul = LocalFont({
@@ -67,6 +68,7 @@ export const DMSans = DM_Sans({
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const defaultLayout = (page: ReactElement): ReactNode => <MainLayout>{page}</MainLayout>
   const getLayout = Component.layout ?? defaultLayout
+
   return (
     <div className={`${Fractul.className} ${DMSans.variable}`}>
       <Provider store={store}>
@@ -74,15 +76,16 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           <Web3Provider>
             <ChainProvider>
               <AuthProvider>
-                {getLayout(<Component {...pageProps} />)}
+                <SettingsLayout>{getLayout(<Component {...pageProps} />)}</SettingsLayout>
                 <Modals />
               </AuthProvider>
             </ChainProvider>
           </Web3Provider>
         </PersistGate>
       </Provider>
+      <ProgressBar height="4px" color="#ff0000" options={{ showSpinner: false }} shallowRouting />
 
-      <ToastContainer
+      {/* <ToastContainer
         position="top-right"
         className="!z-[10000] !font-fractul"
         autoClose={5000}
@@ -96,7 +99,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         pauseOnHover
         theme="dark"
         transition={Slide}
-      />
+      /> */}
     </div>
   )
 }

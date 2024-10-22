@@ -11,6 +11,7 @@ import { Radio } from '@/components/common/form/radio/radio'
 import { RadioGroup } from '@/components/common/form/radioGroup/radioGroup'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Spinner } from '@/components/common/spinner/spinner'
+import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
@@ -92,23 +93,28 @@ const MineConfigForm = () => {
     }
   }
 
+  console.log('first', mineConfig.isStarted)
+
   return (
-    <Card>
+    <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
         <CardTitle>MANUAL</CardTitle>
       </CardHeader>
       <CardBody>
         <form onSubmit={gameFormHandleSubmit(handleSubmit)} className="flex flex-col gap-y-2">
           <FormGroup>
-            <Label htmlFor="id-233">
-              <span>Bet Amount </span>
+            <Label htmlFor="id-233" className="flex items-center justify-between">
+              <span>Bet Amount</span>
+              <span className="text-main">
+                Available: <span className="text-white">0.00</span>
+              </span>
             </Label>
             <Controller
               name="betAmount"
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's require" },
-                validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
+                validate: (value) => 1 || parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>
@@ -206,8 +212,20 @@ const MineConfigForm = () => {
             </RadioGroup>
           </FormGroup>
 
-          <Button kind="primary" type="submit" disabled={(mineConfig.isStarted && !mineConfig.isGameOver && !isLoading) || !isAuthorized}>
-            {isLoading ? <Spinner /> : 'Start'}
+          <Button
+            kind="primary"
+            type="submit"
+            className="rounded-xl md:rounded-2xl"
+            size="lg"
+            disabled={(mineConfig.isStarted && !mineConfig.isGameOver && !isLoading) || !isAuthorized}
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <div className="flex items-center gap-x-2">
+                <CasinoSquareIcon className="w-6" /> <span> Place BET</span>
+              </div>
+            )}
           </Button>
         </form>
       </CardBody>
