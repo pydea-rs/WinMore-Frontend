@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button } from '../button/button'
 import Container from '../container/container'
-import { QuickAccessProps } from './quickAccess.type'
+import { QuickAccessProps } from './quickAccess.types'
 
 const QuickAccess: React.FC<QuickAccessProps> = (props) => {
   const { className } = props
