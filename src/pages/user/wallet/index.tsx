@@ -79,7 +79,7 @@ const Wallet = () => {
   return (
     <Fragment>
       <Head>
-        <title>Winmore | Home</title>
+        <title>Winmore | Wallet</title>
       </Head>
       <div className="flex flex-col flex-grow">
         <section>
@@ -94,7 +94,7 @@ const Wallet = () => {
                 <TabContent>
                   <Card>
                     {/* bg-opacity-60 sm:filter-backdrop */}
-                    <CardBody className="rounded-tr-none">
+                    <CardBody className="rounded-tl-none lg:rounded-tr-none">
                       <FormGroup className="md:w-48">
                         <Label>Select coin</Label>
                         <Select value={selected} onChange={setSelected}>

@@ -22,7 +22,7 @@ const initialState: StateType = {
     isStarted: false,
     isGameOver: false,
     currentGameId: null,
-    currentGameStatus: null,
+    currentGameStatus: 'NOT_STARTED',
     stake: null,
   },
 }
@@ -70,13 +70,16 @@ export const mineSlice = createSlice({
       state.mineConfig.isGameOver = false // Reset game over state when starting a new game
       state.mineConfig.selectedBlocks = initialState.mineConfig.selectedBlocks
       state.mineConfig.activeRow = 1
+      state.mineConfig.currentGameStatus = 'ONGOING'
     },
     endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean }>) => {
       if (action.payload.isWin) {
         // state.mineConfig.isGameOver = true // Reset game over state when starting a new game
-        state.mineConfig = initialState.mineConfig
+        // state.mineConfig = initialState.mineConfig
+        state.mineConfig.currentGameStatus = 'WON'
       } else {
         state.mineConfig.isGameOver = true // Reset game over state when starting a new game
+        state.mineConfig.currentGameStatus = 'LOST' // Reset game over state when starting a new game
       }
       // state.mineConfig.isStarted = false
 

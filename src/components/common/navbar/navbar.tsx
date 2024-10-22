@@ -1,3 +1,4 @@
+import { usePermalink } from '@/hooks/usePermalink'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
 import { useDispatch } from '@/store/store'
@@ -5,6 +6,7 @@ import { BaseProps } from '@/types/global.types'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Avatar } from '../avatar/avatar'
 import { Button } from '../button/button'
 import Menu from './menu/menu'
@@ -16,6 +18,7 @@ import { INavbar } from './navbar.type'
 const Navbar: BaseProps<INavbar> = (props) => {
   const { isOpen } = props
   const dispatch = useDispatch()
+  const { internalLinks } = usePermalink()
 
   const variants = {
     open: { opacity: 1, x: 0 },
@@ -38,7 +41,7 @@ const Navbar: BaseProps<INavbar> = (props) => {
       variants={variants}
       animate={isOpen ? 'open' : 'closed'}
       transition={{ type: 'tween', stiffness: 100 }}
-      className=" fixed top-0 left-0 z-30 w-full h-full"
+      className=" fixed top-0 left-0 z-[2000] w-full h-full"
     >
       <div
         className="relative bg-[#101820] py-6 px-4 w-full bg-top bg-no-repeat h-[100vh] overflow-y-auto !pb-28"
@@ -90,17 +93,21 @@ const Navbar: BaseProps<INavbar> = (props) => {
               </MenuItem>
 
               <MenuItem>
-                <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
-                  Wallet
-                  <ChevronRightIcon className="flex-shrink-0 w-4" />
-                </Button>
+                <Link href={internalLinks.userWallet.get()}>
+                  <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
+                    Wallet
+                    <ChevronRightIcon className="flex-shrink-0 w-4" />
+                  </Button>
+                </Link>
               </MenuItem>
 
               <MenuItem>
-                <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
-                  Message
-                  <ChevronRightIcon className="flex-shrink-0 w-4" />
-                </Button>
+                <Link href={internalLinks.userMessages.get()}>
+                  <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
+                    Message
+                    <ChevronRightIcon className="flex-shrink-0 w-4" />
+                  </Button>
+                </Link>
               </MenuItem>
             </MenuList>
           </Menu>

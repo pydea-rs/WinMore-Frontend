@@ -25,41 +25,41 @@ const TopGames: React.FC<ElementProps> = (props) => {
             <span className="font-bold text-lg">Top Games</span>
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-4 lg:gap-8">
-          <div className="col-span-12 md:col-span-6">
-            <div className="relative">
-              <div className="relative flex flex-col justify-center items-center rounded-3xl bg-gradient-navy aspect-[358/144] overflow-hidden">
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-12 lg:col-span-4">
+            <div className="relative max-w-96 mx-auto">
+              <div className="relative flex flex-col justify-center items-center rounded-3xl bg-gradient-navy aspect-[358/144] overflow-hidden ">
                 <Image
                   alt="shape"
                   src="/assets/images/polygon-1.svg"
-                  width={208}
-                  height={208}
+                  width={108}
+                  height={108}
                   className="w-32 h-32 sm:w-52 sm:h-52 pointer-events-none absolute -top-12 left-0 z-20"
                 />
-                <h2 className="text-relative-xl lg:text-relative-2xl 2xl:text-[68px] font-bold lg:leading-[82px] ">Plinko</h2>
-                <Button kind="primary" variant="light" className="text-xs md:text-sm flex items-center gap-[10px] px-4" pilled>
+                <h2 className="text-4xl font-bold mb-2">Plinko</h2>
+                <Button kind="primary" variant="light" className="text-xs md:text-sm flex items-center gap-[8px] px-4" pilled>
                   Play Plinko
                   <ArrowRightIcon className="w-6 h-6" />
                 </Button>
                 <Image
                   alt="shape"
                   src="/assets/images/polygon.svg"
-                  width={208}
-                  height={208}
+                  width={108}
+                  height={108}
                   className="w-32 h-32 sm:w-52 sm:h-52 pointer-events-none absolute -bottom-12 -right-2 z-20"
                 />
               </div>
               <Image
                 alt="shape"
                 src="/assets/images/gem-navy.svg"
-                width={120}
-                height={110}
-                className="w-[70px] md:w-[120px] md:h-[110px] block absolute right-0 -top-14 md:right-[unset] md:top-[unset] md:-bottom-10 md:-left-[50px] pointer-events-none z-20"
+                width={100}
+                height={90}
+                className="w-[100px] block absolute -right-5 -top-12 md:right-[unset] md:top-[unset] md:-bottom-5 md:left-[-40px] pointer-events-none z-20"
               />
             </div>
           </div>
-          <div className="col-span-12 md:col-span-6">
-            <div className="relative">
+          <div className="col-span-12 lg:col-span-4">
+            <div className="relative max-w-96 mx-auto">
               <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl bg-gradient-hot-pink aspect-[358/144]">
                 <Image
                   alt="shape"
@@ -68,7 +68,7 @@ const TopGames: React.FC<ElementProps> = (props) => {
                   height={114}
                   className="w-20 h-20 sm:w-[114px] sm:h-[114px] pointer-events-none absolute -top-0 -right-0 z-20"
                 />
-                <h2 className="text-relative-xl lg:text-relative-2xl 2xl:text-[68px] font-bold lg:leading-[82px]">DREAM MINE</h2>
+                <h2 className="text-4xl font-bold mb-2">DREAM MINE</h2>
                 <Button
                   onClick={() => router.push(internalLinks.game.get('mine'))}
                   kind="primary"
@@ -87,25 +87,16 @@ const TopGames: React.FC<ElementProps> = (props) => {
                   className="w-20 h-20 sm:w-[120px] sm:h-[120px] pointer-events-none absolute -bottom-5 left-0 z-20"
                 />
               </div>
-              <Image alt="shape" src="/assets/images/gem-hot-pink.svg" width={120} height={100} className="hidden md:block absolute -top-14 -right-14 z-20 pointer-events-none" />
+              <Image alt="shape" src="/assets/images/gem-hot-pink.svg" width={95} height={95} className="hidden md:block absolute -top-14 -right-12 z-20 pointer-events-none" />
             </div>
           </div>
-          <div className="col-span-12 md:col-span-6">
-            <div className="relative overflow-hidden">
+          <div className="col-span-12 lg:col-span-4">
+            <div className="relative overflow-hidden max-w-96 mx-auto">
               <Image alt="shape" src="/assets/images/gem-blue-1.svg" width={86} height={86} className="hidden- sm:block- pointer-events-none absolute top-4 right-4 -z-20" />
               <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl aspect-[358/144] bg-gradient-dark-purple filter-backdrop">
-                <h2 className="text-relative-xl lg:text-relative-2xl 2xl:text-[68px] font-bold lg:leading-[82px]">Coming Soon</h2>
+                <h2 className="text-4xl font-bold mb-2">Coming Soon</h2>
               </div>
               <Image alt="shape" src="/assets/images/gem-blue-1.svg" width={86} height={86} className="hidden- sm:block- pointer-events-none absolute bottom-0 left-0 -z-20" />
-            </div>
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <div className="relative overflow-hidden">
-              <Image alt="shape" src="/assets/images/gem-gold-2.svg" width={80} height={80} className="hidden- sm:block- pointer-events-none absolute top-2 right-2 -z-20" />
-              <div className="relative flex flex-col justify-center items-center overflow-hidden rounded-3xl aspect-[358/144] bg-gradient-dark-purple filter-backdrop">
-                <h2 className="text-relative-xl lg:text-relative-2xl 2xl:text-[68px] font-bold lg:leading-[82px]">Coming Soon</h2>
-              </div>
-              <Image alt="shape" src="/assets/images/gem-gold-1.svg" width={80} height={80} className="hidden- sm:block- pointer-events-none absolute bottom-2 left-2 -z-20" />
             </div>
           </div>
         </div>

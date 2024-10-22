@@ -41,7 +41,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
         </div>
 
         <Tab className="mb-8">
-          <TabHeader>
+          <TabHeader className="ml-0 mr-auto">
             <TabItem>All BETS</TabItem>
             <TabItem>HIGH ROLLERS</TabItem>
             <TabItem>LUCKY BETS</TabItem>
@@ -51,7 +51,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
           <TabBody>
             <TabContent>
               <Card>
-                <CardBody className="bg-opacity-60 sm:filter-backdrop rounded-tr-none">
+                <CardBody className="bg-opacity-60 sm:filter-backdrop rounded-tl-none lg:rounded-tr-none">
                   <TableWrapper>
                     <Table className="text-white w-full ">
                       <TableHeader>

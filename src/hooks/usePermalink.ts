@@ -14,7 +14,7 @@ export const usePermalink = () => {
     },
     game: {
       slug: 'games',
-      get: function (slug: string) {
+      get: function (slug: 'mine' | 'plinko') {
         return `/${this.slug}/${slug}`
       },
     },
@@ -56,6 +56,12 @@ export const usePermalink = () => {
     },
     userWallet: {
       slug: 'user/wallet',
+      get: function () {
+        return `/${this.slug}`
+      },
+    },
+    userMessages: {
+      slug: 'user/messages',
       get: function () {
         return `/${this.slug}`
       },

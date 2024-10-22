@@ -53,6 +53,7 @@ const config: Config = {
         'gradient-navy': 'linear-gradient(90deg, rgba(45, 48, 93, 1),rgba(94, 101, 195, 1))',
         'gradient-hot-pink': 'linear-gradient(90deg, rgba(199, 56, 184, 1),rgba(97, 27, 90, 1))',
         'gradient-dark-purple': 'linear-gradient(0deg, rgba(45, 48, 93, 0.42), rgba(45, 48, 93, 0.42)),linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))',
+        'gradient-gray': 'linear-gradient(135deg, #182128 0%, #354959 100%)',
       },
       animation: {
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',

@@ -146,3 +146,80 @@ body {
 .Toastify__toast--error {
   @apply toastify_custom bg-danger/35 border-danger text-danger fill-danger;
 }
+
+#nprogress {
+  position: absolute;
+  top: 0;
+  z-index: 200000000000;
+}
+
+#nprogress .spinner,
+#nprogress .bar {
+  z-index: 200000000000;
+}
+
+#nprogress .bar {
+  background: #1db954 !important;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #1db954,
+    0 0 5px #1db954 !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #1db954 !important;
+  border-left-color: #1db954 !important;
+}
+.block-stone {
+  @apply w-[45px] h-[50px];
+}
+
+@media (min-width: 400px) {
+  .block-stone {
+    @apply w-[55px] h-[60px];
+  }
+}
+
+.vacuum-animate-2 {
+  animation: vacuum 15s linear infinite;
+}
+
+@keyframes vacuum-2 {
+  0%,
+  100% {
+    transform: translate(0.9375em, -0.9375em);
+  }
+  50% {
+    transform: translate(0.9375em, 0.9375em);
+  }
+}
+.vacuum-animate-3 {
+  animation: vacuum 15s linear infinite;
+}
+
+@keyframes vacuum-3 {
+  0%,
+  100% {
+    transform: translate(0.9375em, -1.9375em);
+  }
+  50% {
+    transform: translate(0.9375em, 1.9375em);
+  }
+}
+
+.vacuum-animate {
+  animation: vacuum 15s ease-in infinite;
+}
+
+@keyframes vacuum {
+  0%,
+  100% {
+    transform: translate(0.9375em, -1.2375em);
+  }
+  50% {
+    transform: translate(0.9375em, 1.2375em);
+  }
+}

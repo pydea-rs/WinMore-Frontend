@@ -7,7 +7,7 @@
 }
 
 .form-radio-label {
-  @apply block py-[18px] px-6 text-center text-main font-medium text-sm rounded-2xl border border-transparent bg-dark cursor-pointer;
+  @apply block text-xs py-[14px] px-4 sm:py-[18px] sm:px-6 text-center text-main font-medium sm:text-sm rounded-2xl border border-transparent bg-dark cursor-pointer;
 }
 
 .form-radio.form-radio-sm ~ .form-radio-label {

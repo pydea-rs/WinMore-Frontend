@@ -1,19 +1,24 @@
 import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
+import { useMediaQueries } from '@react-hook/media-query'
 import classNames from 'classnames'
 import Image from 'next/image'
 import Footer from '../common/footer/footer'
 import FooterMenu from '../common/footer/footer-menu/footer-menu'
 import Header from '../common/header/header'
+import HeaderSimple from '../common/header/header-simple/header-simple'
 import MenuSticky from '../common/menuSticky/menuSticky'
 import Navbar from '../common/navbar/navbar'
 import QuickAccess from '../common/quickAccess/quickAccess'
 
-const MainLayout: BaseProps = (props) => {
+const GameLayout: BaseProps = (props) => {
   const { children } = props
+  const { navbar } = useSelector((state) => state.navbar)
   const { quickAccess } = useSelector((state) => state.quickAccess)
 
-  const { navbar } = useSelector((state) => state.navbar)
+  const { matches } = useMediaQueries({
+    width: '(min-width: 920px)',
+  })
 
   const isScrollDisabled = [navbar.open].every(Boolean)
 
@@ -34,13 +39,13 @@ const MainLayout: BaseProps = (props) => {
         className="pointer-events-none"
       />
 
-      <Header />
+      {matches.width ? <Header /> : <HeaderSimple />}
 
       <Navbar isOpen={navbar.open} />
 
       {quickAccess && <QuickAccess />}
 
-      <main className="flex flex-col flex-grow">{children}</main>
+      <main className="relative flex flex-col flex-grow overflow-x-hidden z-10">{children}</main>
 
       <Footer className="relative z-20 flex-grow-0 hidden md:block">
         <FooterMenu className="relative" />
@@ -51,4 +56,4 @@ const MainLayout: BaseProps = (props) => {
   )
 }
 
-export default MainLayout
+export default GameLayout
