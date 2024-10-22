@@ -12,9 +12,7 @@ const SettingsLayout: BaseProps = (props) => {
   const dispatch = useDispatch()
 
   const handleCloseNavbar = () => {
-    console.log('before ', navbar.open)
     if (navbar.open) {
-      console.log('handleCloseNavbar')
       dispatch(closeNavbar())
     }
   }

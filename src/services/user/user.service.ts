@@ -79,8 +79,10 @@ export const UserService = createApi({
           },
         }
       },
+
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        const { data } = await queryFulfilled
+        const { data, meta } = await queryFulfilled
+
         dispatch(updateCurrentTokenBalance(data.data))
       },
     }),

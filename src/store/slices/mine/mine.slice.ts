@@ -76,10 +76,13 @@ export const mineSlice = createSlice({
       if (action.payload.isWin) {
         // state.mineConfig.isGameOver = true // Reset game over state when starting a new game
         // state.mineConfig = initialState.mineConfig
-        state.mineConfig.currentGameStatus = 'WON'
+        state.mineConfig.isStarted = false
+        // state.mineConfig.currentGameStatus = 'WON'
       } else {
         state.mineConfig.isGameOver = true // Reset game over state when starting a new game
-        state.mineConfig.currentGameStatus = 'LOST' // Reset game over state when starting a new game
+        state.mineConfig.isStarted = false
+
+        // state.mineConfig.currentGameStatus = 'LOST' // Reset game over state when starting a new game
       }
       // state.mineConfig.isStarted = false
 
