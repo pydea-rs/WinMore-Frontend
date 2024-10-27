@@ -130,7 +130,7 @@ const HeaderComponent = () => {
         <DropdownMenuButton as="div">
           <Button kind="pattern" bordered pilled className="py-5 px-5 !text-xs md:text-sm min-w-[165px]">
             <div className="flex items-center gap-x-2">
-              <SingleUserIcon className="flex-shrink-0" /> {user.name} <ChevronDownIcon />
+              <SingleUserIcon className="flex-shrink-0" /> {user.name || 'Guest'} <ChevronDownIcon />
             </div>
           </Button>
         </DropdownMenuButton>
@@ -143,7 +143,7 @@ const HeaderComponent = () => {
           <div className="flex gap-x-2 ">
             <Avatar src={user.profile.avatar || '/assets/images/profile/user-1.jpg'} size="xl" alt={user.name || ''} />
             <div className="flex flex-col pt-1 gap-y-1">
-              <span className="text-[22px] font-bold">{user.name}</span>
+              <span className="text-[22px] font-bold">{user.name || 'Guest'} </span>
               <span className="text-sm font-normal">{user.email}</span>
             </div>
           </div>

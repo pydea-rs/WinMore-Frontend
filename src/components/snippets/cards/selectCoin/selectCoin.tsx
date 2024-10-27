@@ -31,6 +31,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
   const handleChangeToken = (token: IToken) => {
+    console.log(token)
     dispatch(updateToken({ token }))
   }
 
@@ -82,16 +83,9 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
           <Label>Select coin</Label>
           <RadioCardGroup>
             {network.tokens.map((currency) => {
-              const { name, icon, contractAddress, symbol } = currency
+              const { name, icon, contractAddress, symbol, id } = currency
               return (
-                <RadioCard
-                  id={symbol}
-                  name="tokens"
-                  value={contractAddress}
-                  key={contractAddress}
-                  checked={contractAddress === token.contractAddress}
-                  onChange={(e) => handleChangeToken(currency)}
-                >
+                <RadioCard id={symbol} name="tokens" value={id.toString()} key={id} checked={id === token.id} onChange={(e) => handleChangeToken(currency)}>
                   <div className="flex items-center">
                     <div className="flex items-center">
                       <Avatar size="md" src={icon} alt={name} />
