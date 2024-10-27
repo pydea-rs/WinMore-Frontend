@@ -9,7 +9,13 @@ const ChainProvider: BaseProps = ({ children }) => {
   const { network, token } = useSelector((state) => state.currency)
   const { chains, switchChain } = useSwitchChain()
   const { isAuthorized } = useAuth()
-  const { refetch, data } = useGetUserCurrentBalanceQuery({ chain: network.chainId, token: token.symbol }, { skip: !isAuthorized })
+  const { refetch, data } = useGetUserCurrentBalanceQuery(
+    { chain: network.chainId, token: token.symbol },
+    {
+      skip: !isAuthorized,
+      pollingInterval: 30000, // 10 seconds
+    },
+  )
   useEffect(() => {
     if (network.chainId && network.chainId !== chains[0].id) {
       switchChain({ chainId: network.chainId })

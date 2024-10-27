@@ -23,7 +23,7 @@ const nextConfig = {
   },
   env: {
     BASE_URL: process.env.BASE_URL,
-    PROJECT_ID: process.env.PROJECT_ID,
+    MAIN_PUBLIC_KEY: process.env.MAIN_PUBLIC_KEY,
   },
 }
 

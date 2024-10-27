@@ -24,7 +24,6 @@ import List from '../list/list'
 import ListItem from '../list/listItem/listItem'
 import ListLink from '../list/listLink/listLink'
 import ListText from '../list/listText/listText'
-import { Spinner } from '../spinner/spinner'
 
 const HeaderComponent = () => {
   const dispatch = useDispatch()
@@ -187,7 +186,7 @@ const HeaderComponent = () => {
               </div>
               <div>
                 <span className="text-main">Balance:</span>
-                {IsLoadingCurrentBalance || isFetchingCurrentBalance ? <Spinner size="sm" /> : <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>}
+                <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>
               </div>
             </div>
             <ChevronDownIcon />

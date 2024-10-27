@@ -79,7 +79,6 @@ export const UserService = createApi({
           },
         }
       },
-
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         const { data, meta } = await queryFulfilled
 

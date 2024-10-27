@@ -21,7 +21,7 @@ import useGetWalletBalance from '@/hooks/useGetWalletBalance'
 import useSendWalletTransaction from '@/hooks/useSendTransaction'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { INetwork, IToken, TType } from '@/types/global.types'
+import { IAddress, INetwork, IToken, TType } from '@/types/global.types'
 import { Controller, useForm } from 'react-hook-form'
 import { useAccount } from 'wagmi'
 import { DepositCardProps, DepositForm } from './deposit.types'
@@ -41,7 +41,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
   const dispatch = useDispatch()
   const balance = useGetWalletBalance()
   const { sendTransaction } = useSendWalletTransaction()
-
+  const MAIN_PUBLIC_KEY = process.env.MAIN_PUBLIC_KEY as IAddress
   const handleChangeChain = (value: TType) => {
     const selectedNetwork = networks.find((net) => net.chainId === value.id) as INetwork
     dispatch(updateNetwork({ network: selectedNetwork }))
@@ -54,7 +54,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
   }
 
   const handleSubmit = (values: DepositForm) => {
-    sendTransaction({ amount: values.amount, decimals: balance.decimals, to: address })
+    sendTransaction({ amount: values.amount.replace(',', ''), decimals: balance.decimals, to: MAIN_PUBLIC_KEY })
   }
   return (
     <Card size="lg" className="w-full max-w-[430px]">
@@ -177,7 +177,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             <Label className="flex items-center justify-between">
               Enter Deposit Amount
               <span className="text-main">
-                Available: <span className="text-white">{balance.formattedValue.toString().slice(0, 6)}</span>
+                Available: <span className="text-white">{balance.formattedValue.toString().slice(0, 6)}</span>{' '}
               </span>
             </Label>
             <Controller

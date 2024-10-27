@@ -13,6 +13,7 @@ import { DM_Sans } from 'next/font/google'
 import LocalFont from 'next/font/local'
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
+import { Slide, ToastContainer } from 'react-toastify'
 import { PersistGate } from 'redux-persist/integration/react'
 
 export const Fractul = LocalFont({
@@ -85,21 +86,20 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Provider>
       <ProgressBar height="4px" color="#ff0000" options={{ showSpinner: false }} shallowRouting />
 
-      {/* <ToastContainer
+      <ToastContainer
         position="top-right"
-        className="!z-[10000] !font-fractul"
+        className="!z-[999999999999999999] !font-fractul"
         autoClose={5000}
         closeButton={false}
         hideProgressBar={true}
         newestOnTop={false}
-        closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        draggable
+        // draggable
         pauseOnHover
         theme="dark"
         transition={Slide}
-      /> */}
+      />
     </div>
   )
 }
