@@ -180,9 +180,15 @@ const HeaderComponent = () => {
         <Button kind="pattern" className="px-2.5 !min-w-[165px]" bordered pilled onClick={handleOpenSelectCoinModal}>
           <div className="flex justify-between items-center gap-x-2">
             <Avatar size="md" src={token.icon} alt={token.name} />
-            <div className="flex items-center gap-x-1 font-normal text-xs">
-              <span className="text-main">Balance:</span>
-              {IsLoadingCurrentBalance || isFetchingCurrentBalance ? <Spinner size="sm" /> : <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>}
+            <div className="flex items-center gap-x-2.5 font-normal text-xs">
+              <div>
+                <span className="text-main">Network:</span>
+                <span className="text-white">{network.name}</span>
+              </div>
+              <div>
+                <span className="text-main">Balance:</span>
+                {IsLoadingCurrentBalance || isFetchingCurrentBalance ? <Spinner size="sm" /> : <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>}
+              </div>
             </div>
             <ChevronDownIcon />
           </div>
