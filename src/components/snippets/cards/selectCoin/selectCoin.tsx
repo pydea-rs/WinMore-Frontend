@@ -82,7 +82,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
           <Label>Select Coin</Label>
           <RadioCardGroup>
             {currentChainTokenList.map((currency) => {
-              const { name, icon, contractAddress, symbol, id } = currency
+              const { name, icon, symbol, id, balance } = currency
               return (
                 <RadioCard id={symbol} name="tokens" value={id.toString()} key={id} checked={id === token.id} onChange={(e) => handleChangeToken(currency)}>
                   <div className="flex items-center">
@@ -91,7 +91,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
                     </div>
                     <div className="flex items-center justify-between flex-grow px-2">
                       <span className="font-medium">{name}</span>
-                      {/* <span className="text-xs text-white font-normal ml-auto">{balance}</span> */}
+                      <span className="text-xs text-white font-normal ml-auto">{balance}</span>
                     </div>
                   </div>
                 </RadioCard>
