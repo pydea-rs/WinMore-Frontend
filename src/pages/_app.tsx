@@ -89,7 +89,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <ToastContainer
         position="top-right"
         className="!z-[999999999999999999] !font-fractul"
-        autoClose={5000}
+        autoClose={3000}
         closeButton={false}
         hideProgressBar={true}
         newestOnTop={false}

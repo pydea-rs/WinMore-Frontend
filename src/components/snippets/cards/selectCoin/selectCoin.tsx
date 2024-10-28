@@ -14,7 +14,7 @@ import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
-import { networks } from '@/constants/networks'
+
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { INetwork, IToken, TType } from '@/types/global.types'
@@ -24,6 +24,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
   const { network, token } = useSelector((state) => state.currency)
   const dispatch = useDispatch()
   const { isOpenModal, onCloseModal, onComplete } = props
+  const { networks } = useSelector((state) => state.networks)
 
   const handleChangeNetwork = ({ id }: TType) => {
     const selectedNetwork = networks.find((net) => net.chainId === id) as INetwork
@@ -33,6 +34,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
   const handleChangeToken = (token: IToken) => {
     dispatch(updateToken({ token }))
   }
+  const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
 
   return (
     <Card size="lg" className="w-full max-w-[380px]">
@@ -47,7 +49,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
       </CardHeader>
       <CardBody>
         <FormGroup>
-          <Label></Label>
+          <Label>Select Chain</Label>
           <Select value={{ id: network.chainId, name: network.name }} onChange={handleChangeNetwork}>
             <SelectButton className="flex items-center justify-between ">
               <div className="flex items-center text-sm text-main font-medium gap-x-2">
@@ -69,9 +71,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
                       <div className="w-6 h-6 bg-black rounded-full" />
                     </SelectIcon>
                   )}
-                  <SelectIcon>
-                    <div className="w-6 h-6 bg-black rounded-full" />
-                  </SelectIcon>
+
                   <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
                 </SelectOption>
               ))}
@@ -79,9 +79,9 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
           </Select>
         </FormGroup>
         <FormGroup>
-          <Label>Select coin</Label>
+          <Label>Select Coin</Label>
           <RadioCardGroup>
-            {network.tokens.map((currency) => {
+            {currentChainTokenList.map((currency) => {
               const { name, icon, contractAddress, symbol, id } = currency
               return (
                 <RadioCard id={symbol} name="tokens" value={id.toString()} key={id} checked={id === token.id} onChange={(e) => handleChangeToken(currency)}>

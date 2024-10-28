@@ -16,7 +16,6 @@ import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
-import { networks } from '@/constants/networks'
 import useGetWalletBalance from '@/hooks/useGetWalletBalance'
 import useSendWalletTransaction from '@/hooks/useSendTransaction'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
@@ -29,6 +28,7 @@ import { DepositCardProps, DepositForm } from './deposit.types'
 export const DepositCard: React.FC<DepositCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
   const { network, token, currentTokenBalance } = useSelector((state) => state.currency)
+  const { networks } = useSelector((state) => state.networks)
   const { address } = useAccount()
 
   const {
@@ -47,15 +47,17 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
     dispatch(updateNetwork({ network: selectedNetwork }))
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
+  const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
 
   const handleChangeCoin = (newToken: TType) => {
-    const selectedToken = network.tokens.find((t) => t.id === newToken.id) as IToken
+    const selectedToken = currentChainTokenList.find((t) => t.id === newToken.id) as IToken
     dispatch(updateToken({ token: selectedToken }))
   }
 
   const handleSubmit = (values: DepositForm) => {
     sendTransaction({ amount: values.amount.replace(',', ''), decimals: balance.decimals, to: MAIN_PUBLIC_KEY })
   }
+
   return (
     <Card size="lg" className="w-full max-w-[430px]">
       <CardHeader>
@@ -120,7 +122,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                   </div>
                 </SelectButton>
                 <SelectList>
-                  {network.tokens.map(({ icon, id, name, balance: tokenBalance }) => (
+                  {currentChainTokenList.map(({ icon, id, name, balance: tokenBalance }) => (
                     <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
                       {icon ? (
                         <SelectIcon>
@@ -146,7 +148,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             </div>
 
             <RadioGroup className="flex-wrap">
-              {network.tokens.map((coin) => (
+              {currentChainTokenList.map((coin) => (
                 <Radio
                   key={coin.id}
                   name="suggestedCoin"

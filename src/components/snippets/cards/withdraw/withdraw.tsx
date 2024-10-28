@@ -18,7 +18,6 @@ import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
 import WalletIcon from '@/components/icons/wallet/walet.icon'
 import WarningIcon from '@/components/icons/warning/warning'
-import { networks } from '@/constants/networks'
 import { useWithdrawMutation } from '@/services/user/user.service'
 import { triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
@@ -41,6 +40,8 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
   const { network, token } = useSelector((state) => state.currency)
   const { data: modalData } = useSelector((state) => state.modal.modals.withdraw)
+  const { networks } = useSelector((state) => state.networks)
+
   const dispatch = useDispatch()
   const {
     control: withdrawFormController,

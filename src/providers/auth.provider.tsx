@@ -1,12 +1,16 @@
 import { Spinner } from '@/components/common/spinner/spinner'
 import { useAuth } from '@/hooks/useAuth'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
+import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { Fragment, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { useAccount } from 'wagmi'
 
 const AuthProvider: BaseProps = ({ children }) => {
-  const { isWalletConnected, sendAuthSignature, token, isAuthorized } = useAuth()
-
+  const { isWalletConnected, sendAuthSignature, token, isAuthorized, connectWallet } = useAuth()
+  const { address } = useAccount()
+  const { user } = useSelector((state) => state.auth)
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null // Initialize timeout as null
 
@@ -22,6 +26,18 @@ const AuthProvider: BaseProps = ({ children }) => {
       }
     }
   }, [isWalletConnected, token])
+
+  useEffect(() => {
+    if (isWalletConnected) {
+      if (address && user && user.wallet !== address) {
+        sendAuthSignature()
+      }
+    } else {
+      toast.error('wallet is not connected')
+    }
+
+    return () => {}
+  }, [address])
 
   const { data } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
