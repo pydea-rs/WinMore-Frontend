@@ -8,23 +8,43 @@ import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import Table from '@/components/common/table/table'
 import TableBody from '@/components/common/table/tableBody/tableBody'
+import TableData from '@/components/common/table/tableData/tableData'
+import TableDataWrapper from '@/components/common/table/tableDataWrapper/tableDataWrapper'
 import TableHeader from '@/components/common/table/tableHeader/tableHeader'
 import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
+import CentIcon from '@/components/icons/cent/cent'
+import DicesIcon from '@/components/icons/dices/dices'
+import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
+import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
+import { useState } from 'react'
 
 const GameHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
-
+  const [sort, setSort] = useState<'lucky' | 'rollers'>()
+  const { data, refetch } = useMineGamesListQuery(
+    {
+      skip: 1,
+      take: 10,
+      sort,
+      // order,
+    },
+    { skip: !isAuthorized },
+  )
   const classList = classNames({
     [`${className}`]: className,
   })
+  const handleSort = (sort: 'lucky' | 'rollers' | undefined) => {
+    setSort(sort)
+    refetch()
+  }
 
   const calculateTime = (time: number): string => {
     if (time < 60) {
@@ -45,9 +65,8 @@ const GameHistory: React.FC<ElementProps> = (props) => {
 
         <Tab className="mb-8">
           <TabHeader>
-            <TabItem>All BETS</TabItem>
-            <TabItem>HIGH ROLLERS</TabItem>
-            <TabItem>MY BETS</TabItem>
+            <TabItem onClick={() => handleSort(undefined)}>All BETS</TabItem>
+            <TabItem onClick={() => handleSort('lucky')}>LUCKY BETS</TabItem>
           </TabHeader>
 
           <TabBody className="">
@@ -81,7 +100,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {/* {data ? (
+                        {data ? (
                           <>
                             {data.data.map((game) => {
                               return (
@@ -128,6 +147,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                                   <TableData>
                                     <TableDataWrapper className="min-w-28 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        {/* <CentIcon className="w-6 text-[rgba(255,170,0)]" /> */}
                                         <span>{game.status}</span>
                                       </div>
                                     </TableDataWrapper>
@@ -138,7 +158,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                           </>
                         ) : (
                           <></>
-                        )} */}
+                        )}
                       </TableBody>
                     </Table>
                   </TableWrapper>
@@ -146,13 +166,98 @@ const GameHistory: React.FC<ElementProps> = (props) => {
               </Card>
             </TabContent>
             <TabContent>
-              <Card>
-                <CardBody className="bg-opacity-60 sm:filter-backdrop">Content 2</CardBody>
-              </Card>
-            </TabContent>
-            <TabContent>
-              <Card>
-                <CardBody className="bg-opacity-60 sm:filter-backdrop">Content 3</CardBody>
+              <Card responsive>
+                <CardBody className="bg-opacity-60 sm:filter-backdrop rounded-tl-none lg:rounded-tr-none">
+                  <TableWrapper>
+                    <Table className="text-white w-full">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">
+                              Game <span className="hidden lg:inline-block">Name</span>
+                            </div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">Player</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">Time</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">MULTIPLIER</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">PAYOUT</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">STATUS</div>
+                          </TableHeading>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {data ? (
+                          <>
+                            {data.data.map((game) => {
+                              return (
+                                <TableRow className="text-center" key={game.id}>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <DicesIcon className="hidden lg:inline-block w-6" />
+                                        <span>Dream Tower</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <SingleUserIcon className="hidden lg:inline-block w-6" />
+                                        <span>{game.userId}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <span>{calculateTime(game.time)}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <span>{game.multiplier}.x</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2 h-[40px]">
+                                        <CentIcon className="hidden lg:inline-block w-6 text-[rgba(255,170,0)]" />
+                                        <span>{game.stake}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        {/* <CentIcon className="w-6 text-[rgba(255,170,0)]" /> */}
+                                        <span>{game.status}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                </TableRow>
+                              )
+                            })}
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableWrapper>
+                </CardBody>
               </Card>
             </TabContent>
           </TabBody>

@@ -39,6 +39,9 @@ export const getApiRoute = () => {
       isPlaying: {
         path: 'user/is-playing',
       },
+      dreamMineList: {
+        path: 'user/games/dream-mine',
+      },
     },
     games: {
       mine: {

@@ -20,6 +20,7 @@ import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
 import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useUserMineGamesListQuery } from '@/services/user/user.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -28,21 +29,24 @@ import { useState } from 'react'
 const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
-  const [sort, setSort] = useState<'asc' | 'desc'>('asc')
-  const [order, setOrder] = useState<'lucky' | 'rollers'>('rollers')
-  const { data } = useMineGamesListQuery(
+  const { data: userMineGamesList } = useUserMineGamesListQuery({ skip: 1, take: 10 })
+  const [sort, setSort] = useState<'lucky' | 'rollers'>()
+  const { data, refetch } = useMineGamesListQuery(
     {
       skip: 1,
       take: 10,
       sort,
-      order,
+      // order,
     },
     { skip: !isAuthorized },
   )
   const classList = classNames({
     [`${className}`]: className,
   })
-
+  const handleSort = (sort: 'lucky' | 'rollers' | undefined) => {
+    setSort(sort)
+    refetch()
+  }
   const calculateTime = (time: number): string => {
     if (time < 60) {
       return `${time.toFixed(2)} sec`
@@ -62,8 +66,8 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
 
         <Tab className="mb-8">
           <TabHeader>
-            <TabItem>All BETS</TabItem>
-            <TabItem onClick={() => setOrder('rollers')}>HIGH ROLLERS</TabItem>
+            <TabItem onClick={() => handleSort(undefined)}>All BETS</TabItem>
+            <TabItem onClick={() => handleSort('lucky')}>LUCKY BETS</TabItem>
             <TabItem>MY BETS</TabItem>
           </TabHeader>
 
@@ -260,7 +264,97 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
             </TabContent>
             <TabContent>
               <Card>
-                <CardBody className="bg-opacity-60 sm:filter-backdrop">Content 3</CardBody>
+                <CardBody className="bg-opacity-60 sm:filter-backdrop">
+                  <TableWrapper>
+                    <Table className="text-white w-full">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">
+                              Game <span className="hidden lg:inline-block">Name</span>
+                            </div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">Player</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">Time</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">MULTIPLIER</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">PAYOUT</div>
+                          </TableHeading>
+                          <TableHeading className="w-[165px]">
+                            <div className="p-2">STATUS</div>
+                          </TableHeading>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {userMineGamesList ? (
+                          <>
+                            {userMineGamesList.data.map((game) => {
+                              return (
+                                <TableRow className="text-center" key={game.id}>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <DicesIcon className="hidden lg:inline-block w-6" />
+                                        <span>Dream Tower</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <SingleUserIcon className="hidden lg:inline-block w-6" />
+                                        <span>{game.userId}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-20 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <span>{calculateTime(game.time)}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        <span>{game.multiplier}.x</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2 h-[40px]">
+                                        <CentIcon className="hidden lg:inline-block w-6 text-[rgba(255,170,0)]" />
+                                        <span>{game.stake}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                  <TableData>
+                                    <TableDataWrapper className="min-w-28 bg-opacity-40">
+                                      <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                                        {/* <CentIcon className="w-6 text-[rgba(255,170,0)]" /> */}
+                                        <span>{game.status}</span>
+                                      </div>
+                                    </TableDataWrapper>
+                                  </TableData>
+                                </TableRow>
+                              )
+                            })}
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableWrapper>
+                </CardBody>
               </Card>
             </TabContent>
           </TabBody>

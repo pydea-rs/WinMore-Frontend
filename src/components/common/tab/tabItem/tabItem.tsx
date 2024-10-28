@@ -4,14 +4,18 @@ import classNames from 'classnames'
 import { ITabItem } from './tabItem.types'
 
 const TabItem: BaseProps<ITabItem> = (props) => {
-  const { children, className } = props
+  const { children, className, ...rest } = props
 
   const classList = classNames({
     [`tab-item`]: true,
     [`${className}`]: className,
   })
 
-  return <Tab className={classList}>{children}</Tab>
+  return (
+    <Tab className={classList} {...rest}>
+      {children}
+    </Tab>
+  )
 }
 
 export default TabItem

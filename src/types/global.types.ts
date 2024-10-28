@@ -72,6 +72,6 @@ export type IToken = {
 export interface IPaginationPayload {
   skip: number
   take: number
-  sort?: 'asc' | 'desc'
-  order?: 'lucky' | 'rollers'
+  sort?: 'lucky' | 'rollers'
+  order?: 'asc' | 'desc'
 }

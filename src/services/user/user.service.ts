@@ -17,6 +17,7 @@ import {
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 import { IIsUserPlayingPayload, IIsUserPlayingResponse, IWithdrawPayload, IWithdrawResponse } from './user.service.types'
+import { IGetMineGamesListPayload, IGetMineGamesListResponse } from '../games/mine/mine.service.types'
 
 // Define the API service
 export const UserService = createApi({
@@ -141,7 +142,26 @@ export const UserService = createApi({
         }
       },
     }),
+    userMineGamesList: builder.query<BaseResponse<IGetMineGamesListResponse>, IGetMineGamesListPayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'GET',
+          url: user.dreamMineList.path,
+          params: arg,
+          sendAuthorization: true,
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetUserInfoQuery, useRegisterUserMutation, useGetUserCurrentBalanceQuery, useIsPlayingQuery, useGetUserTokenBalanceMutation, useWithdrawMutation } = UserService
+export const {
+  useGetUserInfoQuery,
+  useRegisterUserMutation,
+  useGetUserCurrentBalanceQuery,
+  useIsPlayingQuery,
+  useGetUserTokenBalanceMutation,
+  useWithdrawMutation,
+  useUserMineGamesListQuery,
+} = UserService
