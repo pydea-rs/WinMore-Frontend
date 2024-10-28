@@ -1,8 +1,8 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { updateCoefficients, updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.slice'
-import { IBlock, ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
+import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
 
 import { createApi } from '@reduxjs/toolkit/query/react'
 import {
@@ -12,8 +12,6 @@ import {
   IGetMineGamesListResponse,
   IGetMineRulesPayload,
   IGetMineRulesResponse,
-  IIsPlayingMinePayload,
-  IIsPlayingMineResponse,
   IMineBlockPayload,
   IMineBlockResponse,
   IPlaceMineBetPayload,
@@ -95,38 +93,7 @@ export const MineService = createApi({
         }
       },
     }),
-    isPlayingMine: builder.query<BaseResponse<IIsPlayingMineResponse>, IIsPlayingMinePayload>({
-      query(arg) {
-        const { games } = getApiRoute()
-        return {
-          method: 'GET',
-          url: games.mine.isPlaying.path,
-          sendAuthorization: true,
-        }
-      },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled
-        if (!data.data) {
-          return
-        }
-        const currentGame = data.data
-        const currentGameSelectedBlocks: IBlock[] = currentGame.golds.map((gold, rowIndex) => ({ index: gold, row: rowIndex + 1, status: 'GOLD' }))
-        dispatch(
-          updateMineConfig({
-            activeRow: currentGame.currentRow + 1,
-            betAmount: currentGame.initialBet.toString(),
-            rows: currentGame.rowsCount,
-            currentGameId: currentGame.id,
-            currentGameStatus: currentGame.status,
-            selectedBlocks: currentGameSelectedBlocks,
-            stake: currentGame.stake,
-            isStarted: true,
-          }),
-        )
-        dispatch(updateMinConfigMode(currentGame.mode))
-      },
-    }),
   }),
 })
 
-export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useIsPlayingMineQuery, useMineGamesListQuery } = MineService
+export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useMineGamesListQuery } = MineService

@@ -18,6 +18,7 @@ import SelectButton from '@/components/common/form/select/selectButton/selectBut
 import SelectIcon from '@/components/common/form/select/selectIcon/selectIcon'
 import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
+import { Spinner } from '@/components/common/spinner/spinner'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabContent from '@/components/common/tab/tabContent/tabContent'
@@ -32,48 +33,42 @@ import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { useDispatch } from '@/store/store'
-import { TType } from '@/types/global.types'
+import { networks } from '@/constants/networks'
+import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
+import { triggerModal, triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
+import { useDispatch, useSelector } from '@/store/store'
+import { INetwork, IToken, TType } from '@/types/global.types'
 import Head from 'next/head'
 import { Fragment, useState } from 'react'
 
-const selectData = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Durward', icon: '/assets/images/tokens/USDC.png' },
-  { id: 2, name: 'Kenton', icon: '/assets/images/tokens/USDT.png' },
-  { id: 3, name: 'Therese', icon: '/assets/images/tokens/USDC.png' },
-  { id: 4, name: 'Benedict', icon: '/assets/images/tokens/USDT.png' },
-  { id: 5, name: 'Katelyn', icon: '/assets/images/tokens/USDC.png' },
-]
-
-const selectChainData = [
-  { id: 0, name: 'All', icon: undefined },
-  { id: 1, name: 'Durward', icon: '/assets/images/tokens/USDC.png' },
-  { id: 2, name: 'Kenton', icon: '/assets/images/tokens/USDT.png' },
-  { id: 3, name: 'Therese', icon: '/assets/images/tokens/USDC.png' },
-  { id: 4, name: 'Benedict', icon: '/assets/images/tokens/USDT.png' },
-  { id: 5, name: 'Katelyn', icon: '/assets/images/tokens/USDC.png' },
-]
-
-const data_fake = [
-  { id: '1', chain: 'USDC', coin: 'USDT', wallet: '1.234' },
-  { id: '1', chain: 'USDC', coin: 'USDT', wallet: '1.234' },
-  { id: '1', chain: 'USDC', coin: 'USDT', wallet: '1.234' },
-  { id: '1', chain: 'USDC', coin: 'USDT', wallet: '1.234' },
-]
-
 const Wallet = () => {
   const dispatch = useDispatch()
-  const [selected, setSelected] = useState<TType>(selectData[1])
-  const [selectedChain, setSelectedChain] = useState<TType>(selectData[1])
-
-  const handleOpenDepositModal = (id: string) => {
+  const { network } = useSelector((state) => state.currency)
+  const [GetTokenBalanceMutate, { isLoading: isLoadingBalance }] = useGetUserTokenBalanceMutation()
+  const [selectedTokenWithdrawId, setSelectedTokenWithdrawId] = useState<number>()
+  const handleOpenDepositModal = (id: number) => {
     dispatch(triggerModal({ modal: 'deposit', trigger: true }))
   }
 
-  const handleOpenWithdrawModal = (id: string) => {
-    dispatch(triggerModal({ modal: 'withdraw', trigger: true }))
+  const handleChangeNetwork = ({ id }: TType) => {
+    const selectedNetwork = networks.find((net) => net.chainId === id) as INetwork
+    dispatch(updateNetwork({ network: selectedNetwork }))
+    dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
+  }
+
+  const handleOpenWithdrawModal = async (token: IToken) => {
+    const balance = await GetTokenBalanceMutate({ chain: network.chainId, token: token.symbol }).unwrap()
+    dispatch(
+      triggerWithdrawModal({
+        trigger: true,
+        data: {
+          token: token.symbol,
+          balance: balance.data,
+          chainId: network.chainId,
+        },
+      }),
+    )
   }
 
   return (
@@ -96,24 +91,24 @@ const Wallet = () => {
                     {/* bg-opacity-60 sm:filter-backdrop */}
                     <CardBody className="rounded-tl-none lg:rounded-tr-none">
                       <FormGroup className="md:w-48">
-                        <Label>Select coin</Label>
-                        <Select value={selected} onChange={setSelected}>
+                        <Label>Select Chain</Label>
+                        <Select value={{ id: network.chainId, name: network.name, icon: network.icon }} onChange={handleChangeNetwork}>
                           <SelectButton className="flex items-center justify-between">
                             <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                              {selected.icon ? (
-                                <Avatar src={selected.icon} alt="flag" />
+                              {network.icon ? (
+                                <Avatar src={network.icon} alt="flag" />
                               ) : (
                                 <SelectIcon>
                                   <div className="w-6 h-6 bg-black rounded-full -ml-2" />
                                 </SelectIcon>
                               )}
-                              {selected.name}
+                              {network.name}
                             </div>
                             <ChevronDownIcon className="pointer-events-none size-4 fill-white/60" aria-hidden="true" />
                           </SelectButton>
                           <SelectList>
-                            {selectData.map(({ icon, id, name }) => (
-                              <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
+                            {networks.map(({ chainId, name, icon }) => (
+                              <SelectOption value={{ id: chainId, name, icon }} key={chainId} className="flex items-center">
                                 {icon ? (
                                   <SelectIcon>
                                     <Avatar className="flex-shrink-0 -ml-2" size="md" src={icon} alt="flag" />
@@ -138,52 +133,59 @@ const Wallet = () => {
                           <DataHeading className="w-full md:w-1/5">Deposit</DataHeading>
                         </DataHeader>
                         <DataBody>
-                          {data_fake.map(({ chain, coin, id, wallet }) => (
-                            <DataRow key={id}>
-                              <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
-                                <DataHeading className="md:hidden">Chain</DataHeading>
-                                <div className="flex items-center justify-center gap-x-2">
-                                  <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
-                                  <span>{chain}</span>
-                                </div>
-                              </DataCol>
-                              <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
-                                <DataHeading className="md:hidden">Coin</DataHeading>
-                                <div className="flex items-center justify-center gap-x-2">
-                                  <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
-                                  <span>{coin}</span>
-                                </div>
-                              </DataCol>
-                              <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
-                                <DataHeading className="md:hidden">My Wallet</DataHeading>
-                                <span>{wallet}</span>
-                              </DataCol>
-                              <DataCol className="w-full md:w-1/5">
-                                <Button
-                                  kind="primary"
-                                  variant="success"
-                                  full
-                                  onClick={() => {
-                                    handleOpenWithdrawModal(id)
-                                  }}
-                                >
-                                  Withdraw
-                                </Button>
-                              </DataCol>
-                              <DataCol className="w-full md:w-1/5">
-                                <Button
-                                  kind="primary"
-                                  variant="primary"
-                                  full
-                                  onClick={() => {
-                                    handleOpenDepositModal(id)
-                                  }}
-                                >
-                                  Deposit
-                                </Button>
-                              </DataCol>
-                            </DataRow>
-                          ))}
+                          {network.tokens.map((token) => {
+                            return (
+                              <DataRow key={token.id}>
+                                <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
+                                  <DataHeading className="md:hidden">Chain</DataHeading>
+                                  <div className="flex items-center justify-center gap-x-2">
+                                    {network.icon ? <Avatar src={network.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
+                                    <span>{network.name}</span>
+                                  </div>
+                                </DataCol>
+                                <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
+                                  <DataHeading className="md:hidden">Coin</DataHeading>
+                                  <div className="flex items-center justify-center gap-x-2">
+                                    <Avatar size="md" src={token.icon} alt="tether" />
+                                    <span>{token.symbol}</span>
+                                  </div>
+                                </DataCol>
+                                <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
+                                  <DataHeading className="md:hidden">My Wallet</DataHeading>
+                                  <span>0</span>
+                                </DataCol>
+                                <DataCol className="w-full md:w-1/5">
+                                  <Button
+                                    kind="primary"
+                                    variant="success"
+                                    full
+                                    disabled={isLoadingBalance && selectedTokenWithdrawId === token.id}
+                                    onClick={() => {
+                                      setSelectedTokenWithdrawId(token.id)
+                                      handleOpenWithdrawModal(token)
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-x-2">
+                                      Withdraw
+                                      {isLoadingBalance && selectedTokenWithdrawId === token.id ? <Spinner size="sm" /> : <></>}
+                                    </div>
+                                  </Button>
+                                </DataCol>
+                                <DataCol className="w-full md:w-1/5">
+                                  <Button
+                                    kind="primary"
+                                    variant="primary"
+                                    full
+                                    onClick={() => {
+                                      handleOpenDepositModal(token.id)
+                                    }}
+                                  >
+                                    Deposit
+                                  </Button>
+                                </DataCol>
+                              </DataRow>
+                            )
+                          })}
                         </DataBody>
                       </Data>
                     </CardBody>
@@ -207,26 +209,25 @@ const Wallet = () => {
                           </Radio>
                         </RadioGroup>
                       </FormGroup>
-
                       <FormGroup className="md:w-48">
-                        <Label>Select chain</Label>
-                        <Select value={selectedChain} onChange={setSelectedChain}>
+                        <Label>Select Chain</Label>
+                        <Select value={{ id: network.chainId, name: network.name, icon: network.icon }} onChange={handleChangeNetwork}>
                           <SelectButton className="flex items-center justify-between">
                             <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                              {selectedChain.icon ? (
-                                <Avatar src={selectedChain.icon} alt="flag" />
+                              {network.icon ? (
+                                <Avatar src={network.icon} alt="flag" />
                               ) : (
                                 <SelectIcon>
                                   <div className="w-6 h-6 bg-black rounded-full -ml-2" />
                                 </SelectIcon>
                               )}
-                              {selectedChain.name}
+                              {network.name}
                             </div>
                             <ChevronDownIcon className="pointer-events-none size-4 fill-white/60" aria-hidden="true" />
                           </SelectButton>
                           <SelectList>
-                            {selectChainData.map(({ icon, id, name }) => (
-                              <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
+                            {networks.map(({ chainId, name, icon }) => (
+                              <SelectOption value={{ id: chainId, name, icon }} key={chainId} className="flex items-center">
                                 {icon ? (
                                   <SelectIcon>
                                     <Avatar className="flex-shrink-0 -ml-2" size="md" src={icon} alt="flag" />

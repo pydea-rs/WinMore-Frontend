@@ -113,14 +113,14 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                     <div className="flex ml-auto gap-x-1">
                       <div className="flex items-center gap-x-1 font-normal text-xs">
                         <span className="text-main">Balance:</span>
-                        <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>
+                        <span className="text-white">{currentTokenBalance.toLocaleString()}</span>
                       </div>
                       <ChevronDownIcon className="pointer-events-none size-6 text-white" aria-hidden="true" />
                     </div>
                   </div>
                 </SelectButton>
                 <SelectList>
-                  {network.tokens.map(({ icon, id, name }) => (
+                  {network.tokens.map(({ icon, id, name, balance: tokenBalance }) => (
                     <SelectOption value={{ id, name, icon }} key={id} className="flex items-center">
                       {icon ? (
                         <SelectIcon>
@@ -132,13 +132,13 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
                         </SelectIcon>
                       )}
                       <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
-                      {/* <div className="flex ml-auto gap-x-1">
+                      <div className="flex ml-auto gap-x-1">
                         <div className="flex text-main items-center gap-x-1 font-normal text-xs">
                           <span className="">Balance:</span>
-                          <span className="group-data-[selected]:text-white">0.000</span>
+                          <span className="group-data-[selected]:text-white">{tokenBalance?.toLocaleString()}</span>
                         </div>
                         <ChevronDownIcon className="pointer-events-none size-6 text-white" aria-hidden="true" />
-                      </div> */}
+                      </div>
                     </SelectOption>
                   ))}
                 </SelectList>
@@ -177,7 +177,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             <Label className="flex items-center justify-between">
               Enter Deposit Amount
               <span className="text-main">
-                Available: <span className="text-white">{balance.formattedValue.toString().slice(0, 6)}</span>{' '}
+                Available: <span className="text-white">{balance.formattedValue.toLocaleString()}</span>{' '}
               </span>
             </Label>
             <Controller

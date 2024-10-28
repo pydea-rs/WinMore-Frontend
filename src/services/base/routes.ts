@@ -33,6 +33,12 @@ export const getApiRoute = () => {
           return `/${this.path}/${slug}`
         },
       },
+      withdraw: {
+        path: 'user/withdraw',
+      },
+      isPlaying: {
+        path: 'user/is-playing',
+      },
     },
     games: {
       mine: {

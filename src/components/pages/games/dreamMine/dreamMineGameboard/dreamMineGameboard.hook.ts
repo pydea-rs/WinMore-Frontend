@@ -16,7 +16,13 @@ const useDreamMineGameBoardHelper = () => {
   const { isAuthorized } = useAuth()
   const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
   const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
-  const { refetch: refetchList } = useMineGamesListQuery({}, { skip: !isAuthorized })
+  const { refetch: refetchList } = useMineGamesListQuery(
+    {
+      skip: 1,
+      take: 10,
+    },
+    { skip: !isAuthorized },
+  )
   const [backoffMine] = useBackoffMineMutation()
   const { refetch: refetchBalance } = useGetUserCurrentBalanceQuery({ chain: network.chainId, token: token.symbol }, { skip: !isAuthorized })
 

@@ -3,6 +3,8 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { setUser } from '@/store/slices/auth/auth.slice'
 import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
+import { updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import {
   IGetUserBalanceResponse,
@@ -14,6 +16,7 @@ import {
 } from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
+import { IIsUserPlayingPayload, IIsUserPlayingResponse, IWithdrawPayload, IWithdrawResponse } from './user.service.types'
 
 // Define the API service
 export const UserService = createApi({
@@ -85,7 +88,60 @@ export const UserService = createApi({
         dispatch(updateCurrentTokenBalance(data.data))
       },
     }),
+    getUserTokenBalance: builder.mutation<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'GET',
+          url: user.currentBalance.get(arg.token),
+          params: {
+            chain: arg.chain,
+          },
+        }
+      },
+    }),
+    isPlaying: builder.query<BaseResponse<IIsUserPlayingResponse>, IIsUserPlayingPayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'GET',
+          url: user.isPlaying.path,
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        if (!data.data.dreamMine) {
+          return
+        }
+        const currentGame = data.data.dreamMine
+        const currentGameSelectedBlocks: IBlock[] = currentGame.golds.map((gold, rowIndex) => ({ index: gold, row: rowIndex + 1, status: 'GOLD' }))
+        dispatch(
+          updateMineConfig({
+            activeRow: currentGame.currentRow + 1,
+            betAmount: currentGame.initialBet.toString(),
+            rows: currentGame.rowsCount,
+            currentGameId: currentGame.id,
+            currentGameStatus: currentGame.status,
+            selectedBlocks: currentGameSelectedBlocks,
+            stake: currentGame.stake,
+            isStarted: true,
+          }),
+        )
+        dispatch(updateMinConfigMode(currentGame.mode))
+      },
+    }),
+    withdraw: builder.mutation<BaseResponse<IWithdrawResponse>, IWithdrawPayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'POST',
+          data: arg,
+          url: user.withdraw.path,
+          sendAuthorization: true,
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetUserInfoQuery, useRegisterUserMutation, useGetUserCurrentBalanceQuery } = UserService
+export const { useGetUserInfoQuery, useRegisterUserMutation, useGetUserCurrentBalanceQuery, useIsPlayingQuery, useGetUserTokenBalanceMutation, useWithdrawMutation } = UserService

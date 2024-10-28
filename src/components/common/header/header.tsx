@@ -186,7 +186,7 @@ const HeaderComponent = () => {
               </div>
               <div>
                 <span className="text-main">Balance:</span>
-                <span className="text-white">{currentTokenBalance.toString().slice(0, 6)}</span>
+                <span className="text-white">{currentTokenBalance.toLocaleString()}</span>
               </div>
             </div>
             <ChevronDownIcon />

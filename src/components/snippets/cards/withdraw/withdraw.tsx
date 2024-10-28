@@ -6,7 +6,6 @@ import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
 import { Label } from '@/components/common/form/label/label'
-import { NumberInput } from '@/components/common/form/numberInput/numberInput'
 import Select from '@/components/common/form/select/select'
 import SelectButton from '@/components/common/form/select/selectButton/selectButton'
 import SelectIcon from '@/components/common/form/select/selectIcon/selectIcon'
@@ -14,26 +13,22 @@ import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Input } from '@/components/common/form/textInput/textInput'
+import { Spinner } from '@/components/common/spinner/spinner'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
-import FinanceIcon from '@/components/icons/finance/finance.icon'
 import WalletIcon from '@/components/icons/wallet/walet.icon'
 import WarningIcon from '@/components/icons/warning/warning'
 import { networks } from '@/constants/networks'
-import { useSelector } from '@/store/store'
+import { useWithdrawMutation } from '@/services/user/user.service'
+import { triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
+import { useDispatch, useSelector } from '@/store/store'
 import { TType } from '@/types/global.types'
 import { Fragment } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { WithdrawCardProps, WithdrawForm } from './withdraw.types'
 
-const gasList: Array<TType> = [
-  { id: 0, name: 'Medium (Fee: 0.00900000 USDC)', icon: undefined },
-  // { id: 1, name: 'Bitcoin', icon: '/assets/images/tokens/USDC.png' },
-  // { id: 2, name: 'ETH', icon: '/assets/images/tokens/USDT.png' },
-  // { id: 3, name: 'SOL', icon: '/assets/images/tokens/USDC.png' },
-  // { id: 4, name: 'USDT', icon: '/assets/images/tokens/USDT.png' },
-  // { id: 5, name: 'SOL', icon: '/assets/images/sol.png' },
-]
+const gasList: Array<TType> = [{ id: 0, name: 'Medium (Fee: 0.00900000 USDC)', icon: undefined }]
 
 function arrayToObject(array: TType[]): Record<number, TType> {
   return array.reduce((obj: Record<number, TType>, item: TType) => {
@@ -45,18 +40,30 @@ function arrayToObject(array: TType[]): Record<number, TType> {
 export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
   const { isOpenModal, onCloseModal, onComplete } = props
   const { network, token } = useSelector((state) => state.currency)
+  const { data: modalData } = useSelector((state) => state.modal.modals.withdraw)
+  const dispatch = useDispatch()
   const {
     control: withdrawFormController,
     handleSubmit: withdrawFormHandleSubmit,
     watch: withdrawFormWatch,
     setValue: withdrawFormSetValue,
     formState: { errors },
-  } = useForm<WithdrawForm>({ defaultValues: { chain: '1', coin: '', gas_level: '3', wallet: '3' } })
-
-  const handleSubmit = (values: WithdrawForm) => {
-    console.log(values)
+  } = useForm<WithdrawForm>({ defaultValues: { chain: network.chainId, amount: '' } })
+  const [withdrawMutate, { isLoading: isSendingWithdrawRequest }] = useWithdrawMutation()
+  const handleSubmit = async (values: WithdrawForm) => {
+    await withdrawMutate({
+      amount: +values.amount,
+      chain: network.chainId,
+      token: modalData?.token || '',
+    })
+      .unwrap()
+      .then((res) => {
+        toast.success(res.data.trxHash)
+      })
+      .catch((err) => console.log(err))
+    dispatch(triggerWithdrawModal({ data: null, trigger: false }))
   }
-
+  const amountValueWatch = withdrawFormWatch('amount')
   const gasListOBJ: any = arrayToObject(gasList)
 
   return (
@@ -75,7 +82,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
           <FormGroup>
             <Label className="flex items-center justify-between">
               Chain
-              <span className="text-sm font-medium text-[#2A323A]">24h remaining limit: 0.00 / 9900 USDT</span>
+              <span className="text-sm font-medium text-[#2A323A]">24h remaining limit: 0.00 / 9900 {modalData?.token}</span>
             </Label>
 
             <Controller
@@ -121,7 +128,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
             />
           </FormGroup>
 
-          <FormGroup>
+          {/* <FormGroup>
             <Label className="flex items-center justify-between">
               Coin
               <span className="text-main">
@@ -139,14 +146,12 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                   <div className="relative">
                     <button
                       className="appearance-none w-10 h-10 text-sm font-medium text-main absolute left-3 z-10 top-2.5 active:opacity-70 rounded-full active:bg-white/20"
-                      type="button"
-                    >
+                      type="button">
                       Min.
                     </button>
                     <button
                       className="appearance-none w-10 h-10 text-sm font-medium text-primary absolute right-3 top-2.5 z-10 active:opacity-70 rounded-full active:bg-white/20"
-                      type="button"
-                    >
+                      type="button">
                       Max
                     </button>
                     <NumberInput className="px-16" onChange={onChange} onBlur={onBlur} value={value} id="id-233" placeholder="0" />
@@ -174,8 +179,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                   value={gasListOBJ[value]}
                   onChange={(op) => {
                     onChange(op.id.toString())
-                  }}
-                >
+                  }}>
                   <SelectButton className="flex items-center justify-between">
                     <div className="flex items-center text-sm text-main font-medium gap-x-2 w-full">
                       <span>{gasListOBJ[value]?.name}</span>
@@ -198,35 +202,47 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                 </Select>
               )}
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
-            <Label className="flex items-center gap-x-2">
-              <WalletIcon />
-              <span>USDC Wallet</span>
+            <Label className="flex items-center justify-between ">
+              <div className="flex items-center gap-x-2">
+                <WalletIcon />
+                <span>{modalData?.token} Wallet</span>
+              </div>
+              <span className="text-main">
+                Available: <span className="text-white">{modalData?.balance.toLocaleString() || 0}</span>
+              </span>
             </Label>
             <Controller
-              name="wallet"
+              name="amount"
               control={withdrawFormController}
               rules={{
                 required: { value: true, message: "It's require" },
+                validate: (value) => parseFloat(value) <= (modalData?.balance || 0) || `Bet amount cannot exceed ${modalData?.balance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Fragment>
                   <div className="relative">
                     <button
                       className="appearance-none w-16 h-10 text-sm font-medium text-primary absolute right-3 top-2.5 z-10 active:opacity-70 rounded-full active:bg-white/20"
+                      onClick={() => {
+                        withdrawFormSetValue('amount', modalData?.balance.toString() || '0')
+                      }}
                       type="button"
                     >
                       AutoSet
                     </button>
-                    <Input className="pr-20" onChange={onChange} onBlur={onBlur} value={value} id="id-233" placeholder="type here" />
+                    <Input className="pr-20" onChange={onChange} onBlur={onBlur} value={value} id="id-233" placeholder="Amount" />
                   </div>
-                  {fieldState.invalid && <TextForm variant="invalid">put your error message</TextForm>}
+                  {fieldState.invalid && <TextForm variant="invalid">{fieldState.error?.message}</TextForm>}
                 </Fragment>
               )}
             />
             <span className="text-sm text-main font-medium block pt-[2px]">
-              You will receive: <span className="text-white">USDC</span>
+              You will receive:{' '}
+              <span className="text-white">
+                {Number(amountValueWatch).toLocaleString()} {modalData?.token}
+              </span>
             </span>
           </FormGroup>
 
@@ -236,8 +252,11 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
           </Alert>
 
           {/* check the demo button page to find the loading examples */}
-          <Button kind="gradient" className="w-36" full type="submit" size="lg">
-            Withdraw
+          <Button kind="gradient" className="w-36" full type="submit" size="lg" disabled={isSendingWithdrawRequest}>
+            <div className="flex items-center gap-x-2">
+              Withdraw
+              {isSendingWithdrawRequest ? <Spinner size="sm" /> : <></>}
+            </div>
           </Button>
         </form>
       </CardBody>

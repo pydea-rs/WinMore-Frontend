@@ -3,17 +3,25 @@ import { Spinner } from '@/components/common/spinner/spinner'
 import GameLayout from '@/components/layouts/game.layout'
 import MineGame from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
 import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
-import GameHistory from '@/components/snippets/gameHistory/gameHistory'
+import DreamMineHistory from '@/components/snippets/dreamMineHistory/dreamMineHistory'
+
 import { useAuth } from '@/hooks/useAuth'
-import { useIsPlayingMineQuery, useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useIsPlayingQuery } from '@/services/user/user.service'
 import { useMediaQueries } from '@react-hook/media-query'
 import Image from 'next/image'
 import { ReactElement } from 'react'
 
 const Mine = () => {
   const { isAuthorized } = useAuth()
-  const { isLoading } = useIsPlayingMineQuery({}, { skip: !isAuthorized })
-  const { isLoading: IsGamesListLoading } = useMineGamesListQuery({}, { skip: !isAuthorized })
+  const { isLoading } = useIsPlayingQuery({}, { skip: !isAuthorized })
+  const { isLoading: IsGamesListLoading } = useMineGamesListQuery(
+    {
+      skip: 1,
+      take: 10,
+    },
+    { skip: !isAuthorized },
+  )
 
   const { matches } = useMediaQueries({
     width: '(min-width: 920px)',
@@ -87,7 +95,7 @@ const Mine = () => {
           </section>
 
           <section>
-            <GameHistory />
+            <DreamMineHistory />
           </section>
         </>
       )}

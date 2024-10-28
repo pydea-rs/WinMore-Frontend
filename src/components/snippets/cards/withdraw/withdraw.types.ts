@@ -5,8 +5,8 @@ export interface WithdrawCardProps {
 }
 
 export interface WithdrawForm {
-  coin: string
-  chain: string
-  wallet: string
-  gas_level: string
+  // coin: string
+  chain: number
+  amount: string
+  // gas_level: string
 }

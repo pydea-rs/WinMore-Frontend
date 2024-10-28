@@ -8,26 +8,20 @@ import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import Table from '@/components/common/table/table'
 import TableBody from '@/components/common/table/tableBody/tableBody'
-import TableData from '@/components/common/table/tableData/tableData'
-import TableDataWrapper from '@/components/common/table/tableDataWrapper/tableDataWrapper'
 import TableHeader from '@/components/common/table/tableHeader/tableHeader'
 import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
-import CentIcon from '@/components/icons/cent/cent'
-import DicesIcon from '@/components/icons/dices/dices'
-import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
 
-const DreamMineHistory: React.FC<ElementProps> = (props) => {
+const GameHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
-  const { data } = useMineGamesListQuery({}, { skip: !isAuthorized })
+
   const classList = classNames({
     [`${className}`]: className,
   })
@@ -52,9 +46,8 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
         <Tab className="mb-8">
           <TabHeader>
             <TabItem>All BETS</TabItem>
-            {/* <TabItem>HIGH ROLLERS</TabItem>
-            <TabItem>LUCKY BETS</TabItem>
-            <TabItem>MY BETS</TabItem> */}
+            <TabItem>HIGH ROLLERS</TabItem>
+            <TabItem>MY BETS</TabItem>
           </TabHeader>
 
           <TabBody className="">
@@ -88,7 +81,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {data ? (
+                        {/* {data ? (
                           <>
                             {data.data.map((game) => {
                               return (
@@ -135,7 +128,6 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
                                   <TableData>
                                     <TableDataWrapper className="min-w-28 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                                        {/* <CentIcon className="w-6 text-[rgba(255,170,0)]" /> */}
                                         <span>{game.status}</span>
                                       </div>
                                     </TableDataWrapper>
@@ -146,7 +138,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
                           </>
                         ) : (
                           <></>
-                        )}
+                        )} */}
                       </TableBody>
                     </Table>
                   </TableWrapper>
@@ -163,11 +155,6 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
                 <CardBody className="bg-opacity-60 sm:filter-backdrop">Content 3</CardBody>
               </Card>
             </TabContent>
-            <TabContent>
-              <Card>
-                <CardBody className="bg-opacity-60 sm:filter-backdrop">Content 4</CardBody>
-              </Card>
-            </TabContent>
           </TabBody>
         </Tab>
         <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20 pointer-events-none" />
@@ -176,4 +163,4 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   )
 }
 
-export default DreamMineHistory
+export default GameHistory

@@ -56,6 +56,7 @@ export type INetwork = {
   chainId: number
   name: string
   rpcUrl: string
+  icon?: string
   tokens: IToken[]
 }
 export type IToken = {
@@ -65,4 +66,12 @@ export type IToken = {
   contractAddress: IAddress
   icon: string
   isNativeToken: boolean
+  balance: number
+}
+
+export interface IPaginationPayload {
+  skip: number
+  take: number
+  sort?: 'asc' | 'desc'
+  order?: 'lucky' | 'rollers'
 }
