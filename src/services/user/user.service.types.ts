@@ -49,6 +49,7 @@ export interface ITransaction {
     wallet: IAddress
     fromUser: number
     description: string
+    hash: IAddress
   }
   source: {
     id: number
@@ -58,10 +59,9 @@ export interface ITransaction {
       name: string
     }
   }
-  trx: string
-  status: string
+  status: 'PENDING' | 'FAILED' | 'REVERTED' | 'SUCCESSFUL'
   token: IAvailableTokens
-  type: string
+  type: 'INGAME' | 'WITHDRAWAL' | 'DEPOSIT'
   updatedAt: string
 }
 

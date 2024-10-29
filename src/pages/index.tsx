@@ -1,8 +1,7 @@
 import Container from '@/components/common/container/container'
-import GameHistory from '@/components/snippets/gameHistory/gameHistory'
-
 import MainLayout from '@/components/layouts/main.layout'
 import TopGames from '@/components/pages/home/top-games/top-game'
+import GameHistory from '@/components/snippets/gameHistory/gameHistory'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { Fragment, ReactElement } from 'react'

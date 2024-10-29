@@ -291,7 +291,7 @@ const Wallet = () => {
                           <TableBody>
                             {data ? (
                               data.data.map((transaction) => {
-                                const { amount, chain, createdAt, destination, id, remarks, source, status, token, type, trx } = transaction
+                                const { amount, chain, createdAt, destination, id, remarks, source, status, token, type } = transaction
                                 const formattedDate = moment(createdAt).format('MMM DD YYYY')
                                 const formattedTime = moment(createdAt).format('HH:MM')
                                 return (
@@ -340,7 +340,7 @@ const Wallet = () => {
                                     <TableData>
                                       <TableDataWrapper className="text-white bg-opacity-40">
                                         <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                          <span>{trx ?? '----'}</span>
+                                          <span>{remarks.hash ?? '----'}</span>
                                         </div>
                                       </TableDataWrapper>
                                     </TableData>
