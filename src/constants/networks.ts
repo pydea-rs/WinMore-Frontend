@@ -47,7 +47,7 @@ export const networks: INetwork[] = [
         symbol: 'WUSDC',
         name: 'Winmore USD',
         contractAddress: '0x9dfb350c3253386de5e2fec4dcb959b18f6ee2a1', // Native token for Sepolia testnet
-        icon: '/assets/images/tokens/USDT.png',
+        icon: '/assets/images/tokens/WUSDC.png',
         isNativeToken: false,
         balance: 0,
       },
