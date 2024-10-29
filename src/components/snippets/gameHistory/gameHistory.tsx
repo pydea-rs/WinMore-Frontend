@@ -19,7 +19,7 @@ import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useGamesListQuery } from '@/services/games/games.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -29,7 +29,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
-  const { data, refetch } = useMineGamesListQuery(
+  const { data, refetch } = useGamesListQuery(
     {
       skip: 1,
       take: 10,
@@ -109,7 +109,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                                     <TableDataWrapper className="min-w-20 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
                                         <DicesIcon className="hidden lg:inline-block w-6" />
-                                        <span>Dream Tower</span>
+                                        <span>{game.name}</span>
                                       </div>
                                     </TableDataWrapper>
                                   </TableData>
@@ -117,7 +117,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                                     <TableDataWrapper className="min-w-20 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
                                         <SingleUserIcon className="hidden lg:inline-block w-6" />
-                                        <span>{game.userId}</span>
+                                        <span>{game.user.name || 'Ghost 😱'}</span>
                                       </div>
                                     </TableDataWrapper>
                                   </TableData>
@@ -204,7 +204,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                                     <TableDataWrapper className="min-w-20 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
                                         <DicesIcon className="hidden lg:inline-block w-6" />
-                                        <span>Dream Tower</span>
+                                        <span>{game.name}</span>
                                       </div>
                                     </TableDataWrapper>
                                   </TableData>
@@ -212,7 +212,7 @@ const GameHistory: React.FC<ElementProps> = (props) => {
                                     <TableDataWrapper className="min-w-20 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
                                         <SingleUserIcon className="hidden lg:inline-block w-6" />
-                                        <span>{game.userId}</span>
+                                        <span>{game.user.name || 'Ghost 😱'}</span>
                                       </div>
                                     </TableDataWrapper>
                                   </TableData>

@@ -76,6 +76,9 @@ export const getApiRoute = () => {
           path: 'dream-mine',
         },
       },
+      list: {
+        path: 'games',
+      },
     },
   }
   return routes
