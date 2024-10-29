@@ -5,6 +5,7 @@ export const networks: INetwork[] = [
     chainId: 137, // Polygon Mainnet Chain ID
     name: 'Polygon Mainnet',
     rpcUrl: 'https://rpc-mainnet.maticvigil.com', // Mainnet RPC URL
+    icon: '/assets/images/chains/Polygon.png',
     tokens: [
       {
         id: 0,
@@ -39,6 +40,7 @@ export const networks: INetwork[] = [
     chainId: 11155111, // Sepolia Testnet Chain ID
     name: 'Sepolia',
     rpcUrl: 'https://rpc2.sepolia.org', // Replace with your actual Infura project ID
+    icon: '/assets/images/chains/Sepolia.png',
     tokens: [
       {
         id: 1,

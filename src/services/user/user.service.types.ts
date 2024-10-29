@@ -1,4 +1,4 @@
-import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { IAddress, IAvailableTokens, IPaginationPayload } from '@/types/global.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
 
 export interface IIsUserPlayingResponse {
@@ -28,5 +28,42 @@ export interface IUserWalletResponse {
 }
 
 // User Transaction History
+export interface ITransaction {
+  amount: number
+  chain: {
+    id: number
+    name: string
+  }
+  createdAt: string
+  destination: {
+    id: number
+    address: IAddress
+    owner: {
+      id: number
+      name: string
+    }
+  }
+  id: string
+  remarks: {
+    toUser: number
+    wallet: IAddress
+    fromUser: number
+    description: string
+  }
+  source: {
+    id: number
+    address: IAddress
+    owner: {
+      id: number
+      name: string
+    }
+  }
+  trx: string
+  status: string
+  token: IAvailableTokens
+  type: string
+  updatedAt: string
+}
+
 export interface IUserTransactionHistoryPayload extends IPaginationPayload {}
-export interface IUserTransactionHistoryResponse {}
+export type IUserTransactionHistoryResponse = ITransaction[]

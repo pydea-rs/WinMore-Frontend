@@ -33,16 +33,19 @@ import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { useAuth } from '@/hooks/useAuth'
+import { useGetUserTokenBalanceMutation, useUserTransactionHistoryQuery } from '@/services/user/user.service'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { triggerModal, triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { INetwork, IToken, TType } from '@/types/global.types'
+import moment from 'moment'
 import Head from 'next/head'
 import { Fragment, useState } from 'react'
 
 const Wallet = () => {
   const dispatch = useDispatch()
+  const { isAuthorized } = useAuth()
   const { network } = useSelector((state) => state.currency)
   const [GetTokenBalanceMutate, { isLoading: isLoadingBalance }] = useGetUserTokenBalanceMutation()
   const [selectedTokenWithdrawId, setSelectedTokenWithdrawId] = useState<number>()
@@ -73,6 +76,7 @@ const Wallet = () => {
   }
 
   const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
+  const { data } = useUserTransactionHistoryQuery({ skip: 1, take: 10 }, { skip: !isAuthorized, pollingInterval: 20000 })
 
   return (
     <Fragment>
@@ -274,6 +278,9 @@ const Wallet = () => {
                                 <div className="p-2">Status</div>
                               </TableHeading>
                               <TableHeading className="w-[165px]">
+                                <div className="p-2">Detail</div>
+                              </TableHeading>
+                              <TableHeading className="w-[165px]">
                                 <div className="p-2">Time</div>
                               </TableHeading>
                               <TableHeading className="w-[165px]">
@@ -282,79 +289,95 @@ const Wallet = () => {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {new Array(4).fill(null).map((_, inx) => (
-                              <TableRow className="text-center" key={inx}>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>----</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>----</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <div className="flex items-center justify-center gap-x-2">
-                                        <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
-                                        <span>USDC</span>
-                                      </div>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <div className="flex items-center justify-center gap-x-2">
-                                        <Avatar size="md" src="/assets/images/tokens/USDT.png" alt="tether" />
-                                        <span>USDT</span>
-                                      </div>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>----</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>----</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>----</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>15:23</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                                <TableData>
-                                  <TableDataWrapper className="text-white bg-opacity-40">
-                                    <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                                      <span>10/10/10</span>
-                                    </div>
-                                  </TableDataWrapper>
-                                </TableData>
-                              </TableRow>
-                            ))}
+                            {data ? (
+                              data.data.map((transaction) => {
+                                const { amount, chain, createdAt, destination, id, remarks, source, status, token, type, trx } = transaction
+                                const formattedDate = moment(createdAt).format('MMM DD YYYY')
+                                const formattedTime = moment(createdAt).format('HH:MM')
+                                return (
+                                  <TableRow className="text-center" key={id}>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{id}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{type}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <div className="flex items-center justify-center gap-x-2">
+                                            <Avatar size="md" src={`/assets/images/chains/${chain.name}.png`} alt={chain.name} />
+                                            <span>{chain.name}</span>
+                                          </div>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <div className="flex items-center justify-center gap-x-2">
+                                            <Avatar size="md" src={`/assets/images/tokens/${token}.png`} alt={token} />
+                                            <span>{token}</span>
+                                          </div>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{amount}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{trx ?? '----'}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{status}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{remarks.description}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{formattedTime}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                    <TableData>
+                                      <TableDataWrapper className="text-white bg-opacity-40">
+                                        <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
+                                          <span>{formattedDate}</span>
+                                        </div>
+                                      </TableDataWrapper>
+                                    </TableData>
+                                  </TableRow>
+                                )
+                              })
+                            ) : (
+                              <></>
+                            )}
                           </TableBody>
                         </Table>
                       </TableWrapper>
