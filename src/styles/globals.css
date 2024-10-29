@@ -127,7 +127,7 @@ body {
 }
 
 .toastify_custom {
-  @apply !relative !block !border !text-sm !leading-[16.8px] !p-2 !rounded-lg  !font-medium !font-fractul;
+  @apply filter-backdrop !relative !block !border !text-sm !leading-[16.8px] !p-2 !rounded-lg  !font-medium !font-fractul;
 }
 
 .Toastify__toast-body {

@@ -1,9 +1,9 @@
 import Container from '@/components/common/container/container'
 import { Spinner } from '@/components/common/spinner/spinner'
 import GameLayout from '@/components/layouts/game.layout'
-import MineGame from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
+import MineGame from '@/components/pages/games/dreamMine/dreamMineGameBoard/dreamMineGameBoard'
+import DreamMineHistory from '@/components/pages/games/dreamMine/dreamMineHistory/dreamMineHistory'
 import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
-import DreamMineHistory from '@/components/snippets/dreamMineHistory/dreamMineHistory'
 
 import { useAuth } from '@/hooks/useAuth'
 import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
