@@ -3,8 +3,8 @@ name: ESLINT Checker
 on:
   pull_request:
     branches:
-      - dev
-      - prod
+      - development
+      - main
 
 jobs:
   lint:
