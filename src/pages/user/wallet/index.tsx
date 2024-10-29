@@ -4,12 +4,16 @@ import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabContent from '@/components/common/tab/tabContent/tabContent'
 import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
+import { useAuth } from '@/hooks/useAuth'
+import { useUserTransactionHistoryQuery } from '@/services/user/user.service'
 import Head from 'next/head'
 import { Fragment } from 'react'
 import ChainTokenList from '../../../components/pages/wallet/chainTokenList/chainTokenList'
 import WalletHistory from '../../../components/pages/wallet/walletHistory/walletHistory'
 
 const Wallet = () => {
+  const { isAuthorized } = useAuth()
+  const { data } = useUserTransactionHistoryQuery({ skip: 1, take: 10 }, { skip: !isAuthorized, pollingInterval: 20000 })
   return (
     <Fragment>
       <Head>
@@ -36,7 +40,7 @@ const Wallet = () => {
                 </TabContent>
 
                 <TabContent>
-                  <WalletHistory />
+                  <WalletHistory data={data?.data} />
                 </TabContent>
               </TabBody>
             </Tab>

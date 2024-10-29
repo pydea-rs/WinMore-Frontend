@@ -20,7 +20,6 @@ import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import { useAuth } from '@/hooks/useAuth'
-import { useUserTransactionHistoryQuery } from '@/services/user/user.service'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps, INetwork, TType } from '@/types/global.types'
@@ -28,7 +27,9 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { WalletHistoryProps } from './walletHistory.types'
 
-const WalletHistory: BaseProps<WalletHistoryProps> = () => {
+const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
+  const { data } = props
+
   const router = useRouter()
   const { pathname, query, push } = router
 
@@ -72,8 +73,6 @@ const WalletHistory: BaseProps<WalletHistoryProps> = () => {
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
 
-  const { data } = useUserTransactionHistoryQuery({ skip: 1, take: 10 }, { skip: !isAuthorized, pollingInterval: 20000 })
-
   return (
     <Card>
       <CardBody className="rounded-tr-none">
@@ -93,7 +92,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = () => {
           <Label>Select Chain</Label>
           <Select value={{ id: network.chainId, name: network.name, icon: network.icon }} onChange={handleChangeNetwork}>
             <SelectButton className="flex items-center justify-between">
-              <div className="flex items-center text-sm text-main font-medium gap-x-2 truncate">
+              <div className="flex items-center text-sm text-main font-medium gap-x-2">
                 {network.icon ? (
                   <Avatar src={network.icon} alt="flag" />
                 ) : (
@@ -117,7 +116,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = () => {
                       <div className="w-6 h-6 bg-black rounded-full -ml-2" />
                     </SelectIcon>
                   )}
-                  <div className="text-sm text-main font-medium truncate">{name}</div>
+                  <div className="text-sm text-main font-medium">{name}</div>
                 </SelectOption>
               ))}
             </SelectList>
@@ -163,8 +162,8 @@ const WalletHistory: BaseProps<WalletHistoryProps> = () => {
             </TableHeader>
             <TableBody>
               {data ? (
-                data.data.map((transaction) => {
-                  const { amount, chain, createdAt, destination, id, remarks, source, status, token, type, trx } = transaction
+                data.map((transaction) => {
+                  const { amount, chain, createdAt, destination, id, remarks, source, status, token, type } = transaction
                   const formattedDate = moment(createdAt).format('MMM DD YYYY')
                   const formattedTime = moment(createdAt).format('HH:MM')
                   return (
@@ -213,7 +212,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = () => {
                       <TableData>
                         <TableDataWrapper className="text-white bg-opacity-40">
                           <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                            <span>{trx ?? '----'}</span>
+                            <span>{remarks.hash ?? '----'}</span>
                           </div>
                         </TableDataWrapper>
                       </TableData>

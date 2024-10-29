@@ -10,9 +10,9 @@ const Modal: BaseProps<ModalProps> = (props) => {
 
   return (
     <Dialog {...mergedAttrs} open={isOpen} as="div" onClose={onClose}>
-      <div className="fixed inset-0 z-[2000000000000000000000000000] w-screen overflow-y-auto">
-        <DialogBackdrop className="fixed inset-0 bg-dark bg-opacity-60 filter-backdrop z-[2000000000000000000000000000]" />
-        <div className="flex flex-col items-center justify-end xl:justify-center min-h-full w-full p-4 relative z-[9000000000000000000000000000]">
+      <div className="fixed inset-0 z-[20] w-screen overflow-y-auto">
+        <DialogBackdrop className="fixed inset-0 bg-dark bg-opacity-60 filter-backdrop z-[200]" />
+        <div className="flex flex-col items-center justify-end xl:justify-center min-h-full w-full p-4 relative z-[9000]">
           <DialogPanel
             transition
             className="duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 relative w-full flex flex-col justify-center items-center
