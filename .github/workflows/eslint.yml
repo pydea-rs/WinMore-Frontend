@@ -11,16 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+        run: |
+          git clone ${{ github.repository_url }} .
+          git submodule update --init --recursive
+
       - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.17.0'
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          node -v
+          npm -v
+
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          export BUN_INSTALL="$HOME/.bun"
+          export PATH="$BUN_INSTALL/bin:$PATH"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --network-concurrency 1
+        run: bun install --frozen-lockfile --network-concurrency 1
 
       - name: Run ESLint
-        run: yarn lint --max-warnings 0 --no-cache
+        run: bun run lint --max-warnings 0 --no-cache
