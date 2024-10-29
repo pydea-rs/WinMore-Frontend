@@ -1,3 +1,4 @@
+import { IAvailableTokens } from '@/types/global.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
 
 export interface IIsUserPlayingResponse {
@@ -15,4 +16,13 @@ export interface IWithdrawPayload {
 
 export interface IWithdrawResponse {
   trxHash: string
+}
+
+type TokenBalances = {
+  [key in IAvailableTokens]?: number
+}
+// User Wallet
+export interface IUserWalletPayload {}
+export interface IUserWalletResponse {
+  [chainId: number]: TokenBalances
 }

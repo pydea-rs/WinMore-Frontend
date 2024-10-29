@@ -10,6 +10,7 @@ import currencySlice from './slices/currency/currency.slice'
 import gamesSlice from './slices/mine/mine.slice'
 import modalSlice from './slices/modal/modal.slice'
 import navbarSlice from './slices/navbar/navbar.slice'
+import networksSlice from './slices/networks/networks.slice'
 import quickAccessSlice from './slices/quickAccess/quickAccess.slice'
 
 type Store = typeof store
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   navbar: navbarSlice,
   quickAccess: quickAccessSlice,
   currency: currencySlice,
+  networks: networksSlice,
   ...APIsReducers,
 })
 

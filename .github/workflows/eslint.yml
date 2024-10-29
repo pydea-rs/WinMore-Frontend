@@ -1,0 +1,26 @@
+name: ESLINT Checker
+
+on:
+  pull_request:
+    branches:
+      - development
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.17.0'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --network-concurrency 1
+
+      - name: Run ESLint
+        run: yarn lint --max-warnings 0 --no-cache

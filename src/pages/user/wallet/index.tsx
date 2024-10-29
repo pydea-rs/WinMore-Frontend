@@ -33,7 +33,6 @@ import TableHeading from '@/components/common/table/tableHeading/tableHeading'
 import TableRow from '@/components/common/table/tableRow/tableRow'
 import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import { networks } from '@/constants/networks'
 import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { triggerModal, triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
@@ -47,6 +46,8 @@ const Wallet = () => {
   const { network } = useSelector((state) => state.currency)
   const [GetTokenBalanceMutate, { isLoading: isLoadingBalance }] = useGetUserTokenBalanceMutation()
   const [selectedTokenWithdrawId, setSelectedTokenWithdrawId] = useState<number>()
+  const { networks } = useSelector((state) => state.networks)
+
   const handleOpenDepositModal = (id: number) => {
     dispatch(triggerModal({ modal: 'deposit', trigger: true }))
   }
@@ -70,6 +71,8 @@ const Wallet = () => {
       }),
     )
   }
+
+  const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
 
   return (
     <Fragment>
@@ -133,7 +136,7 @@ const Wallet = () => {
                           <DataHeading className="w-full md:w-1/5">Deposit</DataHeading>
                         </DataHeader>
                         <DataBody>
-                          {network.tokens.map((token) => {
+                          {currentChainTokenList.map((token) => {
                             return (
                               <DataRow key={token.id}>
                                 <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
