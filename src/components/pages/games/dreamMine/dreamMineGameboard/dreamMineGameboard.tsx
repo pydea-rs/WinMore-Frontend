@@ -14,7 +14,7 @@ import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { Fragment } from 'react'
-import useDreamMineGameBoardHelper from './dreamMineGameBoard.hook'
+import useDreamMineGameBoardHelper from './dreamMineGameBoard.hooks'
 
 export default function DreamMineGameBoard() {
   const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading } = useDreamMineGameBoardHelper()
