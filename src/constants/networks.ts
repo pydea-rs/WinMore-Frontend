@@ -41,21 +41,21 @@ export const networks: INetwork[] = [
     rpcUrl: 'https://rpc2.sepolia.org', // Replace with your actual Infura project ID
     tokens: [
       {
-        id: 0,
-        symbol: 'ETH',
-        name: 'Sepolia Ether',
-        contractAddress: '0x$', // Native token for Sepolia testnet
-        icon: '/assets/images/tokens/ETH.png',
-        isNativeToken: true,
-        balance: 0,
-      },
-      {
         id: 1,
         symbol: 'WUSDC',
         name: 'Winmore USD',
         contractAddress: '0x9dfb350c3253386de5e2fec4dcb959b18f6ee2a1', // Native token for Sepolia testnet
         icon: '/assets/images/tokens/USDT.png',
         isNativeToken: false,
+        balance: 0,
+      },
+      {
+        id: 0,
+        symbol: 'ETH',
+        name: 'Sepolia Ether',
+        contractAddress: '0x$', // Native token for Sepolia testnet
+        icon: '/assets/images/tokens/ETH.png',
+        isNativeToken: true,
         balance: 0,
       },
     ],

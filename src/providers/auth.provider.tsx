@@ -1,10 +1,9 @@
 import { Spinner } from '@/components/common/spinner/spinner'
 import { useAuth } from '@/hooks/useAuth'
-import { useGetUserInfoQuery } from '@/services/user/user.service'
+import { useGetUserInfoQuery, useUserWalletQuery } from '@/services/user/user.service'
 import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { Fragment, useEffect } from 'react'
-import { toast } from 'react-toastify'
 import { useAccount } from 'wagmi'
 
 const AuthProvider: BaseProps = ({ children }) => {
@@ -33,14 +32,15 @@ const AuthProvider: BaseProps = ({ children }) => {
         sendAuthSignature()
       }
     } else {
-      toast.error('wallet is not connected')
+      // toast.error('wallet is not connected')
     }
 
     return () => {}
   }, [address])
 
-  const { data } = useGetUserInfoQuery({}, { skip: !isAuthorized })
-
+  useGetUserInfoQuery({}, { skip: !isAuthorized })
+  const { data } = useUserWalletQuery({}, { skip: !isAuthorized })
+  console.log(data)
   return (
     <Fragment>
       {isWalletConnected && !token ? (

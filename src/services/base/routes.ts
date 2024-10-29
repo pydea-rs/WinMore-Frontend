@@ -42,6 +42,9 @@ export const getApiRoute = () => {
       dreamMineList: {
         path: 'user/games/dream-mine',
       },
+      userWallet: {
+        path: 'user/wallet',
+      },
     },
     games: {
       mine: {

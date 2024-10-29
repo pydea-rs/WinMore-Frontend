@@ -6,6 +6,7 @@ import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slic
 import { updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
+import { setBalances } from '@/store/slices/networks/networks.slice'
 import {
   IGetUserBalanceResponse,
   IGetUserCurrentBalancePayload,
@@ -16,8 +17,8 @@ import {
 } from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
-import { IIsUserPlayingPayload, IIsUserPlayingResponse, IWithdrawPayload, IWithdrawResponse } from './user.service.types'
 import { IGetMineGamesListPayload, IGetMineGamesListResponse } from '../games/mine/mine.service.types'
+import { IIsUserPlayingPayload, IIsUserPlayingResponse, IUserWalletPayload, IUserWalletResponse, IWithdrawPayload, IWithdrawResponse } from './user.service.types'
 
 // Define the API service
 export const UserService = createApi({
@@ -84,9 +85,12 @@ export const UserService = createApi({
         }
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        const { data, meta } = await queryFulfilled
-
-        dispatch(updateCurrentTokenBalance(data.data))
+        try {
+          const { data, meta } = await queryFulfilled
+          dispatch(updateCurrentTokenBalance(data.data))
+        } catch (error) {
+          dispatch(updateCurrentTokenBalance(0))
+        }
       },
     }),
     getUserTokenBalance: builder.mutation<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
@@ -153,6 +157,20 @@ export const UserService = createApi({
         }
       },
     }),
+    userWallet: builder.query<BaseResponse<IUserWalletResponse>, IUserWalletPayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          method: 'GET',
+          url: user.userWallet.path,
+          sendAuthorization: true,
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(setBalances(data.data))
+      },
+    }),
   }),
 })
 
@@ -164,4 +182,5 @@ export const {
   useGetUserTokenBalanceMutation,
   useWithdrawMutation,
   useUserMineGamesListQuery,
+  useUserWalletQuery,
 } = UserService
