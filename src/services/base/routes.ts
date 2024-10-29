@@ -45,6 +45,9 @@ export const getApiRoute = () => {
       userWallet: {
         path: 'user/wallet',
       },
+      userTransactionHistory: {
+        path: 'user/transactions',
+      },
     },
     games: {
       mine: {

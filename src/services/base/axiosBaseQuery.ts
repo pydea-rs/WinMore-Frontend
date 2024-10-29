@@ -43,7 +43,7 @@ const axiosBaseQuery =
       url: string
       headers?: { 'Content-Type'?: string }
       sendAuthorization?: boolean
-      method: AxiosRequestConfig['method']
+      method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
       data?: AxiosRequestConfig['data']
       params?: AxiosRequestConfig['params']
     },
