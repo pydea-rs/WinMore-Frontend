@@ -103,7 +103,7 @@ const MineConfigForm = () => {
             <Label htmlFor="id-233" className="flex items-center justify-between">
               <span>Bet Amount</span>
               <span className="text-main">
-                Available: <span className="text-white">0.00</span>
+                Available: <span className="text-white">{currentTokenBalance}</span>
               </span>
             </Label>
             <Controller
