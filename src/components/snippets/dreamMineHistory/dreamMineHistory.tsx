@@ -119,7 +119,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
                                     <TableDataWrapper className="min-w-20 bg-opacity-40">
                                       <div className="flex items-center justify-center gap-x-2  h-[40px]">
                                         <SingleUserIcon className="hidden lg:inline-block w-6" />
-                                        <span>{game.userId}</span>
+                                        <span>{game.user.name || 'Ghost 😱'}</span>
                                       </div>
                                     </TableDataWrapper>
                                   </TableData>

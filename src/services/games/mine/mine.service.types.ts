@@ -18,6 +18,11 @@ export interface IMineGameDetail {
   updatedAt: string
   time: number
   multiplier: number
+  user: {
+    name: string
+    id: number
+  }
+
   userId: number
 }
 
