@@ -15,7 +15,7 @@ export interface IWithdrawPayload {
 }
 
 export interface IWithdrawResponse {
-  trxHash: string
+  ok: boolean
 }
 
 type TokenBalances = {

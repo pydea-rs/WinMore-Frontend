@@ -159,7 +159,7 @@ const Wallet = () => {
                                 </DataCol>
                                 <DataCol className="w-full md:w-1/5 flex justify-between md:justify-center items-center">
                                   <DataHeading className="md:hidden">My Wallet</DataHeading>
-                                  <span>0</span>
+                                  <span>{token.balance}</span>
                                 </DataCol>
                                 <DataCol className="w-full md:w-1/5">
                                   <Button

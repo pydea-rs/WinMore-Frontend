@@ -76,26 +76,26 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
             <Select value={{ id: network.chainId, name: network.name }} onChange={handleChangeChain}>
               <SelectButton className="flex items-center justify-between ">
                 <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                  {/* {network.icon ? <Avatar src={selectedChian.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />} */}
-                  <div className="w-6 h-6 bg-black rounded-full" />
+                  {network.icon ? <Avatar src={network.icon} alt={network.name} /> : <div className="w-6 h-6 bg-black rounded-full" />}
+
                   {network.name}
                 </div>
                 <ChevronDownIcon className="pointer-events-none size-6 fill-white/60" aria-hidden="true" />
               </SelectButton>
               <SelectList>
                 {networks.map((net) => {
-                  const { chainId, name } = net
+                  const { chainId, name, icon } = net
                   return (
                     <SelectOption value={{ id: chainId, name }} key={chainId} className="flex items-center">
-                      {/* {icon ? (
+                      {icon ? (
                         <SelectIcon>
-                          <Avatar className="flex-shrink-0" size="md" src={icon} alt="flag" />
+                          <Avatar className="flex-shrink-0" size="md" src={icon} alt={name} />
                         </SelectIcon>
-                      ) : ( */}
-                      <SelectIcon>
-                        <div className="w-6 h-6 bg-black rounded-full" />
-                      </SelectIcon>
-                      {/* )} */}
+                      ) : (
+                        <SelectIcon>
+                          <div className="w-6 h-6 bg-black rounded-full" />
+                        </SelectIcon>
+                      )}
                       <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
                     </SelectOption>
                   )

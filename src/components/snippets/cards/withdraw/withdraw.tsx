@@ -1,4 +1,5 @@
 import { Alert } from '@/components/common/alert/alert'
+import { Avatar } from '@/components/common/avatar/avatar'
 import { Button } from '@/components/common/button/button'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
@@ -51,6 +52,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
     formState: { errors },
   } = useForm<WithdrawForm>({ defaultValues: { chain: network.chainId, amount: '' } })
   const [withdrawMutate, { isLoading: isSendingWithdrawRequest }] = useWithdrawMutation()
+
   const handleSubmit = async (values: WithdrawForm) => {
     await withdrawMutate({
       amount: +values.amount,
@@ -59,11 +61,14 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
     })
       .unwrap()
       .then((res) => {
-        toast.success(res.data.trxHash)
+        if (res.data.ok) {
+          toast.success(res.message)
+        }
       })
       .catch((err) => console.log(err))
     dispatch(triggerWithdrawModal({ data: null, trigger: false }))
   }
+
   const amountValueWatch = withdrawFormWatch('amount')
   const gasListOBJ: any = arrayToObject(gasList)
 
@@ -93,37 +98,32 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
                 required: { value: true, message: "It's require" },
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
-                <Select
-                  value={{ id: network.chainId, name: network.name }}
-                  onChange={(op) => {
-                    onChange(op.id.toString())
-                  }}
-                >
+                <Select value={{ id: network.chainId, name: network.name }} onChange={() => {}} disabled>
                   <SelectButton className="flex items-center justify-between ">
                     <div className="flex items-center text-sm text-main font-medium gap-x-2">
-                      {/* {network?.icon ? <Avatar src={network?.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />} */}
-                      <div className="w-6 h-6 bg-black rounded-full" />
+                      {network.icon ? <Avatar src={network.icon} alt="flag" /> : <div className="w-6 h-6 bg-black rounded-full" />}
+                      {/* <div className="w-6 h-6 bg-black rounded-full" /> */}
                       {network.name}
                     </div>
                     <ChevronDownIcon className="pointer-events-none size-6 fill-white/60" aria-hidden="true" />
                   </SelectButton>
                   <SelectList>
-                    {networks.map(({ chainId: id, name }) => (
+                    {networks.map(({ chainId: id, name, icon }) => (
                       <SelectOption value={{ id, name }} key={id} className="flex items-center">
-                        {/* {icon ? (
+                        {icon ? (
                           <SelectIcon>
                             <Avatar className="flex-shrink-0" size="md" src={icon} alt="flag" />
                           </SelectIcon>
-                        ) : ( */}
-                        <SelectIcon>
-                          <div className="w-6 h-6 bg-black rounded-full" />
-                        </SelectIcon>
-                        {/* )} */}
+                        ) : (
+                          <SelectIcon>
+                            <div className="w-6 h-6 bg-black rounded-full" />
+                          </SelectIcon>
+                        )}
+
                         <span className="inline-block text-sm text-main font-medium group-data-[selected]:text-white">{name}</span>
                       </SelectOption>
                     ))}
                   </SelectList>
-                  {fieldState.invalid && <TextForm variant="invalid">put your error message</TextForm>}
                 </Select>
               )}
             />
