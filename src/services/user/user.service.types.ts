@@ -1,4 +1,4 @@
-import { IAvailableTokens } from '@/types/global.types'
+import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
 
 export interface IIsUserPlayingResponse {
@@ -26,3 +26,7 @@ export interface IUserWalletPayload {}
 export interface IUserWalletResponse {
   [chainId: number]: TokenBalances
 }
+
+// User Transaction History
+export interface IUserTransactionHistoryPayload extends IPaginationPayload {}
+export interface IUserTransactionHistoryResponse {}

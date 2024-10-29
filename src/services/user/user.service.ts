@@ -18,7 +18,16 @@ import {
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 import { IGetMineGamesListPayload, IGetMineGamesListResponse } from '../games/mine/mine.service.types'
-import { IIsUserPlayingPayload, IIsUserPlayingResponse, IUserWalletPayload, IUserWalletResponse, IWithdrawPayload, IWithdrawResponse } from './user.service.types'
+import {
+  IIsUserPlayingPayload,
+  IIsUserPlayingResponse,
+  IUserTransactionHistoryPayload,
+  IUserTransactionHistoryResponse,
+  IUserWalletPayload,
+  IUserWalletResponse,
+  IWithdrawPayload,
+  IWithdrawResponse,
+} from './user.service.types'
 
 // Define the API service
 export const UserService = createApi({
@@ -171,6 +180,16 @@ export const UserService = createApi({
         dispatch(setBalances(data.data))
       },
     }),
+    userTransactionHistory: builder.query<BaseResponse<IUserTransactionHistoryResponse>, IUserTransactionHistoryPayload>({
+      query(arg) {
+        const { user } = getApiRoute()
+        return {
+          url: user.userTransactionHistory.path,
+          method: 'GET',
+          sendAuthorization: true,
+        }
+      },
+    }),
   }),
 })
 
@@ -183,4 +202,5 @@ export const {
   useWithdrawMutation,
   useUserMineGamesListQuery,
   useUserWalletQuery,
+  useUserTransactionHistoryQuery,
 } = UserService
