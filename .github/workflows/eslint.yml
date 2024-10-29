@@ -1,4 +1,4 @@
-name: ESLINT Checker
+name: ESLINT
 
 on:
   pull_request:
