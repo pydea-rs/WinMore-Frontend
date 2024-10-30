@@ -6,7 +6,7 @@ import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useGamesListQuery } from '@/services/games/games.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -18,7 +18,7 @@ const HomeGameHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
-  const { data, refetch } = useMineGamesListQuery(
+  const { data, refetch } = useGamesListQuery(
     {
       skip: 1,
       take: 10,
