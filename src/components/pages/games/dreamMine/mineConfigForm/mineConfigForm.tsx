@@ -111,7 +111,7 @@ const MineConfigForm = () => {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's require" },
-                validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
+                // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>

@@ -70,8 +70,9 @@ export type IToken = {
 }
 
 export interface IPaginationPayload {
-  skip: number
-  take: number
-  sort?: 'lucky' | 'rollers'
+  skip?: number
+  take?: number
+  sort?: string
+  type?: string
   order?: 'asc' | 'desc'
 }

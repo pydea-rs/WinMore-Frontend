@@ -23,8 +23,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps, INetwork, TType } from '@/types/global.types'
+import { truncate } from '@/utils/truncate.utils'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 import { WalletHistoryProps } from './walletHistory.types'
 
 const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
@@ -33,37 +35,46 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
   const router = useRouter()
   const { pathname, query, push } = router
 
-  const sort = [
+  const types = [
     {
       id: 1,
       name: 'All',
-      value: 'all',
+      value: 'ALL',
     },
     {
       id: 2,
       name: 'Deposit',
-      value: 'deposit',
+      value: 'DEPOSIT',
     },
     {
       id: 3,
       name: 'Withdraw',
-      value: 'withdraw',
+      value: 'WITHDRAWAL',
+    },
+    {
+      id: 4,
+      name: 'In Game',
+      value: 'INGAME',
+    },
+    {
+      id: 5,
+      name: 'Blockchain',
+      value: 'BLOCKCHAIN',
     },
   ]
-
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { network } = useSelector((state) => state.currency)
   const { networks } = useSelector((state) => state.networks)
 
-  const handleChangeQuery = (sortData: string) => {
+  const handleChangeQuery = (typeData: string) => {
     push(
       {
         pathname: pathname,
-        query: { ...query, sort: sortData },
+        query: { ...query, type: typeData },
       },
       undefined,
-      { shallow: true },
+      { shallow: false },
     )
   }
 
@@ -72,16 +83,15 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
     dispatch(updateNetwork({ network: selectedNetwork }))
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
-
   return (
     <Card>
       <CardBody className="rounded-tr-none">
         {/* FILTERS */}
         <FormGroup>
           <RadioGroup>
-            {sort.map(({ id, name, value }) => {
+            {types.map(({ id, name, value }) => {
               return (
-                <Radio key={`sort-${id}`} id={`sort-${id}`} name="sort" value={value} checked={value === query.sort} onClick={() => handleChangeQuery(value)}>
+                <Radio key={`type-${id}`} id={`type-${id}`} name="type" value={value} checked={value === query.type} onClick={() => handleChangeQuery(value)}>
                   {name}
                 </Radio>
               )
@@ -149,9 +159,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
                 <TableHeading className="w-[165px]">
                   <div className="p-2">Status</div>
                 </TableHeading>
-                <TableHeading className="w-[165px]">
-                  <div className="p-2">Detail</div>
-                </TableHeading>
+
                 <TableHeading className="w-[165px]">
                   <div className="p-2">Time</div>
                 </TableHeading>
@@ -163,9 +171,10 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
             <TableBody>
               {data ? (
                 data.map((transaction) => {
-                  const { amount, chain, createdAt, destination, id, remarks, source, status, token, type } = transaction
+                  const { amount, chain, createdAt, destination, id, log, source, status, token, type } = transaction
                   const formattedDate = moment(createdAt).format('MMM DD YYYY')
-                  const formattedTime = moment(createdAt).format('HH:MM')
+                  const formattedTime = moment(createdAt).format('HH:mm')
+
                   return (
                     <TableRow className="text-center" key={id}>
                       <TableData>
@@ -211,8 +220,14 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
                       </TableData>
                       <TableData>
                         <TableDataWrapper className="text-white bg-opacity-40">
-                          <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                            <span>{remarks.hash ?? '----'}</span>
+                          <div
+                            className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px] cursor-pointer"
+                            onClick={() => {
+                              navigator.clipboard.writeText(log?.trxHash || '')
+                              toast.success('Transaction Hash Copied To Clipboard', { autoClose: 2000, toastId: log?.trxHash })
+                            }}
+                          >
+                            <span>{log && log.trxHash ? truncate(log.trxHash || '', 6, 'center') : '----'}</span>
                           </div>
                         </TableDataWrapper>
                       </TableData>
@@ -223,13 +238,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
                           </div>
                         </TableDataWrapper>
                       </TableData>
-                      <TableData>
-                        <TableDataWrapper className="text-white bg-opacity-40">
-                          <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">
-                            <span>{remarks.description}</span>
-                          </div>
-                        </TableDataWrapper>
-                      </TableData>
+
                       <TableData>
                         <TableDataWrapper className="text-white bg-opacity-40">
                           <div className="flex items-center justify-center gap-x-2 p-2 w-[100px] h-[40px]">

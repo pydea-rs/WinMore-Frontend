@@ -1,4 +1,4 @@
-import { IAddress, IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { IAddress, IAvailableTokens, IPaginationPayload, Nullable } from '@/types/global.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
 
 export interface IIsUserPlayingResponse {
@@ -44,13 +44,18 @@ export interface ITransaction {
     }
   }
   id: string
-  remarks: {
-    toUser: number
-    wallet: IAddress
-    fromUser: number
-    description: string
-    hash: IAddress
-  }
+  log: Nullable<{
+    block: {
+      hash: string
+      number: string
+      status: string
+    }
+    from: string
+    successful: boolean
+    to: string
+    trxHash: string
+    trxIndex: string
+  }>
   source: {
     id: number
     address: IAddress
