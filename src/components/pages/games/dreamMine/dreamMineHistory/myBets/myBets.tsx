@@ -11,13 +11,14 @@ import TableWrapper from '@/components/common/table/tableWrapper/tableWrapper'
 import CentIcon from '@/components/icons/cent/cent'
 import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
 import { calculateTime } from '@/utils/timeAndDate'
 import { MyBetsProps } from './myBets.types'
 
 const MyBets: BaseProps<MyBetsProps> = (props) => {
   const { data } = props
-
+  const { user } = useSelector((state) => state.auth)
   return (
     <Card>
       <CardBody className="bg-opacity-60 sm:filter-backdrop">
@@ -65,7 +66,7 @@ const MyBets: BaseProps<MyBetsProps> = (props) => {
                           <TableDataWrapper className="min-w-20 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
                               <SingleUserIcon className="hidden lg:inline-block w-6" />
-                              <span>{game.user.name}</span>
+                              <span>{user?.name || 'Ghost 😱'}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
