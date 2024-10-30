@@ -5,7 +5,7 @@ import LogoutIcon from '@/components/icons/logout/logout'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useAuth } from '@/hooks/useAuth'
 import { usePermalink } from '@/hooks/usePermalink'
-import { useGetUserCurrentBalanceQuery, useGetUserInfoQuery } from '@/services/user/user.service'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { IGetUserInfoResponse } from '@/types/auth/user.types'
@@ -30,10 +30,7 @@ const HeaderComponent = () => {
   const { token, network, currentTokenBalance } = useSelector((state) => state.currency)
   const { internalLinks } = usePermalink()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
-  const { isLoading: IsLoadingCurrentBalance, isFetching: isFetchingCurrentBalance } = useGetUserCurrentBalanceQuery(
-    { chain: network.chainId, token: token.symbol },
-    { skip: !isAuthorized },
-  )
+
   const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const headerRoutes = [

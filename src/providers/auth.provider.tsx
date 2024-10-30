@@ -7,7 +7,7 @@ import { Fragment, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 
 const AuthProvider: BaseProps = ({ children }) => {
-  const { isWalletConnected, sendAuthSignature, token, isAuthorized, connectWallet } = useAuth()
+  const { isWalletConnected, sendAuthSignature, token, isAuthorized, logoutAndDisconnect } = useAuth()
   const { address } = useAccount()
   const { user } = useSelector((state) => state.auth)
   useEffect(() => {
@@ -29,7 +29,7 @@ const AuthProvider: BaseProps = ({ children }) => {
   useEffect(() => {
     if (isWalletConnected) {
       if (address && user && user.wallet !== address) {
-        sendAuthSignature()
+        logoutAndDisconnect()
       }
     } else {
       // toast.error('wallet is not connected')
@@ -39,14 +39,13 @@ const AuthProvider: BaseProps = ({ children }) => {
   }, [address])
 
   useGetUserInfoQuery({}, { skip: !isAuthorized })
-  const { data } = useUserWalletQuery({}, { skip: !isAuthorized })
-  console.log(data)
+  useUserWalletQuery({}, { skip: !isAuthorized, pollingInterval: 30000 })
   return (
     <Fragment>
       {isWalletConnected && !token ? (
         <div className="flex justify-center items-center h-[100vh] w-screen flex-col">
           <Spinner />
-          Waiting for sign
+          Waiting for signature
         </div>
       ) : (
         children

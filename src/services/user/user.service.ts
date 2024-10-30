@@ -7,6 +7,7 @@ import { updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setBalances } from '@/store/slices/networks/networks.slice'
+import { RootState } from '@/store/store'
 import {
   IGetUserBalanceResponse,
   IGetUserCurrentBalancePayload,
@@ -82,26 +83,7 @@ export const UserService = createApi({
         } catch (err) {}
       },
     }),
-    getUserCurrentBalance: builder.query<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
-      query(arg) {
-        const { user } = getApiRoute()
-        return {
-          method: 'GET',
-          url: user.currentBalance.get(arg.token),
-          params: {
-            chain: arg.chain,
-          },
-        }
-      },
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const { data, meta } = await queryFulfilled
-          dispatch(updateCurrentTokenBalance(data.data))
-        } catch (error) {
-          dispatch(updateCurrentTokenBalance(0))
-        }
-      },
-    }),
+
     getUserTokenBalance: builder.mutation<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
       query(arg) {
         const { user } = getApiRoute()
@@ -112,6 +94,10 @@ export const UserService = createApi({
             chain: arg.chain,
           },
         }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled, getState }) {
+        const { data } = await queryFulfilled
+        dispatch(updateCurrentTokenBalance(data.data || 0))
       },
     }),
     isPlaying: builder.query<BaseResponse<IIsUserPlayingResponse>, IIsUserPlayingPayload>({
@@ -175,9 +161,15 @@ export const UserService = createApi({
           sendAuthorization: true,
         }
       },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled
-        dispatch(setBalances(data.data))
+      async onQueryStarted(arg, { dispatch, queryFulfilled, getState }) {
+        try {
+          const state = getState() as RootState
+          const { network, token } = state.currency
+          const { data } = await queryFulfilled
+          const currentToken = data.data[network.chainId][token.symbol]
+          dispatch(setBalances(data.data))
+          dispatch(updateCurrentTokenBalance(currentToken || 0))
+        } catch (error) {}
       },
     }),
     userTransactionHistory: builder.query<BaseResponse<IUserTransactionHistoryResponse>, IUserTransactionHistoryPayload>({
@@ -186,7 +178,7 @@ export const UserService = createApi({
         return {
           url: user.userTransactionHistory.path,
           method: 'GET',
-          // params: arg,
+          params: arg,
           sendAuthorization: true,
         }
       },
@@ -197,7 +189,7 @@ export const UserService = createApi({
 export const {
   useGetUserInfoQuery,
   useRegisterUserMutation,
-  useGetUserCurrentBalanceQuery,
+
   useIsPlayingQuery,
   useGetUserTokenBalanceMutation,
   useWithdrawMutation,
