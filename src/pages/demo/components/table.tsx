@@ -48,7 +48,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -96,7 +96,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -144,7 +144,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -192,7 +192,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -240,7 +240,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -288,7 +288,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -336,7 +336,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -384,7 +384,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -432,7 +432,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -480,7 +480,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -528,7 +528,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -576,7 +576,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -624,7 +624,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>
@@ -672,7 +672,7 @@ const TableDemo = () => {
                   <TableDataWrapper>
                     <div className="flex items-center justify-center gap-x-2 p-2 w-[165px] h-[40px]">
                       <DicesIcon className="w-6" />
-                      <span>Dream Tower</span>
+                      <span>Dream Mine</span>
                     </div>
                   </TableDataWrapper>
                 </TableData>

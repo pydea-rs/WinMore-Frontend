@@ -1,9 +1,10 @@
 import Container from '@/components/common/container/container'
 import { Spinner } from '@/components/common/spinner/spinner'
 import GameLayout from '@/components/layouts/game.layout'
-import MineGame from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
+import DreamMineGameBoard from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
+
+import DreamMineHistory from '@/components/pages/games/dreamMine/dreamMineHistory/dreamMineHistory'
 import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
-import DreamMineHistory from '@/components/snippets/dreamMineHistory/dreamMineHistory'
 
 import { useAuth } from '@/hooks/useAuth'
 import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
@@ -43,7 +44,7 @@ const Mine = () => {
                   <MineConfigForm />
                 </aside>
                 <div className="flex justify-center lg:justify-end flex-grow order-1 lg:order-2 pt-6 lg:pt-0 ">
-                  <MineGame />
+                  <DreamMineGameBoard />
                 </div>
               </div>
             </Container>

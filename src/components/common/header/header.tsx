@@ -213,7 +213,7 @@ const HeaderComponent = () => {
   const handleOpenPointsModal = () => {}
 
   return (
-    <header className="mb-10 relative z-[10000000000000]">
+    <header className="mb-10 relative z-[10000000]">
       <Container kind="fluid" className="relative">
         <Image
           src={'/assets/images/header-rectangle.svg'}

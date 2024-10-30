@@ -1,7 +1,7 @@
 import Container from '@/components/common/container/container'
 import MainLayout from '@/components/layouts/main.layout'
+import HomeGameHistory from '@/components/pages/home/homeGameHistory/homeGameHistory'
 import TopGames from '@/components/pages/home/top-games/top-game'
-import GameHistory from '@/components/snippets/gameHistory/gameHistory'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { Fragment, ReactElement } from 'react'
@@ -17,7 +17,7 @@ export default function Home() {
       <div className="flex flex-col flex-grow">
         <Hero className="mb-12" />
         <TopGames className="mb-12" />
-        <GameHistory />
+        <HomeGameHistory />
         <Container kind="fluid" className="-z-1 hidden sm:block mt-auto px-0">
           <div className="sm:-mb-[40px] lg:-mb-[64px]  sm:-mt-[100px]  lg:-mt-[260px]">
             <img src="/assets/images/complex.svg" alt="complex" />
