@@ -61,7 +61,7 @@ export type INetwork = {
 }
 export type IToken = {
   id: number
-  symbol: string
+  symbol: IAvailableTokens
   name: string
   contractAddress: IAddress
   icon: string

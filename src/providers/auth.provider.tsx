@@ -39,7 +39,7 @@ const AuthProvider: BaseProps = ({ children }) => {
   }, [address])
 
   useGetUserInfoQuery({}, { skip: !isAuthorized })
-  useUserWalletQuery({}, { skip: !isAuthorized })
+  useUserWalletQuery({}, { skip: !isAuthorized, pollingInterval: 30000 })
   return (
     <Fragment>
       {isWalletConnected && !token ? (

@@ -15,7 +15,7 @@ import SelectOption from '@/components/common/form/select/selectOption/selectOpt
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
 import DisabledIcon from '@/components/icons/disabled/disabled'
 
-import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
+import { updateCurrentTokenBalance, updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { INetwork, IToken, TType } from '@/types/global.types'
 import { SelectCoinProps } from './selectCoin.types'
@@ -30,9 +30,13 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
     const selectedNetwork = networks.find((net) => net.chainId === id) as INetwork
     dispatch(updateNetwork({ network: selectedNetwork }))
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
+    dispatch(updateCurrentTokenBalance(selectedNetwork.tokens[0].balance))
   }
   const handleChangeToken = (token: IToken) => {
+    const selectedNetwork = networks.find((net) => net.chainId === network.chainId) as INetwork
+    const tokenBalance = selectedNetwork.tokens.find((tk) => tk.id === token.id)
     dispatch(updateToken({ token }))
+    dispatch(updateCurrentTokenBalance(tokenBalance?.balance || 0))
   }
   const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
 
