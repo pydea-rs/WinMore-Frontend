@@ -186,7 +186,7 @@ export const UserService = createApi({
         return {
           url: user.userTransactionHistory.path,
           method: 'GET',
-          // params: arg,
+          params: arg,
           sendAuthorization: true,
         }
       },
