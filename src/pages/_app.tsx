@@ -95,7 +95,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         newestOnTop={false}
         rtl={false}
         pauseOnFocusLoss
-        // draggable
+        draggable
         pauseOnHover
         theme="dark"
         transition={Slide}
