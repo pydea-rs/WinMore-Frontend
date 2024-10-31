@@ -92,6 +92,22 @@ const MineConfigForm = () => {
     }
   }
 
+  const handleOnIncrease = (value: string) => {
+    const increasedValue = !isAuthorized ? null : addDecimalNumbers(formatNumber(value || '0'), 1)
+
+    if (!increasedValue) return null
+    numericFormSetValue('betAmount', increasedValue)
+    dispatch(updateMineConfig({ betAmount: increasedValue }))
+  }
+
+  const handleOnDecrease = (value: string) => {
+    const decreasedValue = !isAuthorized ? null : subDecimalNumbers(formatNumber(value || '0'), 1)
+
+    if (!decreasedValue) return null
+    numericFormSetValue('betAmount', decreasedValue)
+    dispatch(updateMineConfig({ betAmount: decreasedValue }))
+  }
+
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
@@ -119,11 +135,12 @@ const MineConfigForm = () => {
                     <NumberInput
                       disabled={mineConfig.isStarted || !isAuthorized}
                       onChange={(event) => {
+                        console.log({ event: event.target.value })
                         dispatch(updateMineConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}
-                      onIncrease={() => (!isAuthorized ? null : numericFormSetValue('betAmount', addDecimalNumbers(formatNumber(value || '0'), 1)))}
-                      onDecrease={() => (!isAuthorized ? null : numericFormSetValue('betAmount', subDecimalNumbers(formatNumber(value || '0'), 1)))}
+                      onIncrease={() => handleOnIncrease(value)}
+                      onDecrease={() => handleOnDecrease(value)}
                       onBlur={onBlur}
                       value={value}
                       id="id-233"
