@@ -1,7 +1,7 @@
 import Container from '@/components/common/container/container'
 import { Spinner } from '@/components/common/spinner/spinner'
 import GameLayout from '@/components/layouts/game.layout'
-import DreamMineGameBoard from '@/components/pages/games/dreamMine/dreamMineGameboard/dreamMineGameboard'
+import DreamMineGameBoard from '@/components/pages/games/dreamMine/dreamMineGameBoard/dreamMineGameBoard'
 
 import DreamMineHistory from '@/components/pages/games/dreamMine/dreamMineHistory/dreamMineHistory'
 import MineConfigForm from '@/components/pages/games/dreamMine/mineConfigForm/mineConfigForm'
