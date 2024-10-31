@@ -74,7 +74,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
         query: { ...query, type: typeData },
       },
       undefined,
-      { shallow: false },
+      { shallow: true },
     )
   }
 
