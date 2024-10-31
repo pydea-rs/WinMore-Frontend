@@ -5,7 +5,7 @@ export const networks: INetwork[] = [
     chainId: 137, // Polygon Mainnet Chain ID
     name: 'Polygon Mainnet',
     rpcUrl: 'https://rpc-mainnet.maticvigil.com', // Mainnet RPC URL
-    icon: '/assets/images/chains/Polygon.png',
+    icon: '/assets/images/chains/Polygon Mainnet.png',
     tokens: [
       {
         id: 0,
