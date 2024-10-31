@@ -117,7 +117,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
             </FormGroup>
 
             <Button kind="gradient" size="lg" full type="submit">
-              Primary
+              Get Start
             </Button>
           </div>
         </form>
