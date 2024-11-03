@@ -83,7 +83,6 @@ export const UserService = createApi({
         } catch (err) {}
       },
     }),
-
     getUserTokenBalance: builder.mutation<BaseResponse<IGetUserBalanceResponse>, IGetUserCurrentBalancePayload>({
       query(arg) {
         const { user } = getApiRoute()
@@ -189,7 +188,6 @@ export const UserService = createApi({
 export const {
   useGetUserInfoQuery,
   useRegisterUserMutation,
-
   useIsPlayingQuery,
   useGetUserTokenBalanceMutation,
   useWithdrawMutation,
@@ -197,3 +195,5 @@ export const {
   useUserWalletQuery,
   useUserTransactionHistoryQuery,
 } = UserService
+
+export const { getUserInfo } = UserService.endpoints
