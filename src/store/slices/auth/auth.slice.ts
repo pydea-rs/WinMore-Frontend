@@ -23,7 +23,7 @@ export const authSlice = createSlice({
       const decodedToken: { exp: number } = jwtDecode(token)
       // Convert 'exp' to milliseconds and set cookie expiration
       const cookieExpiration = new Date(decodedToken.exp * 1000) // 'exp' is in seconds
-      console.log({ token, domain })
+      console.log('testttt', { token, domain })
       setCookie('token', token, { domain, expires: cookieExpiration })
       state.token = token
     },
