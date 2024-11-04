@@ -61,6 +61,7 @@ const axiosBaseQuery =
         data,
         params,
         headers: {
+          'Access-Control-Allow-Origin': '*',
           ...auth,
           ...headers,
         },
