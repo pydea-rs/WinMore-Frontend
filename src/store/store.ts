@@ -19,8 +19,8 @@ export type AppDispatch = Store['dispatch']
 
 // Persist configuration
 const persistConfig = {
-  key: 'currency',
-  version: 1,
+  key: 'currency-v1.1',
+  version: 1.1,
   storage,
   whitelist: ['currency'], // Specify which slice to persist
 }

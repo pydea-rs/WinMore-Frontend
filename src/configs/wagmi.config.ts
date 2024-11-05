@@ -9,7 +9,7 @@ export const config = createConfig({
   ], // Include both mainnet and devnet
   transports: {
     // [polygon.id]: http(),
-    [sepolia.id]: http(),
+    [sepolia.id]: http('https://rough-aged-valley.ethereum-sepolia.quiknode.pro/7854d3f5a76f771a510ba06ed1a95a58f1416ee5'),
   },
   connectors: [
     metaMask({
