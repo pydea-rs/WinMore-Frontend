@@ -39,7 +39,7 @@ export const networks: INetwork[] = [
   {
     chainId: 11155111, // Sepolia Testnet Chain ID
     name: 'Sepolia',
-    rpcUrl: 'https://rpc2.sepolia.org', // Replace with your actual Infura project ID
+    rpcUrl: 'https://rough-aged-valley.ethereum-sepolia.quiknode.pro/7854d3f5a76f771a510ba06ed1a95a58f1416ee5', // Replace with your actual Infura project ID
     icon: '/assets/images/chains/Sepolia.png',
     tokens: [
       {
