@@ -1,6 +1,7 @@
 import { config } from '@/configs/wagmi.config'
 import { useGetAuthMutation, useGetMessageMutation } from '@/services/authentication/auth.service'
 import { logout } from '@/store/slices/auth/auth.slice'
+import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
 import { IWalletError } from '@/types/global.types'
@@ -93,9 +94,10 @@ export const useAuth = () => {
   const logoutAndDisconnect = () => {
     const domain = getDomain()
     deleteCookie('token', { domain })
+    dispatch(updateCurrentTokenBalance(0))
     dispatch(logout())
     disconnect()
-    window.location.reload()
+    // window.location.reload()
   }
   useEffect(() => {
     if (isConnected && !!token) {

@@ -16,7 +16,6 @@ const Mine = () => {
   const { isLoading } = useIsPlayingQuery({}, { skip: !isAuthorized })
   const { isLoading: IsGamesListLoading } = useMineGamesListQuery(
     {
-      skip: 1,
       take: 10,
     },
     { skip: !isAuthorized },

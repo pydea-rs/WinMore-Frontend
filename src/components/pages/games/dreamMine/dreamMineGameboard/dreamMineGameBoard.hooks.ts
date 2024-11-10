@@ -18,7 +18,6 @@ const useDreamMineGameBoardHelper = () => {
   const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
   const { refetch: refetchList } = useMineGamesListQuery(
     {
-      skip: 1,
       take: 10,
     },
     { skip: !isAuthorized },

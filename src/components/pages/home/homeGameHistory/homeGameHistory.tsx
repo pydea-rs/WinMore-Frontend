@@ -18,15 +18,11 @@ const HomeGameHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { isAuthorized } = useAuth()
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
-  const { data, refetch } = useGamesListQuery(
-    {
-      skip: 1,
-      take: 10,
-      sort,
-      // order,
-    },
-    { skip: !isAuthorized },
-  )
+  const { data, refetch } = useGamesListQuery({
+    take: 10,
+    sort,
+    // order,
+  })
 
   const classList = classNames({
     [`${className}`]: className,

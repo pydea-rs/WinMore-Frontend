@@ -22,17 +22,13 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
   const { isAuthorized } = useAuth()
 
-  const { data: userMineGamesList } = useUserMineGamesListQuery({ skip: 1, take: 10 })
+  const { data: userMineGamesList } = useUserMineGamesListQuery({ take: 10 }, { skip: !isAuthorized })
 
-  const { data, refetch } = useMineGamesListQuery(
-    {
-      skip: 1,
-      take: 10,
-      sort,
-      // order,
-    },
-    { skip: !isAuthorized },
-  )
+  const { data, refetch } = useMineGamesListQuery({
+    take: 10,
+    sort,
+    // order,
+  })
 
   const classList = classNames({
     [`${className}`]: className,
@@ -57,7 +53,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
           <TabHeader>
             <TabItem onClick={() => handleSort(undefined)}>All BETS</TabItem>
             <TabItem onClick={() => handleSort('lucky')}>LUCKY BETS</TabItem>
-            <TabItem>MY BETS</TabItem>
+            {isAuthorized ? <TabItem>MY BETS</TabItem> : <></>}
           </TabHeader>
 
           <TabBody className="">
@@ -67,9 +63,13 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
             <TabContent>
               <LuckyBets data={data} />
             </TabContent>
-            <TabContent>
-              <MyBets data={userMineGamesList} />
-            </TabContent>
+            {isAuthorized ? (
+              <TabContent>
+                <MyBets data={userMineGamesList} />
+              </TabContent>
+            ) : (
+              <></>
+            )}
           </TabBody>
         </Tab>
         <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20 pointer-events-none" />
