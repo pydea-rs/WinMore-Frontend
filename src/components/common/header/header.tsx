@@ -207,7 +207,11 @@ const HeaderComponent = () => {
   }
 
   const handleOpenDepositModal = () => {
-    dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    if (!UserData?.data.profile || !UserData?.data.name) {
+      dispatch(triggerModal({ modal: 'login', trigger: true }))
+    } else {
+      dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    }
   }
 
   const handleOpenPointsModal = () => {}

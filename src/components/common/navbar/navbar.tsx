@@ -1,4 +1,6 @@
+import { useAuth } from '@/hooks/useAuth'
 import { usePermalink } from '@/hooks/usePermalink'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
 import { useDispatch } from '@/store/store'
@@ -19,6 +21,8 @@ const Navbar: BaseProps<INavbar> = (props) => {
   const { isOpen } = props
   const dispatch = useDispatch()
   const { internalLinks } = usePermalink()
+  const { isAuthorized } = useAuth()
+  const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const variants = {
     open: { opacity: 1, x: 0 },
@@ -31,8 +35,12 @@ const Navbar: BaseProps<INavbar> = (props) => {
   }
 
   const handleOpenDepositModal = () => {
-    dispatch(toggleNavbar())
-    dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    if (!UserData?.data.profile || !UserData?.data.name) {
+      dispatch(triggerModal({ modal: 'login', trigger: true }))
+    } else {
+      dispatch(toggleNavbar())
+      dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    }
   }
 
   return (

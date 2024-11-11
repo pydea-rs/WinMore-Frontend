@@ -16,7 +16,7 @@ import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
-import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IMineMode } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
@@ -34,6 +34,7 @@ const MineConfigForm = () => {
   const { isAuthorized } = useAuth()
   const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
   const [refetchBalance] = useGetUserTokenBalanceMutation()
+  const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const modes: IMineMode[] = [
     {
@@ -78,17 +79,21 @@ const MineConfigForm = () => {
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
   const handleSubmit = async (values: IGameForm) => {
-    if (!isAuthorized) {
+    if (!UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
-      return
-    }
-    const betAmount = mineConfig.betAmount.split(',').join('')
-    try {
-      await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
-      refetchBalance({ chain: network.chainId, token: token.symbol })
-      onStart()
-    } catch (error) {
-      // toast.error(error.message)
+    } else {
+      if (!isAuthorized) {
+        dispatch(triggerModal({ modal: 'login', trigger: true }))
+        return
+      }
+      const betAmount = mineConfig.betAmount.split(',').join('')
+      try {
+        await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
+        refetchBalance({ chain: network.chainId, token: token.symbol })
+        onStart()
+      } catch (error) {
+        // toast.error(error.message)
+      }
     }
   }
 

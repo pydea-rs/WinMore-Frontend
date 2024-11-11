@@ -13,7 +13,6 @@ const WalletModalGroup: BaseProps<WalletModalGroupProps> = (props) => {
   const { goTo, next } = useMultiStepModal(2)
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
-  const { modals } = useSelector((state) => state.modal)
 
   useEffect(() => {
     if (user) {

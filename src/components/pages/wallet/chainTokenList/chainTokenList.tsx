@@ -17,7 +17,8 @@ import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
 import { Spinner } from '@/components/common/spinner/spinner'
 import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { useAuth } from '@/hooks/useAuth'
+import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { triggerModal, triggerWithdrawModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
@@ -30,11 +31,17 @@ const ChainTokenList: BaseProps<ChainTokenListProps> = (props) => {
   const dispatch = useDispatch()
   const { network } = useSelector((state) => state.currency)
   const { networks } = useSelector((state) => state.networks)
+  const { isAuthorized } = useAuth()
+  const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const [GetTokenBalanceMutate, { isLoading: isLoadingBalance }] = useGetUserTokenBalanceMutation()
 
   const handleOpenDepositModal = (id: number) => {
-    dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    if (!UserData?.data.profile || !UserData?.data.name) {
+      dispatch(triggerModal({ modal: 'login', trigger: true }))
+    } else {
+      dispatch(triggerModal({ modal: 'deposit', trigger: true }))
+    }
   }
 
   const handleChangeNetwork = ({ id }: TType) => {
