@@ -96,6 +96,7 @@ export const useAuth = () => {
     dispatch(updateCurrentTokenBalance(0))
     dispatch(logout())
     disconnect()
+    setIsAuthorized(false)
     // window.location.reload()
   }
   useEffect(() => {
