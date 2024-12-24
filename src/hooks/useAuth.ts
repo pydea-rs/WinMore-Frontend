@@ -5,7 +5,6 @@ import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slic
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
 import { IWalletError } from '@/types/global.types'
-import { getDomain } from '@/utils/getDomain.util'
 import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useEffect, useState } from 'react'
@@ -47,7 +46,6 @@ export const useAuth = () => {
 
     const protocol = 'https://' // Assuming you're using HTTPS
     const fullDomain = `${protocol}${domain}`
-
     const rawMessage = new SiweMessage({
       address: message.address,
       nonce: message.nonce,
@@ -92,7 +90,8 @@ export const useAuth = () => {
   }
 
   const logoutAndDisconnect = () => {
-    const domain = getDomain()
+    const domain = getHostName()
+
     deleteCookie('token', { domain })
     dispatch(updateCurrentTokenBalance(0))
     dispatch(logout())
