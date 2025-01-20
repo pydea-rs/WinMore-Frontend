@@ -13,7 +13,7 @@ import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
-import { calculateTime } from '@/utils/timeAndDate'
+import { getTimePassed } from '@/utils/timeAndDate'
 import { MyBetsProps } from './myBets.types'
 
 const MyBets: BaseProps<MyBetsProps> = (props) => {
@@ -73,7 +73,7 @@ const MyBets: BaseProps<MyBetsProps> = (props) => {
                         <TableData>
                           <TableDataWrapper className="min-w-20 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                              <span>{calculateTime(game.time)}</span>
+                              <span>{getTimePassed(new Date(game.createdAt))}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
