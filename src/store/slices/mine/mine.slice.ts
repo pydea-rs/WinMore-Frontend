@@ -39,15 +39,8 @@ export const mineSlice = createSlice({
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.coefficients
       if (!rowsConfig) return
       state.mineConfig.coefficients = rowsConfig
-      if (state.mineConfig.mode.label === 'EASY') {
-        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.easy
-      }
-      if (state.mineConfig.mode.label === 'MEDIUM') {
-        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.medium
-      }
-      if (state.mineConfig.mode.label === 'HARD') {
-        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.hard
-      }
+      state.mineConfig.mode.coefficient =
+        state.mineConfig.coefficients[state.mineConfig.mode.label === 'HARD' ? 'hard' : state.mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
     },
     updateMinConfigMode: (state: StateType, action: PayloadAction<IMineModeVariants>) => {
       switch (action.payload) {

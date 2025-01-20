@@ -16,7 +16,6 @@ export const getTimePassed = (startTime: Date) => {
     { symbol: 'y', max: 0 },
   ]
   let unitIndex = 0
-  console.log(startTime)
   for (; unitIndex < units.length && units[unitIndex].max && time >= units[unitIndex].max; time /= units[unitIndex++].max);
   return `${time | 0}${units[unitIndex].symbol} ago`
 }

@@ -18,7 +18,6 @@ import useDreamMineGameBoardHelper from './dreamMineGameBoard.hooks'
 
 export default function DreamMineGameBoard() {
   const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading } = useDreamMineGameBoardHelper()
-  const rows = createNumberArray(1, mineConfig.rows)
   const blockPerRows = createNumberArray(1, mineConfig.mode.value)
 
   const getGameStateColor = (status: Nullable<IMineGameStatuses>) => {
@@ -98,74 +97,76 @@ export default function DreamMineGameBoard() {
                 <></>
               )}
 
-              {rows.map((row) => {
-                return (
-                  <Fragment key={row}>
-                    <div className="flex items-center gap-x-4 sm:gap-x-5">
-                      <div
-                        className={classNames({
-                          'flex justify-center items-center text-xs w-8 h-6 rounded-full border': true,
-                          'border-green-500': row < mineConfig.activeRow,
-                          'border-[#798998]': row === mineConfig.activeRow,
-                          'border-[#3B3D47CC]': row > mineConfig.activeRow,
-                        })}
-                      >
-                        <span className="relative top-[1px] font-fractul font-medium">{mineConfig.mode.coefficient[row]}</span>
-                      </div>
-                      <div
-                        // grid gap-3 custom-cursor flex-grow-1
-                        className={`flex  custom-cursor flex-grow-1 h-[60px] w-full ${mineConfig.mode.label === 'EASY' ? 'justify-between' : 'justify-around'} ${row === mineConfig.activeRow ? '' : 'inactive'} `}
-                        style={{
-                          gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
-                        }}
-                      >
-                        {blockPerRows.map((block) => {
-                          const currentRowSelectedItem = mineConfig.selectedBlocks.find((item) => item.row === row && item.index === block)
-                          const isLoading = loadingBlock?.index === block && loadingBlock?.row === row
-                          const imageSrc = !currentRowSelectedItem
-                            ? `/assets/games/mine/images/rock-${block}.svg`
-                            : currentRowSelectedItem.status === 'GOLD'
-                              ? `/assets/games/mine/images/gold.svg`
-                              : `/assets/games/mine/images/bomb.svg`
+              {Array(mineConfig.rows)
+                .fill(null)
+                .map((_, row) => {
+                  return (
+                    <Fragment key={row}>
+                      <div className="flex items-center gap-x-4 sm:gap-x-5">
+                        <div
+                          className={classNames({
+                            'flex justify-center items-center text-xs w-12 h-6 rounded-full border': true,
+                            'border-green-500': row + 1 < mineConfig.activeRow,
+                            'border-[#798998]': row + 1 === mineConfig.activeRow,
+                            'border-[#3B3D47CC]': row + 1 > mineConfig.activeRow,
+                          })}
+                        >
+                          <span className="relative top-[1px] font-fractul font-medium">{mineConfig.mode.coefficient[row]?.toFixed(3)}</span>
+                        </div>
+                        <div
+                          // grid gap-3 custom-cursor flex-grow-1
+                          className={`flex  custom-cursor flex-grow-1 h-[60px] w-full ${mineConfig.mode.label === 'EASY' ? 'justify-between' : 'justify-around'} ${row === mineConfig.activeRow ? '' : 'inactive'} `}
+                          style={{
+                            gridTemplateColumns: `repeat(${mineConfig.mode.value}, minmax(0, 1fr))`,
+                          }}
+                        >
+                          {blockPerRows.map((block) => {
+                            const currentRowSelectedItem = mineConfig.selectedBlocks.find((item) => item.row === row + 1 && item.index === block)
+                            const isLoading = loadingBlock?.index === block && loadingBlock?.row === row + 1
+                            const imageSrc = !currentRowSelectedItem
+                              ? `/assets/games/mine/images/rock-${block}.svg`
+                              : currentRowSelectedItem.status === 'GOLD'
+                                ? `/assets/games/mine/images/gold.svg`
+                                : `/assets/games/mine/images/bomb.svg`
 
-                          return (
-                            <motion.div
-                              key={block}
-                              whileTap={{ scale: 1.1 }}
-                              onClick={() => {
-                                row === mineConfig.activeRow && !isMineBlockLoading ? onCheckBlock(block, row) : null
-                              }}
-                              // className={`transition-all flex-shrink-0 ${currentRowSelectedItem?.status === 'GOLD' ? 'block-gold' : `block-${block}`}`}>
-                              className={`transition-all flex-shrink-0 block-stone`}
-                            >
+                            return (
                               <motion.div
-                                key={`block-${block}`}
-                                initial={{ scale: 0.6 }}
-                                animate={{ scale: 1 }}
-                                exit={{ scale: 0.6 }}
-                                transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
-                                className="flex justify-center items-center h-full w-full"
+                                key={block}
+                                whileTap={{ scale: 1.1 }}
+                                onClick={() => {
+                                  row + 1 === mineConfig.activeRow && !isMineBlockLoading ? onCheckBlock(block, row + 1) : null
+                                }}
+                                // className={`transition-all flex-shrink-0 ${currentRowSelectedItem?.status === 'GOLD' ? 'block-gold' : `block-${block}`}`}>
+                                className={`transition-all flex-shrink-0 block-stone`}
                               >
-                                {isLoading ? (
-                                  <Spinner />
-                                ) : (
-                                  <Image
-                                    src={imageSrc}
-                                    alt="block"
-                                    className={classNames({ 'opacity-50': row < mineConfig.activeRow && currentRowSelectedItem?.status !== 'GOLD' })}
-                                    width={55}
-                                    height={60}
-                                  />
-                                )}
+                                <motion.div
+                                  key={`block-${block}`}
+                                  initial={{ scale: 0.6 }}
+                                  animate={{ scale: 1 }}
+                                  exit={{ scale: 0.6 }}
+                                  transition={{ type: 'spring', bounce: 0.7, duration: 0.8 }}
+                                  className="flex justify-center items-center h-full w-full"
+                                >
+                                  {isLoading ? (
+                                    <Spinner />
+                                  ) : (
+                                    <Image
+                                      src={imageSrc}
+                                      alt="block"
+                                      className={classNames({ 'opacity-50': row + 1 < mineConfig.activeRow && currentRowSelectedItem?.status !== 'GOLD' })}
+                                      width={55}
+                                      height={60}
+                                    />
+                                  )}
+                                </motion.div>
                               </motion.div>
-                            </motion.div>
-                          )
-                        })}
+                            )
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  </Fragment>
-                )
-              })}
+                    </Fragment>
+                  )
+                })}
             </div>
           </div>
 
