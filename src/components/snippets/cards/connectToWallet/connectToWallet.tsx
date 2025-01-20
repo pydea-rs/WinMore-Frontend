@@ -48,8 +48,8 @@ export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) =
                 className=""
                 size="lg"
                 full
-                onClick={() => {
-                  connectWallet(wallet)
+                onClick={async () => {
+                  await connectWallet(wallet)
                 }}
                 disabled={isLoading}
               >

@@ -4,7 +4,6 @@ import { logout } from '@/store/slices/auth/auth.slice'
 import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
-import { IWalletError } from '@/types/global.types'
 import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useEffect, useState } from 'react'
@@ -13,9 +12,11 @@ import { SiweMessage } from 'siwe'
 import { Connector, useAccount, useChainId, useDisconnect, useSignMessage } from 'wagmi'
 
 export const useAuth = () => {
-  const { isConnected, address } = useAccount({ config: config })
+  const { isConnected, address } = useAccount({ config })
   const chainId = useChainId()
+
   const token = getCookie('token')
+
   const { disconnect } = useDisconnect({ config: config })
   const [getMessageMutate, { isLoading: isMessageLoading }] = useGetMessageMutation({})
   const [login, { isLoading: isLoginLoading }] = useGetAuthMutation()
@@ -25,17 +26,20 @@ export const useAuth = () => {
   const { signMessageAsync } = useSignMessage({
     mutation: {
       onMutate: () => {
+        console.log('onMutate')
         setIsPendingForSign(true)
       },
       onSuccess: () => {
+        console.log('onSuccess')
         setIsPendingForSign(false)
       },
-      onError: () => {
+      onError: (err) => {
+        console.log(err)
         setIsPendingForSign(false)
       },
     },
   })
-  const signMessageHandler = (message: ISIWEMessage) => {
+  const signMessageHandler = async (message: ISIWEMessage) => {
     const domain = getHostName()
 
     if (!domain) {
@@ -57,14 +61,13 @@ export const useAuth = () => {
     })
 
     const preparedMessage = rawMessage.prepareMessage()
-    signMessageAsync({ message: preparedMessage })
-      .then((res) => {
-        const payload = { message: preparedMessage, signature: res }
-        login(payload).catch((err) => toast.error(err.message))
-      })
-      .catch((err) => {
-        toast.error(err.details)
-      })
+    try {
+      const res = await signMessageAsync({ account: address, message: preparedMessage })
+      const payload = { message: preparedMessage, signature: res }
+      await login(payload)
+    } catch (err) {
+      toast.error((err as any)['details'] || (err as string))
+    }
   }
 
   const sendAuthSignature = async () => {
@@ -73,18 +76,19 @@ export const useAuth = () => {
     }
     await getMessageMutate({ address })
       .unwrap()
-      .then((res) => {
-        signMessageHandler(res.data)
+      .then(async (res) => {
+        console.log(res)
+        await signMessageHandler(res.data)
       })
   }
 
   const connectWallet = async (connector: Connector) => {
     connector
       .connect()
-      .then((res) => {
-        sendAuthSignature()
+      .then(async (res) => {
+        await sendAuthSignature()
       })
-      .catch((error: IWalletError) => {
+      .catch((error) => {
         toast.error(error.details, { toastId: error.code })
       })
   }

@@ -14,8 +14,8 @@ const AuthProvider: BaseProps = ({ children }) => {
     let timeout: NodeJS.Timeout | null = null // Initialize timeout as null
 
     if (isWalletConnected && !token) {
-      timeout = setTimeout(() => {
-        sendAuthSignature()
+      timeout = setTimeout(async () => {
+        await sendAuthSignature() // TODO: CHECK: async method not awaited
       }, 500)
     }
 

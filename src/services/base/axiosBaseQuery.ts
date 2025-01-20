@@ -66,16 +66,15 @@ const axiosBaseQuery =
           ...headers,
         },
       })
-      return result
-      // return {
-      //   data: {
-      //     data: result.data.data,
-      //     message: result.data.message,
-      //     status: result.data.status,
-      //   },
-      // }
+      return {
+        data: {
+          data: result.data.data,
+          message: result.data.message,
+          status: result.data.status,
+        },
+      }
     } catch (axiosError) {
-      let err = axiosError as AxiosError<{ data: null; message: string[] }>
+      let err = axiosError as AxiosError<{ data: null; message: string[]; status?: number }>
 
       toast.error(err.response?.data.message)
       throw err
