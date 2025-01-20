@@ -36,24 +36,6 @@ const MineConfigForm = () => {
   const [refetchBalance] = useGetUserTokenBalanceMutation()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
-  const modes: IMineMode[] = [
-    {
-      label: 'EASY',
-      value: 4,
-      coefficient: rulesData?.data.coefficients.easy || [],
-    },
-    {
-      label: 'MEDIUM',
-      value: 3,
-      coefficient: rulesData?.data.coefficients.medium || [],
-    },
-    {
-      label: 'HARD',
-      value: 2,
-      coefficient: rulesData?.data.coefficients.hard || [],
-    },
-  ]
-
   const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
 
@@ -61,8 +43,6 @@ const MineConfigForm = () => {
     dispatch(startMineGame())
     tile.play()
   }, [mineConfig, rulesData])
-
-  const rows = createNumberArray(rulesData?.data.minRows || 8, rulesData?.data.maxRows || 12)
 
   const {
     control: gameControl,
@@ -76,6 +56,31 @@ const MineConfigForm = () => {
       gameRows: mineConfig.rows,
     },
   })
+
+  const rows = createNumberArray(
+    Math.min(...(rulesData?.data || [{ rows: 8 }]).map((rules) => rules.rows)),
+    Math.max(...(rulesData?.data || [{ rows: 12 }]).map((rules) => rules.rows)),
+  )
+
+  const currentRowsRules = rulesData?.data.find((rules) => rules.rows === mineConfig.rows)
+
+  const modes: IMineMode[] = [
+    {
+      label: 'EASY',
+      value: 4,
+      coefficient: currentRowsRules?.coefficients.easy || [],
+    },
+    {
+      label: 'MEDIUM',
+      value: 3,
+      coefficient: currentRowsRules?.coefficients.medium || [],
+    },
+    {
+      label: 'HARD',
+      value: 2,
+      coefficient: currentRowsRules?.coefficients.hard || [],
+    },
+  ]
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
   const handleSubmit = async (values: IGameForm) => {

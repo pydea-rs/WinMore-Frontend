@@ -5,7 +5,7 @@ export interface IMineGameDetail {
   betToken: IAvailableTokens
   createdAt: string
   currentRow: number
-  golds: number[]
+  nulls: number[]
   finishedAt: null
   id: string
   initialBet: number
@@ -27,14 +27,14 @@ export interface IMineGameDetail {
 }
 
 export interface IGetMineRulesPayload {}
-export interface IGetMineRulesResponse {
+export interface IRowsBasedCoefficients {
   coefficients: ICoefficients
   maxBetAmount: number | null
-  maxRows: number
   minBetAmount: number
-  minRows: number
+  rows: number
 }
 
+export type IGetMineRulesResponse = IRowsBasedCoefficients[]
 export interface IPlaceMineBetPayload {
   betAmount: number
   mode: string

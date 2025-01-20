@@ -113,7 +113,7 @@ export const UserService = createApi({
           return
         }
         const currentGame = data.data.dreamMine
-        const currentGameSelectedBlocks: IBlock[] = currentGame.golds.map((gold, rowIndex) => ({ index: gold, row: rowIndex + 1, status: 'GOLD' }))
+        const currentGameSelectedBlocks: IBlock[] = currentGame.nulls.map((nullIndex: number, rowIndex: number) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }))
         dispatch(
           updateMineConfig({
             activeRow: currentGame.currentRow + 1,

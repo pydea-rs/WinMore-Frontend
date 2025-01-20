@@ -32,8 +32,8 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(updateCoefficients(data.data.coefficients))
-        dispatch(updateMineConfig({ rows: data.data.minRows }))
+        dispatch(updateCoefficients(data.data))
+        dispatch(updateMineConfig({ rows: data.data[0].rows }))
       },
     }),
     postMineBet: builder.mutation<BaseResponse<ICurrentMineGame>, IPlaceMineBetPayload>({

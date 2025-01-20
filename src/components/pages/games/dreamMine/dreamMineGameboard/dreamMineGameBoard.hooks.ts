@@ -78,10 +78,10 @@ const useDreamMineGameBoardHelper = () => {
 
       try {
         const { data } = await mineBlockMutation({ id: mineConfig.currentGameId, choice: i }).unwrap()
-        const block: IBlock = { index: i, row, status: data.success ? 'GOLD' : 'MINE' }
+        const block: IBlock = { index: i, row, status: data.success ? 'GOLD' : 'NULL' }
 
         if (!data.success) {
-          bomb.play()
+          bomb.play() // TODO: Make this optional, by sound On or Off state
           dispatch(updateMineConfig({ selectedBlocks: [...mineConfig.selectedBlocks, block] }))
           lostHandler()
         } else {

@@ -12,7 +12,7 @@ export interface IMineMode {
 export interface IBlock {
   index: number
   row: number
-  status: 'GOLD' | 'MINE'
+  status: 'GOLD' | 'NULL'
 }
 interface IMineGame {
   mode: IMineMode

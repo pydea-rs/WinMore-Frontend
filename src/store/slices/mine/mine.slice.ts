@@ -1,5 +1,6 @@
+import { IGetMineRulesResponse } from '@/services/games/mine/mine.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ICoefficients, IMineModeVariants, IUpdateMineConfig, StateType } from './mine.slice.types'
+import { IMineModeVariants, IUpdateMineConfig, StateType } from './mine.slice.types'
 
 export const CURRENT_MINE = 'mine_game'
 
@@ -34,16 +35,18 @@ export const mineSlice = createSlice({
     updateMineConfig: (state: StateType, action: PayloadAction<IUpdateMineConfig>) => {
       state.mineConfig = { ...state.mineConfig, ...action.payload }
     },
-    updateCoefficients: (state: StateType, action: PayloadAction<ICoefficients>) => {
-      state.mineConfig.coefficients = action.payload
+    updateCoefficients: (state: StateType, action: PayloadAction<IGetMineRulesResponse>) => {
+      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.coefficients
+      if (!rowsConfig) return
+      state.mineConfig.coefficients = rowsConfig
       if (state.mineConfig.mode.label === 'EASY') {
-        state.mineConfig.mode.coefficient = action.payload.easy
+        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.easy
       }
       if (state.mineConfig.mode.label === 'MEDIUM') {
-        state.mineConfig.mode.coefficient = action.payload.medium
+        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.medium
       }
       if (state.mineConfig.mode.label === 'HARD') {
-        state.mineConfig.mode.coefficient = action.payload.hard
+        state.mineConfig.mode.coefficient = state.mineConfig.coefficients.hard
       }
     },
     updateMinConfigMode: (state: StateType, action: PayloadAction<IMineModeVariants>) => {
