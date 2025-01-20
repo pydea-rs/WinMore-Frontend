@@ -17,7 +17,7 @@ export interface IGameDetail {
   rowsCount: number
   currentRow: number
   stake: number
-  golds: number[]
+  nulls: number[]
   lastChoice: number
   status: IMineGameStatuses
   finishedAt: string

@@ -123,11 +123,12 @@ export default function DreamMineGameBoard() {
                           {blockPerRows.map((block) => {
                             const currentRowSelectedItem = mineConfig.selectedBlocks.find((item) => item.row === row + 1 && item.index === block)
                             const isLoading = loadingBlock?.index === block && loadingBlock?.row === row + 1
-                            const imageSrc = !currentRowSelectedItem
-                              ? `/assets/games/mine/images/rock-${block}.svg`
-                              : currentRowSelectedItem.status === 'GOLD'
-                                ? `/assets/games/mine/images/gold.svg`
-                                : `/assets/games/mine/images/bomb.svg`
+                            const imageSrc =
+                              row + 1 < mineConfig.activeRow || mineConfig.isGameOver
+                                ? currentRowSelectedItem?.status === 'NULL'
+                                  ? `/assets/games/mine/images/bomb.svg`
+                                  : `/assets/games/mine/images/gold.svg`
+                                : `/assets/games/mine/images/rock-${block}.svg`
 
                             return (
                               <motion.div
@@ -153,7 +154,7 @@ export default function DreamMineGameBoard() {
                                     <Image
                                       src={imageSrc}
                                       alt="block"
-                                      className={classNames({ 'opacity-50': row + 1 < mineConfig.activeRow && currentRowSelectedItem?.status !== 'GOLD' })}
+                                      className={classNames({ 'opacity-50': row + 1 !== mineConfig.activeRow && currentRowSelectedItem?.status !== 'GOLD' })}
                                       width={55}
                                       height={60}
                                     />
