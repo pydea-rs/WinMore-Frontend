@@ -68,11 +68,11 @@ const QuickAccess: React.FC<QuickAccessProps> = (props) => {
               <CasinoIcon className="w-6 h-6" />
             </Button>
           </Link>
-          <Link href={internalLinks.game.get('plinko')}>
-            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'plinko') ? '!bg-gradient-gray' : ''}`}>
-              <ConstructionTool className="w-6 h-6" />
-            </Button>
-          </Link>
+          {/* <Link href={internalLinks.game.get('plinko')}> */}
+          <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'plinko') ? '!bg-gradient-gray' : ''}`} disabled>
+            <ConstructionTool className="w-6 h-6" />
+          </Button>
+          {/* </Link> */}
         </div>
       </motion.aside>
     </Container>

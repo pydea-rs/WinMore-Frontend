@@ -6,12 +6,14 @@ import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
 import { getHostName } from '@/utils/getHostname.utils'
 import { deleteCookie, getCookie } from 'cookies-next'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { SiweMessage } from 'siwe'
 import { Connector, useAccount, useChainId, useDisconnect, useSignMessage } from 'wagmi'
 
 export const useAuth = () => {
+  const router = useRouter()
   const { isConnected, address } = useAccount({ config })
   const chainId = useChainId()
 
@@ -101,7 +103,7 @@ export const useAuth = () => {
     dispatch(logout())
     disconnect()
     setIsAuthorized(false)
-    // window.location.reload()
+    router.reload()
   }
   useEffect(() => {
     if (isConnected && !!token) {

@@ -362,7 +362,7 @@ const FormComponentDemo = () => {
                 name="simple"
                 control={numericFormController}
                 rules={{
-                  required: { value: true, message: "It's require" },
+                  required: { value: true, message: "It's required" },
                 }}
                 render={({ field: { onChange, onBlur, value }, fieldState }) => (
                   <NumberInput
@@ -388,7 +388,7 @@ const FormComponentDemo = () => {
                 name="simple"
                 control={numericFormController}
                 rules={{
-                  required: { value: true, message: "It's require" },
+                  required: { value: true, message: "It's required" },
                 }}
                 render={({ field: { onChange, onBlur, value }, fieldState }) => (
                   <InputIcon>

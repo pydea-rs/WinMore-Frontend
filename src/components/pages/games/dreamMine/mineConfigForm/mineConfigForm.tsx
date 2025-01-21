@@ -144,7 +144,7 @@ const MineConfigForm = () => {
               name="betAmount"
               control={gameControl}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
                 // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
@@ -153,7 +153,6 @@ const MineConfigForm = () => {
                     <NumberInput
                       disabled={mineConfig.isStarted || !isAuthorized}
                       onChange={(event) => {
-                        console.log({ event: event.target.value })
                         dispatch(updateMineConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}

@@ -15,8 +15,8 @@ const Hero: React.FC<ElementProps> = (props) => {
 
   return (
     <section className={classList}>
-      <Container>
-        <Swiper pagination={true} modules={[Pagination]} centeredSlides slidesPerView={1} spaceBetween={30}>
+      <Container kind="boxed" className="!px-0">
+        <Swiper pagination={true} modules={[Pagination]} centeredSlides slidesPerView={1} spaceBetween={5}>
           <SwiperSlide style={{ textAlign: 'center' }}>
             <div className="hidden md:block aspect-[1142/330]">
               <Image

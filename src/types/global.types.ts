@@ -56,7 +56,7 @@ export type INetwork = {
   chainId: number
   name: string
   rpcUrl: string
-  icon?: string
+  icon: string
   tokens: IToken[]
 }
 export type IToken = {

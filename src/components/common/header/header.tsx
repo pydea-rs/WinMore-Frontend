@@ -175,7 +175,10 @@ const HeaderComponent = () => {
       <div className="hidden md:flex gap-x-4 ">
         <Button kind="pattern" className="px-2.5 !min-w-[165px]" bordered pilled onClick={handleOpenSelectCoinModal}>
           <div className="flex justify-between items-center gap-x-2">
-            <Avatar size="md" src={token.icon} alt={token.name} />
+            <div className="flex items-center">
+              <Avatar size="md" src={network.icon || ''} alt={network.name} />
+              <Avatar size="md" src={token.icon} alt={token.name} className="-ml-2" />
+            </div>
             <div className="flex items-center gap-x-2.5 font-normal text-xs">
               <div>
                 <span className="text-main">Network:</span>

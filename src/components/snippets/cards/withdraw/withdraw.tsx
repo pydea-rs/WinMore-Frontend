@@ -95,7 +95,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               name="chain"
               control={withdrawFormController}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Select value={{ id: network.chainId, name: network.name }} onChange={() => {}} disabled>
@@ -140,7 +140,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               name="coin"
               control={withdrawFormController}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Fragment>
@@ -173,7 +173,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               name="gas_level"
               control={withdrawFormController}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <Select
@@ -218,7 +218,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
               name="amount"
               control={withdrawFormController}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
                 validate: (value) => parseFloat(value) <= (modalData?.balance || 0) || `Bet amount cannot exceed ${modalData?.balance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (

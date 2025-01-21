@@ -186,7 +186,7 @@ export const DepositCard: React.FC<DepositCardProps> = (props) => {
               name="amount"
               control={depositFormController}
               rules={{
-                required: { value: true, message: "It's require" },
+                required: { value: true, message: "It's required" },
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <div className="relative">

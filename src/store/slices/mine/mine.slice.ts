@@ -33,7 +33,11 @@ export const mineSlice = createSlice({
   initialState,
   reducers: {
     updateMineConfig: (state: StateType, action: PayloadAction<IUpdateMineConfig>) => {
-      state.mineConfig = { ...state.mineConfig, ...action.payload }
+      state.mineConfig = {
+        ...state.mineConfig,
+        ...action.payload,
+        ...(state.mineConfig.isGameOver ? { selectedBlocks: [], activeRow: 1, isGameOver: false, isStarted: false } : {}),
+      }
     },
     updateCoefficients: (state: StateType, action: PayloadAction<IGetMineRulesResponse>) => {
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.coefficients
@@ -44,20 +48,17 @@ export const mineSlice = createSlice({
     },
     updateMinConfigMode: (state: StateType, action: PayloadAction<IMineModeVariants>) => {
       switch (action.payload) {
-        case 'EASY':
-          state.mineConfig.mode = {
-            label: 'EASY',
-            value: 4,
-            coefficient: state.mineConfig.coefficients.easy,
-          }
-          break
         case 'MEDIUM':
           state.mineConfig.mode = { label: 'MEDIUM', value: 3, coefficient: state.mineConfig.coefficients.medium }
           break
         case 'HARD':
           state.mineConfig.mode = { label: 'HARD', value: 2, coefficient: state.mineConfig.coefficients.hard }
         default:
-          state.mineConfig.mode = { label: 'EASY', value: 4, coefficient: state.mineConfig.coefficients.easy }
+          state.mineConfig.mode = {
+            label: 'EASY',
+            value: 4,
+            coefficient: state.mineConfig.coefficients.easy,
+          }
           break
       }
     },

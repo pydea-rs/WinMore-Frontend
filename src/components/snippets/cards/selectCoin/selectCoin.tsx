@@ -39,7 +39,7 @@ export const SelectCoinCard: React.FC<SelectCoinProps> = (props) => {
     dispatch(updateCurrentTokenBalance(tokenBalance?.balance || 0))
   }
   const currentChainTokenList = networks.find((item) => item.chainId === network.chainId)?.tokens as IToken[]
-
+  console.log(currentChainTokenList)
   return (
     <Card size="lg" className="w-full max-w-[380px]">
       <CardHeader>
