@@ -53,7 +53,9 @@ export const mineSlice = createSlice({
           break
         case 'HARD':
           state.mineConfig.mode = { label: 'HARD', value: 2, coefficient: state.mineConfig.coefficients.hard }
+          break
         default:
+          console.log(action.payload)
           state.mineConfig.mode = {
             label: 'EASY',
             value: 4,
