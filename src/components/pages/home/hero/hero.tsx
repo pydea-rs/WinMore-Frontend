@@ -3,7 +3,8 @@ import { useMediaBreakpoints } from '@/hooks/useMediaBreakpoints'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { Pagination } from 'swiper/modules'
+import 'swiper/css'
+import { Autoplay, EffectCoverflow, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 const Hero: React.FC<ElementProps & { children: string[] }> = ({ className, children }) => {
@@ -11,11 +12,23 @@ const Hero: React.FC<ElementProps & { children: string[] }> = ({ className, chil
   const classList = classNames({
     [`${className}`]: className,
   })
-  console.log(children)
+
   return (
     <section className={classList}>
       <Container kind="boxed" className="px-5">
-        <Swiper pagination={true} modules={[Pagination]} centeredSlides slidesPerView={1} spaceBetween={5}>
+        <Swiper
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: true,
+          }}
+          speed={4000}
+          effect="coverflow"
+          pagination={{ clickable: true }}
+          modules={[Pagination, Autoplay, EffectCoverflow]}
+          centeredSlides
+          slidesPerView={1}
+          spaceBetween={5}
+        >
           {Boolean(children?.length) &&
             children.map((image, idx) => (
               <SwiperSlide key={idx} style={{ textAlign: 'center' }}>
