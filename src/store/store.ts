@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import { apiMiddleware } from './api.middleware'
 import { APIsReducers } from './api.reducers'
 import authSlice from './slices/auth/auth.slice'
+import configsSlice from './slices/configs/configs.slice'
 import currencySlice from './slices/currency/currency.slice'
 import gamesSlice from './slices/mine/mine.slice'
 import modalSlice from './slices/modal/modal.slice'
@@ -19,10 +20,10 @@ export type AppDispatch = Store['dispatch']
 
 // Persist configuration
 const persistConfig = {
-  key: 'currency-v1.2',
-  version: 1.1,
+  key: 'winmore',
+  version: 1.0,
   storage,
-  whitelist: ['currency'], // Specify which slice to persist
+  whitelist: ['currency', 'configs'], // Specify which slice to persist
 }
 
 // Combine your reducers
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   quickAccess: quickAccessSlice,
   currency: currencySlice,
   networks: networksSlice,
+  configs: configsSlice,
   ...APIsReducers,
 })
 

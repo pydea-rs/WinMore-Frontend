@@ -1,4 +1,3 @@
-import { getDomain } from '@/utils/getDomain.util'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { getCookie, setCookie } from 'cookies-next'
 import { jwtDecode } from 'jwt-decode'
@@ -16,19 +15,16 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state: AuthStateType, action: PayloadAction<string>) => {
-      const domain = getDomain()
-      const token = action.payload
-
       // Decode the token to get the 'exp' property
-      const decodedToken: { exp: number } = jwtDecode(token)
+      const decodedToken: { exp: number } = jwtDecode(action.payload)
       // Convert 'exp' to milliseconds and set cookie expiration
       const cookieExpiration = new Date(decodedToken.exp * 1000) // 'exp' is in seconds
 
-      setCookie('token', token, {
-        //  domain,
+      setCookie('token', action.payload, {
+        //  domain: getDomain(),
         expires: cookieExpiration,
       })
-      state.token = token
+      state.token = action.payload
     },
     setUser: (state: AuthStateType, action: PayloadAction<IUser>) => {
       state.user = action.payload

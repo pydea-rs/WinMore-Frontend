@@ -17,11 +17,13 @@ import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { IMineMode } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray } from '@/utils/createNumberArray.util'
+import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/20/solid'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -41,6 +43,7 @@ const getMinMaxRows = (data: { rows?: number }[]) => {
 const MineConfigForm = () => {
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
+  const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
@@ -53,8 +56,8 @@ const MineConfigForm = () => {
 
   const onStart = useCallback(() => {
     dispatch(startMineGame())
-    tile.play()
-  }, [mineConfig, rulesData])
+    if (configs.sound) tile.play()
+  }, [mineConfig, rulesData, configs])
 
   const {
     control: gameControl,
@@ -139,10 +142,15 @@ const MineConfigForm = () => {
     dispatch(updateMineConfig({ betAmount: decreasedValue }))
   }
 
+  const toggleSound = () => dispatch(triggerSound())
+
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
         <CardTitle>MANUAL</CardTitle>
+        <button className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition" onClick={toggleSound} aria-label="Toggle sound">
+          {configs.sound ? <SpeakerWaveIcon className="w-6 h-6 text-white" /> : <SpeakerXMarkIcon className="w-6 h-6 text-white" />}
+        </button>
       </CardHeader>
       <CardBody>
         <form onSubmit={gameFormHandleSubmit(handleSubmit)} className="flex flex-col gap-y-2">

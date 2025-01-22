@@ -24,7 +24,7 @@ export const useAuth = () => {
   const [login, { isLoading: isLoginLoading }] = useGetAuthMutation()
   const dispatch = useDispatch()
   const [isPendingForSign, setIsPendingForSign] = useState(false)
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(isConnected && !!token)
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(Boolean(token))
   const { signMessageAsync } = useSignMessage({
     mutation: {
       onMutate: () => {

@@ -12,6 +12,7 @@ const useDreamMineGameBoardHelper = () => {
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
   const { network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
+  const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
@@ -74,13 +75,13 @@ const useDreamMineGameBoardHelper = () => {
   const onCheckBlock = async (i: number, row: number) => {
     if (mineConfig.isStarted && !mineConfig.isGameOver && !!mineConfig.currentGameId) {
       setLoadingBlock({ index: i, row }) // Set the loading block
-      tile.play()
+      if (configs.sound) tile.play()
 
       try {
         const { data } = await mineBlockMutation({ id: mineConfig.currentGameId, choice: i }).unwrap()
         const previousBlocks = data.nulls.map((nullIndex, rowIndex) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }) as IBlock)
         if (!data.success) {
-          bomb.play() // TODO: Make this optional, by sound On or Off state
+          if (configs.sound) bomb.play()
           dispatch(updateMineConfig({ selectedBlocks: previousBlocks }))
           lostHandler()
         } else {
