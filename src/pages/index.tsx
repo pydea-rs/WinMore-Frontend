@@ -15,7 +15,12 @@ export default function Home() {
         <title>Winmore | Home</title>
       </Head>
       <div className="flex flex-col flex-grow">
-        <Hero className="mb-12" />
+        <Hero className="mb-12">
+          {Array(3)
+            .fill(0)
+            .map((_, idx) => `banners/lg/${idx + 1}.png`)}
+        </Hero>
+
         <TopGames className="mb-12" />
         <HomeGameHistory />
         <Container kind="fluid" className="-z-1 hidden sm:block mt-auto px-0">
