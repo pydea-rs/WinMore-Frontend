@@ -27,6 +27,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { IGameForm } from './mineConfigForm.types'
 
+const getMinMaxRows = (data: { rows?: number }[]) => {
+  let min = data[0].rows || 0
+  let max = data[0].rows || 0
+  for (const row of data) {
+    if (!row?.rows) continue
+    if (row.rows > max) max = row.rows
+    if (row.rows < min) min = row.rows
+  }
+  return [min, max]
+}
+
 const MineConfigForm = () => {
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
@@ -35,6 +46,7 @@ const MineConfigForm = () => {
   const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
   const [refetchBalance] = useGetUserTokenBalanceMutation()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
+  const [rows, setRows] = useState([] as number[])
 
   const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
@@ -57,10 +69,11 @@ const MineConfigForm = () => {
     },
   })
 
-  const rows = createNumberArray(
-    Math.min(...(rulesData?.data || [{ rows: 8 }]).map((rules) => rules.rows)),
-    Math.max(...(rulesData?.data || [{ rows: 12 }]).map((rules) => rules.rows)),
-  )
+  useEffect(() => {
+    if (!rulesData?.data?.length) return
+    const [min, max] = getMinMaxRows(rulesData?.data)
+    setRows(createNumberArray(min, max))
+  }, [rulesData?.data])
 
   const [currentRowsRules, setCurrentRowsRules] = useState(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
 
