@@ -80,7 +80,7 @@ const LuckyBets: BaseProps<LuckyBetProps> = (props) => {
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                              <span>{game.multiplier}.x</span>
+                              <span>{game.multiplier.toFixed(2)}.x</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
@@ -88,7 +88,7 @@ const LuckyBets: BaseProps<LuckyBetProps> = (props) => {
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2 h-[40px]">
                               <CentIcon className="hidden lg:inline-block w-6 text-[rgba(255,170,0)]" />
-                              <span>{game.stake}</span>
+                              <span>{game.status !== 'LOST' && game.status !== 'NOT_STARTED' ? game.stake : 0}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
