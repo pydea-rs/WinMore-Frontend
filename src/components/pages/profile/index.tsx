@@ -15,6 +15,8 @@ import { EditProfileData } from './edit/editProfileData'
 const UserProfile = () => {
   const { user } = useSelector((state) => state.auth)
   const { configs } = useSelector((state) => state.configs)
+  const { connectorName } = useSelector((state) => state.currency)
+
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const deviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
   const dispatch = useDispatch()
@@ -51,7 +53,7 @@ const UserProfile = () => {
         <div className="text-center">
           <h3 className="text-white text-xl font-bold">{user?.name}</h3>
           <p className="text-gray-200">{user?.email}</p>
-          <Avatar className="mx-auto mt-2" size="sm" src={`/assets/images/wallets/MetaMask.svg`} alt="MetaMask" />
+          <Avatar className="mx-auto mt-2" size="sm" src={`/assets/images/wallets/${connectorName}.svg`} alt={connectorName || 'Unknown Wallet Connector'} />
         </div>
 
         <PencilSquareIcon className="absolute top-4 right-4 text-white h-6 w-6 cursor-pointer" onClick={() => setIsEditProfileOpen(true)} />

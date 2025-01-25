@@ -12,7 +12,7 @@ const User = () => {
       <div className="flex flex-col flex-grow">
         <section>
           <Container className="z-10 overflow-x-visible">
-            <div className="left-4 top-0 mb-6">
+            <div className="left-4 top-0 my-4">
               <div className="flex items gap-x-2 pr-4 md:pl-0">
                 <span className="font-bold text-lg">Profile</span>
               </div>

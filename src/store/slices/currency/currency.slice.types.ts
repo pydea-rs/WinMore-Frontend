@@ -6,4 +6,5 @@ export interface ICurrencyState {
   token: IToken
   network: INetworkWithOutTokens
   currentTokenBalance: number
+  connectorName?: string
 }

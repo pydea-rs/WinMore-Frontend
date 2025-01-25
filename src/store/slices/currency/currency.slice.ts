@@ -15,6 +15,7 @@ const initialState: ICurrencyState = {
   },
   token: defaultToken,
   currentTokenBalance: 0,
+  connectorName: undefined,
 }
 
 export const currencySlice = createSlice({
@@ -36,9 +37,12 @@ export const currencySlice = createSlice({
     updateCurrentTokenBalance: (state: ICurrencyState, action: PayloadAction<number>) => {
       state.currentTokenBalance = action.payload
     },
+    setWalletConnectorName: (state: ICurrencyState, action: PayloadAction<string>) => {
+      state.connectorName = action.payload
+    },
   },
 })
 
-export const { updateToken, updateNetwork, updateCurrentTokenBalance } = currencySlice.actions
+export const { updateToken, updateNetwork, updateCurrentTokenBalance, setWalletConnectorName } = currencySlice.actions
 
 export default currencySlice.reducer
