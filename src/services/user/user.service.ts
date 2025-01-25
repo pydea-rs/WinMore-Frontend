@@ -85,7 +85,7 @@ export const UserService = createApi({
         } catch (err) {}
       },
     }),
-    updateUserProfile: builder.mutation<BaseResponse<IEditUserProfilePayload>, IEditUserProfileResponse>({
+    updateUserProfile: builder.mutation<BaseResponse<IEditUserProfileResponse>, IEditUserProfilePayload>({
       query: (args) => {
         const { user } = getApiRoute()
         return {

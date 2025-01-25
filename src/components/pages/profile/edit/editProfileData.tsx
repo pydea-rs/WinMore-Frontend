@@ -13,27 +13,38 @@ import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useUpdateUserProfileMutation } from '@/services/user/user.service'
 import { useSelector } from '@/store/store'
 import Image from 'next/image'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { UserForm } from '../../../snippets/cards/completeUserData/completeUserData.types'
 
 export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
   const { onClose } = props
+  const { user } = useSelector((state) => state.auth)
 
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '' } })
+  } = useForm<UserForm>({ defaultValues: { confirm: false, email: user?.email || '', name: user?.name || '' } })
   const [updateUserProfileMutation, {}] = useUpdateUserProfileMutation() // TODO: in api service section, replace get user call with this endpoint response usage
   const onSubmit: SubmitHandler<UserForm> = (data) => {
-    updateUserProfileMutation({
-      email: data.email,
-      name: data.name,
+    const payload = {
+      ...(user?.email?.toLowerCase() !== data?.email.toLowerCase() ? { email: data.email } : {}),
+      ...(user?.name !== data?.name ? { name: data.name } : {}),
+    }
+    if (!Object.keys(payload)?.length) {
+      toast.error('No changes has been made to apply!')
+      return
+    }
+    updateUserProfileMutation(payload).then((res) => {
+      toast.success('Successfully saved!')
+      onClose()
     })
   }
 
-  const { user } = useSelector((state) => state.auth)
+  const [newEmail, setNewEmail] = useState(user?.email)
+  const [newName, setNewName] = useState(user?.name)
 
   return (
     <Card size="lg" className="w-full max-w-[431px]">
@@ -65,7 +76,7 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type your name here..." value={user?.name || ''} id="2-1" />
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type your name here..." id="2-1" />
                     {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
@@ -83,7 +94,7 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" value={user?.email || ''} id="2-2" />
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" id="2-2" />
                     {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
