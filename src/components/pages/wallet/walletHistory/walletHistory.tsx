@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { BaseProps, INetwork, TType } from '@/types/global.types'
+import DatePlus from '@/utils/DatePlus'
 import { truncate } from '@/utils/truncate.utils'
 import moment from 'moment'
 import { useRouter } from 'next/router'
@@ -66,6 +67,7 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
   const { isAuthorized } = useAuth()
   const { network } = useSelector((state) => state.currency)
   const { networks } = useSelector((state) => state.networks)
+  const { configs } = useSelector((state) => state.configs)
 
   const handleChangeQuery = (typeData: string) => {
     push(
@@ -83,6 +85,9 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
     dispatch(updateNetwork({ network: selectedNetwork }))
     dispatch(updateToken({ token: selectedNetwork.tokens[0] }))
   }
+
+  if (!isAuthorized) return null
+
   return (
     <Card>
       <CardBody className="rounded-tr-none">
@@ -171,7 +176,8 @@ const WalletHistory: BaseProps<WalletHistoryProps> = (props) => {
             <TableBody>
               {data ? (
                 data.map((transaction) => {
-                  const { amount, chain, createdAt, destination, id, log, source, status, token, type } = transaction
+                  const { amount, chain, id, log, status, token, type } = transaction
+                  const createdAt = new DatePlus(configs.timezone).dateInTimezone(new Date(transaction.createdAt))
                   const formattedDate = moment(createdAt).format('MMM DD YYYY')
                   const formattedTime = moment(createdAt).format('HH:mm')
 

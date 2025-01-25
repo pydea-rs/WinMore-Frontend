@@ -13,7 +13,7 @@ import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useUpdateUserProfileMutation } from '@/services/user/user.service'
 import { useSelector } from '@/store/store'
 import Image from 'next/image'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { UserForm } from '../../../snippets/cards/completeUserData/completeUserData.types'
@@ -42,9 +42,6 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
       onClose()
     })
   }
-
-  const [newEmail, setNewEmail] = useState(user?.email)
-  const [newName, setNewName] = useState(user?.name)
 
   return (
     <Card size="lg" className="w-full max-w-[431px]">

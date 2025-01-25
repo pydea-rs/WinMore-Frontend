@@ -1,6 +1,8 @@
 import { Avatar } from '@/components/common/avatar/avatar'
 import Modal from '@/components/common/modal/modal'
-import { useSelector } from '@/store/store'
+import { setUserTimezone } from '@/store/slices/configs/configs.slice'
+import { useDispatch, useSelector } from '@/store/store'
+import { Button } from '@headlessui/react'
 import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -9,9 +11,13 @@ import { FiCopy } from 'react-icons/fi'
 import { MdOutlineAccessTime } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { EditProfileData } from './edit/editProfileData'
+
 const UserProfile = () => {
   const { user } = useSelector((state) => state.auth)
+  const { configs } = useSelector((state) => state.configs)
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const deviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const dispatch = useDispatch()
 
   const copyWalletAddress = async () => {
     try {
@@ -23,6 +29,11 @@ const UserProfile = () => {
       toast.error('Copy Failed! Maybe try again after refresh!')
     }
   }
+
+  const handleChangeTimezone = () => {
+    dispatch(setUserTimezone(configs.timezone.toLowerCase() === 'utc' ? deviceTimezone : 'UTC'))
+  }
+
   return (
     <div className="p-4 sm:py-6 lg:py-10 bg-dark-900 rounded-2xl shadow-lg space-y-6">
       {/* Profile Header */}
@@ -62,12 +73,14 @@ const UserProfile = () => {
           <MdOutlineAccessTime color="white" className="text-blue-400 text-2xl profile-large-icons" />
           <div>
             <h4 className="text-white font-bold">Time Zone</h4>
-            <p className="text-gray-400 text-sm">Current Time Zone: Tehran</p>
+            <p className="text-gray-400 text-sm">Current Time Zone: {configs.timezone}</p>
           </div>
         </div>
-        <a href="#" className="text-green-400 text-sm font-medium profile-timezone-change">
-          Change to UTC +04:00
-        </a>
+        {deviceTimezone !== 'UTC' && (
+          <Button onClick={handleChangeTimezone} className="text-green-400 text-sm font-medium profile-timezone-change">
+            Change to {configs.timezone === deviceTimezone ? 'UTC' : deviceTimezone}
+          </Button>
+        )}
       </div>
       <Modal isOpen={isEditProfileOpen} onClose={() => setIsEditProfileOpen(false)}>
         <EditProfileData onClose={() => setIsEditProfileOpen(false)} />
