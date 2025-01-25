@@ -3,8 +3,6 @@ import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
-import { Checkbox } from '@/components/common/form/checkbox/checkbox'
-import { CheckboxGroup } from '@/components/common/form/checkboxGroup/checkboxGroup'
 import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
 import { Label } from '@/components/common/form/label/label'
 import { TextForm } from '@/components/common/form/textForm/textForm'
@@ -12,34 +10,37 @@ import { Input } from '@/components/common/form/textInput/textInput'
 import DisabledIcon from '@/components/icons/disabled/disabled'
 import EmailIcon from '@/components/icons/email/email'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
-import { useRegisterUserMutation } from '@/services/user/user.service'
+import { useUpdateUserProfileMutation } from '@/services/user/user.service'
+import { useSelector } from '@/store/store'
 import Image from 'next/image'
 import { Fragment } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { CompleteUserDataProps, UserForm } from './completeUserData.types'
+import { UserForm } from '../../../snippets/cards/completeUserData/completeUserData.types'
 
-export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => {
-  const { isOpenModal, onCloseModal, onComplete } = props
+export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
+  const { onClose } = props
 
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '' } })
-  const [registerMutation, {}] = useRegisterUserMutation()
+  const [updateUserProfileMutation, {}] = useUpdateUserProfileMutation() // TODO: in api service section, replace get user call with this endpoint response usage
   const onSubmit: SubmitHandler<UserForm> = (data) => {
-    registerMutation({
+    updateUserProfileMutation({
       email: data.email,
       name: data.name,
     })
   }
 
+  const { user } = useSelector((state) => state.auth)
+
   return (
     <Card size="lg" className="w-full max-w-[431px]">
       <CardHeader>
-        <CardTitle>Complete your account</CardTitle>
+        <CardTitle>Update Profile</CardTitle>
         <button
-          onClick={onCloseModal}
+          onClick={onClose}
           className="appearance-none flex flex-col justify-center items-center p-2.5 focus:bg-primary focus:bg-opacity-60 hover:bg-primary hover:bg-opacity-60 active:bg-opacity-80 transition-all rounded-full "
         >
           <DisabledIcon />
@@ -48,7 +49,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
       <CardBody>
         <div className="flex flex-col items-center mb-5">
           <Image src={'/assets/images/logo-brand.svg'} alt="Winmore logo-brand" width={48} height={34} className="mb-2" />
-          <h2 className="font-bold text-base leading-5 mb-2">WELCOME To WINMORE</h2>
+          <h2 className="font-bold text-base leading-5 mb-2">Edit your information</h2>
           <span className="text-sm font-light">{"We've saved your seat at the winning table."}</span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -64,8 +65,8 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="type here" id="2-1" />
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type your name here..." value={user?.name || ''} id="2-1" />
+                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
               />
@@ -82,42 +83,15 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="example@crypto.com" id="2-2" />
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" value={user?.email || ''} id="2-2" />
+                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
               />
             </FormGroup>
 
-            <FormGroup>
-              <Controller
-                name="confirm"
-                control={control}
-                rules={{ required: true }}
-                render={({ field, fieldState }) => (
-                  <CheckboxGroup>
-                    <Checkbox {...field} id="6-3" />
-                    <Label htmlFor="6-3" className="flex items-center">
-                      <span className="inline-block text-white font-normal text-sm leading-5">
-                        I agree to the collection of information in cookies, I agree with
-                        <a className="text-link" href="#" target="_blank">
-                          Privacy Policy
-                        </a>
-                        and with
-                        <a className="text-link" href="#" target="_blank">
-                          Terms of Use
-                        </a>
-                        , Gambling is not forbidden by my local authorities and Im at least 18 years old.
-                      </span>
-                    </Label>
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
-                  </CheckboxGroup>
-                )}
-              />
-            </FormGroup>
-
             <Button kind="gradient" size="lg" full type="submit">
-              Get Start
+              Save
             </Button>
           </div>
         </form>

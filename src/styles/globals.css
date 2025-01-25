@@ -68,6 +68,7 @@
 @import '../components/common/dropdown/dropdownList/dropdownList.style.css';
 @import '../components/icons/done/done.style.css';
 @import '../components/common/avatar/avatar.style.css';
+@import '../components/pages/profile/profile.css';
 
 @import url('mine/mine.css');
 @import 'swiper/css';

@@ -26,6 +26,19 @@ export interface IRegisterUserPayload {
   email: string
 }
 export interface IRegisterUserResponse {}
+export interface IEditUserProfilePayload {
+  name?: string
+  email?: string
+}
+export interface IEditUserProfileResponse {
+  admin: boolean
+  createdAt: string
+  email: string | null
+  id: number
+  lastLoginAt: string
+  name: string | null
+  updatedAt: string
+}
 
 // Get User Current Balance
 export type IGetUserBalanceResponse = number

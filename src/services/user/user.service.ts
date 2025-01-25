@@ -9,6 +9,8 @@ import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setBalances } from '@/store/slices/networks/networks.slice'
 import { RootState } from '@/store/store'
 import {
+  IEditUserProfilePayload,
+  IEditUserProfileResponse,
   IGetUserBalanceResponse,
   IGetUserCurrentBalancePayload,
   IGetUserInfoPayload,
@@ -80,6 +82,26 @@ export const UserService = createApi({
           dispatch(triggerModal({ modal: 'login', trigger: false }))
 
           dispatch(UserService.endpoints.getUserInfo.initiate({}, { forceRefetch: true }))
+        } catch (err) {}
+      },
+    }),
+    updateUserProfile: builder.mutation<BaseResponse<IEditUserProfilePayload>, IEditUserProfileResponse>({
+      query: (args) => {
+        const { user } = getApiRoute()
+        return {
+          url: user.updateProfile.path,
+          method: 'PATCH',
+          data: args,
+          sendAuthorization: true,
+        }
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+
+          // dispatch(triggerModal({ modal: 'login', trigger: false }))
+
+          dispatch(UserService.endpoints.getUserInfo.initiate({}, { forceRefetch: true })) // FIXME: Replace with using endpoint response
         } catch (err) {}
       },
     }),
@@ -188,6 +210,7 @@ export const UserService = createApi({
 export const {
   useGetUserInfoQuery,
   useRegisterUserMutation,
+  useUpdateUserProfileMutation,
   useIsPlayingQuery,
   useGetUserTokenBalanceMutation,
   useWithdrawMutation,
