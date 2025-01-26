@@ -94,6 +94,32 @@ export const networks: INetwork[] = [
   //   ],
   // },
   {
+    chainId: 137, // Polygon Mainnet Chain ID
+    name: 'Polygon Mainnet',
+    rpcUrl: 'https://rpc-mainnet.maticvigil.com', // Mainnet RPC URL
+    icon: '/assets/images/chains/Polygon Mainnet.png',
+    tokens: [
+      {
+        id: 1,
+        symbol: 'USDT',
+        name: 'Tether USD',
+        contractAddress: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', // USDT on Polygon mainnet
+        icon: '/assets/images/tokens/USDT.png',
+        isNativeToken: false,
+        balance: 0,
+      },
+      {
+        id: 2,
+        symbol: 'USDC',
+        name: 'USD Coin',
+        contractAddress: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', // USDC on Polygon mainnet
+        icon: '/assets/images/tokens/USDC.png',
+        isNativeToken: false,
+        balance: 0,
+      },
+    ],
+  },
+  {
     chainId: 8453, // Base Mainnet Chain ID
     name: 'Base',
     rpcUrl: 'https://mainnet.base.org', // RPC URL for Base Mainnet

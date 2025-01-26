@@ -35,7 +35,7 @@ const TableDemo = () => {
                   <div className="p-2">WAGER</div>
                 </TableHeading>
                 <TableHeading className="w-[165px]">
-                  <div className="p-2">MULTIPLIER</div>
+                  <div className="p-2">Multiplier</div>
                 </TableHeading>
                 <TableHeading className="w-[165px]">
                   <div className="p-2">PAYOUT</div>

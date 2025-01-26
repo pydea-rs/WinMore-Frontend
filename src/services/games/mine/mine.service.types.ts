@@ -4,6 +4,7 @@ import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
 export interface IMineGameDetail {
   betToken: IAvailableTokens
   createdAt: string
+  chainId: number
   currentRow: number
   nulls: number[]
   finishedAt: null

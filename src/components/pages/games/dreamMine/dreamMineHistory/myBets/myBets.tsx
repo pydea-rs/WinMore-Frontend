@@ -1,5 +1,6 @@
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
+import MatchedChainIcon from '@/components/common/shortcuts/matchedChainIcon'
 import Table from '@/components/common/table/table'
 import TableBody from '@/components/common/table/tableBody/tableBody'
 import TableData from '@/components/common/table/tableData/tableData'
@@ -13,12 +14,14 @@ import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { useSelector } from '@/store/store'
 import { BaseProps } from '@/types/global.types'
+import { toCapitalCase } from '@/utils/textTools'
 import { getTimePassed } from '@/utils/timeAndDate'
 import { MyBetsProps } from './myBets.types'
 
 const MyBets: BaseProps<MyBetsProps> = (props) => {
   const { data } = props
   const { user } = useSelector((state) => state.auth)
+
   return (
     <Card>
       <CardBody className="bg-opacity-60 sm:filter-backdrop">
@@ -38,13 +41,13 @@ const MyBets: BaseProps<MyBetsProps> = (props) => {
                   <div className="p-2">Time</div>
                 </TableHeading>
                 <TableHeading className="w-[165px]">
-                  <div className="p-2">MULTIPLIER</div>
+                  <div className="p-2">Wager</div>
                 </TableHeading>
                 <TableHeading className="w-[165px]">
-                  <div className="p-2">PAYOUT</div>
+                  <div className="p-2">Multiplier</div>
                 </TableHeading>
                 <TableHeading className="w-[165px]">
-                  <div className="p-2">STATUS</div>
+                  <div className="p-2">Status</div>
                 </TableHeading>
               </TableRow>
             </TableHeader>
@@ -80,6 +83,16 @@ const MyBets: BaseProps<MyBetsProps> = (props) => {
 
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
+                            <div className="flex items-center justify-center gap-x-2 h-[40px]">
+                              <CentIcon className="hidden lg:inline-block w-6 text-[rgba(255,170,0)]" />
+                              <span>{game.initialBet}</span>
+                              <MatchedChainIcon>{game.chainId}</MatchedChainIcon>
+                            </div>
+                          </TableDataWrapper>
+                        </TableData>
+
+                        <TableData>
+                          <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
                               <span>x{game.multiplier.toFixed(2)}</span>
                             </div>
@@ -87,17 +100,9 @@ const MyBets: BaseProps<MyBetsProps> = (props) => {
                         </TableData>
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
-                            <div className="flex items-center justify-center gap-x-2 h-[40px]">
-                              <CentIcon className="hidden lg:inline-block w-6 text-[rgba(255,170,0)]" />
-                              <span>{game.stake}</span>
-                            </div>
-                          </TableDataWrapper>
-                        </TableData>
-                        <TableData>
-                          <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
                               {/* <CentIcon className="w-6 text-[rgba(255,170,0)]" /> */}
-                              <span>{game.status}</span>
+                              <span>{toCapitalCase(game.status)}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
