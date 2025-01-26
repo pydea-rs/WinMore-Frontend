@@ -111,7 +111,7 @@ export default function DreamMineGameBoard() {
                             'border-[#3B3D47CC]': row + 1 > mineConfig.activeRow,
                           })}
                         >
-                          <span className="relative top-[1px] font-fractul font-medium">x {mineConfig.mode.coefficient[row]?.toFixed(2)}</span>
+                          <span className="relative top-[1px] font-fractul font-medium">x{mineConfig.mode.coefficient[row]?.toFixed(2)}</span>
                         </div>
                         <div
                           // grid gap-3 custom-cursor flex-grow-1

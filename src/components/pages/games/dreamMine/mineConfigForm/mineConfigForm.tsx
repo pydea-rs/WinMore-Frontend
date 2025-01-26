@@ -27,6 +27,7 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/20/solid'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { IGameForm } from './mineConfigForm.types'
 
 const getMinMaxRows = (data: { rows?: number }[]) => {
@@ -116,6 +117,10 @@ const MineConfigForm = () => {
         return
       }
       const betAmount = mineConfig.betAmount.split(',').join('')
+      if (+betAmount > 2.0) {
+        toast.error('Bets must not exceed 2$ for now!')
+        return
+      }
       try {
         await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
         refetchBalance({ chain: network.chainId, token: token.symbol })
@@ -166,6 +171,7 @@ const MineConfigForm = () => {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
+                max: { value: 2, message: 'Bets must not exceed 2$ for now.' },
                 // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
@@ -182,8 +188,8 @@ const MineConfigForm = () => {
                       onBlur={onBlur}
                       value={value}
                       id="id-233"
-                      placeholder="0.00$"
-                      invalid={!!errors.betAmount}
+                      placeholder="UP TO 2.0$"
+                      invalid={Boolean(errors.betAmount)}
                     />
                     <CentIcon className="text-warning" />
                   </InputIcon>
