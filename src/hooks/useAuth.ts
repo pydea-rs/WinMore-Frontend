@@ -97,9 +97,9 @@ export const useAuth = () => {
   }
 
   const logoutAndDisconnect = () => {
-    const domain = getHostName()
-
-    deleteCookie('token', { domain })
+    // const domain = getHostName()
+    deleteCookie('token')
+    localStorage.clear()
     dispatch(updateCurrentTokenBalance(0))
     dispatch(logout())
     disconnect()
