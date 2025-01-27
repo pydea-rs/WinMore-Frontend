@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn'
 import { BorderBeamProps } from './borderBeam.types'
 
-export const BorderBeam = ({ className, size = 200, duration = 15, anchor = 100, borderWidth = 1.5, colorFrom = '#ffaa40', colorTo = '#ffaa40', delay = 0 }: BorderBeamProps) => {
+export const BorderBeam = ({ className, size = 200, duration = 15, anchor = 92, borderWidth = 1.5, colorFrom = '#ffaa40', colorTo = '#ffaa40', delay = 0 }: BorderBeamProps) => {
   return (
     <div
       style={
