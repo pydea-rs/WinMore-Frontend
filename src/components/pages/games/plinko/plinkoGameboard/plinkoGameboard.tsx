@@ -70,7 +70,7 @@ export default function PlinkoGameBoard() {
     const pegArray = []
     for (let row = 0; row < rows; row++) {
       for (let i = 0; i <= row + 2; i++) {
-        const x = canvas.width / 2 + (i - row / 2) * 50 - 60
+        const x = canvas.width / 2 + (i - row / 2) * 50 - 75
         const y = 100 + row * 50
         pegArray.push({ x, y, radius: 9 })
       }
@@ -78,8 +78,13 @@ export default function PlinkoGameBoard() {
     pegsRef.current = pegArray
 
     // Function to create gradient for buckets
+    const bucketWidth = 60
+    const bucketHeight = 80
+    const bucketTopOffset = 20 // Adjust this to control the trapezoid shape
+    const cornerRadius = 10 // Border radius for the bucket corners
+
     const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
-      const gradient = ctx.createLinearGradient(0, 0, 53, 74)
+      const gradient = ctx.createLinearGradient(0, 0, bucketWidth, bucketHeight)
       gradient.addColorStop(0, colorFrom)
       gradient.addColorStop(1, colorTo)
       return gradient
@@ -126,17 +131,26 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      // Draw buckets with gradients
+      // Draw trapezoidal buckets with gradients and rounded corners
       multipliers.forEach((multiplier, index) => {
-        const bucketX = index * 70 + 40
-        const bucketY = canvas.height - 80
+        const bucketX = index * 70 + 35
+        const bucketY = canvas.height - 90
         const gradient = createGradient(ctx, bucketColors[index], bucketColors[index])
 
         ctx.beginPath()
-        ctx.moveTo(bucketX, bucketY)
-        ctx.lineTo(bucketX + 53, bucketY)
-        ctx.lineTo(bucketX + 40, bucketY + 74)
-        ctx.lineTo(bucketX - 13, bucketY + 74)
+        // Top-left corner with radius
+        ctx.moveTo(bucketX + cornerRadius, bucketY)
+        ctx.lineTo(bucketX + bucketWidth - cornerRadius, bucketY)
+        ctx.arcTo(bucketX + bucketWidth, bucketY, bucketX + bucketWidth, bucketY + cornerRadius, cornerRadius)
+        // Right side
+        ctx.lineTo(bucketX + bucketWidth, bucketY + bucketHeight - cornerRadius)
+        ctx.arcTo(bucketX + bucketWidth, bucketY + bucketHeight, bucketX + bucketWidth - cornerRadius, bucketY + bucketHeight, cornerRadius)
+        // Bottom side
+        ctx.lineTo(bucketX + cornerRadius, bucketY + bucketHeight)
+        ctx.arcTo(bucketX, bucketY + bucketHeight, bucketX, bucketY + bucketHeight - cornerRadius, cornerRadius)
+        // Left side
+        ctx.lineTo(bucketX, bucketY + cornerRadius)
+        ctx.arcTo(bucketX, bucketY, bucketX + cornerRadius, bucketY, cornerRadius)
         ctx.closePath()
         ctx.fillStyle = gradient
         ctx.fill()
@@ -144,7 +158,8 @@ export default function PlinkoGameBoard() {
         // Draw multiplier text
         ctx.fillStyle = 'white'
         ctx.font = 'bold 16px Arial'
-        ctx.fillText(`${multiplier}x`, bucketX + 12, bucketY + 50)
+        ctx.textAlign = 'center'
+        ctx.fillText(`${multiplier}x`, bucketX + bucketWidth / 2, bucketY + bucketHeight / 2 + 5)
       })
 
       requestAnimationFrame(update)
