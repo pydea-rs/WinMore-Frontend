@@ -8,10 +8,11 @@ import { APIsReducers } from './api.reducers'
 import authSlice from './slices/auth/auth.slice'
 import configsSlice from './slices/configs/configs.slice'
 import currencySlice from './slices/currency/currency.slice'
-import gamesSlice from './slices/mine/mine.slice'
+import mineSlice from './slices/mine/mine.slice'
 import modalSlice from './slices/modal/modal.slice'
 import navbarSlice from './slices/navbar/navbar.slice'
 import networksSlice from './slices/networks/networks.slice'
+import plinkoSlice from './slices/plinko/plinko.slice'
 import quickAccessSlice from './slices/quickAccess/quickAccess.slice'
 
 type Store = typeof store
@@ -30,7 +31,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authSlice,
   modal: modalSlice,
-  mine: gamesSlice,
+  mine: mineSlice,
+  plinko: plinkoSlice,
   navbar: navbarSlice,
   quickAccess: quickAccessSlice,
   currency: currencySlice,
