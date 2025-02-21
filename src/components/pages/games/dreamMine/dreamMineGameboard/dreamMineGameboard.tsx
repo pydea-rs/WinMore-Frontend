@@ -176,8 +176,8 @@ export default function DreamMineGameBoard() {
           <BorderBeam
             className="rounded-[20px]"
             duration={3}
-            size={500}
-            borderWidth={5}
+            size={400}
+            borderWidth={3}
             colorFrom={getGameStateColor(mineConfig.currentGameStatus).colorFrom}
             colorTo={getGameStateColor(mineConfig.currentGameStatus).colorTo}
           />
