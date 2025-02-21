@@ -26,6 +26,7 @@ export const usePermalink = () => {
     },
     contactUs: {
       slug: 'contact-us',
+      alternative: 'footer-social-media',
       get: function () {
         return `/${this.slug}`
       },
@@ -38,6 +39,12 @@ export const usePermalink = () => {
     },
     help: {
       slug: 'help',
+      get: function () {
+        return `/${this.slug}`
+      },
+    },
+    docs: {
+      slug: 'docs',
       get: function () {
         return `/${this.slug}`
       },

@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 import NotFoundPage from '@/pages/404'
 // import { usePlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
 import { useIsPlayingQuery } from '@/services/user/user.service'
+import { isDevelopmentMode } from '@/utils/dev'
 import { useMediaQueries } from '@react-hook/media-query'
 import Image from 'next/image'
 import { ReactElement } from 'react'
@@ -26,7 +27,7 @@ const Plinko = () => {
     width: '(min-width: 920px)',
   })
 
-  if (process.env.NODE_ENV.toLowerCase() !== 'development') {
+  if (!isDevelopmentMode()) {
     return <NotFoundPage />
   }
 

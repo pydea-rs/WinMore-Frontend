@@ -8,6 +8,8 @@ import TelegramIcon from '@/components/icons/telegram/telegram'
 import XIcon from '@/components/icons/x/x.icon'
 import { usePermalink } from '@/hooks/usePermalink'
 import { BaseProps } from '@/types/global.types'
+import { isDevelopmentMode } from '@/utils/dev'
+import { useRouterTools } from '@/utils/router'
 import classNames from 'classnames'
 import { useState } from 'react'
 import Container from '../../container/container'
@@ -16,34 +18,49 @@ import { IFooterMenu } from './footer-menu.types'
 const FooterMenu: BaseProps<IFooterMenu> = (props) => {
   const { className } = props
   const { internalLinks, externalLinks } = usePermalink()
+  const { isAtHome } = useRouterTools()
+
   const [staticData] = useState({
     menu: {
       quickAccess: [
-        {
-          title: 'Home',
-          link: internalLinks.home.get(),
-          id: 'wm2339474',
-        },
-        {
-          title: 'Help',
-          link: internalLinks.help.get(),
-          id: 'wm434545',
-        },
-        {
-          title: 'FAQ',
-          link: internalLinks.faq.get(),
-          id: 'wm4354566',
-        },
-        {
-          title: 'About Us',
-          link: internalLinks.aboutUs.get(),
-          id: 'wm6245465',
-        },
-        {
-          title: 'Contact Us',
-          link: internalLinks.contactUs.get(),
-          id: 'wm5346564',
-        },
+        ...(!isAtHome()
+          ? [
+              {
+                link: internalLinks.home.get(),
+                title: 'Home',
+                disabled: false,
+              },
+            ]
+          : []),
+        ...(isDevelopmentMode()
+          ? [
+              {
+                title: 'Docs',
+                link: internalLinks.docs.get(),
+                id: 'wm434546',
+              },
+              {
+                title: 'Help',
+                link: internalLinks.help.get(),
+                id: 'wm434545',
+              },
+              {
+                title: 'FAQ',
+                link: internalLinks.faq.get(),
+                id: 'wm4354566',
+              },
+              {
+                title: 'About Us',
+                link: internalLinks.aboutUs.get(),
+                id: 'wm6245465',
+              },
+              {
+                title: 'Contact Us',
+                link: internalLinks.contactUs.get(),
+                id: 'wm5346564',
+              },
+            ]
+          : []),
       ],
       socialMedia: [
         {
@@ -94,7 +111,7 @@ const FooterMenu: BaseProps<IFooterMenu> = (props) => {
               ))}
             </List>
           </div>
-          <div className="col-span-12 sm:col-span-6 flex items-center justify-end">
+          <div id={internalLinks.contactUs.alternative} className="col-span-12 sm:col-span-6 flex items-center justify-end">
             <List className="gap-x-[0.9rem]">
               {staticData.menu.socialMedia.map(({ link, title, Icon, id }) => (
                 <ListItem key={`social-media-${id}`}>

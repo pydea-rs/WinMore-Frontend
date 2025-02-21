@@ -82,6 +82,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 ::selection {
   @apply text-primary bg-primary/10;
 }

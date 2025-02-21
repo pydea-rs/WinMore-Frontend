@@ -9,6 +9,7 @@ import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { IGetUserInfoResponse } from '@/types/auth/user.types'
+import { isDevelopmentMode } from '@/utils/dev'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -39,25 +40,24 @@ const HeaderComponent = () => {
       title: 'Home',
       disabled: false,
     },
+    ...(isDevelopmentMode()
+      ? [
+          {
+            path: internalLinks.faq.get(),
+            title: 'FAQ',
+            disabled: true,
+          },
+          {
+            path: internalLinks.aboutUs.get(),
+            title: 'About Us',
+            disabled: true,
+          },
+        ]
+      : []),
     {
-      path: internalLinks.blogs.get(),
-      title: 'Blog',
-      disabled: true,
-    },
-    {
-      path: internalLinks.faq.get(),
-      title: 'FAQ',
-      disabled: true,
-    },
-    {
-      path: internalLinks.aboutUs.get(),
-      title: 'About Us',
-      disabled: true,
-    },
-    {
-      path: internalLinks.contactUs.get(),
+      path: `#${internalLinks.contactUs.alternative}`, // internalLinks.contactUs.get(),
       title: 'Contact Us',
-      disabled: true,
+      disabled: false,
     },
   ]
 
@@ -94,7 +94,7 @@ const HeaderComponent = () => {
               {route.disabled ? (
                 <ListText>{route.title}</ListText>
               ) : (
-                <ListLink href={'/'} className="text-white transition">
+                <ListLink href={route.path} className="text-white transition">
                   {route.title}
                 </ListLink>
               )}
