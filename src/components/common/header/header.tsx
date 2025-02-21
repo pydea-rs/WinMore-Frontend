@@ -3,8 +3,8 @@ import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
 import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
 import LogoutIcon from '@/components/icons/logout/logout'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import { internalLinks } from '@/configs/app-routes'
 import { useAuth } from '@/hooks/useAuth'
-import { usePermalink } from '@/hooks/usePermalink'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
@@ -29,7 +29,6 @@ import ListText from '../list/listText/listText'
 const HeaderComponent = () => {
   const dispatch = useDispatch()
   const { token, network, currentTokenBalance } = useSelector((state) => state.currency)
-  const { internalLinks } = usePermalink()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
 
   const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })

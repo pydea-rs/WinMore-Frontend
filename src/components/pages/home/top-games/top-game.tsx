@@ -2,7 +2,7 @@ import { Button } from '@/components/common/button/button'
 import Container from '@/components/common/container/container'
 import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
 import GameControllerIcon from '@/components/icons/game-controller/game-controller'
-import { usePermalink } from '@/hooks/usePermalink'
+import { internalLinks } from '@/configs/app-routes'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation'
 const TopGames: React.FC<ElementProps> = (props) => {
   const { className } = props
   const router = useRouter()
-  const { internalLinks } = usePermalink()
   const classList = classNames({
     [`${className}`]: className,
   })

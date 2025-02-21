@@ -1,4 +1,4 @@
-import { networks } from '@/constants/networks'
+import { networks } from '@/configs/networks'
 import { IUserWalletResponse } from '@/services/user/user.service.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { INetworksState } from './networks.slice.types'

@@ -1,6 +1,6 @@
 import CasinoIcon from '@/components/icons/casino/casino'
 import ConstructionTool from '@/components/icons/constructionTool/constructionTool'
-import { SocialMediaItemType, usePermalink } from '@/hooks/usePermalink'
+import { internalLinks, socialMediaLinks } from '@/configs/app-routes'
 import { isDevelopmentMode } from '@/utils/dev'
 import { useRouterTools } from '@/utils/router'
 import classNames from 'classnames'
@@ -11,17 +11,14 @@ import { Button } from '../button/button'
 import Container from '../container/container'
 import { QuickAccessProps } from './quickAccess.types'
 
+const socialMediaItems = Object.values(socialMediaLinks).filter(({ url }) => url)
+
 const QuickAccess: React.FC<QuickAccessProps> = (props) => {
   const { className } = props
   const [isScrolled, setIsScrolled] = useState(false)
   const { isAtSubPath } = useRouterTools()
-  const { internalLinks, socialMediaLinks } = usePermalink()
-  const [socialMediaItems, setSocialMediaItems] = useState<SocialMediaItemType[]>([])
 
-  useEffect(() => {
-    setSocialMediaItems(Object.values(socialMediaLinks).filter(({ url }) => url))
-  }, [socialMediaLinks])
-
+  console.warn('RENDERED')
   const variants = {
     open: { top: '20px' },
     closed: { top: '140px' },

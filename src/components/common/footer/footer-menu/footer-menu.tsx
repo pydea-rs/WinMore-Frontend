@@ -2,7 +2,7 @@ import List from '@/components/common/list/list'
 import ListExternalLink from '@/components/common/list/listExternalLink/listExternalLink'
 import ListItem from '@/components/common/list/listItem/listItem'
 import ListLink from '@/components/common/list/listLink/listLink'
-import { usePermalink } from '@/hooks/usePermalink'
+import { internalLinks, socialMediaLinks } from '@/configs/app-routes'
 import { BaseProps } from '@/types/global.types'
 import { isDevelopmentMode } from '@/utils/dev'
 import { useRouterTools } from '@/utils/router'
@@ -13,7 +13,6 @@ import { IFooterMenu } from './footer-menu.types'
 
 const FooterMenu: BaseProps<IFooterMenu> = (props) => {
   const { className } = props
-  const { internalLinks, socialMediaLinks } = usePermalink()
   const { isAtHome } = useRouterTools()
 
   const [staticData] = useState({

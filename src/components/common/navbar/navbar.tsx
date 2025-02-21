@@ -1,5 +1,5 @@
+import { internalLinks } from '@/configs/app-routes'
 import { useAuth } from '@/hooks/useAuth'
-import { usePermalink } from '@/hooks/usePermalink'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { toggleNavbar } from '@/store/slices/navbar/navbar.slice'
@@ -20,7 +20,6 @@ import { INavbar } from './navbar.type'
 const Navbar: BaseProps<INavbar> = (props) => {
   const { isOpen } = props
   const dispatch = useDispatch()
-  const { internalLinks } = usePermalink()
   const { isAuthorized } = useAuth()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 

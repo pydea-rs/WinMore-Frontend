@@ -1,4 +1,4 @@
-import { networks } from '@/constants/networks'
+import { networks } from '@/configs/networks'
 import { INetwork, IToken } from '@/types/global.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ICurrencyState, INetworkWithOutTokens } from './currency.slice.types'
