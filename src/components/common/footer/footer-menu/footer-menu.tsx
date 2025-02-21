@@ -2,10 +2,6 @@ import List from '@/components/common/list/list'
 import ListExternalLink from '@/components/common/list/listExternalLink/listExternalLink'
 import ListItem from '@/components/common/list/listItem/listItem'
 import ListLink from '@/components/common/list/listLink/listLink'
-import DiscordIcon from '@/components/icons/discord/discord'
-import InstagramIcon from '@/components/icons/instagram/instagram'
-import TelegramIcon from '@/components/icons/telegram/telegram'
-import XIcon from '@/components/icons/x/x.icon'
 import { usePermalink } from '@/hooks/usePermalink'
 import { BaseProps } from '@/types/global.types'
 import { isDevelopmentMode } from '@/utils/dev'
@@ -17,7 +13,7 @@ import { IFooterMenu } from './footer-menu.types'
 
 const FooterMenu: BaseProps<IFooterMenu> = (props) => {
   const { className } = props
-  const { internalLinks, externalLinks } = usePermalink()
+  const { internalLinks, socialMediaLinks } = usePermalink()
   const { isAtHome } = useRouterTools()
 
   const [staticData] = useState({
@@ -26,7 +22,7 @@ const FooterMenu: BaseProps<IFooterMenu> = (props) => {
         ...(!isAtHome()
           ? [
               {
-                link: internalLinks.home.get(),
+                link: internalLinks.home.path,
                 title: 'Home',
                 disabled: false,
               },
@@ -36,58 +32,40 @@ const FooterMenu: BaseProps<IFooterMenu> = (props) => {
           ? [
               {
                 title: 'Docs',
-                link: internalLinks.docs.get(),
+                link: internalLinks.docs.path,
                 id: 'wm434546',
               },
               {
                 title: 'Help',
-                link: internalLinks.help.get(),
+                link: internalLinks.help.path,
                 id: 'wm434545',
               },
               {
                 title: 'FAQ',
-                link: internalLinks.faq.get(),
+                link: internalLinks.faq.path,
                 id: 'wm4354566',
               },
               {
                 title: 'About Us',
-                link: internalLinks.aboutUs.get(),
+                link: internalLinks.aboutUs.path,
                 id: 'wm6245465',
               },
               {
                 title: 'Contact Us',
-                link: internalLinks.contactUs.get(),
+                link: internalLinks.contactUs.path,
                 id: 'wm5346564',
               },
             ]
           : []),
       ],
-      socialMedia: [
-        {
-          id: 'wm5673536',
-          title: 'Telegram',
-          link: externalLinks.telegram.get(),
-          Icon: TelegramIcon,
-        },
-        {
-          id: 'wm5657333',
-          title: 'Discord',
-          link: externalLinks.discord.get(),
-          Icon: DiscordIcon,
-        },
-        {
-          id: 'wm5666463',
-          title: 'X',
-          link: externalLinks.x.get(),
-          Icon: XIcon,
-        },
-        {
-          id: 'wm5556533',
-          title: 'Instagram',
-          link: externalLinks.instagram.get(),
-          Icon: InstagramIcon,
-        },
-      ],
+      socialMedia: Object.values(socialMediaLinks)
+        .filter(({ url }) => url)
+        .map(({ title, url, Icon }, idx) => ({
+          id: `wm55${idx + 4}6533`,
+          title,
+          link: url || '',
+          Icon,
+        })),
     },
   })
 

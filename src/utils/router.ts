@@ -7,7 +7,13 @@ export const useRouterTools = () => {
 
   const isAtPath = (path: string) => router.pathname === path
 
-  const isAtSubPath = (path: string) => router.pathname.includes(path)
+  const isAtSubPath = (path: string, { exact = false, ignoreParams = true }: { exact?: boolean; ignoreParams?: boolean } = {}) =>
+    !exact
+      ? router.pathname.includes(path)
+      : (ignoreParams ? router.pathname : router.asPath)
+          ?.split('/')
+          .filter((x) => x?.length)
+          .pop() === path
 
   return {
     isAtHome,

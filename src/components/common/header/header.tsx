@@ -36,26 +36,26 @@ const HeaderComponent = () => {
 
   const headerRoutes = [
     {
-      path: internalLinks.home.get(),
+      path: internalLinks.home.path,
       title: 'Home',
       disabled: false,
     },
     ...(isDevelopmentMode()
       ? [
           {
-            path: internalLinks.faq.get(),
+            path: internalLinks.faq.path,
             title: 'FAQ',
             disabled: true,
           },
           {
-            path: internalLinks.aboutUs.get(),
+            path: internalLinks.aboutUs.path,
             title: 'About Us',
             disabled: true,
           },
         ]
       : []),
     {
-      path: `#${internalLinks.contactUs.alternative}`, // internalLinks.contactUs.get(),
+      path: `#${internalLinks.contactUs.alternative}`, // internalLinks.contactUs.path,
       title: 'Contact Us',
       disabled: false,
     },
@@ -65,22 +65,22 @@ const HeaderComponent = () => {
     {
       id: '1',
       title: 'Profile',
-      link: internalLinks.user.get(),
+      link: internalLinks.user.path,
     },
     {
       id: '2',
       title: 'Wallet',
-      link: internalLinks.userWallet.get(),
+      link: internalLinks.user.wallet.path,
     },
     {
       id: '3',
       title: 'Messages',
-      link: internalLinks.userMessages.get(),
+      link: internalLinks.user.messages.path,
     },
   ]
 
   const renderBrandLogo = () => (
-    <Link href={internalLinks.home.get()}>
+    <Link href={internalLinks.home.path}>
       <Image src={'/assets/images/logo.svg'} alt="logo" width={140} height={50} className="w-36 lg:w-44" />
     </Link>
   )

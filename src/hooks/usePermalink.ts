@@ -1,112 +1,138 @@
+import DiscordIcon from '@/components/icons/discord/discord'
+import InstagramIcon from '@/components/icons/instagram/instagram'
+import TelegramIcon from '@/components/icons/telegram/telegram'
+import XIcon from '@/components/icons/x/x.icon'
+import { ElementProps } from '@/types/elements.types'
+import { BaseProps } from '@/types/global.types'
+
+export type SocialMediaItemType = {
+  title: string
+  slug: string
+  url: string | null
+  Icon: BaseProps<ElementProps>
+}
+
 export const usePermalink = () => {
   const internalLinks = {
     home: {
       slug: '/',
-      get: function () {
+      get path() {
         return '/'
       },
     },
     blogs: {
       slug: 'blogs',
-      get: function () {
+      get path() {
         return 'blogs'
       },
     },
     game: {
       slug: 'games',
-      get: function (slug: 'mine' | 'plinko') {
-        return `/${this.slug}/${slug}`
+      get path() {
+        return `/${this.slug}`
+      },
+      mine: {
+        slug: 'mine',
+        parent: {} as Record<string, any>,
+        get path() {
+          return `${this.parent?.path || ''}/${this.slug}`
+        },
+      },
+      plinko: {
+        slug: 'plinko',
+        parent: {} as Record<string, any>,
+        get path() {
+          return `${this.parent?.path || ''}/${this.slug}`
+        },
       },
     },
     aboutUs: {
       slug: 'about-us',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     contactUs: {
       slug: 'contact-us',
       alternative: 'footer-social-media',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     faq: {
       slug: 'faq',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     help: {
       slug: 'help',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     docs: {
       slug: 'docs',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     referral: {
       slug: 'referral',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
     },
     user: {
       slug: 'user',
-      get: function () {
+      get path() {
         return `/${this.slug}`
       },
-    },
-    userWallet: {
-      slug: 'user/wallet',
-      get: function () {
-        return `/${this.slug}`
+      wallet: {
+        slug: 'wallet',
+        parent: {} as Record<string, any>,
+        get path() {
+          return `${this.parent?.path || ''}/${this.slug}`
+        },
       },
-    },
-    userMessages: {
-      slug: 'user/messages',
-      get: function () {
-        return `/${this.slug}`
+      messages: {
+        slug: 'messages',
+        parent: {} as Record<string, any>,
+        get path() {
+          return `${this.parent?.path || ''}/${this.slug}`
+        },
       },
     },
   }
+  internalLinks.user.wallet.parent = internalLinks.user.messages.parent = internalLinks.user
+  internalLinks.game.mine.parent = internalLinks.game.plinko.parent = internalLinks.game
 
-  const externalLinks = {
+  const socialMediaLinks: Record<string, SocialMediaItemType> = {
     telegram: {
-      slug: '/',
-      get: function () {
-        return '/'
-      },
-    },
-    discord: {
-      slug: '/',
-      get: function () {
-        return '/'
-      },
-    },
-    youtube: {
-      slug: '/',
-      get: function () {
-        return '/'
-      },
+      slug: 'telegram',
+      title: 'Telegram',
+      url: null,
+      Icon: TelegramIcon,
     },
     x: {
-      slug: '/',
-      get: function () {
-        return '/'
-      },
+      slug: 'x-twitter',
+      title: 'X',
+      url: 'https://x.com/winmore_xyz',
+      Icon: XIcon,
+    },
+    discord: {
+      slug: 'discord',
+      title: 'Discord',
+      url: 'https://discord.gg/MA98WqRjbd',
+      Icon: DiscordIcon,
     },
     instagram: {
-      slug: '/',
-      get: function () {
-        return '/'
-      },
+      slug: 'instagram',
+      title: 'Instagram',
+      url: null,
+      Icon: InstagramIcon,
     },
   }
 
-  return { internalLinks, externalLinks }
+  return { internalLinks, socialMediaLinks }
 }

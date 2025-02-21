@@ -101,7 +101,7 @@ const Navbar: BaseProps<INavbar> = (props) => {
               </MenuItem>
 
               <MenuItem>
-                <Link href={internalLinks.userWallet.get()}>
+                <Link href={internalLinks.user.wallet.path}>
                   <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
                     Wallet
                     <ChevronRightIcon className="flex-shrink-0 w-4" />
@@ -110,7 +110,7 @@ const Navbar: BaseProps<INavbar> = (props) => {
               </MenuItem>
 
               <MenuItem>
-                <Link href={internalLinks.userMessages.get()}>
+                <Link href={internalLinks.user.messages.path}>
                   <Button kind="primary" variant="dark" className="flex justify-between font-medium bg-opacity-40 border text-main border-[#1A1F25]" full size="lg">
                     Message
                     <ChevronRightIcon className="flex-shrink-0 w-4" />

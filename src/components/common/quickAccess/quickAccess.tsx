@@ -1,10 +1,11 @@
 import CasinoIcon from '@/components/icons/casino/casino'
 import ConstructionTool from '@/components/icons/constructionTool/constructionTool'
-import { usePermalink } from '@/hooks/usePermalink'
+import { SocialMediaItemType, usePermalink } from '@/hooks/usePermalink'
+import { isDevelopmentMode } from '@/utils/dev'
+import { useRouterTools } from '@/utils/router'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button } from '../button/button'
 import Container from '../container/container'
@@ -13,8 +14,13 @@ import { QuickAccessProps } from './quickAccess.types'
 const QuickAccess: React.FC<QuickAccessProps> = (props) => {
   const { className } = props
   const [isScrolled, setIsScrolled] = useState(false)
-  const router = useRouter()
-  const { internalLinks } = usePermalink()
+  const { isAtSubPath } = useRouterTools()
+  const { internalLinks, socialMediaLinks } = usePermalink()
+  const [socialMediaItems, setSocialMediaItems] = useState<SocialMediaItemType[]>([])
+
+  useEffect(() => {
+    setSocialMediaItems(Object.values(socialMediaLinks).filter(({ url }) => url))
+  }, [socialMediaLinks])
 
   const variants = {
     open: { top: '20px' },
@@ -42,11 +48,8 @@ const QuickAccess: React.FC<QuickAccessProps> = (props) => {
     }
   }, [])
 
-  const checkGameName = (url: string, valueToMatch: string) => {
-    const urlToArr = url.split('/')
-    const gameName = urlToArr[urlToArr.length - 1]
-
-    return gameName === valueToMatch
+  const gameIsAlreadyOn = (gameName: string) => {
+    return isAtSubPath(gameName, { exact: true })
   }
 
   return (
@@ -63,16 +66,31 @@ const QuickAccess: React.FC<QuickAccessProps> = (props) => {
         }}
       >
         <div className="w-fit flex flex-col gap-4 ">
-          <Link href={internalLinks.game.get('mine')}>
-            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'mine') ? '!bg-gradient-gray' : ''}`}>
+          <Link href={internalLinks.game.mine.path}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.game.mine.slug) ? '!bg-gradient-gray' : ''}`}>
               <CasinoIcon className="w-6 h-6" />
             </Button>
           </Link>
-          {/* <Link href={internalLinks.game.get('plinko')}> */}
-          <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${checkGameName(router.asPath, 'plinko') ? '!bg-gradient-gray' : ''}`} disabled>
-            <ConstructionTool className="w-6 h-6" />
-          </Button>
-          {/* </Link> */}
+          {isDevelopmentMode() && (
+            <Link href={internalLinks.game.plinko.path}>
+              <Button
+                kind="primary"
+                variant="info"
+                className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.game.plinko.slug) ? '!bg-gradient-gray' : ''}`}
+                disabled
+              >
+                <ConstructionTool className="w-6 h-6" />
+              </Button>
+            </Link>
+          )}
+          <hr style={{ border: '1px solid #333' }} />
+          {socialMediaItems.map(({ url, Icon }, idx) => (
+            <Link href={url || '#'} key={idx}>
+              <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-warning/90`}>
+                <Icon className="w-6 h-6" />
+              </Button>
+            </Link>
+          ))}
         </div>
       </motion.aside>
     </Container>
