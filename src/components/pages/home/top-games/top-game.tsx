@@ -37,7 +37,7 @@ const TopGames: React.FC<ElementProps> = (props) => {
                 />
                 <h2 className="text-4xl font-bold mb-2">DREAM MINE</h2>
                 <Button
-                  onClick={() => router.push(internalLinks.game.mine.path)}
+                  onClick={() => router.push(internalLinks.games.mine.path)}
                   kind="primary"
                   variant="light"
                   className="text-xs md:text-sm flex items-center gap-[10px] px-4"

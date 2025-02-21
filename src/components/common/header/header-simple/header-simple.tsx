@@ -1,4 +1,6 @@
+import { internalLinks } from '@/configs/app-routes'
 import Image from 'next/image'
+import Link from 'next/link'
 import Container from '../../container/container'
 
 const HeaderSimple = () => {
@@ -9,9 +11,9 @@ const HeaderSimple = () => {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none w-[230px] h-[120px] z-10">
             <Image src={'/assets/images/shadow.svg'} alt="shadow" width={230} height={150} className="scale-125" />
           </div>
-          <div className="flex justify-center">
+          <Link href={internalLinks.home.path} className="flex justify-center">
             <Image src={'/assets/images/logo.svg'} alt="shadow" width={140} height={40} />
-          </div>
+          </Link>
         </div>
       </Container>
     </header>

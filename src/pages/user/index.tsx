@@ -1,9 +1,15 @@
 import Container from '@/components/common/container/container'
 import UserProfile from '@/components/pages/profile'
+import { useAuth } from '@/hooks/useAuth'
 import Head from 'next/head'
 import { Fragment } from 'react'
+import LoginRequiredPage from '../../components/pages/common/MustLoginFirst'
 
 const User = () => {
+  const { isAuthorized, token } = useAuth()
+  if (!isAuthorized || !token?.length) {
+    return <LoginRequiredPage />
+  }
   return (
     <Fragment>
       <Head>

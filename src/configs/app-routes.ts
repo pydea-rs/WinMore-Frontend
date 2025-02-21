@@ -13,7 +13,7 @@ export type SocialMediaItemType = {
 }
 
 const parentRoutes = {
-  game: {
+  games: {
     slug: 'games',
     get path() {
       return `/${this.slug}`
@@ -40,18 +40,18 @@ export const internalLinks = {
       return 'blogs'
     },
   },
-  game: {
-    ...parentRoutes.game,
+  games: {
+    ...parentRoutes.games,
     mine: {
       slug: 'mine',
-      parent: parentRoutes.game,
+      parent: parentRoutes.games,
       get path() {
         return `${this.parent?.path || ''}/${this.slug}`
       },
     },
     plinko: {
       slug: 'plinko',
-      parent: parentRoutes.game,
+      parent: parentRoutes.games,
       get path() {
         return `${this.parent?.path || ''}/${this.slug}`
       },

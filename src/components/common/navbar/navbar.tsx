@@ -59,9 +59,9 @@ const Navbar: BaseProps<INavbar> = (props) => {
         </div>
 
         <div className="relative z-20">
-          <div className="flex justify-center mb-24">
+          <Link href={internalLinks.home.path} className="flex justify-center mb-24">
             <Image src={'/assets/images/logo.svg'} alt="shadow" width={140} height={40} />
-          </div>
+          </Link>
 
           <Menu className="mb-6">
             <MenuTitle>Coin</MenuTitle>

@@ -4,6 +4,7 @@ import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabContent from '@/components/common/tab/tabContent/tabContent'
 import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
+import LoginRequiredPage from '@/components/pages/common/MustLoginFirst'
 import { useAuth } from '@/hooks/useAuth'
 import { useUserTransactionHistoryQuery } from '@/services/user/user.service'
 import Head from 'next/head'
@@ -13,11 +14,15 @@ import ChainTokenList from '../../../components/pages/wallet/chainTokenList/chai
 import WalletHistory from '../../../components/pages/wallet/walletHistory/walletHistory'
 
 const Wallet = () => {
-  const { isAuthorized } = useAuth()
+  const { isAuthorized, token } = useAuth()
   const router = useRouter()
   const { query } = router
   const type = query.type as string
   const { data } = useUserTransactionHistoryQuery({ type }, { skip: !isAuthorized, pollingInterval: 20000 })
+
+  if (!isAuthorized || !token?.length) {
+    return <LoginRequiredPage />
+  }
 
   return (
     <Fragment>

@@ -63,17 +63,17 @@ const QuickAccess: React.FC<QuickAccessProps> = (props) => {
         }}
       >
         <div className="w-fit flex flex-col gap-4 ">
-          <Link href={internalLinks.game.mine.path}>
-            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.game.mine.slug) ? '!bg-gradient-gray' : ''}`}>
+          <Link href={internalLinks.games.mine.path}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.mine.slug) ? '!bg-gradient-gray' : ''}`}>
               <CasinoIcon className="w-6 h-6" />
             </Button>
           </Link>
           {isDevelopmentMode() && (
-            <Link href={internalLinks.game.plinko.path}>
+            <Link href={internalLinks.games.plinko.path}>
               <Button
                 kind="primary"
                 variant="info"
-                className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.game.plinko.slug) ? '!bg-gradient-gray' : ''}`}
+                className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.plinko.slug) ? '!bg-gradient-gray' : ''}`}
                 disabled
               >
                 <ConstructionTool className="w-6 h-6" />
