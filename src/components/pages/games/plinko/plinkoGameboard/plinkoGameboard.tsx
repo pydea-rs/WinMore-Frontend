@@ -56,7 +56,7 @@ export default function PlinkoGameBoard() {
   const multipliers = [2, 3, 4, 5, 4, 3, 2]
 
   const gravity = 0.07
-  const friction = 0.95
+  const friction = 0.92
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -85,8 +85,10 @@ export default function PlinkoGameBoard() {
 
     const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
       const gradient = ctx.createLinearGradient(0, 0, bucketWidth, bucketHeight)
-      gradient.addColorStop(0, colorFrom)
-      gradient.addColorStop(1, colorTo)
+      // gradient.addColorStop(0, colorFrom)
+      // gradient.addColorStop(1, colorTo)
+      gradient.addColorStop(0, '#2A3A4A')
+      gradient.addColorStop(1, '#1A2530')
       return gradient
     }
 
@@ -103,13 +105,16 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      // Draw balls
+      const BALL_DROP_SPEED = 1.5 // Base vertical speed
+      const BALL_HORIZONTAL_SPEED = 1.5
+      const MAX_SPEED = 10000
+
       ballsRef.current.forEach((ball) => {
-        ball.vy += gravity
+        ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
         ball.vy *= friction
         ball.vx *= friction
-        ball.x += ball.vx
-        ball.y += ball.vy
+        ball.x += ball.vx * BALL_HORIZONTAL_SPEED
+        ball.y += ball.vy * BALL_DROP_SPEED
 
         // Collision with pegs
         pegsRef.current.forEach((peg) => {
@@ -131,42 +136,56 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      // Draw trapezoidal buckets with gradients and rounded corners
+      // Draw trapezoid bucket
       multipliers.forEach((multiplier, index) => {
-        const bucketX = index * 70 + 35
+        const bucketTopWidth = bucketWidth * 1.05 // Wider at top
+        const bucketBottomWidth = bucketWidth * 0.7 // Narrower at bottom
+        const bucketX = (index + 1) * 70
         const bucketY = canvas.height - 90
-        const gradient = createGradient(ctx, bucketColors[index], bucketColors[index])
+        const topLeftX = bucketX - bucketTopWidth / 2
+        const topRightX = bucketX + bucketTopWidth / 2
+        const bottomLeftX = bucketX - bucketBottomWidth / 2
+        const bottomRightX = bucketX + bucketBottomWidth / 2
 
         ctx.beginPath()
-        // Top-left corner with radius
-        ctx.moveTo(bucketX + cornerRadius, bucketY)
-        ctx.lineTo(bucketX + bucketWidth - cornerRadius, bucketY)
-        ctx.arcTo(bucketX + bucketWidth, bucketY, bucketX + bucketWidth, bucketY + cornerRadius, cornerRadius)
-        // Right side
-        ctx.lineTo(bucketX + bucketWidth, bucketY + bucketHeight - cornerRadius)
-        ctx.arcTo(bucketX + bucketWidth, bucketY + bucketHeight, bucketX + bucketWidth - cornerRadius, bucketY + bucketHeight, cornerRadius)
-        // Bottom side
-        ctx.lineTo(bucketX + cornerRadius, bucketY + bucketHeight)
-        ctx.arcTo(bucketX, bucketY + bucketHeight, bucketX, bucketY + bucketHeight - cornerRadius, cornerRadius)
-        // Left side
-        ctx.lineTo(bucketX, bucketY + cornerRadius)
-        ctx.arcTo(bucketX, bucketY, bucketX + cornerRadius, bucketY, cornerRadius)
+        ctx.moveTo(topLeftX, bucketY)
+        ctx.lineTo(topRightX, bucketY)
+
+        ctx.lineTo(bottomRightX, bucketY + bucketHeight - cornerRadius)
+        ctx.arcTo(bottomRightX, bucketY + bucketHeight, bottomRightX - cornerRadius, bucketY + bucketHeight, cornerRadius)
+
+        ctx.lineTo(bottomLeftX + cornerRadius, bucketY + bucketHeight)
+
+        ctx.arcTo(bottomLeftX, bucketY + bucketHeight, bottomLeftX, bucketY + bucketHeight - cornerRadius, cornerRadius)
+        ctx.lineTo(topLeftX, bucketY)
         ctx.closePath()
+
+        const gradient = ctx.createLinearGradient(bucketX, bucketY, bucketX, bucketY + bucketHeight)
+        gradient.addColorStop(0, '#2A3A4A')
+        gradient.addColorStop(1, '#1A2530')
         ctx.fillStyle = gradient
         ctx.fill()
 
-        // Draw multiplier text
+        // Add subtle inner shadow
+        ctx.save()
+        ctx.clip()
+        ctx.shadowBlur = 10
+        ctx.shadowColor = 'rgba(0,0,0,0.5)'
+        ctx.shadowOffsetY = 5
+        ctx.fill()
+        ctx.restore()
+
         ctx.fillStyle = 'white'
         ctx.font = 'bold 16px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText(`${multiplier}x`, bucketX + bucketWidth / 2, bucketY + bucketHeight / 2 + 5)
+        ctx.fillText(`${multiplier}x`, bucketX, bucketY + bucketHeight / 2 + 5)
       })
 
       requestAnimationFrame(update)
     }
 
     update()
-  }, [])
+  }, [multipliers])
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return
