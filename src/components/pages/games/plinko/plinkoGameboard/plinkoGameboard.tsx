@@ -4,11 +4,12 @@ import { CardBody } from '@/components/common/card/card-body/card-body'
 import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
 import { Nullable } from '@/types/global.types'
 import { motion } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 
 export default function PlinkoGameBoard() {
   const { onDropBall, plinkoConfig, loadingBlock, isBallDropping } = usePlinkoGameBoardHelper()
+  const [boardWidth, setBoardWidth] = useState(600)
 
   const getGameStateColor = (status: Nullable<IPlinkoStatus>) => {
     switch (status) {
@@ -53,35 +54,42 @@ export default function PlinkoGameBoard() {
   const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
-  const multipliers = [2, 3, 4, 5, 4, 3, 2]
 
   const gravity = 0.1
   const friction = 0.9
-
+  console.log(boardWidth)
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
-    canvas.width = 600
-    canvas.height = 600
 
     // Generate pegs in a triangular pattern
-    const rows = 8
-    const pegArray = []
-    for (let row = 0; row < rows; row++) {
-      for (let i = 0; i <= row + 2; i++) {
-        const x = canvas.width / 2 + (i - row / 2) * 50 - 75
-        const y = 100 + row * 50
-        pegArray.push({ x, y, radius: 9 })
-      }
-    }
-    pegsRef.current = pegArray
-
+    const rows = 9
+    canvas.height = 200 + (rows - 1) * 50
+    canvas.width = 600 + Math.max(0, rows - 9) * 40
+    setBoardWidth(canvas.width)
     // Function to create gradient for buckets
     const bucketWidth = 60
     const bucketHeight = 80
     const bucketTopOffset = 20 // Adjust this to control the trapezoid shape
     const cornerRadius = 10 // Border radius for the bucket corners
+
+    const multipliers = Array(rows - 1)
+      .fill(0)
+      .map((_, i) => i + 1)
+    const pegArray = []
+    let leastLeft = Infinity
+    for (let row = 0; row < rows; row++) {
+      for (let i = 0; i <= row + 2; i++) {
+        const x = canvas.width / 2 + (i - row / 2) * 50 - bucketWidth
+        if (x < leastLeft) {
+          leastLeft = x
+        }
+        const y = 100 + row * 50
+        pegArray.push({ x, y, radius: 9 })
+      }
+    }
+    pegsRef.current = pegArray
 
     const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
       const gradient = ctx.createLinearGradient(0, 0, bucketWidth, bucketHeight)
@@ -108,12 +116,13 @@ export default function PlinkoGameBoard() {
       const BALL_DROP_SPEED = 1
       const BALL_HORIZONTAL_SPEED = 1.5
       const MAX_SPEED = 100
+      const bucketWidthThreshold = 5
 
       const buckets = multipliers.map((multiplier, index) => {
         const bucketTopWidth = bucketWidth * 1.1
         const bucketBottomWidth = bucketWidth * 0.7
-        const bucketX = (index + 1) * 70
-        const bucketY = canvas.height - 90
+        const bucketX = index * (bucketWidth + bucketWidthThreshold * 1.5) + leastLeft + bucketWidthThreshold * 4
+        const bucketY = pegsRef.current[pegsRef.current.length - 1].y + 20
         const topLeftX = bucketX - bucketTopWidth / 2
         const topRightX = bucketX + bucketTopWidth / 2
         const bottomLeftX = bucketX - bucketBottomWidth / 2
@@ -173,14 +182,13 @@ export default function PlinkoGameBoard() {
           }
         })
 
-        const bucketYThreshold = canvas.height - 80 // Same as bucket height start position
-        if (ball.y >= bucketYThreshold) {
+        const bucketYThreshold = 20
+        if (ball.y >= buckets[0].y + bucketYThreshold) {
           // Find the closest bucket
           let bucketInContactIndex = -1
           let minDistance = Infinity
 
-          const threshhold = 5
-          if (ball.x >= buckets[0].topLeftX - threshhold && ball.x <= buckets[buckets.length - 1].topRightX + threshhold) {
+          if (ball.x >= buckets[0].topLeftX - bucketWidthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold) {
             for (let i = 0; i < buckets.length - 1; i++) {
               if (ball.x >= buckets[i].topLeftX && ball.x < buckets[i + 1].topLeftX) {
                 bucketInContactIndex = i
@@ -189,11 +197,12 @@ export default function PlinkoGameBoard() {
             }
             if (bucketInContactIndex === -1) {
               // ball fell into the first or last bucket threshold
-              bucketInContactIndex = ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + threshhold ? buckets.length - 1 : 0
+              bucketInContactIndex =
+                ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold ? buckets.length - 1 : 0
             }
             if (bucketInContactIndex !== -1) {
               ball.x = buckets[bucketInContactIndex].x
-              ball.y = buckets[bucketInContactIndex].bottomY - threshhold
+              ball.y = buckets[bucketInContactIndex].bottomY - bucketWidthThreshold
               ball.vx = 0
               ball.vy = 0
             }
@@ -213,7 +222,7 @@ export default function PlinkoGameBoard() {
     }
 
     update()
-  }, [multipliers])
+  }, [])
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return
@@ -224,7 +233,7 @@ export default function PlinkoGameBoard() {
   }
 
   return (
-    <Card className="w-full max-w-[600px] mt-10">
+    <Card className={`w - full max - w - [${boardWidth}px] mt - 10`}>
       <CardBody className="p-4 sm:p-6">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div>
