@@ -55,8 +55,8 @@ export default function PlinkoGameBoard() {
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
   const multipliers = [2, 3, 4, 5, 4, 3, 2]
 
-  const gravity = 0.07
-  const friction = 0.92
+  const gravity = 0.1
+  const friction = 0.9
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -105,41 +105,13 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      const BALL_DROP_SPEED = 1.5 // Base vertical speed
+      const BALL_DROP_SPEED = 1
       const BALL_HORIZONTAL_SPEED = 1.5
-      const MAX_SPEED = 10000
+      const MAX_SPEED = 100
 
-      ballsRef.current.forEach((ball) => {
-        ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
-        ball.vy *= friction
-        ball.vx *= friction
-        ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-        ball.y += ball.vy * BALL_DROP_SPEED
-
-        // Collision with pegs
-        pegsRef.current.forEach((peg) => {
-          const dx = ball.x - peg.x
-          const dy = ball.y - peg.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < ball.radius + peg.radius) {
-            const angle = Math.atan2(dy, dx)
-            ball.vx = Math.cos(angle) * 2
-            ball.vy = Math.sin(angle) * 2
-          }
-        })
-
-        // Draw ball
-        ctx.beginPath()
-        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-        ctx.fillStyle = 'red'
-        ctx.fill()
-        ctx.closePath()
-      })
-
-      // Draw trapezoid bucket
-      multipliers.forEach((multiplier, index) => {
-        const bucketTopWidth = bucketWidth * 1.05 // Wider at top
-        const bucketBottomWidth = bucketWidth * 0.7 // Narrower at bottom
+      const buckets = multipliers.map((multiplier, index) => {
+        const bucketTopWidth = bucketWidth * 1.1
+        const bucketBottomWidth = bucketWidth * 0.7
         const bucketX = (index + 1) * 70
         const bucketY = canvas.height - 90
         const topLeftX = bucketX - bucketTopWidth / 2
@@ -179,6 +151,62 @@ export default function PlinkoGameBoard() {
         ctx.font = 'bold 16px Arial'
         ctx.textAlign = 'center'
         ctx.fillText(`${multiplier}x`, bucketX, bucketY + bucketHeight / 2 + 5)
+        return { x: bucketX, y: bucketY, topLeftX, topRightX, bottomLeftX, bottomRightX, bottomY: bucketY + bucketHeight }
+      })
+
+      ballsRef.current = ballsRef.current.filter((ball) => {
+        ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
+        ball.vy *= friction
+        ball.vx *= friction
+        ball.x += ball.vx * BALL_HORIZONTAL_SPEED
+        ball.y += ball.vy * BALL_DROP_SPEED
+
+        // Collision with pegs
+        pegsRef.current.forEach((peg) => {
+          const dx = ball.x - peg.x
+          const dy = ball.y - peg.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < ball.radius + peg.radius) {
+            const angle = Math.atan2(dy, dx)
+            ball.vx = Math.cos(angle) * 2
+            ball.vy = Math.sin(angle) * 2
+          }
+        })
+
+        const bucketYThreshold = canvas.height - 80 // Same as bucket height start position
+        if (ball.y >= bucketYThreshold) {
+          // Find the closest bucket
+          let bucketInContactIndex = -1
+          let minDistance = Infinity
+
+          const threshhold = 5
+          if (ball.x >= buckets[0].topLeftX - threshhold && ball.x <= buckets[buckets.length - 1].topRightX + threshhold) {
+            for (let i = 0; i < buckets.length - 1; i++) {
+              if (ball.x >= buckets[i].topLeftX && ball.x < buckets[i + 1].topLeftX) {
+                bucketInContactIndex = i
+                break
+              }
+            }
+            if (bucketInContactIndex === -1) {
+              // ball fell into the first or last bucket threshold
+              bucketInContactIndex = ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + threshhold ? buckets.length - 1 : 0
+            }
+            if (bucketInContactIndex !== -1) {
+              ball.x = buckets[bucketInContactIndex].x
+              ball.y = buckets[bucketInContactIndex].bottomY - threshhold
+              ball.vx = 0
+              ball.vy = 0
+            }
+          }
+          return false
+        }
+        // Draw ball
+        ctx.beginPath()
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+        ctx.fillStyle = 'red'
+        ctx.fill()
+        ctx.closePath()
+        return true
       })
 
       requestAnimationFrame(update)
@@ -192,7 +220,7 @@ export default function PlinkoGameBoard() {
     const canvas: HTMLCanvasElement = canvasRef.current
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
-    ballsRef.current.push({ x, y: 50, vx: (Math.random() - 0.5) * 2, vy: 2, radius: 5 })
+    ballsRef.current.push({ x, y: 50, vx: (Math.random() - 0.5) * 2, vy: 2, radius: 7.5 })
   }
 
   return (
