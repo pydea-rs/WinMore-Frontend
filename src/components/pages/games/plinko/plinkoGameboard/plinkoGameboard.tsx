@@ -57,7 +57,7 @@ export default function PlinkoGameBoard() {
 
   const gravity = 0.1
   const friction = 0.9
-  console.log(boardWidth)
+
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas: HTMLCanvasElement = canvasRef.current
@@ -77,7 +77,7 @@ export default function PlinkoGameBoard() {
     const multipliers = Array(rows - 1)
       .fill(0)
       .map((_, i) => i + 1)
-    const pegArray = []
+    const pegArray: { x: number; y: number; radius: number }[] = []
     let leastLeft = Infinity
     for (let row = 0; row < rows; row++) {
       for (let i = 0; i <= row + 2; i++) {
@@ -113,7 +113,7 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      const BALL_DROP_SPEED = 1
+      const BALL_DROP_SPEED = 2
       const BALL_HORIZONTAL_SPEED = 1.5
       const MAX_SPEED = 100
       const bucketWidthThreshold = 5
@@ -186,7 +186,6 @@ export default function PlinkoGameBoard() {
         if (ball.y >= buckets[0].y + bucketYThreshold) {
           // Find the closest bucket
           let bucketInContactIndex = -1
-          let minDistance = Infinity
 
           if (ball.x >= buckets[0].topLeftX - bucketWidthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold) {
             for (let i = 0; i < buckets.length - 1; i++) {
@@ -229,7 +228,8 @@ export default function PlinkoGameBoard() {
     const canvas: HTMLCanvasElement = canvasRef.current
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
-    ballsRef.current.push({ x, y: 50, vx: (Math.random() - 0.5) * 2, vy: 2, radius: 7.5 })
+    // const xPredicted = computeDropPointForBucket(5, pegsRef.current, buckets)
+    ballsRef.current.push({ x: 200, y: 50, vx: 1.5, vy: 0, radius: 7.5 })
   }
 
   return (
