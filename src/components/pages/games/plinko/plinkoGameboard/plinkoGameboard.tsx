@@ -6,6 +6,7 @@ import { Nullable } from '@/types/global.types'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
+import { backwardSimulation } from './predictions'
 
 export default function PlinkoGameBoard() {
   const { onDropBall, plinkoConfig, loadingBlock, isBallDropping } = usePlinkoGameBoardHelper()
@@ -54,9 +55,13 @@ export default function PlinkoGameBoard() {
   const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
+  const [buckets, setBuckets] = useState<Record<string, number>[]>([])
 
   const gravity = 0.1
   const friction = 0.9
+  const BALL_DROP_SPEED = 2
+  const BALL_HORIZONTAL_SPEED = 1.5
+  const MAX_SPEED = 100
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -113,9 +118,6 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      const BALL_DROP_SPEED = 2
-      const BALL_HORIZONTAL_SPEED = 1.5
-      const MAX_SPEED = 100
       const bucketWidthThreshold = 5
 
       const buckets = multipliers.map((multiplier, index) => {
@@ -162,6 +164,7 @@ export default function PlinkoGameBoard() {
         ctx.fillText(`${multiplier}x`, bucketX, bucketY + bucketHeight / 2 + 5)
         return { x: bucketX, y: bucketY, topLeftX, topRightX, bottomLeftX, bottomRightX, bottomY: bucketY + bucketHeight }
       })
+      setBuckets(buckets)
 
       ballsRef.current = ballsRef.current.filter((ball) => {
         ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
@@ -229,7 +232,9 @@ export default function PlinkoGameBoard() {
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     // const xPredicted = computeDropPointForBucket(5, pegsRef.current, buckets)
-    ballsRef.current.push({ x: 200, y: 50, vx: 1.5, vy: 0, radius: 7.5 })
+    const ball = backwardSimulation(buckets[6], 50, pegsRef.current, friction, gravity, BALL_HORIZONTAL_SPEED, BALL_DROP_SPEED, MAX_SPEED)
+    console.log(ball)
+    ballsRef.current.push(ball)
   }
 
   return (

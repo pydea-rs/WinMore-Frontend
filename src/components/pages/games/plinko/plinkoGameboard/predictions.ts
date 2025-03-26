@@ -1,4 +1,4 @@
-function simulate(
+export function simulate(
   buckets: Record<string, number>[],
   pegsArray: Record<string, number>[],
   ball: Record<string, number>,
@@ -56,24 +56,18 @@ function simulate(
   }
 }
 
-function backwardSimulation(
-  buckets: Record<string, number>[],
+export function backwardSimulation(
+  targetBucket: Record<string, number>,
+  dropPointY: number,
   pegsArray: Record<string, number>[],
-  ball: Record<string, number>,
   friction: number,
   gravity: number,
-  bucketWidthThreshold: number,
   BALL_HORIZONTAL_SPEED: number,
   BALL_DROP_SPEED: number,
   MAX_SPEED: number,
 ) {
+  const ball = { x: targetBucket.x, y: targetBucket.y, vx: 0.5, vy: MAX_SPEED / 2, radius: 7.5 }
   while (true) {
-    ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
-    ball.vy *= friction
-    ball.vx *= friction
-    ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-    ball.y += ball.vy * BALL_DROP_SPEED
-
     // Collision with pegs
     pegsArray.forEach((peg) => {
       const dx = ball.x - peg.x
@@ -86,35 +80,18 @@ function backwardSimulation(
       }
     })
 
-    const bucketYThreshold = 20
-    if (ball.y >= buckets[0].y + bucketYThreshold) {
-      // Find the closest bucket
-      let bucketInContactIndex = -1
-
-      if (ball.x >= buckets[0].topLeftX - bucketWidthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold) {
-        for (let i = 0; i < buckets.length - 1; i++) {
-          if (ball.x >= buckets[i].topLeftX && ball.x < buckets[i + 1].topLeftX) {
-            bucketInContactIndex = i
-            break
-          }
-        }
-        if (bucketInContactIndex === -1) {
-          // ball fell into the first or last bucket threshold
-          bucketInContactIndex = ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold ? buckets.length - 1 : 0
-        }
-        if (bucketInContactIndex !== -1) {
-          ball.x = buckets[bucketInContactIndex].x
-          ball.y = buckets[bucketInContactIndex].bottomY - bucketWidthThreshold
-          ball.vx = 0
-          ball.vy = 0
-        }
-        return bucketInContactIndex
-      }
-    }
+    ball.y -= ball.vy * BALL_DROP_SPEED
+    if (ball.y <= dropPointY) break
+    ball.x -= ball.vx * BALL_HORIZONTAL_SPEED
+    ball.vy /= friction
+    ball.vx /= friction
+    ball.vy = Math.max(ball.vy - gravity, 1)
+    console.log(ball.vy)
   }
+  return { ...ball, vy: 1 }
 }
 
-function computeDropPointForBucketProb(targetBucketIndex: number, pegs: Record<string, number>[], buckets: Record<string, number>[]) {
+export function computeDropPointForBucketProb(targetBucketIndex: number, pegs: Record<string, number>[], buckets: Record<string, number>[]) {
   let bucketX = buckets[targetBucketIndex].x // Target bucket x position
   let y = pegs[pegs.length - 1].y // Start from last row of pegs
   let x = bucketX // Work backwards from the bucket
@@ -139,7 +116,7 @@ function computeDropPointForBucketProb(targetBucketIndex: number, pegs: Record<s
   return x // Computed initial drop position
 }
 
-function computeDropPointForBucket(targetBucketIndex: number, pegs: Record<string, number>[], buckets: Record<string, number>[], gravity = 0.1, friction = 0.9) {
+export function computeDropPointForBucket(targetBucketIndex: number, pegs: Record<string, number>[], buckets: Record<string, number>[], gravity = 0.1, friction = 0.9) {
   const bucketX = buckets[targetBucketIndex].topLeftX // Target bucket position
   const rows = 9 // Number of peg rows
   const pegSpacingX = 50 // Horizontal distance between pegs
