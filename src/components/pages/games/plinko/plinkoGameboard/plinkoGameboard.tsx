@@ -4,9 +4,9 @@ import { CardBody } from '@/components/common/card/card-body/card-body'
 import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
 import { Nullable } from '@/types/global.types'
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
-import { predictBucket } from './predictions'
+import { simulate } from './predictions'
 
 export default function PlinkoGameBoard() {
   const { onDropBall, plinkoConfig, loadingBlock, isBallDropping } = usePlinkoGameBoardHelper()
@@ -52,7 +52,7 @@ export default function PlinkoGameBoard() {
   }
 
   const canvasRef = useRef(null)
-  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number }[]>([])
+  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
   const [buckets, setBuckets] = useState<Record<string, number>[]>([])
@@ -183,6 +183,11 @@ export default function PlinkoGameBoard() {
           if (dist < ball.radius + peg.radius) {
             const angle = Math.atan2(dy, dx)
             ball.vx = Math.cos(angle) * 2
+            if (ball.vx >= 0) {
+              ball.vx = Math.max(ball.vx, 0.001)
+            } else {
+              ball.vx = Math.min(ball.vx, -0.001)
+            }
             ball.vy = Math.sin(angle) * 2
           }
         })
@@ -209,7 +214,7 @@ export default function PlinkoGameBoard() {
               ball.vx = 0
               ball.vy = 0
             }
-            console.log('x_f', bucketInContactIndex)
+            console.log({ bucketInContactIndex, dropAt: ball.dropAt })
           }
           return false
         }
@@ -228,6 +233,34 @@ export default function PlinkoGameBoard() {
     update()
   }, [])
 
+  const guess = useCallback(
+    (targetIndex: number, dropY: number, ballRadius: number) => {
+      const vx = Math.random() * 6 - 3
+      let bucketIndex = -1
+      let dropX = 95
+      let startTime = Date.now()
+      const currectX = []
+      while (dropX <= boardWidth) {
+        dropX += 5
+        bucketIndex = simulate(
+          buckets,
+          pegsRef.current,
+          { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius },
+          friction,
+          gravity,
+          5,
+          BALL_HORIZONTAL_SPEED,
+          BALL_DROP_SPEED,
+          MAX_SPEED,
+        )
+        if (bucketIndex === targetIndex) currectX.push(dropX)
+      }
+      console.log('Simulation took', (Date.now() - startTime) / 1000, 'sec')
+      console.log(`found ${currectX.length} results.`)
+      return { x: currectX[(Math.random() * currectX.length) | 0], vx, y: dropY, vy: 0, radius: ballRadius }
+    },
+    [buckets, pegsRef, boardWidth, gravity, friction, BALL_DROP_SPEED, BALL_HORIZONTAL_SPEED],
+  )
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return
     const canvas: HTMLCanvasElement = canvasRef.current
@@ -235,9 +268,9 @@ export default function PlinkoGameBoard() {
     const x = e.clientX - rect.left
     // const xPredicted = computeDropPointForBucket(5, pegsRef.current, buckets)
     // const ball = backwardSimulation(buckets[6], 50, pegsRef.current, friction, gravity, BALL_HORIZONTAL_SPEED, BALL_DROP_SPEED, MAX_SPEED)
-    const ball = { x, y: 50, vx: 0.5, vy: BALL_DROP_SPEED, radius: 7.5 }
-    console.log('Guessed x_f = ', predictBucket(ball.x))
-    ballsRef.current.push(ball)
+    const dropAt = ((Math.random() * 4) | 0) + 2
+    const ball = guess(dropAt, 50, 7.5)
+    ballsRef.current.push({ ...ball, dropAt })
   }
 
   return (

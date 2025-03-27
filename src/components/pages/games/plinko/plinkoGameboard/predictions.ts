@@ -24,6 +24,11 @@ export function simulate(
       if (dist < ball.radius + peg.radius) {
         const angle = Math.atan2(dy, dx)
         ball.vx = Math.cos(angle) * 2
+        if (ball.vx >= 0) {
+          ball.vx = Math.max(ball.vx, 0.001)
+        } else {
+          ball.vx = Math.min(ball.vx, -0.001)
+        }
         ball.vy = Math.sin(angle) * 2
       }
     })
@@ -50,8 +55,8 @@ export function simulate(
           ball.vx = 0
           ball.vy = 0
         }
-        return bucketInContactIndex
       }
+      return bucketInContactIndex
     }
   }
 }
@@ -272,7 +277,7 @@ export function backwardSimulation(
   BALL_DROP_SPEED: number,
   MAX_SPEED: number,
 ) {
-  const ball = { x: targetBucket.x, y: targetBucket.y, vx: 0.5, vy: MAX_SPEED / 2, radius: 7.5 }
+  const ball = { x: targetBucket.x, y: targetBucket.y, vx: -0.5, vy: -MAX_SPEED / 2, radius: 7.5 }
   while (true) {
     // Collision with pegs
     pegsArray.forEach((peg) => {
@@ -281,20 +286,24 @@ export function backwardSimulation(
       const dist = Math.sqrt(dx * dx + dy * dy)
       if (dist < ball.radius + peg.radius) {
         const angle = Math.atan2(dy, dx)
-        ball.vx = Math.cos(angle) * 2
-        ball.vy = Math.sin(angle) * 2
+        ball.vx = -Math.cos(angle) * 2
+        ball.vy = -Math.sin(angle) * 2
+        if (ball.vx >= 0) {
+          ball.vx = -Math.max(ball.vx, 0.001)
+        } else {
+          ball.vx = -Math.min(ball.vx, -0.001)
+        }
       }
     })
 
-    ball.y -= ball.vy * BALL_DROP_SPEED
+    ball.y += ball.vy * BALL_DROP_SPEED
     if (ball.y <= dropPointY) break
-    ball.x -= ball.vx * BALL_HORIZONTAL_SPEED
+    ball.x += ball.vx * BALL_HORIZONTAL_SPEED
     ball.vy /= friction
     ball.vx /= friction
-    ball.vy = Math.max(ball.vy - gravity, 1)
-    console.log(ball.vy)
+    ball.vy = Math.min(ball.vy + gravity, -1)
   }
-  return { ...ball, vy: 1 }
+  return ball
 }
 
 export function computeDropPointForBucketProb(targetBucketIndex: number, pegs: Record<string, number>[], buckets: Record<string, number>[]) {
@@ -353,4 +362,77 @@ export function computeDropPointForBucket(targetBucketIndex: number, pegs: Recor
   }
 
   return x // Computed initial drop position
+}
+
+export function reverseSimulate(
+  buckets: Record<string, number>[],
+  pegsArray: Record<string, number>[],
+  ball: { x: number; y: number; vx: number; vy: number; radius: number },
+  friction: number,
+  gravity: number,
+  bucketWidthThreshold: number,
+  BALL_HORIZONTAL_SPEED: number,
+  BALL_DROP_SPEED: number,
+  MAX_SPEED: number,
+  targetBucketIndex: number,
+) {
+  // Initialize ball position at the target bucket
+  ball.x = buckets[targetBucketIndex].x
+  ball.y = buckets[targetBucketIndex].bottomY - bucketWidthThreshold
+  ball.vx = 0
+  ball.vy = 0
+
+  // We need to keep track of previous states to properly reverse collisions
+  let prevStates: { x: number; y: number; vx: number; vy: number }[] = []
+
+  while (ball.y > 0) {
+    // Stop when ball reaches top
+    // Store current state before any modifications
+    const currentState = { x: ball.x, y: ball.y, vx: ball.vx, vy: ball.vy }
+
+    // 1. First reverse the position update
+    if (prevStates.length > 0) {
+      const prevState = prevStates[prevStates.length - 1]
+      ball.x += ball.vx * BALL_HORIZONTAL_SPEED
+      ball.y += ball.vy * BALL_DROP_SPEED
+    }
+
+    // 2. Then reverse the velocity updates (friction and gravity)
+    if (prevStates.length > 1) {
+      // To reverse friction, we need to divide by friction
+      ball.vx /= friction
+      ball.vy /= friction
+
+      // To reverse gravity, we subtract it (since we added it in forward simulation)
+      ball.vy = Math.max(ball.vy - gravity, -MAX_SPEED)
+    }
+
+    // 3. Handle collisions in reverse
+    pegsArray.forEach((peg) => {
+      const dx = ball.x - peg.x
+      const dy = ball.y - peg.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+
+      // If collision would happen in next step (we're going backwards)
+      if (dist < ball.radius + peg.radius) {
+        // Calculate the reversed collision response
+        const angle = Math.atan2(dy, dx)
+        ball.vx = -Math.cos(angle) * 2 // Reverse direction
+        ball.vy = -Math.sin(angle) * 2 // Reverse direction
+        if (ball.vx >= 0) {
+          ball.vx = -Math.max(ball.vx, 0.001)
+        } else {
+          ball.vx = -Math.min(ball.vx, -0.001)
+        }
+      }
+    })
+
+    // Store current state for next iteration
+    prevStates.push(currentState)
+
+    // Prevent infinite loops
+    if (prevStates.length > 1000) break
+  }
+
+  return ball
 }
