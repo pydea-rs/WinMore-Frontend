@@ -1,35 +1,40 @@
 export function simulate(
   buckets: Record<string, number>[],
   pegsArray: Record<string, number>[],
-  ball: Record<string, number>,
+  ball: { x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number; rapidImpacts?: number[] },
   friction: number,
   gravity: number,
   bucketWidthThreshold: number,
-  BALL_HORIZONTAL_SPEED: number,
-  BALL_DROP_SPEED: number,
+  BALL_HORIZONTAL_SPEED_FACTOR: number,
+  BALL_VERTICAL_SPEED_FACTOR: number,
   MAX_SPEED: number,
 ) {
   while (true) {
     ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
     ball.vy *= friction
     ball.vx *= friction
-    ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-    ball.y += ball.vy * BALL_DROP_SPEED
+    ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
+    ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
 
     // Collision with pegs
-    pegsArray.forEach((peg) => {
+    pegsArray.forEach((peg, i) => {
       const dx = ball.x - peg.x
       const dy = ball.y - peg.y
       const dist = Math.sqrt(dx * dx + dy * dy)
+      if (!ball.rapidImpacts) {
+        ball.rapidImpacts = []
+      }
       if (dist < ball.radius + peg.radius) {
         const angle = Math.atan2(dy, dx)
-        ball.vx = Math.cos(angle) * 2
+        ball.vx = Math.cos(angle) * BALL_HORIZONTAL_SPEED_FACTOR
         if (ball.vx >= 0) {
           ball.vx = Math.max(ball.vx, 0.001)
         } else {
           ball.vx = Math.min(ball.vx, -0.001)
         }
-        ball.vy = Math.sin(angle) * 2
+
+        ball.rapidImpacts[i] = (ball.rapidImpacts?.[i] ?? 0) + 1
+        ball.vy = (Math.sin(angle) * BALL_VERTICAL_SPEED_FACTOR) / ball.rapidImpacts[i]
       }
     })
 
@@ -67,8 +72,8 @@ export function ballMove(
   ball: Record<string, number>,
   friction: number,
   gravity: number,
-  BALL_HORIZONTAL_SPEED: number,
-  BALL_DROP_SPEED: number,
+  BALL_HORIZONTAL_SPEED_FACTOR: number,
+  BALL_VERTICAL_SPEED_FACTOR: number,
   MAX_SPEED: number,
   bucketYThreshold = 20,
 ) {
@@ -76,8 +81,8 @@ export function ballMove(
     ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
     ball.vy *= friction
     ball.vx *= friction
-    ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-    ball.y += ball.vy * BALL_DROP_SPEED
+    ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
+    ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
 
     // Collision with pegs
     pegsArray.forEach((peg) => {
@@ -203,7 +208,7 @@ export function predictBucketMedAcc(x_i: number, vx_i: number) {
 
   // Calculate effective horizontal movement
   const friction_factor = (1 - Math.pow(friction, n_steps)) / (1 - friction)
-  const effective_vx = vx_i * friction_factor * 1.5 // BALL_HORIZONTAL_SPEED included
+  const effective_vx = vx_i * friction_factor * 1.5 // BALL_HORIZONTAL_SPEED_FACTOR included
 
   // Peg interaction effect (empirically derived)
   const peg_effect = 0.12 * (x_i - center_offset) * Math.sign(vx_i) * Math.min(Math.abs(vx_i), 3)
@@ -273,8 +278,8 @@ export function backwardSimulation(
   pegsArray: Record<string, number>[],
   friction: number,
   gravity: number,
-  BALL_HORIZONTAL_SPEED: number,
-  BALL_DROP_SPEED: number,
+  BALL_HORIZONTAL_SPEED_FACTOR: number,
+  BALL_VERTICAL_SPEED_FACTOR: number,
   MAX_SPEED: number,
 ) {
   const ball = { x: targetBucket.x, y: targetBucket.y, vx: -0.5, vy: -MAX_SPEED / 2, radius: 7.5 }
@@ -296,9 +301,9 @@ export function backwardSimulation(
       }
     })
 
-    ball.y += ball.vy * BALL_DROP_SPEED
+    ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
     if (ball.y <= dropPointY) break
-    ball.x += ball.vx * BALL_HORIZONTAL_SPEED
+    ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
     ball.vy /= friction
     ball.vx /= friction
     ball.vy = Math.min(ball.vy + gravity, -1)
@@ -371,8 +376,8 @@ export function reverseSimulate(
   friction: number,
   gravity: number,
   bucketWidthThreshold: number,
-  BALL_HORIZONTAL_SPEED: number,
-  BALL_DROP_SPEED: number,
+  BALL_HORIZONTAL_SPEED_FACTOR: number,
+  BALL_VERTICAL_SPEED_FACTOR: number,
   MAX_SPEED: number,
   targetBucketIndex: number,
 ) {
@@ -393,8 +398,8 @@ export function reverseSimulate(
     // 1. First reverse the position update
     if (prevStates.length > 0) {
       const prevState = prevStates[prevStates.length - 1]
-      ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-      ball.y += ball.vy * BALL_DROP_SPEED
+      ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
+      ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
     }
 
     // 2. Then reverse the velocity updates (friction and gravity)

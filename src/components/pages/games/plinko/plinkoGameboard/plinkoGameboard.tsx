@@ -52,15 +52,15 @@ export default function PlinkoGameBoard() {
   }
 
   const canvasRef = useRef(null)
-  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number }[]>([])
+  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number; rapidImpacts?: number[] }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
   const [buckets, setBuckets] = useState<Record<string, number>[]>([])
 
   const gravity = 0.1
   const friction = 0.9
-  const BALL_DROP_SPEED = 2
-  const BALL_HORIZONTAL_SPEED = 1.5
+  const BALL_VERTICAL_SPEED_FACTOR = 2.5
+  const BALL_HORIZONTAL_SPEED_FACTOR = 1.25
   const MAX_SPEED = 100
 
   useEffect(() => {
@@ -172,23 +172,29 @@ export default function PlinkoGameBoard() {
         ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
         ball.vy *= friction
         ball.vx *= friction
-        ball.x += ball.vx * BALL_HORIZONTAL_SPEED
-        ball.y += ball.vy * BALL_DROP_SPEED
+        ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
+        ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
 
         // Collision with pegs
-        pegsRef.current.forEach((peg) => {
+        pegsRef.current.forEach((peg, i) => {
           const dx = ball.x - peg.x
           const dy = ball.y - peg.y
           const dist = Math.sqrt(dx * dx + dy * dy)
+          if (!ball.rapidImpacts) {
+            ball.rapidImpacts = []
+          }
+
           if (dist < ball.radius + peg.radius) {
             const angle = Math.atan2(dy, dx)
-            ball.vx = Math.cos(angle) * 2
+            ball.vx = Math.cos(angle) * BALL_HORIZONTAL_SPEED_FACTOR
             if (ball.vx >= 0) {
               ball.vx = Math.max(ball.vx, 0.001)
             } else {
               ball.vx = Math.min(ball.vx, -0.001)
             }
-            ball.vy = Math.sin(angle) * 2
+
+            ball.rapidImpacts[i] = (ball.rapidImpacts?.[i] ?? 0) + 1
+            ball.vy = (Math.sin(angle) * BALL_VERTICAL_SPEED_FACTOR) / ball.rapidImpacts[i]
           }
         })
 
@@ -245,12 +251,12 @@ export default function PlinkoGameBoard() {
         bucketIndex = simulate(
           buckets,
           pegsRef.current,
-          { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius },
+          { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius, rapidImpacts: [] },
           friction,
           gravity,
           5,
-          BALL_HORIZONTAL_SPEED,
-          BALL_DROP_SPEED,
+          BALL_HORIZONTAL_SPEED_FACTOR,
+          BALL_VERTICAL_SPEED_FACTOR,
           MAX_SPEED,
         )
         if (bucketIndex === targetIndex) currectX.push(dropX)
@@ -259,7 +265,7 @@ export default function PlinkoGameBoard() {
       console.log(`found ${currectX.length} results.`)
       return { x: currectX[(Math.random() * currectX.length) | 0], vx, y: dropY, vy: 0, radius: ballRadius }
     },
-    [buckets, pegsRef, boardWidth, gravity, friction, BALL_DROP_SPEED, BALL_HORIZONTAL_SPEED],
+    [buckets, pegsRef, boardWidth, gravity, friction, BALL_VERTICAL_SPEED_FACTOR, BALL_HORIZONTAL_SPEED_FACTOR],
   )
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return
@@ -267,9 +273,9 @@ export default function PlinkoGameBoard() {
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     // const xPredicted = computeDropPointForBucket(5, pegsRef.current, buckets)
-    // const ball = backwardSimulation(buckets[6], 50, pegsRef.current, friction, gravity, BALL_HORIZONTAL_SPEED, BALL_DROP_SPEED, MAX_SPEED)
+    // const ball = backwardSimulation(buckets[6], 50, pegsRef.current, friction, gravity, BALL_HORIZONTAL_SPEED_FACTOR, BALL_VERTICAL_SPEED_FACTOR, MAX_SPEED)
     const dropAt = ((Math.random() * 4) | 0) + 2
-    const ball = guess(dropAt, 50, 7.5)
+    const ball = guess(dropAt, 50, 7)
     ballsRef.current.push({ ...ball, dropAt })
   }
 
