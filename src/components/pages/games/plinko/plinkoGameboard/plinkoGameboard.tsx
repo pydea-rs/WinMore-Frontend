@@ -272,8 +272,7 @@ export default function PlinkoGameBoard() {
     const canvas: HTMLCanvasElement = canvasRef.current
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
-    // const xPredicted = computeDropPointForBucket(5, pegsRef.current, buckets)
-    // const ball = backwardSimulation(buckets[6], 50, pegsRef.current, friction, gravity, BALL_HORIZONTAL_SPEED_FACTOR, BALL_VERTICAL_SPEED_FACTOR, MAX_SPEED)
+
     const dropAt = ((Math.random() * 4) | 0) + 2
     const ball = guess(dropAt, 50, 7)
     ballsRef.current.push({ ...ball, dropAt })

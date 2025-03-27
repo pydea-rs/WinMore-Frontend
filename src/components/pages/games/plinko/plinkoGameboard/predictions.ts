@@ -7,10 +7,9 @@ export function simulate(
   bucketWidthThreshold: number,
   BALL_HORIZONTAL_SPEED_FACTOR: number,
   BALL_VERTICAL_SPEED_FACTOR: number,
-  MAX_SPEED: number,
 ) {
   while (true) {
-    ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
+    ball.vy += gravity
     ball.vy *= friction
     ball.vx *= friction
     ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
@@ -74,11 +73,10 @@ export function ballMove(
   gravity: number,
   BALL_HORIZONTAL_SPEED_FACTOR: number,
   BALL_VERTICAL_SPEED_FACTOR: number,
-  MAX_SPEED: number,
   bucketYThreshold = 20,
 ) {
   while (true) {
-    ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
+    ball.vy += gravity
     ball.vy *= friction
     ball.vx *= friction
     ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
@@ -280,9 +278,8 @@ export function backwardSimulation(
   gravity: number,
   BALL_HORIZONTAL_SPEED_FACTOR: number,
   BALL_VERTICAL_SPEED_FACTOR: number,
-  MAX_SPEED: number,
 ) {
-  const ball = { x: targetBucket.x, y: targetBucket.y, vx: -0.5, vy: -MAX_SPEED / 2, radius: 7.5 }
+  const ball = { x: targetBucket.x, y: targetBucket.y, vx: -0.5, vy: 10, radius: 7.5 }
   while (true) {
     // Collision with pegs
     pegsArray.forEach((peg) => {
@@ -378,7 +375,6 @@ export function reverseSimulate(
   bucketWidthThreshold: number,
   BALL_HORIZONTAL_SPEED_FACTOR: number,
   BALL_VERTICAL_SPEED_FACTOR: number,
-  MAX_SPEED: number,
   targetBucketIndex: number,
 ) {
   // Initialize ball position at the target bucket
@@ -409,7 +405,7 @@ export function reverseSimulate(
       ball.vy /= friction
 
       // To reverse gravity, we subtract it (since we added it in forward simulation)
-      ball.vy = Math.max(ball.vy - gravity, -MAX_SPEED)
+      ball.vy -= gravity
     }
 
     // 3. Handle collisions in reverse
