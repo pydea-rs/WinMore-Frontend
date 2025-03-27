@@ -52,7 +52,7 @@ export default function PlinkoGameBoard() {
   }
 
   const canvasRef = useRef(null)
-  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number; rapidImpacts?: number[] }[]>([])
+  const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; rapidImpacts?: number[] }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
   const [buckets, setBuckets] = useState<Record<string, number>[]>([])
@@ -169,7 +169,7 @@ export default function PlinkoGameBoard() {
       setBuckets(buckets)
 
       ballsRef.current = ballsRef.current.filter((ball) => {
-        ball.vy = Math.min(ball.vy + gravity, MAX_SPEED)
+        ball.vy += gravity
         ball.vy *= friction
         ball.vx *= friction
         ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
@@ -198,8 +198,7 @@ export default function PlinkoGameBoard() {
           }
         })
 
-        const bucketYThreshold = 20
-        if (ball.y >= buckets[0].y + bucketYThreshold) {
+        if (ball.y >= buckets[0].y + bucketHeight / 2) {
           // Find the closest bucket
           let bucketInContactIndex = -1
           if (ball.x >= buckets[0].topLeftX - bucketWidthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold) {
@@ -220,7 +219,6 @@ export default function PlinkoGameBoard() {
               ball.vx = 0
               ball.vy = 0
             }
-            console.log({ bucketInContactIndex, dropAt: ball.dropAt })
           }
           return false
         }
@@ -257,7 +255,6 @@ export default function PlinkoGameBoard() {
           5,
           BALL_HORIZONTAL_SPEED_FACTOR,
           BALL_VERTICAL_SPEED_FACTOR,
-          MAX_SPEED,
         )
         if (bucketIndex === targetIndex) currectX.push(dropX)
       }
@@ -275,7 +272,7 @@ export default function PlinkoGameBoard() {
 
     const dropAt = ((Math.random() * 4) | 0) + 2
     const ball = guess(dropAt, 50, 7)
-    ballsRef.current.push({ ...ball, dropAt })
+    ballsRef.current.push(ball)
   }
 
   return (
