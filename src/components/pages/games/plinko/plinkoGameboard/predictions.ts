@@ -4,6 +4,7 @@ export function simulate(
   ball: { x: number; y: number; vx: number; vy: number; radius: number; dropAt?: number; rapidImpacts?: number[] },
   friction: number,
   gravity: number,
+  bucketYThreshold: number,
   bucketWidthThreshold: number,
   BALL_HORIZONTAL_SPEED_FACTOR: number,
   BALL_VERTICAL_SPEED_FACTOR: number,
@@ -37,7 +38,6 @@ export function simulate(
       }
     })
 
-    const bucketYThreshold = 20
     if (ball.y >= buckets[0].y + bucketYThreshold) {
       // Find the closest bucket
       let bucketInContactIndex = -1

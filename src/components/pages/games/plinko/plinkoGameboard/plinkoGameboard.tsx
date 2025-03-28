@@ -61,24 +61,22 @@ export default function PlinkoGameBoard() {
   const friction = 0.9
   const BALL_VERTICAL_SPEED_FACTOR = 2.5
   const BALL_HORIZONTAL_SPEED_FACTOR = 1.25
-  const MAX_SPEED = 100
+
+  const bucketWidth = 60
+  const bucketHeight = 80
+  const bucketWidthThreshold = 5
+  const cornerRadius = 10 // Border radius for the bucket corners
 
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
-    // Generate pegs in a triangular pattern
     const rows = 9
     canvas.height = 200 + (rows - 1) * 50
     canvas.width = 600 + Math.max(0, rows - 9) * 40
 
     setBoardWidth(canvas.width)
-    // Function to create gradient for buckets
-    const bucketWidth = 60
-    const bucketHeight = 80
-    const bucketTopOffset = 20 // Adjust this to control the trapezoid shape
-    const cornerRadius = 10 // Border radius for the bucket corners
 
     const multipliers = Array(rows - 1)
       .fill(0)
@@ -108,10 +106,9 @@ export default function PlinkoGameBoard() {
 
     function update() {
       if (!ctx) return
-      // if (!ballsRef.current.length) return
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Draw pegs
       pegsRef.current.forEach((peg) => {
         ctx.beginPath()
         ctx.arc(peg.x, peg.y, peg.radius, 0, Math.PI * 2)
@@ -119,8 +116,6 @@ export default function PlinkoGameBoard() {
         ctx.fill()
         ctx.closePath()
       })
-
-      const bucketWidthThreshold = 5
 
       const buckets = multipliers.map((multiplier, index) => {
         const bucketTopWidth = bucketWidth * 1.1
@@ -252,7 +247,8 @@ export default function PlinkoGameBoard() {
           { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius, rapidImpacts: [] },
           friction,
           gravity,
-          5,
+          bucketHeight / 2,
+          bucketWidthThreshold,
           BALL_HORIZONTAL_SPEED_FACTOR,
           BALL_VERTICAL_SPEED_FACTOR,
         )
