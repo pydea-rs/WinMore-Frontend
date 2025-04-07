@@ -1,8 +1,8 @@
-import { IMineGameStatuses, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
+import { IMineGameStatus, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
 
 export interface IGetGamesListPayload extends IPaginationPayload {
-  status?: IMineGameStatuses
+  status?: IMineGameStatus
 }
 
 export interface IGameDetail {
@@ -19,7 +19,7 @@ export interface IGameDetail {
   stake: number
   nulls: number[]
   lastChoice: number
-  status: IMineGameStatuses
+  status: IMineGameStatus
   finishedAt: string
   user: {
     name: null

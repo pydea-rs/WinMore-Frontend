@@ -2,26 +2,17 @@ import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
-import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
 
+import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
-import {
-  IBackoffMinePayload,
-  IBackoffMineResponse,
-  IGetMineGamesListPayload,
-  IGetMineGamesListResponse,
-  IGetMineRulesPayload,
-  IGetMineRulesResponse,
-  IMineBlockPayload,
-  IMineBlockResponse,
-  IPlaceMineBetPayload,
-} from './plinko.service.types'
+import { PlinkoBallType } from './physx.types'
+import { IGetPlinkoGamesListPayload, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
 
 export const MineService = createApi({
   reducerPath: 'mineService',
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    getRules: builder.query<BaseResponse<IGetMineRulesResponse>, IGetMineRulesPayload>({
+    getRules: builder.query<BaseResponse<IPlinkoRules[]>, IEmptyPayload>({
       query: (params) => {
         const { games } = getApiRoute()
         return {
@@ -36,7 +27,7 @@ export const MineService = createApi({
         dispatch(updateMineConfig({ rows: data.data[0].rows }))
       },
     }),
-    postMineBet: builder.mutation<BaseResponse<ICurrentMineGame>, IPlaceMineBetPayload>({
+    postPlinkoBet: builder.mutation<BaseResponse<IPlinkoGame>, IPlacePlinkoBetPayload>({
       query: (params) => {
         const { games } = getApiRoute()
         return {
@@ -52,42 +43,22 @@ export const MineService = createApi({
         dispatch(updateMineConfig({ currentGameId: data.data.id }))
       },
     }),
-    mineBlock: builder.mutation<BaseResponse<IMineBlockResponse>, IMineBlockPayload>({
+    dropPlinkoBalls: builder.mutation<BaseResponse<PlinkoBallType[]>, IEndpointWithIdParamPayload>({
       query(payload) {
         const { games } = getApiRoute()
         return {
           method: 'POST',
-          url: games.mine.mineBlock.get(payload.id),
-          data: { choice: payload.choice },
-          sendAuthorization: true,
-        }
-      },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled
-        dispatch(
-          updateMineConfig({
-            stake: data.data.stake,
-            currentGameStatus: data.data.status,
-          }),
-        )
-      },
-    }),
-    backoffMine: builder.mutation<BaseResponse<IBackoffMineResponse>, IBackoffMinePayload>({
-      query(payload) {
-        const { games } = getApiRoute()
-        return {
-          method: 'POST',
-          url: games.mine.backoffMine.get(payload.id),
+          url: games.plinko.drop.get(payload.id),
           sendAuthorization: true,
         }
       },
     }),
-    mineGamesList: builder.query<BaseResponse<IGetMineGamesListResponse>, IGetMineGamesListPayload>({
+    getPlinkoGamesList: builder.query<BaseResponse<IPlinkoGame[]>, IGetPlinkoGamesListPayload>({
       query(arg) {
         const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: games.mine.mineGamesList.path,
+          url: games.plinko.history.path,
           params: arg,
           sendAuthorization: true,
         }
@@ -96,4 +67,4 @@ export const MineService = createApi({
   }),
 })
 
-export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useMineGamesListQuery } = MineService
+export const { useGetRulesQuery, usePostPlinkoBetMutation, useDropPlinkoBallsMutation, useGetPlinkoGamesListQuery } = MineService

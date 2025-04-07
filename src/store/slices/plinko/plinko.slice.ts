@@ -3,8 +3,6 @@ import { IPlinkoModeVariants, IUpdatePlinkoConfig, StateType } from './plinko.sl
 // import { IGetPlinkoRulesResponse } from '@/services/games/mine/mine.service.types'
 type IGetPlinkoRulesResponse = {} // FIXME: Update this after backend implementation
 
-export const CURRENT_MINE = 'mine_game'
-
 const initialState: StateType = {
   plinkoConfig: {
     betAmount: '',

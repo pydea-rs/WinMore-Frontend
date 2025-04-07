@@ -42,12 +42,6 @@ export const getApiRoute = () => {
       withdraw: {
         path: 'user/withdraw',
       },
-      isPlaying: {
-        path: 'user/is-playing',
-      },
-      dreamMineList: {
-        path: 'user/games/dream-mine',
-      },
       userWallet: {
         path: 'user/wallet',
       },
@@ -75,15 +69,40 @@ export const getApiRoute = () => {
             return `${this.path}${id}`
           },
         },
-        isPlaying: {
-          path: 'dream-mine/is-playing',
-        },
-        mineGamesList: {
+        history: {
           path: 'dream-mine',
         },
+        myHistory: {
+          path: 'dream-mine/my-history',
+        },
       },
-      list: {
-        path: 'games',
+      plinko: {
+        rules: {
+          path: 'plinko/rules',
+        },
+        bet: {
+          path: 'plinko/bet',
+        },
+        drop: {
+          path: 'plinko/drop',
+          get(id: number) {
+            return `${this.path}/${id}`
+          },
+        },
+        history: {
+          path: 'plinko',
+        },
+        myHistory: {
+          path: 'plinko/my-history',
+        },
+      },
+      common: {
+        list: {
+          path: 'games',
+        },
+        mePlaying: {
+          path: 'games/me-playing',
+        },
       },
     },
   }

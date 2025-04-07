@@ -14,7 +14,7 @@ export const GamesService = createApi({
         const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: games.list.path,
+          url: games.common.list.path,
           params: arg,
           sendAuthorization: false,
         }

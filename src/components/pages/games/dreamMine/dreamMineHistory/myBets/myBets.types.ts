@@ -1,6 +1,6 @@
 import { BaseResponse } from '@/services/base/request-interface'
-import { IGetMineGamesListResponse } from '@/services/games/mine/mine.service.types'
+import { IMineGameDetail } from '@/services/games/mine/mine.service.types'
 
 export interface MyBetsProps {
-  data: BaseResponse<IGetMineGamesListResponse> | undefined
+  data: BaseResponse<IMineGameDetail[]> | undefined
 }

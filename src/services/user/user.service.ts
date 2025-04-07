@@ -20,7 +20,7 @@ import {
 } from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
-import { IGetMineGamesListPayload, IGetMineGamesListResponse } from '../games/mine/mine.service.types'
+import { IGetMineGamesListPayload, IMineGameDetail } from '../games/mine/mine.service.types'
 import {
   IIsUserPlayingPayload,
   IIsUserPlayingResponse,
@@ -123,10 +123,10 @@ export const UserService = createApi({
     }),
     isPlaying: builder.query<BaseResponse<IIsUserPlayingResponse>, IIsUserPlayingPayload>({
       query(arg) {
-        const { user } = getApiRoute()
+        const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: user.isPlaying.path,
+          url: games.common.mePlaying.path,
         }
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
@@ -162,12 +162,12 @@ export const UserService = createApi({
         }
       },
     }),
-    userMineGamesList: builder.query<BaseResponse<IGetMineGamesListResponse>, IGetMineGamesListPayload>({
+    userMineGamesList: builder.query<BaseResponse<IMineGameDetail[]>, IGetMineGamesListPayload>({
       query(arg) {
-        const { user } = getApiRoute()
+        const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: user.dreamMineList.path,
+          url: games.mine.myHistory.path,
           params: arg,
           sendAuthorization: true,
         }

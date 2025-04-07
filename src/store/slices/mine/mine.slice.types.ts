@@ -1,6 +1,6 @@
 import { IAvailableTokens, Nullable } from '@/types/global.types'
 
-export type IMineGameStatuses = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'WITHDRAWN' | 'WON'
+export type IMineGameStatus = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'WITHDRAWN' | 'WON'
 export type IMineModeVariants = 'EASY' | 'MEDIUM' | 'HARD'
 
 export interface IMineMode {
@@ -23,9 +23,9 @@ interface IMineGame {
   coefficients: ICoefficients
   selectedBlocks: IBlock[]
   activeRow: number
-  currentGameId: Nullable<string>
+  currentGameId: Nullable<number>
   stake: Nullable<number>
-  currentGameStatus: Nullable<IMineGameStatuses>
+  currentGameStatus: Nullable<IMineGameStatus>
 }
 
 export interface ICoefficients {
@@ -38,13 +38,13 @@ export interface ICurrentMineGame {
   createdAt: string
   currentRow: number
   finishedAt: string
-  id: string
+  id: number
   initialBet: number
   mode: IMineModeVariants
   rowsCount: number
   stake: number
   startedAt: string
-  status: IMineGameStatuses
+  status: IMineGameStatus
   updatedAt: string
   userId: number
 }

@@ -7,7 +7,7 @@ import { HoldToActionContent } from '@/components/common/holdToAction/holdToActi
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import { Spinner } from '@/components/common/spinner/spinner'
 import DoneIcon from '@/components/icons/done/done.icon'
-import { IMineGameStatuses } from '@/store/slices/mine/mine.slice.types'
+import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
 import { Nullable } from '@/types/global.types'
 import { createNumberArray } from '@/utils/createNumberArray.util'
 import classNames from 'classnames'
@@ -20,7 +20,7 @@ export default function DreamMineGameBoard() {
   const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading } = useDreamMineGameBoardHelper()
   const blockPerRows = createNumberArray(1, mineConfig.mode.value)
 
-  const getGameStateColor = (status: Nullable<IMineGameStatuses>) => {
+  const getGameStateColor = (status: Nullable<IMineGameStatus>) => {
     switch (status) {
       case 'LOST': {
         return {

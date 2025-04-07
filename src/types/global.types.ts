@@ -73,6 +73,5 @@ export interface IPaginationPayload {
   skip?: number
   take?: number
   sort?: string
-  type?: string
   order?: 'asc' | 'desc'
 }

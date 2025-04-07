@@ -1,6 +1,7 @@
 import { IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
 import { IMultipliers, IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { ExtraCommonGameStatus } from '../common/games.types'
 import { BucketsDataType, PegsDataType, PlinkoBallType } from './physx.types'
 
 export interface IPlinkoBall {
@@ -16,7 +17,7 @@ export interface IPlinkoBall {
   dropSpecs: PlinkoBallType
 }
 
-export interface IPlinkoGameDetail {
+export interface IPlinkoGame {
   id: number
   createdAt: Date
   updatedAt: Date
@@ -38,9 +39,7 @@ export interface IPlinkoGameDetail {
   plinkoBalls?: IPlinkoBall[]
 }
 
-export interface IGetPlinkoRulesPayload {}
-
-export interface IPlinkoRowsBasedMultipliers {
+export interface IPlinkoRules {
   multipliers: IMultipliers
   maxBetAmount: number | null
   minBetAmount: number
@@ -53,8 +52,6 @@ export interface IPlinkoRowsBasedMultipliers {
   buckets: BucketsDataType
 }
 
-export type IGetPlinkoRulesResponse = IPlinkoRowsBasedMultipliers[]
-
 export interface IPlacePlinkoBetPayload {
   betAmount: number
   mode: string
@@ -65,8 +62,7 @@ export interface IPlacePlinkoBetPayload {
 }
 
 // Mine Games List
-
-export type IGetMineGamesListResponse = IPlinkoGameDetail[]
+export type IGetPlinkoGamesListResponse = IPlinkoGame[]
 export interface IGetPlinkoGamesListPayload extends IPaginationPayload {
-  status?: IPlinkoStatus
+  status?: IPlinkoStatus | ExtraCommonGameStatus
 }

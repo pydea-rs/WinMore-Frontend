@@ -1,5 +1,6 @@
-import { ICoefficients, IMineGameStatuses, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
+import { ICoefficients, IMineGameStatus, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { ExtraCommonGameStatus } from '../common/games.types'
 
 export interface IMineGameDetail {
   betToken: IAvailableTokens
@@ -14,8 +15,8 @@ export interface IMineGameDetail {
   rowsCount: number
   stake: number
   startedAt: null
-  status: IMineGameStatuses
-  success: false
+  status: IMineGameStatus
+  success?: boolean // FIXME: Separate /mine response type from DreamMineGame type
   updatedAt: string
   time: number
   multiplier: number
@@ -27,15 +28,13 @@ export interface IMineGameDetail {
   userId: number
 }
 
-export interface IGetMineRulesPayload {}
-export interface IRowsBasedCoefficients {
+export interface IDreamMineRules {
   coefficients: ICoefficients
   maxBetAmount: number | null
   minBetAmount: number
   rows: number
 }
 
-export type IGetMineRulesResponse = IRowsBasedCoefficients[]
 export interface IPlaceMineBetPayload {
   betAmount: number
   mode: string
@@ -49,16 +48,6 @@ export interface IMineBlockPayload {
   choice: number
 }
 
-export interface IMineBlockResponse extends IMineGameDetail {}
-
-export interface IBackoffMineResponse {}
-export interface IBackoffMinePayload {
-  id: number
-}
-
-// Mine Games List
-
-export type IGetMineGamesListResponse = IMineGameDetail[]
 export interface IGetMineGamesListPayload extends IPaginationPayload {
-  status?: IMineGameStatuses
+  status?: IMineGameStatus | ExtraCommonGameStatus
 }

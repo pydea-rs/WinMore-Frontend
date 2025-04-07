@@ -1,8 +1,6 @@
-import { IGetMineRulesResponse } from '@/services/games/mine/mine.service.types'
+import { IDreamMineRules } from '@/services/games/mine/mine.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IMineModeVariants, IUpdateMineConfig, StateType } from './mine.slice.types'
-
-export const CURRENT_MINE = 'mine_game'
 
 const initialState: StateType = {
   mineConfig: {
@@ -39,7 +37,7 @@ export const mineSlice = createSlice({
         ...(state.mineConfig.isGameOver ? { selectedBlocks: [], activeRow: 1, isGameOver: false, isStarted: false } : {}),
       }
     },
-    updateCoefficients: (state: StateType, action: PayloadAction<IGetMineRulesResponse>) => {
+    updateCoefficients: (state: StateType, action: PayloadAction<IDreamMineRules[]>) => {
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.coefficients
       if (!rowsConfig) return
       state.mineConfig.coefficients = rowsConfig

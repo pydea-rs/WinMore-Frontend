@@ -4,24 +4,15 @@ import { getApiRoute } from '@/services/base/routes'
 import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
 import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
 
+import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
-import {
-  IBackoffMinePayload,
-  IBackoffMineResponse,
-  IGetMineGamesListPayload,
-  IGetMineGamesListResponse,
-  IGetMineRulesPayload,
-  IGetMineRulesResponse,
-  IMineBlockPayload,
-  IMineBlockResponse,
-  IPlaceMineBetPayload,
-} from './mine.service.types'
+import { IDreamMineRules, IGetMineGamesListPayload, IMineBlockPayload, IMineGameDetail, IPlaceMineBetPayload } from './mine.service.types'
 
 export const MineService = createApi({
   reducerPath: 'mineService',
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    getRules: builder.query<BaseResponse<IGetMineRulesResponse>, IGetMineRulesPayload>({
+    getRules: builder.query<BaseResponse<IDreamMineRules[]>, IEmptyPayload>({
       query: (params) => {
         const { games } = getApiRoute()
         return {
@@ -52,7 +43,7 @@ export const MineService = createApi({
         dispatch(updateMineConfig({ currentGameId: data.data.id }))
       },
     }),
-    mineBlock: builder.mutation<BaseResponse<IMineBlockResponse>, IMineBlockPayload>({
+    mineBlock: builder.mutation<BaseResponse<IMineGameDetail>, IMineBlockPayload>({
       query(payload) {
         const { games } = getApiRoute()
         return {
@@ -72,7 +63,7 @@ export const MineService = createApi({
         )
       },
     }),
-    backoffMine: builder.mutation<BaseResponse<IBackoffMineResponse>, IBackoffMinePayload>({
+    backoffMine: builder.mutation<BaseResponse<IMineGameDetail>, IEndpointWithIdParamPayload>({
       query(payload) {
         const { games } = getApiRoute()
         return {
@@ -82,12 +73,12 @@ export const MineService = createApi({
         }
       },
     }),
-    mineGamesList: builder.query<BaseResponse<IGetMineGamesListResponse>, IGetMineGamesListPayload>({
+    mineGamesList: builder.query<BaseResponse<IMineGameDetail[]>, IGetMineGamesListPayload>({
       query(arg) {
         const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: games.mine.mineGamesList.path,
+          url: games.mine.history.path,
           params: arg,
           sendAuthorization: true,
         }
