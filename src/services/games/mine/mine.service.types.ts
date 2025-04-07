@@ -8,7 +8,7 @@ export interface IMineGameDetail {
   currentRow: number
   nulls: number[]
   finishedAt: null
-  id: string
+  id: number
   initialBet: number
   mode: IMineModeVariants
   rowsCount: number
@@ -45,7 +45,7 @@ export interface IPlaceMineBetPayload {
 }
 
 export interface IMineBlockPayload {
-  id: string
+  id: number
   choice: number
 }
 
@@ -53,7 +53,7 @@ export interface IMineBlockResponse extends IMineGameDetail {}
 
 export interface IBackoffMineResponse {}
 export interface IBackoffMinePayload {
-  id: string
+  id: number
 }
 
 // Mine Games List

@@ -65,13 +65,13 @@ export const getApiRoute = () => {
         },
         mineBlock: {
           path: 'dream-mine/mine/',
-          get(id: string) {
+          get(id: number) {
             return `${this.path}${id}`
           },
         },
         backoffMine: {
           path: 'dream-mine/backoff/',
-          get(id: string) {
+          get(id: number) {
             return `${this.path}${id}`
           },
         },

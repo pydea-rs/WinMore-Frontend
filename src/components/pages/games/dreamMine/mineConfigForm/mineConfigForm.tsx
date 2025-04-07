@@ -47,7 +47,7 @@ const MineConfigForm = () => {
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
-  const { data: rulesData, isLoading: IsLoadingGameData } = useGetRulesQuery({})
+  const { data: rulesData } = useGetRulesQuery({})
   const [refetchBalance] = useGetUserTokenBalanceMutation()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
   const [rows, setRows] = useState([] as number[])

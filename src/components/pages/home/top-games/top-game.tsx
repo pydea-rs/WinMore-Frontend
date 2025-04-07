@@ -68,8 +68,18 @@ const TopGames: React.FC<ElementProps> = (props) => {
                   className="w-32 h-32 sm:w-52 sm:h-52 pointer-events-none absolute -top-12 left-0 z-20"
                 />
                 <h2 className="text-4xl font-bold mb-2">Plinko</h2>
-                <Button kind="primary" variant="light" className="text-xs md:text-sm flex items-center gap-[8px] px-4" pilled disabled>
+                {/* <Button kind="primary" variant="light" className="text-xs md:text-sm flex items-center gap-[8px] px-4" pilled disabled>
                   Coming Soon
+                  <ArrowRightIcon className="w-6 h-6" />
+                </Button> */}
+                <Button
+                  onClick={() => router.push(internalLinks.games.plinko.path)}
+                  kind="primary"
+                  variant="light"
+                  className="text-xs md:text-sm flex items-center gap-[10px] px-4"
+                  pilled
+                >
+                  Play Plinko
                   <ArrowRightIcon className="w-6 h-6" />
                 </Button>
                 <Image

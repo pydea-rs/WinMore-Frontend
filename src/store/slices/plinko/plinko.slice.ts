@@ -19,12 +19,10 @@ const initialState: StateType = {
       hard: [],
       medium: [],
     },
-    isStarted: false,
     numberOfBets: 1,
     currentGameId: null,
-    currentGameStatus: 'NOT_STARTED',
-    stake: null,
-    ballPath: [],
+    currentGameStatus: 'NOT_DROPPED_YET',
+    prize: null,
   },
 }
 
@@ -65,7 +63,7 @@ export const mineSlice = createSlice({
     },
     startPlinkoGame: (state: StateType) => {
       state.plinkoConfig.isStarted = true
-      state.plinkoConfig.currentGameStatus = 'NOT_STARTED'
+      state.plinkoConfig.currentGameStatus = 'NOT_DROPPED_YET'
     },
     endPlinkoGame: (state: StateType, action: PayloadAction<{ hasWon: boolean }>) => {
       if (action.payload.hasWon) {

@@ -1,33 +1,25 @@
 import { IAvailableTokens, Nullable } from '@/types/global.types'
 
-export type IPlinkoStatus = 'NOT_STARTED' | 'LOST' | 'WON' | 'ONGOING'
+export type IPlinkoStatus = 'NOT_DROPPED_YET' | 'DROPPING' | 'FINISHED'
 export type IPlinkoModeVariants = 'EASY' | 'MEDIUM' | 'HARD'
 
 export interface IPlinkoMode {
   label: IPlinkoModeVariants
   value: number
   multipliers: number[]
-}
-
-export interface IBlock {
-  index: number
-  row: number
-  status: 'GOLD' | 'NULL'
-}
+} // FIXME: Some interfaces dont need redeclaring for each game such as this mode, IMultipliers(ICoefficients), etc
 interface IPlinko {
   mode: IPlinkoMode
   numberOfBets: number
   rows: number
   betAmount: string
-  isStarted: boolean
-  multipliers: ICoefficients
+  multipliers: IMultipliers
   currentGameId: Nullable<string>
-  stake: Nullable<number>
+  prize: Nullable<number>
   currentGameStatus: Nullable<IPlinkoStatus>
-  ballPath: number[]
 }
 
-export interface ICoefficients {
+export interface IMultipliers {
   easy: number[]
   hard: number[]
   medium: number[]
