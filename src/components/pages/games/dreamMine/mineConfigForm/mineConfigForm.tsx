@@ -22,24 +22,13 @@ import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { setDreamMineConfig, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { createNumberArray } from '@/utils/createNumberArray.util'
+import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/20/solid'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { IGameConfigForm } from '../../common-games.types'
-
-const getMinMaxRows = (data: { rows?: number }[]) => {
-  let min = data[0].rows || 0
-  let max = data[0].rows || 0
-  for (const row of data) {
-    if (!row?.rows) continue
-    if (row.rows > max) max = row.rows
-    if (row.rows < min) min = row.rows
-  }
-  return [min, max]
-}
 
 const MineConfigForm = () => {
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
@@ -92,17 +81,17 @@ const MineConfigForm = () => {
       {
         label: 'EASY',
         value: 4,
-        multipliers: currentRowsRules?.multipliers.easy || [],
+        multipliers: currentRowsRules?.multipliers.EASY || [],
       },
       {
         label: 'MEDIUM',
         value: 3,
-        multipliers: currentRowsRules?.multipliers.medium || [],
+        multipliers: currentRowsRules?.multipliers.MEDIUM || [],
       },
       {
         label: 'HARD',
         value: 2,
-        multipliers: currentRowsRules?.multipliers.hard || [],
+        multipliers: currentRowsRules?.multipliers.HARD || [],
       },
     ])
   }, [currentRowsRules])
@@ -253,9 +242,7 @@ const MineConfigForm = () => {
                         checked={field.value === row}
                         onChange={(e) => {
                           dispatch(setDreamMineConfig({ rows: +e.target.value }))
-                          const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.multipliers[
-                            mineConfig.mode.label === 'HARD' ? 'hard' : mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
-                          ]
+                          const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.multipliers[mineConfig.mode.label || 'EASY']
                           dispatch(
                             setDreamMineConfig({
                               mode: {

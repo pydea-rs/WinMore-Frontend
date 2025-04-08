@@ -12,12 +12,17 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
-import { useGetPlinkoRulesQuery } from '@/services/games/plinko/plinko.service'
+import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/games/plinko/plinko.service'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
+import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
+import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/solid'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { IPlinkoConfigForm } from './plinkoConfigForm.types'
 
 const modes = [
@@ -33,6 +38,9 @@ export default function PlinkoConfigForm() {
   const { data: rulesData } = useGetPlinkoRulesQuery({})
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { plinkoConfig } = useSelector((state) => state.plinko)
+  const [rows, setRows] = useState([] as number[])
+  const [currentRowsRules, setCurrentRowsRules] = useState(rulesData?.data.find((rules) => rules.rows === plinkoConfig.rows))
+  const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
   const { addDecimalNumbers, formatNumber, subDecimalNumbers } = useHelper()
 
@@ -50,8 +58,32 @@ export default function PlinkoConfigForm() {
     },
   })
 
-  const handleSubmit = (data: IPlinkoConfigForm) => {
-    if (!isAuthorized) return null
+  useEffect(() => {
+    if (!rulesData?.data?.length) return
+    const [min, max] = getMinMaxRows(rulesData?.data)
+    setRows(createNumberArray(min, max)) // FIXME: Revise this to not use array
+    setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === plinkoConfig.rows))
+  }, [rulesData?.data, plinkoConfig.rows]) // TODO: Check if this required to ne separate useEffecys like MineConfig comp
+
+  const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
+
+  const handleSubmit = async (values: IPlinkoConfigForm) => {
+    if (!isAuthorized || !UserData?.data.profile || !UserData?.data.name) {
+      dispatch(triggerModal({ modal: 'login', trigger: true }))
+    } else {
+      const betAmount = plinkoConfig.betAmount.split(',').join('')
+      if (+betAmount > 2.0) {
+        toast.error('Bets must not exceed 2$ for now!')
+        return
+      }
+      try {
+        await plinkoPlaceBetMutation({ betAmount: +betAmount, mode: plinkoConfig.mode.label, rows: plinkoConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
+        // refetchBalance({ chain: network.chainId, token: token.symbol }) // FIXME: Call fetch balance after last ball falls into bucket.
+        // Play drop sound and start dropping balls one by one wit
+      } catch (error) {
+        // toast.error(error.message)
+      }
+    }
   }
 
   const handleOnIncrease = (value: string) => {
