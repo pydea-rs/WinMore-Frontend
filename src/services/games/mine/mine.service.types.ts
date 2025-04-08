@@ -1,6 +1,6 @@
-import { ICoefficients, IMineGameStatus, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
+import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
-import { ExtraCommonGameStatus } from '../common/games.types'
+import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
 
 export interface IMineGameDetail {
   betToken: IAvailableTokens
@@ -11,7 +11,7 @@ export interface IMineGameDetail {
   finishedAt: null
   id: number
   initialBet: number
-  mode: IMineModeVariants
+  mode: IGameDifficultyVariants
   rowsCount: number
   stake: number
   startedAt: null
@@ -29,7 +29,7 @@ export interface IMineGameDetail {
 }
 
 export interface IDreamMineRules {
-  coefficients: ICoefficients
+  multipliers: IMultipliers
   maxBetAmount: number | null
   minBetAmount: number
   rows: number

@@ -1,7 +1,7 @@
+import { IGameDifficultyVariants } from '@/services/games/common/games.types'
+import { IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IPlinkoModeVariants, IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
-// import { IGetPlinkoRulesResponse } from '@/services/games/mine/mine.service.types'
-type IGetPlinkoRulesResponse = {} // FIXME: Update this after backend implementation
+import { IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
 
 const initialState: StateType = {
   plinkoConfig: {
@@ -32,17 +32,16 @@ export const mineSlice = createSlice({
       state.plinkoConfig = {
         ...state.plinkoConfig,
         ...action.payload,
-        ...(!state.plinkoConfig.isStarted ? { selectedBlocks: [], activeRow: 1, isGameOver: false, isStarted: false } : {}),
       }
     },
-    updateMultipliers: (state: StateType, action: PayloadAction<IGetPlinkoRulesResponse>) => {
-      const rowsConfig = null // FIXME: action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)?.multipliers
+    updateMultipliers: (state: StateType, action: PayloadAction<IPlinkoRules[]>) => {
+      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.plinkoConfig.multipliers = rowsConfig
       state.plinkoConfig.mode.multipliers =
         state.plinkoConfig.multipliers[state.plinkoConfig.mode.label === 'HARD' ? 'hard' : state.plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
     },
-    updatePlinkoConfigMode: (state: StateType, action: PayloadAction<IPlinkoModeVariants>) => {
+    updatePlinkoConfigMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
           state.plinkoConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.plinkoConfig.multipliers.medium }
@@ -59,20 +58,9 @@ export const mineSlice = createSlice({
           break
       }
     },
-    startPlinkoGame: (state: StateType) => {
-      state.plinkoConfig.isStarted = true
-      state.plinkoConfig.currentGameStatus = 'NOT_DROPPED_YET'
-    },
-    endPlinkoGame: (state: StateType, action: PayloadAction<{ hasWon: boolean }>) => {
-      if (action.payload.hasWon) {
-        state.plinkoConfig.isStarted = false
-      } else {
-        state.plinkoConfig.isStarted = false
-      }
-    },
   },
 })
 
-export const { updatePlinkoConfig, startPlinkoGame, endPlinkoGame, updateMultipliers, updatePlinkoConfigMode } = mineSlice.actions
+export const { updatePlinkoConfig, updateMultipliers, updatePlinkoConfigMode } = mineSlice.actions
 
 export default mineSlice.reducer

@@ -1,18 +1,19 @@
+import { IGameDifficultyVariants } from '@/services/games/common/games.types'
 import { IDreamMineRules } from '@/services/games/mine/mine.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IMineModeVariants, IUpdateMineConfig, StateType } from './mine.slice.types'
+import { IUpdateMineConfig, StateType } from './mine.slice.types'
 
 const initialState: StateType = {
   mineConfig: {
     betAmount: '',
     mode: {
-      coefficient: [],
+      multipliers: [],
       label: 'EASY',
       value: 4,
     },
     rows: 8,
     activeRow: 1,
-    coefficients: {
+    multipliers: {
       easy: [],
       hard: [],
       medium: [],
@@ -38,25 +39,25 @@ export const mineSlice = createSlice({
       }
     },
     updateCoefficients: (state: StateType, action: PayloadAction<IDreamMineRules[]>) => {
-      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.coefficients
+      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.multipliers
       if (!rowsConfig) return
-      state.mineConfig.coefficients = rowsConfig
-      state.mineConfig.mode.coefficient =
-        state.mineConfig.coefficients[state.mineConfig.mode.label === 'HARD' ? 'hard' : state.mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
+      state.mineConfig.multipliers = rowsConfig
+      state.mineConfig.mode.multipliers =
+        state.mineConfig.multipliers[state.mineConfig.mode.label === 'HARD' ? 'hard' : state.mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
     },
-    updateMinConfigMode: (state: StateType, action: PayloadAction<IMineModeVariants>) => {
+    updateMinConfigMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
-          state.mineConfig.mode = { label: 'MEDIUM', value: 3, coefficient: state.mineConfig.coefficients.medium }
+          state.mineConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.mineConfig.multipliers.medium }
           break
         case 'HARD':
-          state.mineConfig.mode = { label: 'HARD', value: 2, coefficient: state.mineConfig.coefficients.hard }
+          state.mineConfig.mode = { label: 'HARD', value: 2, multipliers: state.mineConfig.multipliers.hard }
           break
         default:
           state.mineConfig.mode = {
             label: 'EASY',
             value: 4,
-            coefficient: state.mineConfig.coefficients.easy,
+            multipliers: state.mineConfig.multipliers.easy,
           }
           break
       }

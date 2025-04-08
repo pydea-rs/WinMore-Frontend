@@ -1,13 +1,7 @@
+import { IGameDifficultyMode, IGameDifficultyVariants, IMultipliers } from '@/services/games/common/games.types'
 import { IAvailableTokens, Nullable } from '@/types/global.types'
 
 export type IMineGameStatus = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'WITHDRAWN' | 'WON'
-export type IMineModeVariants = 'EASY' | 'MEDIUM' | 'HARD'
-
-export interface IMineMode {
-  label: IMineModeVariants
-  value: number
-  coefficient: number[]
-}
 
 export interface IBlock {
   index: number
@@ -15,12 +9,12 @@ export interface IBlock {
   status: 'GOLD' | 'NULL'
 }
 interface IMineGame {
-  mode: IMineMode
+  mode: IGameDifficultyMode
   rows: number
   betAmount: string
   isStarted: boolean
   isGameOver: boolean
-  coefficients: ICoefficients
+  multipliers: IMultipliers
   selectedBlocks: IBlock[]
   activeRow: number
   currentGameId: Nullable<number>
@@ -28,11 +22,6 @@ interface IMineGame {
   currentGameStatus: Nullable<IMineGameStatus>
 }
 
-export interface ICoefficients {
-  easy: number[]
-  hard: number[]
-  medium: number[]
-}
 export interface ICurrentMineGame {
   betToken: IAvailableTokens
   createdAt: string
@@ -40,7 +29,7 @@ export interface ICurrentMineGame {
   finishedAt: string
   id: number
   initialBet: number
-  mode: IMineModeVariants
+  mode: IGameDifficultyVariants
   rowsCount: number
   stake: number
   startedAt: string

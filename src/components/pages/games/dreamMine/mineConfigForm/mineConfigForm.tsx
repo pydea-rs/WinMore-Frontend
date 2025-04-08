@@ -15,11 +15,11 @@ import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
+import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
-import { IMineMode } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray } from '@/utils/createNumberArray.util'
@@ -85,24 +85,24 @@ const MineConfigForm = () => {
     setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
   }, [rulesData, mineConfig.rows])
 
-  const [modes, setModes] = useState([] as IMineMode[])
+  const [modes, setModes] = useState([] as IGameDifficultyMode[])
 
   useEffect(() => {
     setModes([
       {
         label: 'EASY',
         value: 4,
-        coefficient: currentRowsRules?.coefficients.easy || [],
+        multipliers: currentRowsRules?.multipliers.easy || [],
       },
       {
         label: 'MEDIUM',
         value: 3,
-        coefficient: currentRowsRules?.coefficients.medium || [],
+        multipliers: currentRowsRules?.multipliers.medium || [],
       },
       {
         label: 'HARD',
         value: 2,
-        coefficient: currentRowsRules?.coefficients.hard || [],
+        multipliers: currentRowsRules?.multipliers.hard || [],
       },
     ])
   }, [currentRowsRules])
@@ -253,14 +253,14 @@ const MineConfigForm = () => {
                         checked={field.value === row}
                         onChange={(e) => {
                           dispatch(updateMineConfig({ rows: +e.target.value }))
-                          const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
+                          const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.multipliers[
                             mineConfig.mode.label === 'HARD' ? 'hard' : mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
                           ]
                           dispatch(
                             updateMineConfig({
                               mode: {
                                 ...mineConfig.mode,
-                                ...(newMultipliers ? { coefficient: newMultipliers } : {}),
+                                ...(newMultipliers ? { multipliers: newMultipliers } : {}),
                               },
                             }),
                           )

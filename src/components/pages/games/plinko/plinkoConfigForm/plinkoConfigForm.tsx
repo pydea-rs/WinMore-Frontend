@@ -113,7 +113,7 @@ export default function PlinkoConfigForm() {
                 <>
                   <InputIcon>
                     <NumberInput
-                      disabled={plinkoConfig.isStarted || !isAuthorized}
+                      disabled={plinkoConfig.currentGameId != null || !isAuthorized}
                       onChange={(event) => {
                         dispatch(updatePlinkoConfig({ betAmount: event.target.value }))
                         onChange(event)
@@ -148,7 +148,7 @@ export default function PlinkoConfigForm() {
                 <>
                   <InputIcon>
                     <NumberInput
-                      disabled={plinkoConfig.isStarted || !isAuthorized}
+                      disabled={plinkoConfig.currentGameId != null || !isAuthorized}
                       onChange={(event) => {
                         const val = parseInt(event.target.value) || 1
                         dispatch(updatePlinkoConfig({ numberOfBets: val }))
@@ -182,18 +182,18 @@ export default function PlinkoConfigForm() {
                   render={({ field }) => (
                     <>
                       <Radio
-                        disabled={plinkoConfig.isStarted || !isAuthorized}
+                        disabled={plinkoConfig.currentGameId != null || !isAuthorized}
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-                          const newMultipliers = { easy: [], hard: [], medium: [] } /*FIXME: rulesData?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
+                          const newMultipliers = [] as number[] /*FIXME: rulesData?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
                             plinkoConfig.mode.label === 'HARD' ? 'hard' : plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
                           ]*/
                           dispatch(
                             updatePlinkoConfig({
                               mode: {
                                 ...plinkoConfig.mode,
-                                ...(newMultipliers ? { coefficient: newMultipliers } : {}),
+                                ...(newMultipliers ? { multipliers: newMultipliers } : {}),
                               },
                             }),
                           )
