@@ -1,7 +1,6 @@
 import CasinoIcon from '@/components/icons/casino/casino'
 import ConstructionTool from '@/components/icons/constructionTool/constructionTool'
 import { internalLinks, socialMediaLinks } from '@/configs/app-routes'
-import { isDevelopmentMode } from '@/utils/dev'
 import { useRouterTools } from '@/utils/router'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
@@ -68,18 +67,13 @@ const QuickAccess: React.FC<QuickAccessProps> = (props) => {
               <CasinoIcon className="w-6 h-6" />
             </Button>
           </Link>
-          {isDevelopmentMode() && (
+          {
             <Link href={internalLinks.games.plinko.path}>
-              <Button
-                kind="primary"
-                variant="info"
-                className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.plinko.slug) ? '!bg-gradient-gray' : ''}`}
-                disabled
-              >
+              <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.plinko.slug) ? '!bg-gradient-gray' : ''}`}>
                 <ConstructionTool className="w-6 h-6" />
               </Button>
             </Link>
-          )}
+          }
           <hr style={{ border: '1px solid #333' }} />
           {socialMediaItems.map(({ url, Icon }, idx) => (
             <Link href={url || '#'} key={idx}>
