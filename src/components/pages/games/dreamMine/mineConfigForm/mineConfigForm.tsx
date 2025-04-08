@@ -19,7 +19,7 @@ import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
-import { startMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { setDreamMineConfig, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray } from '@/utils/createNumberArray.util'
@@ -136,7 +136,7 @@ const MineConfigForm = () => {
 
     if (!increasedValue) return null
     numericFormSetValue('betAmount', increasedValue)
-    dispatch(updateMineConfig({ betAmount: increasedValue }))
+    dispatch(setDreamMineConfig({ betAmount: increasedValue }))
   }
 
   const handleOnDecrease = (value: string) => {
@@ -144,7 +144,7 @@ const MineConfigForm = () => {
 
     if (!decreasedValue) return null
     numericFormSetValue('betAmount', decreasedValue)
-    dispatch(updateMineConfig({ betAmount: decreasedValue }))
+    dispatch(setDreamMineConfig({ betAmount: decreasedValue }))
   }
 
   const toggleSound = () => dispatch(triggerSound())
@@ -180,7 +180,7 @@ const MineConfigForm = () => {
                     <NumberInput
                       disabled={mineConfig.isStarted || !isAuthorized}
                       onChange={(event) => {
-                        dispatch(updateMineConfig({ betAmount: event.target.value }))
+                        dispatch(setDreamMineConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}
                       onIncrease={() => handleOnIncrease(value)}
@@ -217,7 +217,7 @@ const MineConfigForm = () => {
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-                          dispatch(updateMineConfig({ mode: mode }))
+                          dispatch(setDreamMineConfig({ mode: mode }))
                         }}
                         blockClassName="w-[calc(100/3*1%)]"
                         // new props end
@@ -252,12 +252,12 @@ const MineConfigForm = () => {
                         // new props
                         checked={field.value === row}
                         onChange={(e) => {
-                          dispatch(updateMineConfig({ rows: +e.target.value }))
+                          dispatch(setDreamMineConfig({ rows: +e.target.value }))
                           const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.multipliers[
                             mineConfig.mode.label === 'HARD' ? 'hard' : mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
                           ]
                           dispatch(
-                            updateMineConfig({
+                            setDreamMineConfig({
                               mode: {
                                 ...mineConfig.mode,
                                 ...(newMultipliers ? { multipliers: newMultipliers } : {}),

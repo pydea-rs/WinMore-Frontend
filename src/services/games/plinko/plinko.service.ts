@@ -1,7 +1,7 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { setDreamMineConfig, setDreamMineMultipliers } from '@/store/slices/mine/mine.slice'
 
 import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
@@ -23,8 +23,8 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(updateCoefficients(data.data))
-        dispatch(updateMineConfig({ rows: data.data[0].rows }))
+        dispatch(setDreamMineMultipliers(data.data))
+        dispatch(setDreamMineConfig({ rows: data.data[0].rows }))
       },
     }),
     postPlinkoBet: builder.mutation<BaseResponse<IPlinkoGame>, IPlacePlinkoBetPayload>({
@@ -40,7 +40,7 @@ export const MineService = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
         // dispatch(updateCurrentGame(data.data))
-        dispatch(updateMineConfig({ currentGameId: data.data.id }))
+        dispatch(setDreamMineConfig({ currentGameId: data.data.id }))
       },
     }),
     dropPlinkoBalls: builder.mutation<BaseResponse<PlinkoBallType[]>, IEndpointWithIdParamPayload>({

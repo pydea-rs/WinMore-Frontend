@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useBackoffMineMutation, useMineBlockMutation, useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { useGetUserTokenBalanceMutation } from '@/services/user/user.service'
-import { endMineGame, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { endMineGame, setDreamMineConfig } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
 import confetti from 'canvas-confetti'
@@ -57,12 +57,15 @@ const useDreamMineGameBoardHelper = () => {
   }
 
   const winHandler = async () => {
-    await backoffMine({ id: mineConfig.currentGameId as string })
+    if (mineConfig.currentGameId == null) {
+      throw new Error('Game id must be specified!')
+    }
+    await backoffMine({ id: mineConfig.currentGameId })
       .unwrap()
       .then((res) => {
         refetchList()
         refetchBalance({ chain: network.chainId, token: token.symbol })
-        dispatch(updateMineConfig({ currentGameStatus: 'WON' }))
+        dispatch(setDreamMineConfig({ currentGameStatus: 'WON' }))
         fireworks()
         dispatch(endMineGame({ isWin: true }))
       })
@@ -82,11 +85,11 @@ const useDreamMineGameBoardHelper = () => {
         const previousBlocks = data.nulls.map((nullIndex, rowIndex) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }) as IBlock)
         if (!data.success) {
           if (configs.sound) bomb.play()
-          dispatch(updateMineConfig({ selectedBlocks: previousBlocks }))
+          dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks }))
           lostHandler()
         } else {
-          dispatch(updateMineConfig({ selectedBlocks: previousBlocks }))
-          dispatch(updateMineConfig({ activeRow: mineConfig.activeRow + 1 }))
+          dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks }))
+          dispatch(setDreamMineConfig({ activeRow: mineConfig.activeRow + 1 }))
         }
       } finally {
         setLoadingBlock(null) // Clear the loading block

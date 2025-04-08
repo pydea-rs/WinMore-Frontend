@@ -3,7 +3,7 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 import { setUser } from '@/store/slices/auth/auth.slice'
 import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
-import { updateMinConfigMode, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { setDreamMineConfig, setDreamMineGameMode } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setBalances } from '@/store/slices/networks/networks.slice'
@@ -137,7 +137,7 @@ export const UserService = createApi({
         const currentGame = data.data.dreamMine
         const currentGameSelectedBlocks: IBlock[] = currentGame.nulls.map((nullIndex: number, rowIndex: number) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }))
         dispatch(
-          updateMineConfig({
+          setDreamMineConfig({
             activeRow: currentGame.currentRow + 1,
             betAmount: currentGame.initialBet.toString(),
             rows: currentGame.rowsCount,
@@ -148,7 +148,7 @@ export const UserService = createApi({
             isStarted: true,
           }),
         )
-        dispatch(updateMinConfigMode(currentGame.mode))
+        dispatch(setDreamMineGameMode(currentGame.mode))
       },
     }),
     withdraw: builder.mutation<BaseResponse<IWithdrawResponse>, IWithdrawPayload>({

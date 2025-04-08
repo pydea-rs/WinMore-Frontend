@@ -1,7 +1,7 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { updateCoefficients, updateMineConfig } from '@/store/slices/mine/mine.slice'
+import { setDreamMineConfig, setDreamMineMultipliers } from '@/store/slices/mine/mine.slice'
 import { ICurrentMineGame } from '@/store/slices/mine/mine.slice.types'
 
 import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
@@ -23,8 +23,8 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(updateCoefficients(data.data))
-        dispatch(updateMineConfig({ rows: data.data[0].rows }))
+        dispatch(setDreamMineMultipliers(data.data))
+        dispatch(setDreamMineConfig({ rows: data.data[0].rows }))
       },
     }),
     postMineBet: builder.mutation<BaseResponse<ICurrentMineGame>, IPlaceMineBetPayload>({
@@ -40,7 +40,7 @@ export const MineService = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
         // dispatch(updateCurrentGame(data.data))
-        dispatch(updateMineConfig({ currentGameId: data.data.id }))
+        dispatch(setDreamMineConfig({ currentGameId: data.data.id }))
       },
     }),
     mineBlock: builder.mutation<BaseResponse<IMineGameDetail>, IMineBlockPayload>({
@@ -56,7 +56,7 @@ export const MineService = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
         dispatch(
-          updateMineConfig({
+          setDreamMineConfig({
             stake: data.data.stake,
             currentGameStatus: data.data.status,
           }),

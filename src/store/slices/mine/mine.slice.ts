@@ -31,21 +31,21 @@ export const mineSlice = createSlice({
   name: 'mine',
   initialState,
   reducers: {
-    updateMineConfig: (state: StateType, action: PayloadAction<IUpdateMineConfig>) => {
+    setDreamMineConfig: (state: StateType, action: PayloadAction<IUpdateMineConfig>) => {
       state.mineConfig = {
         ...state.mineConfig,
         ...action.payload,
         ...(state.mineConfig.isGameOver ? { selectedBlocks: [], activeRow: 1, isGameOver: false, isStarted: false } : {}),
       }
     },
-    updateCoefficients: (state: StateType, action: PayloadAction<IDreamMineRules[]>) => {
+    setDreamMineMultipliers: (state: StateType, action: PayloadAction<IDreamMineRules[]>) => {
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.mineConfig.multipliers = rowsConfig
       state.mineConfig.mode.multipliers =
         state.mineConfig.multipliers[state.mineConfig.mode.label === 'HARD' ? 'hard' : state.mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
     },
-    updateMinConfigMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
+    setDreamMineGameMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
           state.mineConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.mineConfig.multipliers.medium }
@@ -88,6 +88,6 @@ export const mineSlice = createSlice({
   },
 })
 
-export const { updateMineConfig, startMineGame, endMineGame, updateCoefficients, updateMinConfigMode } = mineSlice.actions
+export const { setDreamMineConfig, startMineGame, endMineGame, setDreamMineMultipliers, setDreamMineGameMode } = mineSlice.actions
 
 export default mineSlice.reducer

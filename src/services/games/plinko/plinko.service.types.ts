@@ -1,7 +1,6 @@
-import { IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
-import { IMultipliers, IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
+import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
-import { ExtraCommonGameStatus } from '../common/games.types'
+import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
 import { BucketsDataType, PegsDataType, PlinkoBallType } from './physx.types'
 
 export interface IPlinkoBall {
@@ -30,7 +29,7 @@ export interface IPlinkoGame {
   initialBet: number
   token: IAvailableTokens
   chainId: number
-  mode: IMineModeVariants
+  mode: IGameDifficultyVariants
   ballsCount: number
   rowsCount: number
   prize: number
