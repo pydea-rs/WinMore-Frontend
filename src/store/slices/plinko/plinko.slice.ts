@@ -28,20 +28,20 @@ export const mineSlice = createSlice({
   name: 'mine',
   initialState,
   reducers: {
-    updatePlinkoConfig: (state: StateType, action: PayloadAction<IUpdatePlinkoConfig>) => {
+    setPlinkoConfig: (state: StateType, action: PayloadAction<IUpdatePlinkoConfig>) => {
       state.plinkoConfig = {
         ...state.plinkoConfig,
         ...action.payload,
       }
     },
-    updateMultipliers: (state: StateType, action: PayloadAction<IPlinkoRules[]>) => {
+    setPlinkoBucketMultipliers: (state: StateType, action: PayloadAction<IPlinkoRules[]>) => {
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.plinkoConfig.multipliers = rowsConfig
       state.plinkoConfig.mode.multipliers =
         state.plinkoConfig.multipliers[state.plinkoConfig.mode.label === 'HARD' ? 'hard' : state.plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
     },
-    updatePlinkoConfigMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
+    setPlinkoDifficultyMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
           state.plinkoConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.plinkoConfig.multipliers.medium }
@@ -61,6 +61,6 @@ export const mineSlice = createSlice({
   },
 })
 
-export const { updatePlinkoConfig, updateMultipliers, updatePlinkoConfigMode } = mineSlice.actions
+export const { setPlinkoConfig, setPlinkoBucketMultipliers, setPlinkoDifficultyMode } = mineSlice.actions
 
 export default mineSlice.reducer

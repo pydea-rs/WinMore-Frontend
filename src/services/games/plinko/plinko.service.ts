@@ -1,9 +1,9 @@
 import axiosBaseQuery from '@/services/base/axiosBaseQuery'
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
-import { setDreamMineConfig, setDreamMineMultipliers } from '@/store/slices/mine/mine.slice'
 
 import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
+import { setPlinkoBucketMultipliers, setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { PlinkoBallType } from './physx.types'
 import { IGetPlinkoGamesListPayload, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
@@ -13,7 +13,7 @@ export const MineService = createApi({
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
     getRules: builder.query<BaseResponse<IPlinkoRules[]>, IEmptyPayload>({
-      query: (params) => {
+      query: () => {
         const { games } = getApiRoute()
         return {
           method: 'GET',
@@ -23,8 +23,8 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(setDreamMineMultipliers(data.data))
-        dispatch(setDreamMineConfig({ rows: data.data[0].rows }))
+        dispatch(setPlinkoBucketMultipliers(data.data))
+        dispatch(setPlinkoConfig({ rows: data.data[0].rows }))
       },
     }),
     postPlinkoBet: builder.mutation<BaseResponse<IPlinkoGame>, IPlacePlinkoBetPayload>({
@@ -39,8 +39,7 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        // dispatch(updateCurrentGame(data.data))
-        dispatch(setDreamMineConfig({ currentGameId: data.data.id }))
+        dispatch(setPlinkoConfig({ currentGameId: data.data.id }))
       },
     }),
     dropPlinkoBalls: builder.mutation<BaseResponse<PlinkoBallType[]>, IEndpointWithIdParamPayload>({

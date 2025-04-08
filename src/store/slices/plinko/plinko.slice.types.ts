@@ -9,7 +9,7 @@ interface IPlinko {
   rows: number
   betAmount: string
   multipliers: IMultipliers
-  currentGameId: Nullable<string>
+  currentGameId: Nullable<number>
   prize: Nullable<number>
   currentGameStatus: Nullable<IPlinkoStatus>
 }
