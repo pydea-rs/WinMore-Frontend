@@ -12,12 +12,13 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
+import { useGetPlinkoRulesQuery } from '@/services/games/plinko/plinko.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
-import { updatePlinkoConfig } from '@/store/slices/plinko/plinko.slice'
+import { setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/solid'
 import { Controller, useForm } from 'react-hook-form'
-import { IGameForm } from './plinkoConfigForm.types'
+import { IPlinkoConfigForm } from './plinkoConfigForm.types'
 
 const modes = [
   { value: 8, label: '8' },
@@ -29,7 +30,7 @@ export default function PlinkoConfigForm() {
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { configs } = useSelector((state) => state.configs)
-
+  const { data: rulesData } = useGetPlinkoRulesQuery({})
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { plinkoConfig } = useSelector((state) => state.plinko)
 
@@ -40,16 +41,16 @@ export default function PlinkoConfigForm() {
     handleSubmit: gameFormHandleSubmit,
     setValue: numericFormSetValue,
     formState: { errors },
-  } = useForm<IGameForm>({
+  } = useForm<IPlinkoConfigForm>({
     defaultValues: {
-      betAmount: '0',
-      numberOfBets: 1,
-      gameMode: 8,
-      gameRows: 16,
+      betAmount: plinkoConfig.betAmount,
+      numberOfBets: plinkoConfig.numberOfBets,
+      gameMode: plinkoConfig.mode.value,
+      gameRows: plinkoConfig.rows,
     },
   })
 
-  const handleSubmit = (data: IGameForm) => {
+  const handleSubmit = (data: IPlinkoConfigForm) => {
     if (!isAuthorized) return null
   }
 
@@ -58,7 +59,7 @@ export default function PlinkoConfigForm() {
 
     if (!increasedValue) return null
     numericFormSetValue('betAmount', increasedValue)
-    dispatch(updatePlinkoConfig({ betAmount: increasedValue }))
+    dispatch(setPlinkoConfig({ betAmount: increasedValue }))
   }
 
   const handleOnDecrease = (value: string) => {
@@ -66,21 +67,21 @@ export default function PlinkoConfigForm() {
 
     if (!decreasedValue) return null
     numericFormSetValue('betAmount', decreasedValue)
-    dispatch(updatePlinkoConfig({ betAmount: decreasedValue }))
+    dispatch(setPlinkoConfig({ betAmount: decreasedValue }))
   }
 
   const handleBetsIncrease = (value: number) => {
     if (!isAuthorized) return null
     const newValue = value + 1
     numericFormSetValue('numberOfBets', newValue)
-    dispatch(updatePlinkoConfig({ numberOfBets: newValue }))
+    dispatch(setPlinkoConfig({ numberOfBets: newValue }))
   }
 
   const handleBetsDecrease = (value: number) => {
     if (!isAuthorized || value <= 1) return null
     const newValue = value - 1
     numericFormSetValue('numberOfBets', newValue)
-    dispatch(updatePlinkoConfig({ numberOfBets: newValue }))
+    dispatch(setPlinkoConfig({ numberOfBets: newValue }))
   }
 
   const toggleSound = () => dispatch(triggerSound())
@@ -113,9 +114,9 @@ export default function PlinkoConfigForm() {
                 <>
                   <InputIcon>
                     <NumberInput
-                      disabled={plinkoConfig.currentGameId != null || !isAuthorized}
+                      disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
                       onChange={(event) => {
-                        dispatch(updatePlinkoConfig({ betAmount: event.target.value }))
+                        dispatch(setPlinkoConfig({ betAmount: event.target.value }))
                         onChange(event)
                       }}
                       onIncrease={() => handleOnIncrease(value)}
@@ -148,10 +149,10 @@ export default function PlinkoConfigForm() {
                 <>
                   <InputIcon>
                     <NumberInput
-                      disabled={plinkoConfig.currentGameId != null || !isAuthorized}
+                      disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
                       onChange={(event) => {
                         const val = parseInt(event.target.value) || 1
-                        dispatch(updatePlinkoConfig({ numberOfBets: val }))
+                        dispatch(setPlinkoConfig({ numberOfBets: val }))
                         onChange(val)
                       }}
                       onIncrease={() => handleBetsIncrease(value)}
@@ -182,7 +183,7 @@ export default function PlinkoConfigForm() {
                   render={({ field }) => (
                     <>
                       <Radio
-                        disabled={plinkoConfig.currentGameId != null || !isAuthorized}
+                        disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
@@ -190,7 +191,7 @@ export default function PlinkoConfigForm() {
                             plinkoConfig.mode.label === 'HARD' ? 'hard' : plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
                           ]*/
                           dispatch(
-                            updatePlinkoConfig({
+                            setPlinkoConfig({
                               mode: {
                                 ...plinkoConfig.mode,
                                 ...(newMultipliers ? { multipliers: newMultipliers } : {}),

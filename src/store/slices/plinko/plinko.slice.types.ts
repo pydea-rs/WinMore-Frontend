@@ -1,19 +1,30 @@
 import { IGameDifficultyMode, IMultipliers } from '@/services/games/common/games.types'
+import { BucketsDataType, PegsDataType, PlinkoBallType, PlinkoGameBoardBoxType } from '@/services/games/plinko/physx.types'
 import { Nullable } from '@/types/global.types'
 
 export type IPlinkoStatus = 'NOT_DROPPED_YET' | 'DROPPING' | 'FINISHED'
 
-interface IPlinko {
+export interface IPlayingPlinkoGame {
+  id: number
+  status: IPlinkoStatus
+  balls: PlinkoBallType[]
+  droppedCount: number
+  prize: Nullable<number>
+}
+
+export interface IPlinkoState {
   mode: IGameDifficultyMode
   numberOfBets: number
   rows: number
   betAmount: string
   multipliers: IMultipliers
-  currentGameId: Nullable<number>
-  prize: Nullable<number>
-  currentGameStatus: Nullable<IPlinkoStatus>
+  pegs: Nullable<PegsDataType>
+  buckets: Nullable<BucketsDataType>
+  board: Nullable<PlinkoGameBoardBoxType>
+  playing: Nullable<IPlayingPlinkoGame>
 }
 export interface StateType {
-  plinkoConfig: IPlinko
+  plinkoConfig: IPlinkoState
 }
-export interface IUpdatePlinkoConfig extends Partial<IPlinko> {}
+
+export interface IUpdatePlinkoConfig extends Partial<IPlinkoState> {}

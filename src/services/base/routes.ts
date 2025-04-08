@@ -95,6 +95,9 @@ export const getApiRoute = () => {
         myHistory: {
           path: 'plinko/my-history',
         },
+        mePlaying: {
+          path: 'plinko/me-playing',
+        },
       },
       common: {
         list: {

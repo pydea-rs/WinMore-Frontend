@@ -9,33 +9,19 @@ import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 import { simulate } from './predictions'
 
 export default function PlinkoGameBoard() {
-  const { onDropBall, plinkoConfig, loadingBlock, isBallDropping } = usePlinkoGameBoardHelper()
+  const { onDropBall, plinkoConfig } = usePlinkoGameBoardHelper()
   const [boardWidth, setBoardWidth] = useState(600)
 
   const getGameStateColor = (status: Nullable<IPlinkoStatus>) => {
     switch (status) {
-      case 'LOST': {
-        return {
-          colorFrom: '#F40F46',
-          colorTo: '#BF9C2C',
-        }
-      }
-
-      case 'WON': {
+      case 'FINISHED': {
         return {
           colorFrom: '#1db954',
           colorTo: '#1db954',
         }
       }
 
-      case 'NOT_STARTED': {
-        return {
-          colorFrom: '#ffaa40',
-          colorTo: '#ffaa40',
-        }
-      }
-
-      case 'ONGOING': {
+      case 'DROPPING': {
         return {
           colorFrom: '#ffaa40',
           colorTo: '#ffaa40',
@@ -284,8 +270,8 @@ export default function PlinkoGameBoard() {
             duration={3}
             size={350}
             borderWidth={3}
-            colorFrom={getGameStateColor(plinkoConfig.currentGameStatus).colorFrom}
-            colorTo={getGameStateColor(plinkoConfig.currentGameStatus).colorTo}
+            colorFrom={getGameStateColor(plinkoConfig.playing?.status || 'NOT_DROPPED_YET').colorFrom}
+            colorTo={getGameStateColor(plinkoConfig.playing?.status || 'NOT_DROPPED_YET').colorTo}
           />
         </motion.div>
       </CardBody>

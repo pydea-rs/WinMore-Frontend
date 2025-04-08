@@ -14,9 +14,9 @@ const initialState: StateType = {
     rows: 8,
     activeRow: 1,
     multipliers: {
-      easy: [],
-      hard: [],
-      medium: [],
+      EASY: [],
+      HARD: [],
+      MEDIUM: [],
     },
     selectedBlocks: [],
     isStarted: false,
@@ -42,22 +42,21 @@ export const mineSlice = createSlice({
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.mineConfig.multipliers = rowsConfig
-      state.mineConfig.mode.multipliers =
-        state.mineConfig.multipliers[state.mineConfig.mode.label === 'HARD' ? 'hard' : state.mineConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
+      state.mineConfig.mode.multipliers = state.mineConfig.multipliers[state.mineConfig.mode.label || 'EASY']
     },
     setDreamMineGameMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
-          state.mineConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.mineConfig.multipliers.medium }
+          state.mineConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.mineConfig.multipliers.MEDIUM }
           break
         case 'HARD':
-          state.mineConfig.mode = { label: 'HARD', value: 2, multipliers: state.mineConfig.multipliers.hard }
+          state.mineConfig.mode = { label: 'HARD', value: 2, multipliers: state.mineConfig.multipliers.HARD }
           break
         default:
           state.mineConfig.mode = {
             label: 'EASY',
             value: 4,
-            multipliers: state.mineConfig.multipliers.easy,
+            multipliers: state.mineConfig.multipliers.EASY,
           }
           break
       }

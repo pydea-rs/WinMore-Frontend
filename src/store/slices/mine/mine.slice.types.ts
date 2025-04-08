@@ -1,4 +1,4 @@
-import { IGameDifficultyMode, IGameDifficultyVariants, IMultipliers } from '@/services/games/common/games.types'
+import { IGameDifficultyVariants, IGameMode, IMultipliers } from '@/services/games/common/games.types'
 import { IAvailableTokens, Nullable } from '@/types/global.types'
 
 export type IMineGameStatus = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'WITHDRAWN' | 'WON'
@@ -9,7 +9,7 @@ export interface IBlock {
   status: 'GOLD' | 'NULL'
 }
 interface IMineGame {
-  mode: IGameDifficultyMode
+  mode: IGameMode
   rows: number
   betAmount: string
   isStarted: boolean

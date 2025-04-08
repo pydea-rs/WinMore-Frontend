@@ -1,6 +1,5 @@
-export interface IGameForm {
-  betAmount: string
+import { IGameConfigForm } from '../../common-games.types'
+
+export interface IPlinkoConfigForm extends IGameConfigForm {
   numberOfBets: number
-  gameMode: number
-  gameRows: number
 }

@@ -1,26 +1,26 @@
 import { IGameDifficultyVariants } from '@/services/games/common/games.types'
-import { IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
+import { IMePlayingPlinkoGame, IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
+import { IPlinkoStatus, IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
 
 const initialState: StateType = {
   plinkoConfig: {
     betAmount: '',
     mode: {
-      multipliers: [],
       label: 'EASY',
       value: 4,
     },
     rows: 8,
     multipliers: {
-      easy: [],
-      hard: [],
-      medium: [],
+      EASY: [],
+      HARD: [],
+      MEDIUM: [],
     },
     numberOfBets: 1,
-    currentGameId: null,
-    currentGameStatus: 'NOT_DROPPED_YET',
-    prize: null,
+    pegs: null,
+    buckets: null,
+    board: null,
+    playing: null,
   },
 }
 
@@ -38,22 +38,60 @@ export const mineSlice = createSlice({
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.plinkoConfig.multipliers = rowsConfig
-      state.plinkoConfig.mode.multipliers =
-        state.plinkoConfig.multipliers[state.plinkoConfig.mode.label === 'HARD' ? 'hard' : state.plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy']
+    },
+    setPlinkoGamePhysx: (state: StateType, action: PayloadAction<IPlinkoRules[]>) => {
+      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)
+      if (!rowsConfig) return
+      state.plinkoConfig.multipliers = rowsConfig.multipliers
+      state.plinkoConfig.board = rowsConfig.board
+      state.plinkoConfig.pegs = rowsConfig.pegs
+      state.plinkoConfig.buckets = rowsConfig.buckets
+    },
+    setPlayingPlinkoGame: (state: StateType, action: PayloadAction<IMePlayingPlinkoGame>) => {
+      if (!action.payload) {
+        state.plinkoConfig.playing = null
+        return
+      }
+      state.plinkoConfig.playing = {
+        balls: action.payload.plinkoBalls.map((ball) => ball.dropSpecs),
+        droppedCount: 0,
+        id: action.payload.id,
+        prize: action.payload.prize,
+        status: action.payload.status,
+      }
+    },
+    incDroppedBallsCount: (state: StateType, action: PayloadAction<number>) => {
+      if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
+        return
+      }
+      state.plinkoConfig.playing.droppedCount += action.payload
+    },
+    setPlayingPlinkoGameStatus: (state: StateType, action: PayloadAction<IPlinkoStatus>) => {
+      if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
+        return
+      }
+      state.plinkoConfig.playing.status = action.payload
+      switch (action.payload) {
+        case 'FINISHED':
+          state.plinkoConfig.playing.droppedCount = state.plinkoConfig.numberOfBets
+          break
+        case 'NOT_DROPPED_YET':
+          state.plinkoConfig.playing.droppedCount = 0
+          break
+      }
     },
     setPlinkoDifficultyMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
       switch (action.payload) {
         case 'MEDIUM':
-          state.plinkoConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.plinkoConfig.multipliers.medium }
+          state.plinkoConfig.mode = { label: 'MEDIUM', value: 3 }
           break
         case 'HARD':
-          state.plinkoConfig.mode = { label: 'HARD', value: 2, multipliers: state.plinkoConfig.multipliers.hard }
+          state.plinkoConfig.mode = { label: 'HARD', value: 2 }
           break
         default:
           state.plinkoConfig.mode = {
             label: 'EASY',
             value: 4,
-            multipliers: state.plinkoConfig.multipliers.easy,
           }
           break
       }
@@ -61,6 +99,7 @@ export const mineSlice = createSlice({
   },
 })
 
-export const { setPlinkoConfig, setPlinkoBucketMultipliers, setPlinkoDifficultyMode } = mineSlice.actions
+export const { setPlinkoConfig, setPlinkoBucketMultipliers, setPlinkoDifficultyMode, setPlayingPlinkoGameStatus, incDroppedBallsCount, setPlayingPlinkoGame, setPlinkoGamePhysx } =
+  mineSlice.actions
 
 export default mineSlice.reducer

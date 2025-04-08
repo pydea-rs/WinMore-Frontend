@@ -1,10 +1,15 @@
 import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
 import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
-import { BucketsDataType, PegsDataType, PlinkoBallType } from './physx.types'
+import { BucketsDataType, PegsDataType, PlinkoBallType, PlinkoGameBoardBoxType } from './physx.types'
 
-export interface IPlinkoBall {
+export interface IDroppingPlinkoBall {
   id: number
+  gameId: number
+  dropSpecs: PlinkoBallType
+}
+
+export interface IPlinkoBall extends IDroppingPlinkoBall {
   createdAt: Date
   updatedAt: Date
   userId: number
@@ -12,20 +17,13 @@ export interface IPlinkoBall {
     name: string
     id: number
   }
-  gameId: number
-  dropSpecs: PlinkoBallType
 }
 
-export interface IPlinkoGame {
+export interface IPlinkoGameBase {
   id: number
   createdAt: Date
   updatedAt: Date
   userId: number
-  user: {
-    name: string
-    id: number
-  }
-
   initialBet: number
   token: IAvailableTokens
   chainId: number
@@ -35,6 +33,12 @@ export interface IPlinkoGame {
   prize: number
   status: IPlinkoStatus
   finishedAt?: Date
+}
+export interface IPlinkoGame extends IPlinkoGameBase {
+  user?: {
+    name: string
+    id: number
+  }
   plinkoBalls?: IPlinkoBall[]
 }
 
@@ -43,10 +47,7 @@ export interface IPlinkoRules {
   maxBetAmount: number | null
   minBetAmount: number
   rows: number
-  board: {
-    height: number
-    width: number
-  }
+  board: PlinkoGameBoardBoxType
   pegs: PegsDataType
   buckets: BucketsDataType
 }
@@ -64,4 +65,8 @@ export interface IPlacePlinkoBetPayload {
 export type IGetPlinkoGamesListResponse = IPlinkoGame[]
 export interface IGetPlinkoGamesListPayload extends IPaginationPayload {
   status?: IPlinkoStatus | ExtraCommonGameStatus
+}
+
+export interface IMePlayingPlinkoGame extends IPlinkoGameBase {
+  plinkoBalls: IDroppingPlinkoBall[]
 }

@@ -15,8 +15,8 @@ import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
-import { IGameDifficultyMode } from '@/services/games/common/games.types'
-import { useGetRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
+import { IGameMode } from '@/services/games/common/games.types'
+import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { setDreamMineConfig, startMineGame } from '@/store/slices/mine/mine.slice'
@@ -28,7 +28,7 @@ import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { IGameForm } from './mineConfigForm.types'
+import { IGameConfigForm } from '../../common-games.types'
 
 const getMinMaxRows = (data: { rows?: number }[]) => {
   let min = data[0].rows || 0
@@ -47,7 +47,7 @@ const MineConfigForm = () => {
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
-  const { data: rulesData } = useGetRulesQuery({})
+  const { data: rulesData } = useGetDreamMineRulesQuery({})
   const [refetchBalance] = useGetUserTokenBalanceMutation()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
   const [rows, setRows] = useState([] as number[])
@@ -65,7 +65,7 @@ const MineConfigForm = () => {
     handleSubmit: gameFormHandleSubmit,
     setValue: numericFormSetValue,
     formState: { errors },
-  } = useForm<IGameForm>({
+  } = useForm<IGameConfigForm>({
     defaultValues: {
       betAmount: mineConfig.betAmount,
       gameMode: mineConfig.mode.value,
@@ -85,7 +85,7 @@ const MineConfigForm = () => {
     setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
   }, [rulesData, mineConfig.rows])
 
-  const [modes, setModes] = useState([] as IGameDifficultyMode[])
+  const [modes, setModes] = useState([] as IGameMode[])
 
   useEffect(() => {
     setModes([
@@ -108,7 +108,7 @@ const MineConfigForm = () => {
   }, [currentRowsRules])
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
-  const handleSubmit = async (values: IGameForm) => {
+  const handleSubmit = async (values: IGameConfigForm) => {
     if (!UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
     } else {

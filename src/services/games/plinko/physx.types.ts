@@ -7,6 +7,11 @@ export type PlinkoBallType = {
   rapidImpacts?: number[]
 }
 
+export type PlinkoGameBoardBoxType = {
+  width: number
+  height: number
+}
+
 export type DeterministicPlinkoBallType = PlinkoBallType & {
   bucketIndex: number
 }

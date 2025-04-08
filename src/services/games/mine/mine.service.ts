@@ -12,7 +12,7 @@ export const MineService = createApi({
   reducerPath: 'mineService',
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    getRules: builder.query<BaseResponse<IDreamMineRules[]>, IEmptyPayload>({
+    getDreamMineRules: builder.query<BaseResponse<IDreamMineRules[]>, IEmptyPayload>({
       query: (params) => {
         const { games } = getApiRoute()
         return {
@@ -87,4 +87,4 @@ export const MineService = createApi({
   }),
 })
 
-export const { useGetRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useMineGamesListQuery } = MineService
+export const { useGetDreamMineRulesQuery, usePostMineBetMutation, useMineBlockMutation, useBackoffMineMutation, useMineGamesListQuery } = MineService

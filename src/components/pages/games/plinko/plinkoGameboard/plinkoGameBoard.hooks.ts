@@ -1,46 +1,40 @@
-import { endPlinkoGame, updatePlinkoConfig } from '@/store/slices/plinko/plinko.slice'
+import { setPlayingPlinkoGameStatus, setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
+import { IPlinkoState } from '@/store/slices/plinko/plinko.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
 import { useState } from 'react'
 const usePlinkoGameBoardHelper = () => {
   const dispatch = useDispatch()
-  const plinkoConfig = useSelector((state: any) => state.plinko.plinkoConfig)
-  const [loadingBlock, setLoadingBlock] = useState<{ index: number; dropping: boolean }>({ index: 0, dropping: false })
+  const plinkoConfig: IPlinkoState = useSelector((state: any) => state.plinko.plinkoConfig)
   const [isBallDropping, setIsBallDropping] = useState(false)
 
   const winHandler = () => {
-    dispatch(updatePlinkoConfig({ currentGameStatus: 'WON' }))
+    dispatch(setPlayingPlinkoGameStatus('FINISHED'))
     // fireworks()
-    dispatch(endPlinkoGame({ hasWon: true }))
+    // dispatch(endPlinkoGame({ hasWon: true })) // FIXME
   }
 
   const lostHandler = () => {
-    dispatch(endPlinkoGame({ hasWon: false }))
+    // dispatch(endPlinkoGame({ hasWon: false })) // FIXME
   }
 
   const onDropBall = async (path: number[]) => {
-    if (plinkoConfig.isStarted && plinkoConfig.currentGameStatus === 'ONGOING') {
-      setLoadingBlock({ index: path[0], dropping: true })
-
+    if (plinkoConfig.playing?.status === 'DROPPING') {
       try {
         // Simulate random win/loss
         const success = Math.random() > 0.5
 
         if (!success) {
-          dispatch(updatePlinkoConfig({ ballPath: path }))
+          // dispatch(setPlinkoConfig({  })) // TODO:
           lostHandler()
         } else {
           dispatch(
-            updatePlinkoConfig({
-              ballPath: path,
+            setPlinkoConfig({
               multipliers: plinkoConfig.multipliers, // Keep existing multipliers
             }),
           )
           winHandler()
         }
       } finally {
-        setTimeout(() => {
-          setLoadingBlock({ index: 0, dropping: false })
-        }, 1000) // Add slight delay to make animation visible
       }
     }
   }
@@ -48,7 +42,6 @@ const usePlinkoGameBoardHelper = () => {
   return {
     onDropBall,
     plinkoConfig,
-    loadingBlock,
     isBallDropping,
   }
 }
