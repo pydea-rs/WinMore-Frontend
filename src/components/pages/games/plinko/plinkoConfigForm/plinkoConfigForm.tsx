@@ -12,8 +12,9 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
+import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/games/plinko/plinko.service'
-import { useGetUserInfoQuery } from '@/services/user/user.service'
+import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
@@ -25,24 +26,20 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { IPlinkoConfigForm } from './plinkoConfigForm.types'
 
-const modes = [
-  { value: 8, label: '8' },
-  { value: 12, label: '12' },
-  { value: 16, label: '16' },
-]
-
 export default function PlinkoConfigForm() {
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { configs } = useSelector((state) => state.configs)
-  const { data: rulesData } = useGetPlinkoRulesQuery({})
+  const { data: rulesList } = useGetPlinkoRulesQuery({})
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { plinkoConfig } = useSelector((state) => state.plinko)
   const [rows, setRows] = useState([] as number[])
-  const [currentRowsRules, setCurrentRowsRules] = useState(rulesData?.data.find((rules) => rules.rows === plinkoConfig.rows))
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
   const { addDecimalNumbers, formatNumber, subDecimalNumbers } = useHelper()
+  const [refetchBalance] = useGetUserTokenBalanceMutation()
+
+  const [modes, setModes] = useState<IGameMode[]>([])
 
   const {
     control: gameControl,
@@ -59,12 +56,25 @@ export default function PlinkoConfigForm() {
   })
 
   useEffect(() => {
-    if (!rulesData?.data?.length) return
-    const [min, max] = getMinMaxRows(rulesData?.data)
+    if (!rulesList?.data?.length) return
+    const [min, max] = getMinMaxRows(rulesList?.data)
     setRows(createNumberArray(min, max)) // FIXME: Revise this to not use array
-    setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === plinkoConfig.rows))
-  }, [rulesData?.data, plinkoConfig.rows]) // TODO: Check if this required to ne separate useEffecys like MineConfig comp
+    const currentRowsRules = rulesList?.data.find((rules) => rules.rows === plinkoConfig.rows)
 
+    const difficulties = Object.keys(currentRowsRules?.multipliers ?? {})
+    if (!currentRowsRules || !difficulties?.length) {
+      setModes([])
+      return
+    }
+
+    setModes(
+      difficulties.map((label, index) => ({
+        label: label as IGameDifficultyVariants,
+        value: index + 1,
+        multipliers: currentRowsRules.multipliers[label as IGameDifficultyVariants] || [],
+      })),
+    )
+  }, [rulesList?.data, plinkoConfig.rows])
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
   const handleSubmit = async (values: IPlinkoConfigForm) => {
@@ -77,11 +87,18 @@ export default function PlinkoConfigForm() {
         return
       }
       try {
-        await plinkoPlaceBetMutation({ betAmount: +betAmount, mode: plinkoConfig.mode.label, rows: plinkoConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
-        // refetchBalance({ chain: network.chainId, token: token.symbol }) // FIXME: Call fetch balance after last ball falls into bucket.
-        // Play drop sound and start dropping balls one by one wit
+        await plinkoPlaceBetMutation({
+          betAmount: +betAmount,
+          mode: plinkoConfig.mode.label,
+          rows: plinkoConfig.rows,
+          token: token.symbol,
+          chainId: network.chainId,
+          ballsCount: plinkoConfig.numberOfBets ?? 1,
+        }).unwrap()
+        refetchBalance({ chain: network.chainId, token: token.symbol })
+        // TODO: Play drop sound and start dropping balls one by one wit
       } catch (error) {
-        // toast.error(error.message)
+        toast.error((error as Error).message)
       }
     }
   }
@@ -219,7 +236,7 @@ export default function PlinkoConfigForm() {
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-                          const newMultipliers = [] as number[] /*FIXME: rulesData?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
+                          const newMultipliers = [] as number[] /*FIXME: rulesList?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
                             plinkoConfig.mode.label === 'HARD' ? 'hard' : plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
                           ]*/
                           dispatch(

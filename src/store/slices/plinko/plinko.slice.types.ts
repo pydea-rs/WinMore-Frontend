@@ -17,6 +17,8 @@ export interface IPlinkoState {
   numberOfBets: number
   rows: number
   betAmount: string
+  maxBetAmount: number | null
+  minBetAmount: number | null
   multipliers: IMultipliers
   pegs: Nullable<PegsDataType>
   buckets: Nullable<BucketsDataType>

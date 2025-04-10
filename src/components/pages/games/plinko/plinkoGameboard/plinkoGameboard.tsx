@@ -6,7 +6,6 @@ import { Nullable } from '@/types/global.types'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
-import { simulate } from './predictions'
 
 export default function PlinkoGameBoard() {
   const { onDropBall, plinkoConfig } = usePlinkoGameBoardHelper()
@@ -227,17 +226,17 @@ export default function PlinkoGameBoard() {
       const currectX = []
       while (dropX <= boardWidth) {
         dropX += 5
-        bucketIndex = simulate(
-          buckets,
-          pegsRef.current,
-          { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius, rapidImpacts: [] },
-          friction,
-          gravity,
-          bucketHeight / 2,
-          bucketWidthThreshold,
-          BALL_HORIZONTAL_SPEED_FACTOR,
-          BALL_VERTICAL_SPEED_FACTOR,
-        )
+        // bucketIndex = simulate(
+        //   buckets,
+        //   pegsRef.current,
+        //   { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius, rapidImpacts: [] },
+        //   friction,
+        //   gravity,
+        //   bucketHeight / 2,
+        //   bucketWidthThreshold,
+        //   BALL_HORIZONTAL_SPEED_FACTOR,
+        //   BALL_VERTICAL_SPEED_FACTOR,
+        // )
         if (bucketIndex === targetIndex) currectX.push(dropX)
       }
       console.log('Simulation took', (Date.now() - startTime) / 1000, 'sec')

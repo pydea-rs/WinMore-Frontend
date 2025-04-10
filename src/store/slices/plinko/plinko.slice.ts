@@ -21,6 +21,8 @@ const initialState: StateType = {
     buckets: null,
     board: null,
     playing: null,
+    minBetAmount: null,
+    maxBetAmount: null,
   },
 }
 
@@ -35,7 +37,7 @@ export const mineSlice = createSlice({
       }
     },
     setPlinkoBucketMultipliers: (state: StateType, action: PayloadAction<IPlinkoRules[]>) => {
-      const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.plinkoConfig.rows)?.multipliers
+      const rowsConfig = action.payload?.find((rules) => rules.rows === state.plinkoConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.plinkoConfig.multipliers = rowsConfig
     },
@@ -46,6 +48,12 @@ export const mineSlice = createSlice({
       state.plinkoConfig.board = rowsConfig.board
       state.plinkoConfig.pegs = rowsConfig.pegs
       state.plinkoConfig.buckets = rowsConfig.buckets
+    },
+    setSelectedConfigRule: (state: StateType, action: PayloadAction<{ rules: IPlinkoRules[]; selectedRow: number }>) => {
+      const { rules, selectedRow } = action.payload
+      const rowsConfig = (rules ?? []).find((multipliers) => multipliers.rows === selectedRow)
+      if (!rowsConfig) return
+      state.plinkoConfig = { ...rowsConfig, mode: { label: 'EASY', value: 1 }, numberOfBets: 1, betAmount: '', playing: null }
     },
     setPlayingPlinkoGame: (state: StateType, action: PayloadAction<IMePlayingPlinkoGame>) => {
       if (!action.payload) {
@@ -99,7 +107,15 @@ export const mineSlice = createSlice({
   },
 })
 
-export const { setPlinkoConfig, setPlinkoBucketMultipliers, setPlinkoDifficultyMode, setPlayingPlinkoGameStatus, incDroppedBallsCount, setPlayingPlinkoGame, setPlinkoGamePhysx } =
-  mineSlice.actions
+export const {
+  setPlinkoConfig,
+  setPlinkoBucketMultipliers,
+  setPlinkoDifficultyMode,
+  setPlayingPlinkoGameStatus,
+  incDroppedBallsCount,
+  setPlayingPlinkoGame,
+  setPlinkoGamePhysx,
+  setSelectedConfigRule,
+} = mineSlice.actions
 
 export default mineSlice.reducer

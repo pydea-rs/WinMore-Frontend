@@ -72,6 +72,7 @@ const MineConfigForm = () => {
 
   useEffect(() => {
     setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
+    // FIXME: Add betting amount conditions to MineConfig type, then remove the currentRowsRules n its useEffect just like plinkoConfig component did.
   }, [rulesData, mineConfig.rows])
 
   const [modes, setModes] = useState([] as IGameMode[])
@@ -105,13 +106,17 @@ const MineConfigForm = () => {
         dispatch(triggerModal({ modal: 'login', trigger: true }))
         return
       }
-      const betAmount = mineConfig.betAmount.split(',').join('')
-      if (+betAmount > 2.0) {
+      const betAmount = +mineConfig.betAmount.split(',').join('')
+      if (currentRowsRules?.maxBetAmount && betAmount > currentRowsRules.maxBetAmount) {
+        toast.error('Bets must not exceed 2$ for now!')
+        return
+      }
+      if (currentRowsRules?.minBetAmount && betAmount < currentRowsRules.minBetAmount) {
         toast.error('Bets must not exceed 2$ for now!')
         return
       }
       try {
-        await mineBetMutation({ betAmount: +betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
+        await mineBetMutation({ betAmount: betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
         refetchBalance({ chain: network.chainId, token: token.symbol })
         onStart()
       } catch (error) {
@@ -160,7 +165,8 @@ const MineConfigForm = () => {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
-                max: { value: 2, message: 'Bets must not exceed 2$ for now.' },
+                ...(currentRowsRules?.maxBetAmount ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules}$ for now.` } } : {}),
+                ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not below ${currentRowsRules.minBetAmount}$.` } } : {}),
                 // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
@@ -177,7 +183,7 @@ const MineConfigForm = () => {
                       onBlur={onBlur}
                       value={value}
                       id="id-233"
-                      placeholder="UP TO 2.0$"
+                      placeholder={currentRowsRules?.maxBetAmount ? `UP TO ${currentRowsRules?.maxBetAmount}$` : ''}
                       invalid={Boolean(errors.betAmount)}
                     />
                     <CentIcon className="text-warning" />
