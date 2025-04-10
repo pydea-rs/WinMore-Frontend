@@ -1,4 +1,4 @@
-import { IGameDifficultyVariants } from '@/services/games/common/games.types'
+import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { IDreamMineRules } from '@/services/games/mine/mine.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IUpdateMineConfig, StateType } from './mine.slice.types'
@@ -44,22 +44,8 @@ export const mineSlice = createSlice({
       state.mineConfig.multipliers = rowsConfig
       state.mineConfig.mode.multipliers = state.mineConfig.multipliers[state.mineConfig.mode.label || 'EASY']
     },
-    setDreamMineGameMode: (state: StateType, action: PayloadAction<IGameDifficultyVariants>) => {
-      switch (action.payload) {
-        case 'MEDIUM':
-          state.mineConfig.mode = { label: 'MEDIUM', value: 3, multipliers: state.mineConfig.multipliers.MEDIUM }
-          break
-        case 'HARD':
-          state.mineConfig.mode = { label: 'HARD', value: 2, multipliers: state.mineConfig.multipliers.HARD }
-          break
-        default:
-          state.mineConfig.mode = {
-            label: 'EASY',
-            value: 4,
-            multipliers: state.mineConfig.multipliers.EASY,
-          }
-          break
-      }
+    setDreamMineGameMode: (state: StateType, { payload }: PayloadAction<IGameDifficultyMode>) => {
+      state.mineConfig.mode = { ...payload, multipliers: state.mineConfig.multipliers[payload.label] }
     },
     startMineGame: (state: StateType) => {
       state.mineConfig.isStarted = true

@@ -3,7 +3,7 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 
 import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
-import { setPlayingPlinkoGame, setSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
+import { setPlayingPlinkoGame, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { PlinkoBallType } from './physx.types'
 import { IGetPlinkoGamesListPayload, IMePlayingPlinkoGame, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
@@ -23,7 +23,7 @@ export const MineService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        dispatch(setSelectedConfigRule({ rules: data.data, selectedRow: data.data[0].rows }))
+        dispatch(setPlinkoSelectedConfigRule({ rules: data.data, selectedRow: data.data[0].rows }))
       },
     }),
     postPlinkoBet: builder.mutation<BaseResponse<IPlinkoGame>, IPlacePlinkoBetPayload>({

@@ -1,3 +1,4 @@
+import { Button } from '@/components/common/button/button'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
@@ -9,6 +10,8 @@ import { NumberInput } from '@/components/common/form/numberInput/numberInput'
 import { Radio } from '@/components/common/form/radio/radio'
 import { RadioGroup } from '@/components/common/form/radioGroup/radioGroup'
 import { TextForm } from '@/components/common/form/textForm/textForm'
+import { Spinner } from '@/components/common/spinner/spinner'
+import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
@@ -17,7 +20,7 @@ import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/gam
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
+import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/solid'
@@ -81,14 +84,18 @@ export default function PlinkoConfigForm() {
     if (!isAuthorized || !UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
     } else {
-      const betAmount = plinkoConfig.betAmount.split(',').join('')
-      if (+betAmount > 2.0) {
-        toast.error('Bets must not exceed 2$ for now!')
+      const betAmount = +plinkoConfig.betAmount.split(',').join('')
+      if (plinkoConfig.maxBetAmount && betAmount > plinkoConfig.maxBetAmount) {
+        toast.error(`Bets must not exceed ${plinkoConfig.maxBetAmount}$ for now!`)
+        return
+      }
+      if (plinkoConfig.minBetAmount && betAmount < plinkoConfig.minBetAmount) {
+        toast.error(`Can not bet below ${plinkoConfig.minBetAmount}$.`)
         return
       }
       try {
         await plinkoPlaceBetMutation({
-          betAmount: +betAmount,
+          betAmount,
           mode: plinkoConfig.mode.label,
           rows: plinkoConfig.rows,
           token: token.symbol,
@@ -157,7 +164,8 @@ export default function PlinkoConfigForm() {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
-                max: { value: 2, message: 'Bets must not exceed 2$ for now.' },
+                ...(plinkoConfig?.maxBetAmount ? { max: { value: plinkoConfig?.maxBetAmount, message: `Bets must not exceed ${plinkoConfig}$ for now.` } } : {}),
+                ...(plinkoConfig?.minBetAmount ? { min: { value: plinkoConfig?.minBetAmount, message: `Can not bet below ${plinkoConfig.minBetAmount}$.` } } : {}),
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>
@@ -173,7 +181,7 @@ export default function PlinkoConfigForm() {
                       onBlur={onBlur}
                       value={value}
                       id="bet-amount"
-                      placeholder="UP TO 2.0$"
+                      placeholder={plinkoConfig?.maxBetAmount ? `UP TO ${plinkoConfig?.maxBetAmount}$` : ''}
                       invalid={Boolean(errors.betAmount)}
                     />
                     <CentIcon className="text-warning" />
@@ -236,17 +244,7 @@ export default function PlinkoConfigForm() {
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-                          const newMultipliers = [] as number[] /*FIXME: rulesList?.data.find((rules) => rules.rows === +e.target.value)?.coefficients[
-                            plinkoConfig.mode.label === 'HARD' ? 'hard' : plinkoConfig.mode.label === 'MEDIUM' ? 'medium' : 'easy'
-                          ]*/
-                          dispatch(
-                            setPlinkoConfig({
-                              mode: {
-                                ...plinkoConfig.mode,
-                                ...(newMultipliers ? { multipliers: newMultipliers } : {}),
-                              },
-                            }),
-                          )
+                          dispatch(setPlinkoDifficultyMode({ label: mode.label, value: mode.value }))
                         }}
                         blockClassName="w-[calc(100/3*1%)]"
                         id={`mode-${mode.value.toString()}`}
@@ -262,6 +260,56 @@ export default function PlinkoConfigForm() {
               ))}
             </RadioGroup>
           </FormGroup>
+          <FormGroup>
+            <RadioGroup>
+              {rows.map((row) => {
+                return (
+                  <Controller
+                    key={row}
+                    name="gameRows"
+                    control={gameControl}
+                    rules={{
+                      required: { value: true, message: "It's required" },
+                    }}
+                    render={({ field }) => (
+                      <Radio
+                        disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
+                        // new props
+                        checked={field.value === row}
+                        onChange={(e) => {
+                          field.onChange(Number(e.target.value))
+                          setPlinkoSelectedConfigRule({ rules: rulesList?.data ?? [], selectedRow: row, selectedMode: plinkoConfig.mode })
+                        }}
+                        blockClassName="w-[calc(100/5*1%)]"
+                        // new props ends
+                        id={`row-${row.toString()}`}
+                        name="game-rows"
+                        value={row.toString()}
+                      >
+                        {row}
+                      </Radio>
+                    )}
+                  />
+                )
+              })}
+            </RadioGroup>
+          </FormGroup>
+
+          <Button
+            kind="primary"
+            type="submit"
+            className="rounded-xl md:rounded-2xl"
+            size="lg"
+            disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED' && !isLoading) || !isAuthorized}
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <div className="flex items-center gap-x-2">
+                <CasinoSquareIcon className="w-6" /> <span> Place BET</span>
+              </div>
+            )}
+          </Button>
         </form>
       </CardBody>
     </Card>

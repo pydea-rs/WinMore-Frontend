@@ -15,11 +15,11 @@ import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
-import { IGameMode } from '@/services/games/common/games.types'
+import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
-import { setDreamMineConfig, startMineGame } from '@/store/slices/mine/mine.slice'
+import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
@@ -78,23 +78,19 @@ const MineConfigForm = () => {
   const [modes, setModes] = useState([] as IGameMode[])
 
   useEffect(() => {
-    setModes([
-      {
-        label: 'EASY',
-        value: 4,
-        multipliers: currentRowsRules?.multipliers.EASY || [],
-      },
-      {
-        label: 'MEDIUM',
-        value: 3,
-        multipliers: currentRowsRules?.multipliers.MEDIUM || [],
-      },
-      {
-        label: 'HARD',
-        value: 2,
-        multipliers: currentRowsRules?.multipliers.HARD || [],
-      },
-    ])
+    const difficulties = Object.keys(currentRowsRules?.multipliers ?? {})
+    if (!currentRowsRules || !difficulties?.length) {
+      setModes([])
+      return
+    }
+
+    setModes(
+      difficulties.map((label, index) => ({
+        label: label as IGameDifficultyVariants,
+        value: index + 1,
+        multipliers: currentRowsRules.multipliers[label as IGameDifficultyVariants] || [],
+      })),
+    )
   }, [currentRowsRules])
 
   const { formatNumber, addDecimalNumbers, subDecimalNumbers } = useHelper()
@@ -116,7 +112,7 @@ const MineConfigForm = () => {
         return
       }
       try {
-        await mineBetMutation({ betAmount: betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
+        await mineBetMutation({ betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
         refetchBalance({ chain: network.chainId, token: token.symbol })
         onStart()
       } catch (error) {
@@ -166,7 +162,7 @@ const MineConfigForm = () => {
               rules={{
                 required: { value: true, message: "It's required" },
                 ...(currentRowsRules?.maxBetAmount ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules}$ for now.` } } : {}),
-                ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not below ${currentRowsRules.minBetAmount}$.` } } : {}),
+                ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not bet below ${currentRowsRules.minBetAmount}$.` } } : {}),
                 // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
@@ -212,7 +208,7 @@ const MineConfigForm = () => {
                         checked={field.value === mode.value}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
-                          dispatch(setDreamMineConfig({ mode: mode }))
+                          dispatch(setDreamMineGameMode(mode))
                         }}
                         blockClassName="w-[calc(100/3*1%)]"
                         // new props end
