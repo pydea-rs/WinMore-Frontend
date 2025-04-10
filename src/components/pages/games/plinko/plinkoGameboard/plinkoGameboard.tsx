@@ -44,10 +44,10 @@ export default function PlinkoGameBoard() {
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
-    canvas.height = plinkoConfig.rules?.board.height ?? 200
-    canvas.width = plinkoConfig.rules?.board.width ?? 600
+    canvas.height = plinkoConfig.rules?.board?.height ?? 200
+    canvas.width = plinkoConfig.rules?.board?.width ?? 600
 
-    pegsRef.current = plinkoConfig.rules?.pegs.coords ?? []
+    pegsRef.current = plinkoConfig.rules?.pegs?.coords ?? []
 
     const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
       if (!plinkoConfig.rules) {
@@ -78,7 +78,8 @@ export default function PlinkoGameBoard() {
         return
       }
 
-      const { coords: buckets, specs: bucketSpecs } = plinkoConfig.rules.buckets
+      const { coords: buckets, specs: bucketSpecs } = plinkoConfig.rules.buckets ?? { coords: [], specs: {} }
+      console.log(plinkoConfig.rules)
       for (const bucket of buckets) {
         ctx.beginPath()
         ctx.moveTo(bucket.topLeftX, bucket.y)
@@ -207,7 +208,7 @@ export default function PlinkoGameBoard() {
   }
 
   return (
-    <Card className={`w - full max - w - [${plinkoConfig.rules?.board.width}px] mt - 10`}>
+    <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
       <CardBody className="p-4 sm:p-6">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div>

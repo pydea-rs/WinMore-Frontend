@@ -8,8 +8,8 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { PlinkoBallType } from './physx.types'
 import { IGetPlinkoGamesListPayload, IMePlayingPlinkoGame, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
 
-export const MineService = createApi({
-  reducerPath: 'mineService',
+export const PlinkoService = createApi({
+  reducerPath: 'PlinkoService',
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
     getPlinkoRules: builder.query<BaseResponse<IPlinkoRules[]>, IEmptyPayload>({
@@ -17,7 +17,7 @@ export const MineService = createApi({
         const { games } = getApiRoute()
         return {
           method: 'GET',
-          url: games.mine.rules.path,
+          url: games.plinko.rules.path,
           sendAuthorization: true,
         }
       },
@@ -31,7 +31,7 @@ export const MineService = createApi({
         const { games } = getApiRoute()
         return {
           method: 'POST',
-          url: games.mine.bet.path,
+          url: games.plinko.bet.path,
           data: params,
           sendAuthorization: true,
         }
@@ -83,4 +83,4 @@ export const MineService = createApi({
   }),
 })
 
-export const { useGetPlinkoRulesQuery, usePostPlinkoBetMutation, useDropPlinkoBallsMutation, useGetPlinkoGamesListQuery, useGetMePlayingPlinkoGamesQuery } = MineService
+export const { useGetPlinkoRulesQuery, usePostPlinkoBetMutation, useDropPlinkoBallsMutation, useGetPlinkoGamesListQuery, useGetMePlayingPlinkoGamesQuery } = PlinkoService
