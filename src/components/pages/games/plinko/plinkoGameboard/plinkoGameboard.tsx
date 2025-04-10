@@ -1,87 +1,58 @@
 import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
-import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
-import { Nullable } from '@/types/global.types'
+import { useDropPlinkoBallsMutation } from '@/services/games/plinko/plinko.service'
 import { motion } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 
+// TODO: Update buckets colors
+// TODO: Add sounds for droppinh, collisions, etc
+// TODO: Dynamic ball color based on ball.x (change to color of the bucket with same x)
 export default function PlinkoGameBoard() {
-  const { onDropBall, plinkoConfig } = usePlinkoGameBoardHelper()
-  const [boardWidth, setBoardWidth] = useState(600)
+  const { plinkoConfig } = usePlinkoGameBoardHelper()
+  const [dropPlinkoBallsMutation, { isLoading }] = useDropPlinkoBallsMutation()
 
-  const getGameStateColor = (status: Nullable<IPlinkoStatus>) => {
-    switch (status) {
-      case 'FINISHED': {
+  const getGameStateColor = useCallback(() => {
+    switch (plinkoConfig.playing?.status) {
+      case 'FINISHED':
         return {
           colorFrom: '#1db954',
           colorTo: '#1db954',
         }
-      }
-
-      case 'DROPPING': {
+      case 'DROPPING':
         return {
           colorFrom: '#ffaa40',
           colorTo: '#ffaa40',
         }
-      }
-
-      default: {
+      default:
         return {
           colorFrom: '#ffaa40',
           colorTo: '#ffaa40',
         }
-      }
     }
-  }
+  }, [plinkoConfig.playing])
 
   const canvasRef = useRef(null)
   const ballsRef = useRef<{ x: number; y: number; vx: number; vy: number; radius: number; rapidImpacts?: number[] }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
-  const [buckets, setBuckets] = useState<Record<string, number>[]>([])
-
-  const gravity = 0.1
-  const friction = 0.9
-  const BALL_VERTICAL_SPEED_FACTOR = 2.5
-  const BALL_HORIZONTAL_SPEED_FACTOR = 1.25
-
-  const bucketWidth = 60
-  const bucketHeight = 80
-  const bucketWidthThreshold = 5
-  const cornerRadius = 10 // Border radius for the bucket corners
 
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
-    const rows = 9
-    canvas.height = 200 + (rows - 1) * 50
-    canvas.width = 600 + Math.max(0, rows - 9) * 40
+    canvas.height = plinkoConfig.rules?.board.height ?? 200
+    canvas.width = plinkoConfig.rules?.board.width ?? 600
 
-    setBoardWidth(canvas.width)
-
-    const multipliers = Array(rows - 1)
-      .fill(0)
-      .map((_, i) => i + 1)
-    const pegArray: { x: number; y: number; radius: number }[] = []
-    let leastLeft = Infinity
-    for (let row = 0; row < rows; row++) {
-      for (let i = 0; i <= row + 2; i++) {
-        const x = canvas.width / 2 + (i - row / 2) * 50 - bucketWidth
-        if (x < leastLeft) {
-          leastLeft = x
-        }
-        const y = 100 + row * 50
-        pegArray.push({ x, y, radius: 9 })
-      }
-    }
-    pegsRef.current = pegArray
+    pegsRef.current = plinkoConfig.rules?.pegs.coords ?? []
 
     const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
-      const gradient = ctx.createLinearGradient(0, 0, bucketWidth, bucketHeight)
+      if (!plinkoConfig.rules) {
+        return null
+      }
+      const gradient = ctx.createLinearGradient(0, 0, plinkoConfig.rules.buckets.specs.width, plinkoConfig.rules.buckets.specs.height)
       // gradient.addColorStop(0, colorFrom)
       // gradient.addColorStop(1, colorTo)
       gradient.addColorStop(0, '#2A3A4A')
@@ -102,30 +73,26 @@ export default function PlinkoGameBoard() {
         ctx.closePath()
       })
 
-      const buckets = multipliers.map((multiplier, index) => {
-        const bucketTopWidth = bucketWidth * 1.1
-        const bucketBottomWidth = bucketWidth * 0.7
-        const bucketX = index * (bucketWidth + bucketWidthThreshold * 1.5) + leastLeft + bucketWidthThreshold * 4
-        const bucketY = pegsRef.current[pegsRef.current.length - 1].y + 20
-        const topLeftX = bucketX - bucketTopWidth / 2
-        const topRightX = bucketX + bucketTopWidth / 2
-        const bottomLeftX = bucketX - bucketBottomWidth / 2
-        const bottomRightX = bucketX + bucketBottomWidth / 2
+      if (!plinkoConfig.rules) {
+        return
+      }
 
+      const { coords: buckets, specs: bucketSpecs } = plinkoConfig.rules.buckets
+      for (const bucket of buckets) {
         ctx.beginPath()
-        ctx.moveTo(topLeftX, bucketY)
-        ctx.lineTo(topRightX, bucketY)
+        ctx.moveTo(bucket.topLeftX, bucket.y)
+        ctx.lineTo(bucket.topRightX, bucket.y)
 
-        ctx.lineTo(bottomRightX, bucketY + bucketHeight - cornerRadius)
-        ctx.arcTo(bottomRightX, bucketY + bucketHeight, bottomRightX - cornerRadius, bucketY + bucketHeight, cornerRadius)
+        ctx.lineTo(bucket.bottomRightX, bucket.y + bucketSpecs.height - bucketSpecs.cornerRadius)
+        ctx.arcTo(bucket.bottomRightX, bucket.y + bucketSpecs.height, bucket.bottomRightX - bucketSpecs.cornerRadius, bucket.y + bucketSpecs.height, bucketSpecs.cornerRadius)
 
-        ctx.lineTo(bottomLeftX + cornerRadius, bucketY + bucketHeight)
+        ctx.lineTo(bucket.bottomLeftX + bucketSpecs.cornerRadius, bucket.y + bucketSpecs.height)
 
-        ctx.arcTo(bottomLeftX, bucketY + bucketHeight, bottomLeftX, bucketY + bucketHeight - cornerRadius, cornerRadius)
-        ctx.lineTo(topLeftX, bucketY)
+        ctx.arcTo(bucket.bottomLeftX, bucket.y + bucketSpecs.height, bucket.bottomLeftX, bucket.y + bucketSpecs.height - bucketSpecs.cornerRadius, bucketSpecs.cornerRadius)
+        ctx.lineTo(bucket.topLeftX, bucket.y)
         ctx.closePath()
 
-        const gradient = ctx.createLinearGradient(bucketX, bucketY, bucketX, bucketY + bucketHeight)
+        const gradient = ctx.createLinearGradient(bucket.x, bucket.y, bucket.x, bucket.y + bucketSpecs.height)
         gradient.addColorStop(0, '#2A3A4A')
         gradient.addColorStop(1, '#1A2530')
         ctx.fillStyle = gradient
@@ -143,17 +110,16 @@ export default function PlinkoGameBoard() {
         ctx.fillStyle = 'white'
         ctx.font = 'bold 16px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText(`${multiplier}x`, bucketX, bucketY + bucketHeight / 2 + 5)
-        return { x: bucketX, y: bucketY, topLeftX, topRightX, bottomLeftX, bottomRightX, bottomY: bucketY + bucketHeight }
-      })
-      setBuckets(buckets)
+        ctx.fillText(`${bucket.multiplier}x`, bucket.x, bucket.y + bucketSpecs.height / 2 + 5)
+      }
 
+      const physx = plinkoConfig.rules ?? {}
       ballsRef.current = ballsRef.current.filter((ball) => {
-        ball.vy += gravity
-        ball.vy *= friction
-        ball.vx *= friction
-        ball.x += ball.vx * BALL_HORIZONTAL_SPEED_FACTOR
-        ball.y += ball.vy * BALL_VERTICAL_SPEED_FACTOR
+        ball.vy += physx.gravity
+        ball.vy *= physx.friction
+        ball.vx *= physx.friction
+        ball.x += ball.vx * physx.horizontalSpeedFactor
+        ball.y += ball.vy * physx.verticalSpeedFactor
 
         // Collision with pegs
         pegsRef.current.forEach((peg, i) => {
@@ -166,7 +132,7 @@ export default function PlinkoGameBoard() {
 
           if (dist < ball.radius + peg.radius) {
             const angle = Math.atan2(dy, dx)
-            ball.vx = Math.cos(angle) * BALL_HORIZONTAL_SPEED_FACTOR
+            ball.vx = Math.cos(angle) * physx.horizontalSpeedFactor
             if (ball.vx >= 0) {
               ball.vx = Math.max(ball.vx, 0.001)
             } else {
@@ -174,14 +140,14 @@ export default function PlinkoGameBoard() {
             }
 
             ball.rapidImpacts[i] = (ball.rapidImpacts?.[i] ?? 0) + 1
-            ball.vy = (Math.sin(angle) * BALL_VERTICAL_SPEED_FACTOR) / ball.rapidImpacts[i]
+            ball.vy = (Math.sin(angle) * physx.verticalSpeedFactor) / ball.rapidImpacts[i]
           }
         })
 
-        if (ball.y >= buckets[0].y + bucketHeight / 2) {
+        if (ball.y >= buckets[0].y + bucketSpecs.heightThreshold) {
           // Find the closest bucket
           let bucketInContactIndex = -1
-          if (ball.x >= buckets[0].topLeftX - bucketWidthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold) {
+          if (ball.x >= buckets[0].topLeftX - bucketSpecs.widthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold) {
             for (let i = 0; i < buckets.length - 1; i++) {
               if (ball.x >= buckets[i].topLeftX && ball.x < buckets[i + 1].topLeftX) {
                 bucketInContactIndex = i
@@ -191,11 +157,11 @@ export default function PlinkoGameBoard() {
             if (bucketInContactIndex === -1) {
               // ball fell into the first or last bucket threshold
               bucketInContactIndex =
-                ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + bucketWidthThreshold ? buckets.length - 1 : 0
+                ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold ? buckets.length - 1 : 0
             }
             if (bucketInContactIndex !== -1) {
               ball.x = buckets[bucketInContactIndex].x
-              ball.y = buckets[bucketInContactIndex].bottomY - bucketWidthThreshold
+              ball.y = buckets[bucketInContactIndex].bottomY - bucketSpecs.widthThreshold
               ball.vx = 0
               ball.vy = 0
             }
@@ -215,63 +181,38 @@ export default function PlinkoGameBoard() {
     }
 
     update()
-  }, [])
+  }, [plinkoConfig.rules])
 
-  const guess = useCallback(
-    (targetIndex: number, dropY: number, ballRadius: number) => {
-      const vx = Math.random() * 6 - 3
-      let bucketIndex = -1
-      let dropX = 95
-      let startTime = Date.now()
-      const currectX = []
-      while (dropX <= boardWidth) {
-        dropX += 5
-        // bucketIndex = simulate(
-        //   buckets,
-        //   pegsRef.current,
-        //   { x: dropX, vx, y: dropY, vy: 0, radius: ballRadius, rapidImpacts: [] },
-        //   friction,
-        //   gravity,
-        //   bucketHeight / 2,
-        //   bucketWidthThreshold,
-        //   BALL_HORIZONTAL_SPEED_FACTOR,
-        //   BALL_VERTICAL_SPEED_FACTOR,
-        // )
-        if (bucketIndex === targetIndex) currectX.push(dropX)
-      }
-      console.log('Simulation took', (Date.now() - startTime) / 1000, 'sec')
-      console.log(`found ${currectX.length} results.`)
-      return { x: currectX[(Math.random() * currectX.length) | 0], vx, y: dropY, vy: 0, radius: ballRadius }
-    },
-    [buckets, pegsRef, boardWidth, gravity, friction, BALL_VERTICAL_SPEED_FACTOR, BALL_HORIZONTAL_SPEED_FACTOR],
-  )
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current) return
-    const canvas: HTMLCanvasElement = canvasRef.current
-    const rect = canvas.getBoundingClientRect()
-    const x = e.clientX - rect.left
+  const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!canvasRef.current || !plinkoConfig.rules || !plinkoConfig.playing) {
+      return
+    }
+    // FIXME: Add get me playing game on component mount on reload.
 
-    const dropAt = ((Math.random() * 4) | 0) + 2
-    const ball = guess(dropAt, 50, 7)
-    ballsRef.current.push(ball)
+    if (!plinkoConfig.playing.balls?.length) {
+      await dropPlinkoBallsMutation({
+        id: plinkoConfig.playing.id,
+      }).unwrap()
+    }
+    if (isLoading) {
+      return
+    }
+    if (plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length) {
+      // TODO: Which is better for finishing the game, playing = null or playing.status = FINISHED?
+      return
+    }
+    ballsRef.current.push(plinkoConfig.playing.balls[plinkoConfig.playing.droppedCount]) // TODO: Is it correct updating dropCount like that? or it requires dispatch?
   }
 
   return (
-    <Card className={`w - full max - w - [${boardWidth}px] mt - 10`}>
+    <Card className={`w - full max - w - [${plinkoConfig.rules?.board.width}px] mt - 10`}>
       <CardBody className="p-4 sm:p-6">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div>
             <canvas ref={canvasRef} onClick={handleCanvasClick} />
           </div>
 
-          <BorderBeam
-            className="rounded-[20px]"
-            duration={3}
-            size={350}
-            borderWidth={3}
-            colorFrom={getGameStateColor(plinkoConfig.playing?.status || 'NOT_DROPPED_YET').colorFrom}
-            colorTo={getGameStateColor(plinkoConfig.playing?.status || 'NOT_DROPPED_YET').colorTo}
-          />
+          <BorderBeam className="rounded-[20px]" duration={3} size={350} borderWidth={3} colorFrom={getGameStateColor().colorFrom} colorTo={getGameStateColor().colorTo} />
         </motion.div>
       </CardBody>
     </Card>

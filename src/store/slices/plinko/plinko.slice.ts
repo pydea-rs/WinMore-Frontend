@@ -1,4 +1,5 @@
 import { IGameDifficultyMode } from '@/services/games/common/games.types'
+import { PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { IMePlayingPlinkoGame, IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IPlinkoStatus, IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
@@ -70,6 +71,12 @@ export const mineSlice = createSlice({
         status: action.payload.status,
       }
     },
+    setPlayingPlinkoBalls: (state: StateType, action: PayloadAction<PlinkoBallType[]>) => {
+      if (!action.payload || !state.plinkoConfig.playing) {
+        return
+      }
+      state.plinkoConfig.playing.balls = action.payload
+    },
     incDroppedBallsCount: (state: StateType, action: PayloadAction<number>) => {
       if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
         return
@@ -103,6 +110,7 @@ export const {
   setPlayingPlinkoGameStatus,
   incDroppedBallsCount,
   setPlayingPlinkoGame,
+  setPlayingPlinkoBalls,
   updatePlinkoGamePhysx,
   setPlinkoSelectedConfigRule,
 } = mineSlice.actions
