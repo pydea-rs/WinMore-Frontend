@@ -1,4 +1,4 @@
-import { IGameDifficultyMode, IMultipliers } from '@/services/games/common/games.types'
+import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { Nullable } from '@/types/global.types'
@@ -18,7 +18,6 @@ export interface IPlinkoState {
   numberOfBets: number
   rows: number
   betAmount: string
-  multipliers: IMultipliers
   rules: Nullable<IPlinkoRules>
   playing: Nullable<IPlayingPlinkoGame>
 }

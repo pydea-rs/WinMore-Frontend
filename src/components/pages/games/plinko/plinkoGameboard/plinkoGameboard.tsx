@@ -80,21 +80,33 @@ export default function PlinkoGameBoard() {
 
       const { coords: buckets, specs: bucketSpecs } = plinkoConfig.rules.buckets ?? { coords: [], specs: {} }
 
-      for (const bucket of buckets) {
+      for (let i = 0; i < buckets.length; i++) {
         ctx.beginPath()
-        ctx.moveTo(bucket.topLeftX, bucket.y)
-        ctx.lineTo(bucket.topRightX, bucket.y)
+        ctx.moveTo(buckets[i].topLeftX, buckets[i].y)
+        ctx.lineTo(buckets[i].topRightX, buckets[i].y)
 
-        ctx.lineTo(bucket.bottomRightX, bucket.y + bucketSpecs.height - bucketSpecs.cornerRadius)
-        ctx.arcTo(bucket.bottomRightX, bucket.y + bucketSpecs.height, bucket.bottomRightX - bucketSpecs.cornerRadius, bucket.y + bucketSpecs.height, bucketSpecs.cornerRadius)
+        ctx.lineTo(buckets[i].bottomRightX, buckets[i].y + bucketSpecs.height - bucketSpecs.cornerRadius)
+        ctx.arcTo(
+          buckets[i].bottomRightX,
+          buckets[i].y + bucketSpecs.height,
+          buckets[i].bottomRightX - bucketSpecs.cornerRadius,
+          buckets[i].y + bucketSpecs.height,
+          bucketSpecs.cornerRadius,
+        )
 
-        ctx.lineTo(bucket.bottomLeftX + bucketSpecs.cornerRadius, bucket.y + bucketSpecs.height)
+        ctx.lineTo(buckets[i].bottomLeftX + bucketSpecs.cornerRadius, buckets[i].y + bucketSpecs.height)
 
-        ctx.arcTo(bucket.bottomLeftX, bucket.y + bucketSpecs.height, bucket.bottomLeftX, bucket.y + bucketSpecs.height - bucketSpecs.cornerRadius, bucketSpecs.cornerRadius)
-        ctx.lineTo(bucket.topLeftX, bucket.y)
+        ctx.arcTo(
+          buckets[i].bottomLeftX,
+          buckets[i].y + bucketSpecs.height,
+          buckets[i].bottomLeftX,
+          buckets[i].y + bucketSpecs.height - bucketSpecs.cornerRadius,
+          bucketSpecs.cornerRadius,
+        )
+        ctx.lineTo(buckets[i].topLeftX, buckets[i].y)
         ctx.closePath()
 
-        const gradient = ctx.createLinearGradient(bucket.x, bucket.y, bucket.x, bucket.y + bucketSpecs.height)
+        const gradient = ctx.createLinearGradient(buckets[i].x, buckets[i].y, buckets[i].x, buckets[i].y + bucketSpecs.height)
         gradient.addColorStop(0, '#2A3A4A')
         gradient.addColorStop(1, '#1A2530')
         ctx.fillStyle = gradient
@@ -112,7 +124,7 @@ export default function PlinkoGameBoard() {
         ctx.fillStyle = 'white'
         ctx.font = 'bold 16px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText(`${bucket.multiplier}x`, bucket.x, bucket.y + bucketSpecs.height / 2 + 5)
+        ctx.fillText(`${plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i]}x`, buckets[i].x, buckets[i].y + bucketSpecs.height / 2 + 5)
       }
 
       const physx = plinkoConfig.rules ?? {}
@@ -183,7 +195,7 @@ export default function PlinkoGameBoard() {
     }
 
     update()
-  }, [plinkoConfig.rules])
+  }, [plinkoConfig.rules, plinkoConfig.mode, plinkoConfig.rows])
 
   const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current || !plinkoConfig.rules || !plinkoConfig.playing) {

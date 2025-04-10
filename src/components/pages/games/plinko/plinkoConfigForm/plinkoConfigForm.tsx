@@ -78,9 +78,9 @@ export default function PlinkoConfigForm() {
         multipliers: currentRowsRules.multipliers[label as IGameDifficultyVariants] || [],
       })),
     )
-  }, [rulesList?.data, plinkoConfig.rows])
+  }, [rulesList?.data, plinkoConfig.rows, plinkoConfig.mode])
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
-
+  console.log('Modes:', modes)
   const handleSubmit = async (values: IPlinkoConfigForm) => {
     if (!isAuthorized || !UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))

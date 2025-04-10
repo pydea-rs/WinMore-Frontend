@@ -48,7 +48,6 @@ export type BucketCoordinationsType = {
   bottomLeftX: number
   bottomRightX: number
   bottomY: number
-  multiplier: number
 }
 
 export type BucketSpecsType = {
