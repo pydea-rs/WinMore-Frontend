@@ -46,6 +46,10 @@ export interface IPlinkoRules {
   multipliers: IMultipliers
   maxBetAmount: number | null
   minBetAmount: number
+  verticalSpeedFactor: number
+  horizontalSpeedFactor: number
+  gravity: number
+  friction: number
   rows: number
   board: PlinkoGameBoardBoxType
   pegs: PegsDataType

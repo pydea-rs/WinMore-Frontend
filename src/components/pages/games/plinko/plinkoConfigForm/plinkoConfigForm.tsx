@@ -36,6 +36,7 @@ export default function PlinkoConfigForm() {
   const { data: rulesList } = useGetPlinkoRulesQuery({})
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { plinkoConfig } = useSelector((state) => state.plinko)
+
   const [rows, setRows] = useState([] as number[])
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
@@ -85,12 +86,12 @@ export default function PlinkoConfigForm() {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
     } else {
       const betAmount = +plinkoConfig.betAmount.split(',').join('')
-      if (plinkoConfig.maxBetAmount && betAmount > plinkoConfig.maxBetAmount) {
-        toast.error(`Bets must not exceed ${plinkoConfig.maxBetAmount}$ for now!`)
+      if (plinkoConfig.rules?.maxBetAmount && betAmount > plinkoConfig.rules.maxBetAmount) {
+        toast.error(`Bets must not exceed ${plinkoConfig.rules.maxBetAmount}$ for now!`)
         return
       }
-      if (plinkoConfig.minBetAmount && betAmount < plinkoConfig.minBetAmount) {
-        toast.error(`Can not bet below ${plinkoConfig.minBetAmount}$.`)
+      if (plinkoConfig.rules?.minBetAmount && betAmount < plinkoConfig.rules.minBetAmount) {
+        toast.error(`Can not bet below ${plinkoConfig.rules.minBetAmount}$.`)
         return
       }
       try {
@@ -164,8 +165,10 @@ export default function PlinkoConfigForm() {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
-                ...(plinkoConfig?.maxBetAmount ? { max: { value: plinkoConfig?.maxBetAmount, message: `Bets must not exceed ${plinkoConfig}$ for now.` } } : {}),
-                ...(plinkoConfig?.minBetAmount ? { min: { value: plinkoConfig?.minBetAmount, message: `Can not bet below ${plinkoConfig.minBetAmount}$.` } } : {}),
+                ...(plinkoConfig.rules?.maxBetAmount ? { max: { value: plinkoConfig.rules?.maxBetAmount, message: `Bets must not exceed ${plinkoConfig}$ for now.` } } : {}),
+                ...(plinkoConfig.rules?.minBetAmount
+                  ? { min: { value: plinkoConfig.rules?.minBetAmount, message: `Can not bet below ${plinkoConfig.rules.minBetAmount}$.` } }
+                  : {}),
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>
@@ -181,7 +184,7 @@ export default function PlinkoConfigForm() {
                       onBlur={onBlur}
                       value={value}
                       id="bet-amount"
-                      placeholder={plinkoConfig?.maxBetAmount ? `UP TO ${plinkoConfig?.maxBetAmount}$` : ''}
+                      placeholder={plinkoConfig.rules?.maxBetAmount ? `UP TO ${plinkoConfig.rules?.maxBetAmount}$` : ''}
                       invalid={Boolean(errors.betAmount)}
                     />
                     <CentIcon className="text-warning" />

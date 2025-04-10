@@ -1,5 +1,6 @@
 import { IGameDifficultyMode, IMultipliers } from '@/services/games/common/games.types'
-import { BucketsDataType, PegsDataType, PlinkoBallType, PlinkoGameBoardBoxType } from '@/services/games/plinko/physx.types'
+import { PlinkoBallType } from '@/services/games/plinko/physx.types'
+import { IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { Nullable } from '@/types/global.types'
 
 export type IPlinkoStatus = 'NOT_DROPPED_YET' | 'DROPPING' | 'FINISHED'
@@ -17,12 +18,8 @@ export interface IPlinkoState {
   numberOfBets: number
   rows: number
   betAmount: string
-  maxBetAmount: number | null
-  minBetAmount: number | null
   multipliers: IMultipliers
-  pegs: Nullable<PegsDataType>
-  buckets: Nullable<BucketsDataType>
-  board: Nullable<PlinkoGameBoardBoxType>
+  rules: Nullable<IPlinkoRules>
   playing: Nullable<IPlayingPlinkoGame>
 }
 export interface StateType {
