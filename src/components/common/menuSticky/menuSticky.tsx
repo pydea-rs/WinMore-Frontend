@@ -42,7 +42,7 @@ const MenuSticky: BaseProps<IMenuSticky> = (props) => {
     }
     setActiveButton(ActiveButtonsEnum.HOME)
   }, [isAtSubPath])
-  console.log(activeButton)
+
   return (
     <div className={classList}>
       <ul className="p-4 bg-secondary border-t border-t-primary flex justify-between">

@@ -9,7 +9,7 @@ const initialState: StateType = {
     betAmount: '',
     mode: {
       label: 'EASY',
-      value: 4,
+      value: 1,
     },
     rows: 8,
     numberOfBets: 1,
@@ -63,12 +63,17 @@ export const plinkoSlice = createSlice({
         return
       }
       state.plinkoConfig.playing.balls = action.payload
+      state.plinkoConfig.playing.status = 'DROPPING'
     },
-    incDroppedBallsCount: (state: StateType, action: PayloadAction<number>) => {
+    incDroppedBallsCount: (state: StateType, action: PayloadAction<void>) => {
       if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
         return
       }
-      state.plinkoConfig.playing.droppedCount += action.payload
+      state.plinkoConfig.playing.droppedCount++
+      if (state.plinkoConfig.playing.droppedCount === state.plinkoConfig.playing.balls.length) {
+        state.plinkoConfig.playing = null
+        // FIXME: Add specific ending such as firework whatever?
+      }
     },
     setPlayingPlinkoGameStatus: (state: StateType, action: PayloadAction<IPlinkoStatus>) => {
       if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {

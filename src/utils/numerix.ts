@@ -16,3 +16,10 @@ export const getMinMaxRows = (data: { rows?: number }[]) => {
   }
   return [min, max]
 }
+
+export const toFixedEfficient = (num: number | string, maxPrecision: number = 2, minPrecision: number = 0) => {
+  return (+num).toLocaleString('en-US', {
+    minimumFractionDigits: minPrecision,
+    maximumFractionDigits: maxPrecision,
+  })
+}

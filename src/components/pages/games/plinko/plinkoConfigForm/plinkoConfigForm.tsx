@@ -54,8 +54,8 @@ export default function PlinkoConfigForm() {
     defaultValues: {
       betAmount: plinkoConfig.betAmount,
       numberOfBets: plinkoConfig.numberOfBets,
-      gameMode: plinkoConfig.mode.value,
-      gameRows: plinkoConfig.rows,
+      gameMode: plinkoConfig?.mode?.value ?? 1,
+      gameRows: plinkoConfig?.rows ?? 8,
     },
   })
 
@@ -65,7 +65,7 @@ export default function PlinkoConfigForm() {
     setRows(createNumberArray(min, max)) // FIXME: Revise this to not use array
     const currentRowsRules = rulesList?.data.find((rules) => rules.rows === plinkoConfig.rows)
 
-    const difficulties = Object.keys(currentRowsRules?.multipliers ?? {})
+    const difficulties = Object.keys(currentRowsRules?.multipliers ?? {}) as IGameDifficultyVariants[]
     if (!currentRowsRules || !difficulties?.length) {
       setModes([])
       return
@@ -73,14 +73,14 @@ export default function PlinkoConfigForm() {
 
     setModes(
       difficulties.map((label, index) => ({
-        label: label as IGameDifficultyVariants,
+        label,
         value: index + 1,
-        multipliers: currentRowsRules.multipliers[label as IGameDifficultyVariants] || [],
+        multipliers: currentRowsRules.multipliers[label] || [],
       })),
     )
   }, [rulesList?.data, plinkoConfig.rows, plinkoConfig.mode])
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
-  console.log('Modes:', modes)
+
   const handleSubmit = async (values: IPlinkoConfigForm) => {
     if (!isAuthorized || !UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))
@@ -280,7 +280,6 @@ export default function PlinkoConfigForm() {
                         // new props
                         checked={field.value === row}
                         onChange={(e) => {
-                          console.log('Click')
                           field.onChange(Number(e.target.value))
                           dispatch(setPlinkoSelectedConfigRule({ rules: rulesList?.data ?? [], selectedRow: row, selectedMode: plinkoConfig.mode }))
                         }}
