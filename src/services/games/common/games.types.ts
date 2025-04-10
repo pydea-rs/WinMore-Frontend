@@ -16,3 +16,9 @@ export interface IMultipliers {
   MEDIUM: number[]
   HARD: number[]
 }
+
+export const DREAM_MINE_ROCKS_COUNT: Record<IGameDifficultyVariants, number> = {
+  EASY: 4,
+  MEDIUM: 3,
+  HARD: 2,
+}

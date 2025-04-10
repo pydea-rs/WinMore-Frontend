@@ -79,7 +79,7 @@ export default function PlinkoGameBoard() {
       }
 
       const { coords: buckets, specs: bucketSpecs } = plinkoConfig.rules.buckets ?? { coords: [], specs: {} }
-      console.log(plinkoConfig.rules)
+
       for (const bucket of buckets) {
         ctx.beginPath()
         ctx.moveTo(bucket.topLeftX, bucket.y)

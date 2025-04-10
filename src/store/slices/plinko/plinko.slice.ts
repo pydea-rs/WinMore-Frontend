@@ -99,6 +99,7 @@ export const mineSlice = createSlice({
     },
     setPlinkoDifficultyMode: (state: StateType, action: PayloadAction<IGameDifficultyMode>) => {
       state.plinkoConfig.mode = action.payload
+      console.log(state.plinkoConfig.mode)
     },
   },
 })

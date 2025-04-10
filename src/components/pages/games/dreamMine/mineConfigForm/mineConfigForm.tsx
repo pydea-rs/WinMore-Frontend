@@ -15,7 +15,7 @@ import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
-import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
+import { DREAM_MINE_ROCKS_COUNT, IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
 import { triggerSound } from '@/store/slices/configs/configs.slice'
@@ -78,17 +78,17 @@ const MineConfigForm = () => {
   const [modes, setModes] = useState([] as IGameMode[])
 
   useEffect(() => {
-    const difficulties = Object.keys(currentRowsRules?.multipliers ?? {})
+    const difficulties: IGameDifficultyVariants[] = Object.keys(currentRowsRules?.multipliers ?? {}) as IGameDifficultyVariants[]
     if (!currentRowsRules || !difficulties?.length) {
       setModes([])
       return
     }
 
     setModes(
-      difficulties.map((label, index) => ({
-        label: label as IGameDifficultyVariants,
-        value: index + 1,
-        multipliers: currentRowsRules.multipliers[label as IGameDifficultyVariants] || [],
+      difficulties.map((label) => ({
+        label,
+        value: DREAM_MINE_ROCKS_COUNT[label],
+        multipliers: currentRowsRules.multipliers[label],
       })),
     )
   }, [currentRowsRules])
