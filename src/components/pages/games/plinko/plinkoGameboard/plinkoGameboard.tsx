@@ -9,6 +9,7 @@ import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 // TODO: Update buckets colors
 // TODO: Add sounds for droppinh, collisions, etc
 // TODO: Dynamic ball color based on ball.x (change to color of the bucket with same x)
+// TODO: Add 'Drop Here' Text to canvas; Only show it when user is allowed to drop.
 export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading }] = useDropPlinkoBallsMutation()
@@ -194,7 +195,8 @@ export default function PlinkoGameBoard() {
         id: plinkoConfig.playing.id,
       }).unwrap()
     }
-    if (isLoading) {
+    if (isLoading || ballsRef.current?.length) {
+      // only drop if no ball is dropping in app and no api call is in progress
       return
     }
     if (plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length) {
