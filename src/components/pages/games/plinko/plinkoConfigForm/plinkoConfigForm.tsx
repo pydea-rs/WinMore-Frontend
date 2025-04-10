@@ -280,8 +280,9 @@ export default function PlinkoConfigForm() {
                         // new props
                         checked={field.value === row}
                         onChange={(e) => {
+                          console.log('Click')
                           field.onChange(Number(e.target.value))
-                          setPlinkoSelectedConfigRule({ rules: rulesList?.data ?? [], selectedRow: row, selectedMode: plinkoConfig.mode })
+                          dispatch(setPlinkoSelectedConfigRule({ rules: rulesList?.data ?? [], selectedRow: row, selectedMode: plinkoConfig.mode }))
                         }}
                         blockClassName="w-[calc(100/5*1%)]"
                         // new props ends

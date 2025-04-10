@@ -28,15 +28,12 @@ export const useAuth = () => {
   const { signMessageAsync } = useSignMessage({
     mutation: {
       onMutate: () => {
-        console.log('onMutate')
         setIsPendingForSign(true)
       },
       onSuccess: () => {
-        console.log('onSuccess')
         setIsPendingForSign(false)
       },
       onError: (err) => {
-        console.log(err)
         setIsPendingForSign(false)
       },
     },
@@ -79,7 +76,6 @@ export const useAuth = () => {
     await getMessageMutate({ address })
       .unwrap()
       .then(async (res) => {
-        console.log(res)
         await signMessageHandler(res.data)
       })
   }

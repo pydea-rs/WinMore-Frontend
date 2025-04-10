@@ -460,9 +460,9 @@ const ButtonComponentDemo = () => {
             <HoldToActionProvider>
               <HoldToActionButton
                 keepInitialContent
-                onFinish={() => {
-                  console.log("I'm firing!")
-                }}
+                // onFinish={() => {
+                //   console.log("I'm firing!")
+                // }}
               >
                 <HoldToActionContent>Basic - keep Initial Content</HoldToActionContent>
                 <HoldToActionComplete>{" I'm not wanted here :( "}</HoldToActionComplete>
@@ -470,23 +470,14 @@ const ButtonComponentDemo = () => {
             </HoldToActionProvider>
 
             <HoldToActionProvider>
-              <HoldToActionButton
-                disabled
-                onFinish={() => {
-                  console.log("I'm firing!")
-                }}
-              >
+              <HoldToActionButton disabled>
                 <HoldToActionContent>Disabled</HoldToActionContent>
                 <HoldToActionComplete>{" I'm not wanted here :( "}</HoldToActionComplete>
               </HoldToActionButton>
             </HoldToActionProvider>
 
             <HoldToActionProvider>
-              <HoldToActionButton
-                onFinish={() => {
-                  console.log("I'm firing!")
-                }}
-              >
+              <HoldToActionButton>
                 <HoldToActionContent>with success content</HoldToActionContent>
                 <HoldToActionComplete>
                   <DoneIcon className={'absolute-center z-10'} />
@@ -495,25 +486,14 @@ const ButtonComponentDemo = () => {
             </HoldToActionProvider>
 
             <HoldToActionProvider>
-              <HoldToActionButton
-                resetOnFinish
-                keepInitialContent
-                onFinish={() => {
-                  console.log("I'm firing!")
-                }}
-              >
+              <HoldToActionButton resetOnFinish keepInitialContent>
                 <HoldToActionContent>Reset after done</HoldToActionContent>
                 <HoldToActionComplete>{' Me neither :( '}</HoldToActionComplete>
               </HoldToActionButton>
             </HoldToActionProvider>
 
             <HoldToActionProvider>
-              <HoldToActionButton
-                resetOnFinish
-                onFinish={() => {
-                  console.log("I'm firing!")
-                }}
-              >
+              <HoldToActionButton resetOnFinish>
                 <HoldToActionContent>Reset after showing complete content</HoldToActionContent>
                 <HoldToActionComplete>
                   <DoneIcon className={'absolute-center z-10'} />
@@ -551,12 +531,7 @@ const HoldToActionButtonControlled = () => {
       >
         Reset my brother
       </Button>
-      <HoldToActionButton
-        keepInitialContent
-        onFinish={() => {
-          console.log("I'm firing!")
-        }}
-      >
+      <HoldToActionButton keepInitialContent>
         <HoldToActionContent>keep Initial Content</HoldToActionContent>
         <HoldToActionComplete>No one sees me here</HoldToActionComplete>
       </HoldToActionButton>
@@ -580,12 +555,7 @@ const HoldToActionButtonControlledWithContent = () => {
       >
         Reset my brother
       </Button>
-      <HoldToActionButton
-        duration={5000}
-        onFinish={() => {
-          console.log("I'm firing!")
-        }}
-      >
+      <HoldToActionButton duration={5000}>
         <HoldToActionContent>with success content + custom duration</HoldToActionContent>
         <HoldToActionComplete>
           <DoneIcon className={'absolute-center z-10'} />
