@@ -46,7 +46,7 @@ export default function PlinkoGameBoard() {
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
 
-  const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00']
+  const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#FF4D6D', '#FFC107']
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -58,18 +58,6 @@ export default function PlinkoGameBoard() {
 
     pegsRef.current = plinkoConfig.rules?.pegs?.coords ?? []
     bucketsRef.current = plinkoConfig.rules?.buckets ?? ({} as BucketsDataType)
-
-    const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
-      if (!plinkoConfig.rules) {
-        return null
-      }
-      const gradient = ctx.createLinearGradient(0, 0, plinkoConfig.rules.buckets.specs.width, plinkoConfig.rules.buckets.specs.height)
-      // gradient.addColorStop(0, colorFrom)
-      // gradient.addColorStop(1, colorTo)
-      gradient.addColorStop(0, '#2A3A4A')
-      gradient.addColorStop(1, '#1A2530')
-      return gradient
-    }
 
     function update() {
       if (!ctx) return
@@ -89,6 +77,13 @@ export default function PlinkoGameBoard() {
       }
 
       const { coords: buckets, specs: bucketSpecs } = bucketsRef.current
+
+      const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
+        const gradient = ctx.createLinearGradient(0, 0, bucketSpecs.width, bucketSpecs.height)
+        gradient.addColorStop(0, colorFrom)
+        gradient.addColorStop(1, colorTo)
+        return gradient
+      }
 
       for (let i = 0; i < buckets.length; i++) {
         ctx.beginPath()
@@ -116,10 +111,7 @@ export default function PlinkoGameBoard() {
         ctx.lineTo(buckets[i].topLeftX, buckets[i].y)
         ctx.closePath()
 
-        const gradient = ctx.createLinearGradient(buckets[i].x, buckets[i].y, buckets[i].x, buckets[i].y + bucketSpecs.height)
-        gradient.addColorStop(0, '#2A3A4A')
-        gradient.addColorStop(1, '#1A2530')
-        ctx.fillStyle = gradient
+        ctx.fillStyle = createGradient(ctx, bucketColors[i], bucketColors[i])
         ctx.fill()
 
         // Add subtle inner shadow
@@ -134,7 +126,8 @@ export default function PlinkoGameBoard() {
         ctx.fillStyle = 'white'
         ctx.font = 'bold 16px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}x`, buckets[i].x, buckets[i].y + bucketSpecs.height / 2 + 5)
+        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 5)
+        ctx.fillText('X', buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 30)
       }
 
       gameRef.current = gameRef.current.filter(({ ball, physx }) => {
@@ -249,7 +242,7 @@ export default function PlinkoGameBoard() {
         }
       })()
     }
-  }, [plinkoConfig.playing, isDropping, plinkoConfig.rules])
+  }, [plinkoConfig.playing, isDropping, plinkoConfig.rules, dropPlinkoBallsMutation, getMyOngoinGame])
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
