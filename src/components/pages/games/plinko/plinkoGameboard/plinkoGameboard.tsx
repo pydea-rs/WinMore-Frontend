@@ -9,7 +9,7 @@ import { toFixedEfficient } from '@/utils/numerix'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
-import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
+import usePlinkoGameBoardHelper, { PlinkoSoundsType } from './plinkoGameBoard.hooks'
 
 // TODO: Update buckets colors
 // TODO: Add sounds for droppinh, collisions, etc
@@ -43,9 +43,9 @@ export default function PlinkoGameBoard() {
         }
     }
   }, [plinkoConfig.playing])
-
+  const { sounds } = usePlinkoGameBoardHelper()
   const canvasRef = useRef(null)
-  const gameRef = useRef<{ ball: PlinkoBallType; physx: { ground: { vx: number; vy: number }; g: number; fk: number } }[]>([])
+  const gameRef = useRef<{ ball: PlinkoBallType; physx: { ground: { vx: number; vy: number }; g: number; fk: number }; sounds: PlinkoSoundsType }[]>([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
 
@@ -132,7 +132,7 @@ export default function PlinkoGameBoard() {
         ctx.fillText('X', buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 30)
       }
 
-      gameRef.current = gameRef.current.filter(({ ball, physx }) => {
+      gameRef.current = gameRef.current.filter(({ ball, physx, sounds }) => {
         ball.vy += physx.g
         ball.vy *= physx.fk
         ball.vx *= physx.fk
@@ -157,6 +157,7 @@ export default function PlinkoGameBoard() {
               ball.vx = Math.min(ball.vx, -0.001)
             }
 
+            sounds.playCollision(+!!(ball.rapidImpacts?.[j] ?? 0))
             ball.rapidImpacts[j] = (ball.rapidImpacts?.[j] ?? 0) + 1
             ball.vy = (Math.sin(angle) * physx.ground.vy) / ball.rapidImpacts[j]
           }
@@ -182,6 +183,7 @@ export default function PlinkoGameBoard() {
               ball.y = buckets[bucketInContactIndex].bottomY - bucketSpecs.widthThreshold
               ball.vx = 0
               ball.vy = 0
+              sounds.playLanding()
             }
           }
           dispatch(incDroppedBallsCount())
@@ -200,7 +202,7 @@ export default function PlinkoGameBoard() {
     }
 
     update()
-  }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label, plinkoConfig.rows])
+  }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label])
 
   const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current || !plinkoConfig.rules || !plinkoConfig.playing) {
@@ -217,6 +219,7 @@ export default function PlinkoGameBoard() {
       return
     }
 
+    sounds.playDrop()
     gameRef.current.push({
       ball: { ...plinkoConfig.playing.balls[plinkoConfig.playing.droppedCount], rapidImpacts: [] },
       physx: {
@@ -224,6 +227,7 @@ export default function PlinkoGameBoard() {
         g: plinkoConfig.rules.gravity,
         fk: plinkoConfig.rules.friction,
       },
+      sounds,
     }) // TODO: Is it correct updating dropCount like that? or it requires dispatch?
   }
 

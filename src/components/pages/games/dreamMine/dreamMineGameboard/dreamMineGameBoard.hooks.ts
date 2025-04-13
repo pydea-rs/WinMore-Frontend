@@ -8,8 +8,8 @@ import confetti from 'canvas-confetti'
 import { useMemo, useState } from 'react'
 
 const useDreamMineGameBoardHelper = () => {
-  const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
-  const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 0.7, preload: true }), [])
+  const breakBlockSound = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/break.mp3'], volume: 1.0, preload: true }), [])
+  const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 1.0, preload: true }), [])
   const { network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
   const { configs } = useSelector((state) => state.configs)
@@ -78,7 +78,7 @@ const useDreamMineGameBoardHelper = () => {
   const onCheckBlock = async (i: number, row: number) => {
     if (mineConfig.isStarted && !mineConfig.isGameOver && !!mineConfig.currentGameId) {
       setLoadingBlock({ index: i, row }) // Set the loading block
-      if (configs.sound) tile.play()
+      if (configs.sound) breakBlockSound.play()
 
       try {
         const { data } = await mineBlockMutation({ id: mineConfig.currentGameId, choice: i }).unwrap()

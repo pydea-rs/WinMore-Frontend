@@ -154,7 +154,7 @@ export const UserService = createApi({
           const {} = dispatch(
             setPlinkoConfig({
               betAmount: plinko.initialBet.toString(),
-              mode: { label: plinko.mode, value: ['EASY', 'MEDIUM', 'HARD'].findIndex((x) => plinko.mode) + 1 },
+              mode: { label: plinko.mode, value: ['EASY', 'MEDIUM', 'HARD'].findIndex((x) => plinko.mode === x) + 1 },
               numberOfBets: plinko.ballsCount,
               rows: plinko.rowsCount,
             }),

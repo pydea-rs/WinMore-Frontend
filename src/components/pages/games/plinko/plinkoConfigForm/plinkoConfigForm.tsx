@@ -18,15 +18,14 @@ import { useHelper } from '@/hooks/usehelper'
 import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/games/plinko/plinko.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
-import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
-import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/solid'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { SoundTogglerButton } from '../../common/soundToggler'
 import { IPlinkoConfigForm } from './plinkoConfigForm.types'
 
 export default function PlinkoConfigForm() {
@@ -36,6 +35,7 @@ export default function PlinkoConfigForm() {
   const { data: rulesList } = useGetPlinkoRulesQuery({})
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { plinkoConfig } = useSelector((state) => state.plinko)
+  const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
 
   const [rows, setRows] = useState([] as number[])
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
@@ -95,6 +95,7 @@ export default function PlinkoConfigForm() {
         return
       }
       try {
+        if (configs.sound) betSoundHowl.play()
         await plinkoPlaceBetMutation({
           betAmount,
           mode: plinkoConfig.mode.label,
@@ -141,15 +142,11 @@ export default function PlinkoConfigForm() {
     dispatch(setPlinkoConfig({ numberOfBets: newValue }))
   }
 
-  const toggleSound = () => dispatch(triggerSound())
-
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
         <CardTitle>MANUAL</CardTitle>
-        <button className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition" onClick={toggleSound} aria-label="Toggle sound">
-          {configs.sound ? <SpeakerWaveIcon className="w-6 h-6 text-white" /> : <SpeakerXMarkIcon className="w-6 h-6 text-white" />}
-        </button>
+        <SoundTogglerButton disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized} />
       </CardHeader>
       <CardBody>
         <form onSubmit={gameFormHandleSubmit(handleSubmit)} className="flex flex-col gap-y-2">

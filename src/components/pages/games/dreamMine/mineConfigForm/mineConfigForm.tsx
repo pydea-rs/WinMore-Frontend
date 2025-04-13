@@ -18,17 +18,16 @@ import { useHelper } from '@/hooks/usehelper'
 import { DREAM_MINE_ROCKS_COUNT, IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
 import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
-import { triggerSound } from '@/store/slices/configs/configs.slice'
 import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
-import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/20/solid'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { IGameConfigForm } from '../../common-games.types'
+import { SoundTogglerButton } from '../../common/soundToggler'
 
 const MineConfigForm = () => {
   const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
@@ -43,7 +42,7 @@ const MineConfigForm = () => {
   const [rows, setRows] = useState([] as number[])
 
   const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
-  const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
+  const placeBetSound = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
 
   useEffect(() => {
     console.log('REFETCH')
@@ -52,7 +51,7 @@ const MineConfigForm = () => {
 
   const onStart = useCallback(() => {
     dispatch(startMineGame())
-    if (configs.sound) tile.play()
+    if (configs.sound) placeBetSound.play()
   }, [mineConfig, rulesData, configs])
 
   const {
@@ -144,15 +143,11 @@ const MineConfigForm = () => {
     dispatch(setDreamMineConfig({ betAmount: decreasedValue }))
   }
 
-  const toggleSound = () => dispatch(triggerSound())
-
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
         <CardTitle>MANUAL</CardTitle>
-        <button className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition" onClick={toggleSound} aria-label="Toggle sound">
-          {configs.sound ? <SpeakerWaveIcon className="w-6 h-6 text-white" /> : <SpeakerXMarkIcon className="w-6 h-6 text-white" />}
-        </button>
+        <SoundTogglerButton />
       </CardHeader>
       <CardBody>
         <form onSubmit={gameFormHandleSubmit(handleSubmit)} className="flex flex-col gap-y-2">
