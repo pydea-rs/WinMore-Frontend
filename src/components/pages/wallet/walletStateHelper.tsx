@@ -8,6 +8,7 @@ const useWalletStateHelper = () => {
   return {
     fetchBalance: () => refetchBalance({ chain: network.chainId, token: token.symbol }),
     currentToken: { ...token, balance: currentTokenBalance, chain: network.chainId },
+    currentChain: network,
   }
 }
 

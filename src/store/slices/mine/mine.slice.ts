@@ -47,6 +47,12 @@ export const mineSlice = createSlice({
     },
     setDreamMineGameMode: (state: StateType, { payload }: PayloadAction<IGameDifficultyMode>) => {
       state.mineConfig.mode = { ...payload, multipliers: state.mineConfig.multipliers[payload.label] }
+      if (state.mineConfig.isGameOver) {
+        state.mineConfig.selectedBlocks = []
+        state.mineConfig.activeRow = 1
+        state.mineConfig.isGameOver = false
+        state.mineConfig.isStarted = false
+      }
     },
     startMineGame: (state: StateType) => {
       state.mineConfig.isStarted = true
@@ -55,21 +61,10 @@ export const mineSlice = createSlice({
       state.mineConfig.activeRow = 1
       state.mineConfig.currentGameStatus = 'ONGOING'
     },
-    endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean }>) => {
-      if (action.payload.isWin) {
-        // state.mineConfig.isGameOver = true // Reset game over state when starting a new game
-        // state.mineConfig = initialState.mineConfig
-        state.mineConfig.isStarted = false
-        // state.mineConfig.currentGameStatus = 'WON'
-      } else {
-        state.mineConfig.isGameOver = true // Reset game over state when starting a new game
-        state.mineConfig.isStarted = false
-
-        // state.mineConfig.currentGameStatus = 'LOST' // Reset game over state when starting a new game
-      }
-      // state.mineConfig.isStarted = false
-
-      // state.mineConfig = initialState.mineConfig
+    endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean; flawless?: boolean }>) => {
+      state.mineConfig.isGameOver = true
+      state.mineConfig.isStarted = false
+      state.mineConfig.currentGameStatus = action.payload.isWin ? (action.payload.flawless ? 'FLAWLESS_WIN' : 'WON') : 'LOST'
     },
   },
 })

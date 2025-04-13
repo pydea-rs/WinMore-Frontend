@@ -3,13 +3,15 @@ import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
 import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
 import LogoutIcon from '@/components/icons/logout/logout'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { internalLinks } from '@/configs/app-routes'
 import { useAuth } from '@/hooks/useAuth'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { useDispatch, useSelector } from '@/store/store'
+import { useDispatch } from '@/store/store'
 import { IGetUserInfoResponse } from '@/types/auth/user.types'
 import { isDevelopmentMode } from '@/utils/dev'
+import { approximate } from '@/utils/numerix'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -28,7 +30,7 @@ import ListText from '../list/listText/listText'
 
 const HeaderComponent = () => {
   const dispatch = useDispatch()
-  const { token, network, currentTokenBalance } = useSelector((state) => state.currency)
+  const { currentToken, currentChain } = useWalletStateHelper()
   const { logoutAndDisconnect, isAuthorized } = useAuth()
 
   const { isLoading, data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
@@ -175,17 +177,17 @@ const HeaderComponent = () => {
         <Button kind="pattern" className="px-2.5 !min-w-[165px]" bordered pilled onClick={handleOpenSelectCoinModal}>
           <div className="flex justify-between items-center gap-x-2">
             <div className="flex items-center">
-              <Avatar size="md" src={network.icon || ''} alt={network.name} />
-              <Avatar size="md" src={token.icon} alt={token.name} className="-ml-2" />
+              <Avatar size="md" src={currentChain.icon || ''} alt={currentChain.name} />
+              <Avatar size="md" src={currentToken.icon} alt={currentToken.name} className="-ml-2" />
             </div>
             <div className="flex items-center gap-x-2.5 font-normal text-xs">
               <div>
                 <span className="text-main">Network:</span>
-                <span className="text-white">{network.name}</span>
+                <span className="text-white">{currentChain.name}</span>
               </div>
               <div>
                 <span className="text-main">Balance:</span>
-                <span className="text-white">{currentTokenBalance.toLocaleString()}</span>
+                <span className="text-white">{approximate(currentToken.balance, 'round', 5)}</span>
               </div>
             </div>
             <ChevronDownIcon />
@@ -199,6 +201,7 @@ const HeaderComponent = () => {
             <MoneyIcon className="flex-shrink-0 text-yellow-500" />
             13941
           </div>
+          // TODO: Use this for point design
         </Button> */}
       </div>
     )

@@ -22,7 +22,7 @@ import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
+import { approximate, createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -67,7 +67,6 @@ const MineConfigForm = () => {
   })
 
   useEffect(() => {
-    console.log(rulesData)
     if (!rulesData?.data?.length) return
     const [min, max] = getMinMaxRows(rulesData?.data)
     setRows(createNumberArray(min, max))
@@ -77,7 +76,7 @@ const MineConfigForm = () => {
 
   useEffect(() => {
     setCurrentRowsRules(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
-    // FIXME: Add betting amount conditions to MineConfig type, then remove the currentRowsRules n its useEffect just like plinkoConfig component did.
+    // TODO: Add betting amount conditions to MineConfig type, then remove the currentRowsRules n its useEffect just like plinkoConfig component did.
   }, [rulesData, mineConfig.rows])
 
   const [modes, setModes] = useState([] as IGameMode[])
@@ -154,7 +153,7 @@ const MineConfigForm = () => {
             <Label htmlFor="id-233" className="flex items-center justify-between">
               <span>Bet Amount</span>
               <span className="text-main">
-                Available: <span className="text-white">{currentToken.balance}</span>
+                Available: <span className="text-white">{approximate(currentToken.balance, 'round', 5)}</span>
               </span>
             </Label>
             <Controller
@@ -244,10 +243,10 @@ const MineConfigForm = () => {
                         // new props
                         checked={field.value === row}
                         onChange={(e) => {
-                          dispatch(setDreamMineConfig({ rows: +e.target.value }))
                           const newMultipliers = rulesData?.data.find((rules) => rules.rows === +e.target.value)?.multipliers[mineConfig.mode.label || 'EASY']
                           dispatch(
                             setDreamMineConfig({
+                              rows: +e.target.value,
                               mode: {
                                 ...mineConfig.mode,
                                 ...(newMultipliers ? { multipliers: newMultipliers } : {}),

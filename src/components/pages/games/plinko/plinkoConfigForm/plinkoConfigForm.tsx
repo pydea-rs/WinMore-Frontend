@@ -62,7 +62,7 @@ export default function PlinkoConfigForm() {
   useEffect(() => {
     if (!rulesList?.data?.length) return
     const [min, max] = getMinMaxRows(rulesList?.data)
-    setRows(createNumberArray(min, max)) // FIXME: Revise this to not use array
+    setRows(createNumberArray(min, max))
     const currentRowsRules = rulesList?.data.find((rules) => rules.rows === plinkoConfig.rows)
 
     const difficulties = Object.keys(currentRowsRules?.multipliers ?? {}) as IGameDifficultyVariants[]

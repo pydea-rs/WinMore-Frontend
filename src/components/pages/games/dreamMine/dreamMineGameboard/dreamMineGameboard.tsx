@@ -50,7 +50,7 @@ export default function DreamMineGameBoard() {
         }
       }
 
-      case 'WITHDRAWN': {
+      case 'FLAWLESS_WIN': {
         return {
           colorFrom: '#ffaa40',
           colorTo: '#ffaa40',

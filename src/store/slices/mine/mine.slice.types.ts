@@ -1,7 +1,7 @@
 import { IGameDifficultyVariants, IGameMode, IMultipliers } from '@/services/games/common/games.types'
 import { IAvailableTokens, Nullable } from '@/types/global.types'
 
-export type IMineGameStatus = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'WITHDRAWN' | 'WON'
+export type IMineGameStatus = 'NOT_STARTED' | 'ONGOING' | 'LOST' | 'FLAWLESS_WIN' | 'WON'
 
 export interface IBlock {
   index: number

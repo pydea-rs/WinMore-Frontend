@@ -56,6 +56,7 @@ const useDreamMineGameBoardHelper = () => {
   }
 
   const winHandler = async () => {
+    // FIXME: Also handle FLAWLESS_WIN
     if (mineConfig.currentGameId == null) {
       throw new Error('Game id must be specified!')
     }

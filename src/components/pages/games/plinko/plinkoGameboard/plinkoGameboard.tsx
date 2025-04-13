@@ -13,7 +13,6 @@ import { toast } from 'react-toastify'
 import usePlinkoGameBoardHelper, { PlinkoSoundsType } from './plinkoGameBoard.hooks'
 
 // TODO: Update buckets colors
-// TODO: Add sounds for droppinh, collisions, etc
 // TODO: Dynamic ball color based on ball.x (change to color of the bucket with same x)
 // TODO: Add 'Drop Here' Text to canvas; Only show it when user is allowed to drop.
 export default function PlinkoGameBoard() {
@@ -165,12 +164,9 @@ export default function PlinkoGameBoard() {
         }
 
         if (ball.y >= buckets[0].y + bucketSpecs.heightThreshold) {
-          // Find the closest bucket
           let bucketInContactIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
-          // FIXME: Maybe remove threshold?
 
           if (bucketInContactIndex === -1) {
-            // TODO: This can be removed, its all about helping the player a little.
             if (ball.x >= buckets[0].topLeftX - bucketSpecs.widthThreshold && ball.x <= buckets[0].topRightX) {
               bucketInContactIndex = 0
             } else if (ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold && ball.x >= buckets[buckets.length - 1].topLeftX) {
@@ -204,17 +200,14 @@ export default function PlinkoGameBoard() {
   }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label])
 
   const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current || !plinkoConfig.rules || !plinkoConfig.playing) {
-      return
-    }
-
-    if (isDropping || gameRef.current?.length) {
-      // only drop if no ball is dropping in app and no api call is in progress
-      return
-    }
-
-    if (plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length) {
-      // TODO: Which is better for finishing the game, playing = null or playing.status = FINISHED?
+    if (
+      !canvasRef.current ||
+      !plinkoConfig.rules ||
+      !plinkoConfig.playing ||
+      isDropping ||
+      gameRef.current?.length ||
+      plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length
+    ) {
       return
     }
 
@@ -227,7 +220,7 @@ export default function PlinkoGameBoard() {
         fk: plinkoConfig.rules.friction,
       },
       sounds,
-    }) // TODO: Is it correct updating dropCount like that? or it requires dispatch?
+    })
   }
 
   useEffect(() => {
@@ -240,7 +233,6 @@ export default function PlinkoGameBoard() {
     }
     if (!isDropping && plinkoConfig.playing.status === 'NOT_DROPPED_YET') {
       ;(async () => {
-        console.log('HERE AGAIN')
         if (plinkoConfig.playing) {
           await dropPlinkoBallsMutation({
             id: plinkoConfig.playing.id,
@@ -273,6 +265,8 @@ export default function PlinkoGameBoard() {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
       fetchBalance()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
+
+      // TODO: Add win animation and sound
       dispatch(closePlayingPlinkoGame())
     }
   }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch, fetchBalance])

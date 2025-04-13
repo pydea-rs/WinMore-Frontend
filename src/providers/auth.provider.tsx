@@ -15,7 +15,7 @@ const AuthProvider: BaseProps = ({ children }) => {
 
     if (isWalletConnected && !token) {
       timeout = setTimeout(async () => {
-        await sendAuthSignature() // TODO: CHECK: async method not awaited
+        await sendAuthSignature()
       }, 500)
     }
 
