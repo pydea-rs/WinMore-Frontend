@@ -13,8 +13,26 @@ import { toast } from 'react-toastify'
 import usePlinkoGameBoardHelper, { PlinkoSoundsType } from './plinkoGameBoard.hooks'
 
 // TODO: Update buckets colors
-// TODO: Dynamic ball color based on ball.x (change to color of the bucket with same x)
 // TODO: Add 'Drop Here' Text to canvas; Only show it when user is allowed to drop.
+
+function lerpColor(a: string, b: string, amount: number) {
+  const ah = parseInt(a.replace('#', ''), 16)
+  const ar = (ah >> 16) & 0xff,
+    ag = (ah >> 8) & 0xff,
+    ab = ah & 0xff
+
+  const bh = parseInt(b.replace('#', ''), 16)
+  const br = (bh >> 16) & 0xff,
+    bg = (bh >> 8) & 0xff,
+    bb = bh & 0xff
+
+  const rr = Math.round(ar + amount * (br - ar))
+  const rg = Math.round(ag + amount * (bg - ag))
+  const rb = Math.round(ab + amount * (bb - ab))
+
+  return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)
+}
+
 export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
@@ -192,23 +210,6 @@ export default function PlinkoGameBoard() {
 
           dispatch(incDroppedBallsCount())
           return false
-        }
-        function lerpColor(a: string, b: string, amount: number) {
-          const ah = parseInt(a.replace('#', ''), 16)
-          const ar = (ah >> 16) & 0xff,
-            ag = (ah >> 8) & 0xff,
-            ab = ah & 0xff
-
-          const bh = parseInt(b.replace('#', ''), 16)
-          const br = (bh >> 16) & 0xff,
-            bg = (bh >> 8) & 0xff,
-            bb = bh & 0xff
-
-          const rr = Math.round(ar + amount * (br - ar))
-          const rg = Math.round(ag + amount * (bg - ag))
-          const rb = Math.round(ab + amount * (bb - ab))
-
-          return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)
         }
 
         ctx.save()
