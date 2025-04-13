@@ -22,7 +22,7 @@ import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { createNumberArray, getMinMaxRows } from '@/utils/numerix'
+import { approximate, createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -153,7 +153,7 @@ export default function PlinkoConfigForm() {
             <Label htmlFor="bet-amount" className="flex items-center justify-between">
               <span>Bet Amount</span>
               <span className="text-main">
-                Available: <span className="text-white">{currentToken.balance}</span>
+                Available: <span className="text-white">{approximate(currentToken.balance, 'round', 5)}</span>
               </span>
             </Label>
             <Controller

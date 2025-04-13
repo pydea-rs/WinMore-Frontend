@@ -45,7 +45,16 @@ export default function PlinkoGameBoard() {
   }, [plinkoConfig.playing])
   const { sounds } = usePlinkoGameBoardHelper()
   const canvasRef = useRef(null)
-  const gameRef = useRef<{ ball: PlinkoBallType; physx: { ground: { vx: number; vy: number }; g: number; fk: number }; sounds: PlinkoSoundsType }[]>([])
+  const gameRef = useRef<
+    {
+      ball: PlinkoBallType & {
+        color: string // current displayed color
+        targetColor: string
+      }
+      physx: { ground: { vx: number; vy: number }; g: number; fk: number }
+      sounds: PlinkoSoundsType
+    }[]
+  >([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
 
@@ -184,12 +193,71 @@ export default function PlinkoGameBoard() {
           dispatch(incDroppedBallsCount())
           return false
         }
-        // Draw ball
+        function lerpColor(a: string, b: string, amount: number) {
+          const ah = parseInt(a.replace('#', ''), 16)
+          const ar = (ah >> 16) & 0xff,
+            ag = (ah >> 8) & 0xff,
+            ab = ah & 0xff
+
+          const bh = parseInt(b.replace('#', ''), 16)
+          const br = (bh >> 16) & 0xff,
+            bg = (bh >> 8) & 0xff,
+            bb = bh & 0xff
+
+          const rr = Math.round(ar + amount * (br - ar))
+          const rg = Math.round(ag + amount * (bg - ag))
+          const rb = Math.round(ab + amount * (bb - ab))
+
+          return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)
+        }
+
+        ctx.save()
+
+        // const ballColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
+        const bucketIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
+        const targetColor = bucketColors[bucketIndex] ?? 'black'
+
+        // Update targetColor if needed
+        if (targetColor !== ball.targetColor) {
+          ball.targetColor = targetColor
+        }
+
+        // Smoothly interpolate current color toward target
+        ball.color = lerpColor(ball.color, ball.targetColor, 0.1)
+        const ballColor = ball.color
+
+        const blinkFactor = Math.sin(Date.now() / 300) * 0.2 + 0.5 // Makes it blink in and out
+        ctx.globalAlpha = blinkFactor // Adjust opacity
+
+        // Draw solid ball to maintain size
         ctx.beginPath()
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-        ctx.fillStyle = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
+        ctx.fillStyle = ballColor
         ctx.fill()
         ctx.closePath()
+
+        // Add glow effect
+        ctx.save()
+        ctx.globalCompositeOperation = 'lighter'
+        ctx.shadowBlur = 15
+        ctx.shadowColor = ballColor
+        ctx.beginPath()
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+        ctx.fillStyle = ballColor
+        ctx.fill()
+        ctx.closePath()
+        ctx.restore()
+
+        // Optional blinking outline
+        ctx.beginPath()
+        ctx.arc(ball.x, ball.y, ball.radius + 1, 0, Math.PI * 2)
+        ctx.strokeStyle = `${ballColor}AA` // Slightly transparent stroke
+        ctx.lineWidth = 1 + Math.sin(Date.now() / 150) * 1.5 // pulsating stroke width
+        ctx.stroke()
+        ctx.closePath()
+
+        ctx.restore()
+
         return true
       })
 
@@ -213,7 +281,7 @@ export default function PlinkoGameBoard() {
 
     sounds.playDrop()
     gameRef.current.push({
-      ball: { ...plinkoConfig.playing.balls[plinkoConfig.playing.droppedCount], rapidImpacts: [] },
+      ball: { ...plinkoConfig.playing.balls[plinkoConfig.playing.droppedCount], rapidImpacts: [], color: 'black', targetColor: 'black' },
       physx: {
         ground: { vx: plinkoConfig.rules.horizontalSpeedFactor, vy: plinkoConfig.rules.verticalSpeedFactor },
         g: plinkoConfig.rules.gravity,
