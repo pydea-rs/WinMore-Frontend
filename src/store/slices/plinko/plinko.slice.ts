@@ -1,6 +1,6 @@
 import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { PlinkoBallType } from '@/services/games/plinko/physx.types'
-import { IMePlayingPlinkoGame, IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
+import { IFinishedPlinkoGame, IMePlayingPlinkoGame, IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IPlinkoStatus, IUpdatePlinkoConfig, StateType } from './plinko.slice.types'
 
@@ -70,10 +70,15 @@ export const plinkoSlice = createSlice({
         return
       }
       state.plinkoConfig.playing.droppedCount++
-      if (state.plinkoConfig.playing.droppedCount === state.plinkoConfig.playing.balls.length) {
-        state.plinkoConfig.playing = null
-        // FIXME: Add specific ending such as firework whatever?
+    },
+    setPlinkoGamePrizeAmount: (state: StateType, action: PayloadAction<IFinishedPlinkoGame>) => {
+      if (state.plinkoConfig.playing) {
+        state.plinkoConfig.playing.status = action.payload.status
+        state.plinkoConfig.playing.prize = action.payload.prize
       }
+    },
+    closePlayingPlinkoGame: (state: StateType, action: PayloadAction<void>) => {
+      state.plinkoConfig.playing = null
     },
     setPlayingPlinkoGameStatus: (state: StateType, action: PayloadAction<IPlinkoStatus>) => {
       if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
@@ -103,6 +108,8 @@ export const {
   setPlayingPlinkoGame,
   setPlayingPlinkoBalls,
   updatePlinkoGamePhysx,
+  setPlinkoGamePrizeAmount,
+  closePlayingPlinkoGame,
   setPlinkoSelectedConfigRule,
 } = plinkoSlice.actions
 

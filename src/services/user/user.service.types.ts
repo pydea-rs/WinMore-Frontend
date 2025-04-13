@@ -1,8 +1,10 @@
 import { IAddress, IAvailableTokens, IPaginationPayload, Nullable } from '@/types/global.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
+import { IMePlayingPlinkoGame } from '../games/plinko/plinko.service.types'
 
 export interface IIsUserPlayingResponse {
   dreamMine: IMineGameDetail | null
+  plinko: IMePlayingPlinkoGame | null
 }
 
 export interface IIsUserPlayingPayload {}

@@ -3,10 +3,10 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 
 import { IEmptyPayload, IEndpointWithIdParamPayload } from '@/services/base/common.types'
-import { setPlayingPlinkoBalls, setPlayingPlinkoGame, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
+import { setPlayingPlinkoBalls, setPlayingPlinkoGame, setPlinkoGamePrizeAmount, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { PlinkoBallType } from './physx.types'
-import { IGetPlinkoGamesListPayload, IMePlayingPlinkoGame, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
+import { IFinishedPlinkoGame, IGetPlinkoGamesListPayload, IMePlayingPlinkoGame, IPlacePlinkoBetPayload, IPlinkoGame, IPlinkoRules } from './plinko.service.types'
 
 export const PlinkoService = createApi({
   reducerPath: 'PlinkoService',
@@ -55,6 +55,20 @@ export const PlinkoService = createApi({
         dispatch(setPlayingPlinkoBalls(data.data))
       },
     }),
+    finishPlinkoGame: builder.mutation<BaseResponse<IFinishedPlinkoGame>, IEndpointWithIdParamPayload>({
+      query(payload) {
+        const { games } = getApiRoute()
+        return {
+          method: 'POST',
+          url: games.plinko.finish.get(payload.id),
+          sendAuthorization: true,
+        }
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(setPlinkoGamePrizeAmount(data.data))
+      },
+    }),
     getPlinkoGamesList: builder.query<BaseResponse<IPlinkoGame[]>, IGetPlinkoGamesListPayload>({
       query(arg) {
         const { games } = getApiRoute()
@@ -83,4 +97,11 @@ export const PlinkoService = createApi({
   }),
 })
 
-export const { useGetPlinkoRulesQuery, usePostPlinkoBetMutation, useDropPlinkoBallsMutation, useGetPlinkoGamesListQuery, useGetMePlayingPlinkoGamesQuery } = PlinkoService
+export const {
+  useGetPlinkoRulesQuery,
+  usePostPlinkoBetMutation,
+  useDropPlinkoBallsMutation,
+  useFinishPlinkoGameMutation,
+  useGetPlinkoGamesListQuery,
+  useGetMePlayingPlinkoGamesQuery,
+} = PlinkoService

@@ -89,6 +89,12 @@ export const getApiRoute = () => {
             return `${this.path}/${id}`
           },
         },
+        finish: {
+          path: 'plinko/finish',
+          get(id: number) {
+            return `${this.path}/${id}`
+          },
+        },
         history: {
           path: 'plinko',
         },

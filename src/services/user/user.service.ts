@@ -8,6 +8,7 @@ import { setDreamMineConfig, setDreamMineGameMode } from '@/store/slices/mine/mi
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setBalances } from '@/store/slices/networks/networks.slice'
+import { setPlayingPlinkoGame, setPlinkoConfig } from '@/store/slices/plinko/plinko.slice'
 import { RootState } from '@/store/store'
 import {
   IEditUserProfilePayload,
@@ -132,24 +133,34 @@ export const UserService = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
-        if (!data.data.dreamMine) {
-          return
+        const { dreamMine, plinko } = data.data ?? {}
+        if (dreamMine) {
+          const currentGameSelectedBlocks: IBlock[] = dreamMine.nulls.map((nullIndex: number, rowIndex: number) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }))
+          dispatch(
+            setDreamMineConfig({
+              activeRow: dreamMine.currentRow + 1,
+              betAmount: dreamMine.initialBet.toString(),
+              rows: dreamMine.rowsCount,
+              currentGameId: dreamMine.id,
+              currentGameStatus: dreamMine.status,
+              selectedBlocks: currentGameSelectedBlocks,
+              stake: dreamMine.stake,
+              isStarted: true,
+            }),
+          )
+          dispatch(setDreamMineGameMode({ label: dreamMine.mode, value: DREAM_MINE_ROCKS_COUNT[dreamMine.mode] }))
         }
-        const currentGame = data.data.dreamMine
-        const currentGameSelectedBlocks: IBlock[] = currentGame.nulls.map((nullIndex: number, rowIndex: number) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }))
-        dispatch(
-          setDreamMineConfig({
-            activeRow: currentGame.currentRow + 1,
-            betAmount: currentGame.initialBet.toString(),
-            rows: currentGame.rowsCount,
-            currentGameId: currentGame.id,
-            currentGameStatus: currentGame.status,
-            selectedBlocks: currentGameSelectedBlocks,
-            stake: currentGame.stake,
-            isStarted: true,
-          }),
-        )
-        dispatch(setDreamMineGameMode({ label: currentGame.mode, value: DREAM_MINE_ROCKS_COUNT[currentGame.mode] }))
+        if (plinko) {
+          const {} = dispatch(
+            setPlinkoConfig({
+              betAmount: plinko.initialBet.toString(),
+              mode: { label: plinko.mode, value: ['EASY', 'MEDIUM', 'HARD'].findIndex((x) => plinko.mode) + 1 },
+              numberOfBets: plinko.ballsCount,
+              rows: plinko.rowsCount,
+            }),
+          )
+          dispatch(setPlayingPlinkoGame(plinko))
+        }
       },
     }),
     withdraw: builder.mutation<BaseResponse<IWithdrawResponse>, IWithdrawPayload>({

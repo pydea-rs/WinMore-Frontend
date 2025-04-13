@@ -5,6 +5,7 @@ import PlinkoConfigForm from '@/components/pages/games/plinko/plinkoConfigForm/p
 import PlinkoGameBoard from '@/components/pages/games/plinko/plinkoGameboard/plinkoGameboard'
 import { useAuth } from '@/hooks/useAuth'
 import NotFoundPage from '@/pages/404'
+import { useGetPlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
 // import { usePlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
 import { useIsPlayingQuery } from '@/services/user/user.service'
 import { isDevelopmentMode } from '@/utils/dev'
@@ -15,13 +16,12 @@ import { ReactElement } from 'react'
 const Plinko = () => {
   const { isAuthorized } = useAuth()
   const { isLoading } = useIsPlayingQuery({}, { skip: !isAuthorized })
-  // const { isLoading: IsGamesListLoading } = usePlinkoGamesListQuery(
-  //   {
-  //     take: 10,
-  //   },
-  //   { skip: !isAuthorized },
-  // ) // FIXME: Update this section after backend implementation.
-  const IsGamesListLoading = false // TODO: Temp
+  const { isLoading: IsGamesListLoading } = useGetPlinkoGamesListQuery(
+    {
+      take: 10,
+    },
+    { skip: !isAuthorized },
+  ) // FIXME: Update this section after backend implementation.
 
   const { matches } = useMediaQueries({
     width: '(min-width: 920px)',

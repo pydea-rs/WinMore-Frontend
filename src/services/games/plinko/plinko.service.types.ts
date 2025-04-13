@@ -19,6 +19,11 @@ export interface IPlinkoBall extends IDroppingPlinkoBall {
   }
 }
 
+export interface ILandedPlinkoBall extends IPlinkoBall {
+  bucketIndex: number
+  scoredMultiplier: number
+}
+
 export interface IPlinkoGameBase {
   id: number
   createdAt: Date
@@ -40,6 +45,14 @@ export interface IPlinkoGame extends IPlinkoGameBase {
     id: number
   }
   plinkoBalls?: IPlinkoBall[]
+}
+
+export interface IFinishedPlinkoGame extends IPlinkoGameBase {
+  user?: {
+    name: string
+    id: number
+  }
+  plinkoBalls: ILandedPlinkoBall
 }
 
 export interface IPlinkoRules {

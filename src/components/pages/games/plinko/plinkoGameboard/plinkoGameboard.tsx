@@ -2,12 +2,13 @@ import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import { BucketsDataType, PlinkoBallType } from '@/services/games/plinko/physx.types'
-import { useDropPlinkoBallsMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
-import { incDroppedBallsCount } from '@/store/slices/plinko/plinko.slice'
+import { useDropPlinkoBallsMutation, useFinishPlinkoGameMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
+import { closePlayingPlinkoGame, incDroppedBallsCount } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch } from '@/store/store'
 import { toFixedEfficient } from '@/utils/numerix'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef } from 'react'
+import { toast } from 'react-toastify'
 import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 
 // TODO: Update buckets colors
@@ -17,6 +18,8 @@ import usePlinkoGameBoardHelper from './plinkoGameBoard.hooks'
 export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
+  const [finishPlinkoGameMutation, { isLoading: isFinishing }] = useFinishPlinkoGameMutation()
+
   const { refetch: getMyOngoinGame } = useGetMePlayingPlinkoGamesQuery({})
 
   const dispatch = useDispatch()
@@ -46,18 +49,17 @@ export default function PlinkoGameBoard() {
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
 
-  const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#FF4D6D', '#FFC107']
-
   useEffect(() => {
-    if (!canvasRef.current) return
+    if (!canvasRef.current || !plinkoConfig.rules) return
+    const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#FF4D6D', '#FFC107']
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
-    canvas.height = plinkoConfig.rules?.board?.height ?? 200
-    canvas.width = plinkoConfig.rules?.board?.width ?? 600
+    canvas.height = plinkoConfig.rules.board.height ?? 200
+    canvas.width = plinkoConfig.rules.board.width ?? 600
 
-    pegsRef.current = plinkoConfig.rules?.pegs?.coords ?? []
-    bucketsRef.current = plinkoConfig.rules?.buckets ?? ({} as BucketsDataType)
+    pegsRef.current = plinkoConfig.rules.pegs.coords
+    bucketsRef.current = plinkoConfig.rules.buckets
 
     function update() {
       if (!ctx) return
@@ -198,7 +200,7 @@ export default function PlinkoGameBoard() {
     }
 
     update()
-  }, [plinkoConfig.rules, plinkoConfig.mode, plinkoConfig.rows, dispatch])
+  }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label, plinkoConfig.rows])
 
   const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current || !plinkoConfig.rules || !plinkoConfig.playing) {
@@ -235,6 +237,7 @@ export default function PlinkoGameBoard() {
     }
     if (!isDropping && plinkoConfig.playing.status === 'NOT_DROPPED_YET') {
       ;(async () => {
+        console.log('HERE AGAIN')
         if (plinkoConfig.playing) {
           await dropPlinkoBallsMutation({
             id: plinkoConfig.playing.id,
@@ -243,6 +246,32 @@ export default function PlinkoGameBoard() {
       })()
     }
   }, [plinkoConfig.playing, isDropping, plinkoConfig.rules, dropPlinkoBallsMutation, getMyOngoinGame])
+
+  useEffect(() => {
+    if (!plinkoConfig.playing) return
+    if (
+      !isDropping &&
+      !isFinishing &&
+      plinkoConfig.playing.balls.length &&
+      plinkoConfig.playing.droppedCount === plinkoConfig.playing.balls.length &&
+      plinkoConfig.playing.status !== 'FINISHED'
+    ) {
+      ;(async () => {
+        if (plinkoConfig.playing) {
+          await finishPlinkoGameMutation({
+            id: plinkoConfig.playing.id,
+          }).unwrap()
+        }
+      })()
+    }
+  }, [plinkoConfig.playing?.droppedCount, plinkoConfig.playing, isDropping, isFinishing, finishPlinkoGameMutation])
+
+  useEffect(() => {
+    if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
+      toast.success(`You won ${plinkoConfig.playing.prize}$.`)
+      dispatch(closePlayingPlinkoGame())
+    }
+  }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch])
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
