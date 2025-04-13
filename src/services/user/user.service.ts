@@ -1,6 +1,7 @@
 // Import necessary RTK Query methods
 import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
+import { DREAM_MINE_ROCKS_COUNT } from '@/services/games/common/games.types'
 import { setUser } from '@/store/slices/auth/auth.slice'
 import { updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
 import { setDreamMineConfig, setDreamMineGameMode } from '@/store/slices/mine/mine.slice'
@@ -148,7 +149,7 @@ export const UserService = createApi({
             isStarted: true,
           }),
         )
-        dispatch(setDreamMineGameMode(currentGame.mode))
+        dispatch(setDreamMineGameMode({ label: currentGame.mode, value: DREAM_MINE_ROCKS_COUNT[currentGame.mode] }))
       },
     }),
     withdraw: builder.mutation<BaseResponse<IWithdrawResponse>, IWithdrawPayload>({

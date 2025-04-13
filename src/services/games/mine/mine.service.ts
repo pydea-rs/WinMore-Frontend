@@ -15,14 +15,16 @@ export const MineService = createApi({
     getDreamMineRules: builder.query<BaseResponse<IDreamMineRules[]>, IEmptyPayload>({
       query: (params) => {
         const { games } = getApiRoute()
+
         return {
           method: 'GET',
           url: games.mine.rules.path,
-          sendAuthorization: true,
+          sendAuthorization: false,
         }
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled
+
         dispatch(setDreamMineMultipliers(data.data))
         dispatch(setDreamMineConfig({ rows: data.data[0].rows }))
       },

@@ -36,13 +36,19 @@ const MineConfigForm = () => {
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
-  const { data: rulesData } = useGetDreamMineRulesQuery({})
+  const { data: rulesData, refetch, isLoading: isRefetching } = useGetDreamMineRulesQuery({})
+
   const [refetchBalance] = useGetUserTokenBalanceMutation()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
   const [rows, setRows] = useState([] as number[])
 
   const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
   const tile = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/tile.mp3'], volume: 0.7, preload: true }), [])
+
+  useEffect(() => {
+    console.log('REFETCH')
+    refetch()
+  }, [refetch])
 
   const onStart = useCallback(() => {
     dispatch(startMineGame())
@@ -63,10 +69,11 @@ const MineConfigForm = () => {
   })
 
   useEffect(() => {
+    console.log(rulesData)
     if (!rulesData?.data?.length) return
     const [min, max] = getMinMaxRows(rulesData?.data)
     setRows(createNumberArray(min, max))
-  }, [rulesData?.data])
+  }, [rulesData?.data, rulesData])
 
   const [currentRowsRules, setCurrentRowsRules] = useState(rulesData?.data.find((rules) => rules.rows === mineConfig.rows))
 

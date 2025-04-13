@@ -39,6 +39,7 @@ export const mineSlice = createSlice({
       }
     },
     setDreamMineMultipliers: (state: StateType, action: PayloadAction<IDreamMineRules[]>) => {
+      console.log(action)
       const rowsConfig = action.payload?.find((multipliers) => multipliers.rows === state.mineConfig.rows)?.multipliers
       if (!rowsConfig) return
       state.mineConfig.multipliers = rowsConfig
