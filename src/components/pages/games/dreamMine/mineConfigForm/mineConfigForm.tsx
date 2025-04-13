@@ -13,11 +13,12 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Spinner } from '@/components/common/spinner/spinner'
 import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
+import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { DREAM_MINE_ROCKS_COUNT, IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
-import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
@@ -30,14 +31,13 @@ import { IGameConfigForm } from '../../common-games.types'
 import { SoundTogglerButton } from '../../common/soundToggler'
 
 const MineConfigForm = () => {
-  const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
   const { mineConfig } = useSelector((state) => state.mine)
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { data: rulesData, refetch, isLoading: isRefetching } = useGetDreamMineRulesQuery({})
 
-  const [refetchBalance] = useGetUserTokenBalanceMutation()
+  const { fetchBalance, currentToken } = useWalletStateHelper()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
   const [rows, setRows] = useState([] as number[])
 
@@ -45,14 +45,13 @@ const MineConfigForm = () => {
   const placeBetSound = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
 
   useEffect(() => {
-    console.log('REFETCH')
     refetch()
   }, [refetch])
 
   const onStart = useCallback(() => {
     dispatch(startMineGame())
     if (configs.sound) placeBetSound.play()
-  }, [mineConfig, rulesData, configs])
+  }, [configs, dispatch, placeBetSound])
 
   const {
     control: gameControl,
@@ -118,8 +117,8 @@ const MineConfigForm = () => {
         return
       }
       try {
-        await mineBetMutation({ betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: token.symbol, chainId: network.chainId }).unwrap()
-        refetchBalance({ chain: network.chainId, token: token.symbol })
+        await mineBetMutation({ betAmount, mode: mineConfig.mode.label, rows: mineConfig.rows, token: currentToken.symbol, chainId: currentToken.chain }).unwrap()
+        fetchBalance()
         onStart()
       } catch (error) {
         // toast.error(error.message)
@@ -155,7 +154,7 @@ const MineConfigForm = () => {
             <Label htmlFor="id-233" className="flex items-center justify-between">
               <span>Bet Amount</span>
               <span className="text-main">
-                Available: <span className="text-white">{currentTokenBalance}</span>
+                Available: <span className="text-white">{currentToken.balance}</span>
               </span>
             </Label>
             <Controller

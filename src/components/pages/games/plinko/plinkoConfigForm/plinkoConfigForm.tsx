@@ -13,11 +13,12 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Spinner } from '@/components/common/spinner/spinner'
 import CasinoSquareIcon from '@/components/icons/casinoSquare/casinoSquare'
 import CentIcon from '@/components/icons/cent/cent'
+import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
 import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/games/plinko/plinko.service'
-import { useGetUserInfoQuery, useGetUserTokenBalanceMutation } from '@/services/user/user.service'
+import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
@@ -33,7 +34,7 @@ export default function PlinkoConfigForm() {
   const { isAuthorized } = useAuth()
   const { configs } = useSelector((state) => state.configs)
   const { data: rulesList } = useGetPlinkoRulesQuery({})
-  const { currentTokenBalance, network, token } = useSelector((state) => state.currency)
+  const { currentToken, fetchBalance } = useWalletStateHelper()
   const { plinkoConfig } = useSelector((state) => state.plinko)
   const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
 
@@ -41,7 +42,6 @@ export default function PlinkoConfigForm() {
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
   const { addDecimalNumbers, formatNumber, subDecimalNumbers } = useHelper()
-  const [refetchBalance] = useGetUserTokenBalanceMutation()
 
   const [modes, setModes] = useState<IGameMode[]>([])
 
@@ -100,12 +100,11 @@ export default function PlinkoConfigForm() {
           betAmount,
           mode: plinkoConfig.mode.label,
           rows: plinkoConfig.rows,
-          token: token.symbol,
-          chainId: network.chainId,
+          token: currentToken.symbol,
+          chainId: currentToken.chain,
           ballsCount: plinkoConfig.numberOfBets ?? 1,
         }).unwrap()
-        refetchBalance({ chain: network.chainId, token: token.symbol })
-        // TODO: Play drop sound and start dropping balls one by one wit
+        fetchBalance()
       } catch (error) {
         toast.error((error as Error).message)
       }
@@ -154,7 +153,7 @@ export default function PlinkoConfigForm() {
             <Label htmlFor="bet-amount" className="flex items-center justify-between">
               <span>Bet Amount</span>
               <span className="text-main">
-                Available: <span className="text-white">{currentTokenBalance}</span>
+                Available: <span className="text-white">{currentToken.balance}</span>
               </span>
             </Label>
             <Controller

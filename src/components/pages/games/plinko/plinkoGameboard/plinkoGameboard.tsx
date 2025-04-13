@@ -1,6 +1,7 @@
 import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
+import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { BucketsDataType, PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { useDropPlinkoBallsMutation, useFinishPlinkoGameMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
 import { closePlayingPlinkoGame, incDroppedBallsCount } from '@/store/slices/plinko/plinko.slice'
@@ -19,7 +20,7 @@ export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
   const [finishPlinkoGameMutation, { isLoading: isFinishing }] = useFinishPlinkoGameMutation()
-
+  const { fetchBalance } = useWalletStateHelper()
   const { refetch: getMyOngoinGame } = useGetMePlayingPlinkoGamesQuery({})
 
   const dispatch = useDispatch()
@@ -165,34 +166,32 @@ export default function PlinkoGameBoard() {
 
         if (ball.y >= buckets[0].y + bucketSpecs.heightThreshold) {
           // Find the closest bucket
-          let bucketInContactIndex = -1
-          if (ball.x >= buckets[0].topLeftX - bucketSpecs.widthThreshold && ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold) {
-            for (let i = 0; i < buckets.length - 1; i++) {
-              if (ball.x >= buckets[i].topLeftX && ball.x < buckets[i + 1].topLeftX) {
-                bucketInContactIndex = i
-                break
-              }
-            }
-            if (bucketInContactIndex === -1) {
-              // ball fell into the first or last bucket threshold
-              bucketInContactIndex =
-                ball.x >= buckets[buckets.length - 1].topLeftX && ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold ? buckets.length - 1 : 0
-            }
-            if (bucketInContactIndex !== -1) {
-              ball.x = buckets[bucketInContactIndex].x
-              ball.y = buckets[bucketInContactIndex].bottomY - bucketSpecs.widthThreshold
-              ball.vx = 0
-              ball.vy = 0
-              sounds.playLanding()
+          let bucketInContactIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
+          // FIXME: Maybe remove threshold?
+
+          if (bucketInContactIndex === -1) {
+            // TODO: This can be removed, its all about helping the player a little.
+            if (ball.x >= buckets[0].topLeftX - bucketSpecs.widthThreshold && ball.x <= buckets[0].topRightX) {
+              bucketInContactIndex = 0
+            } else if (ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold && ball.x >= buckets[buckets.length - 1].topLeftX) {
+              bucketInContactIndex = buckets.length - 1
             }
           }
+          if (bucketInContactIndex !== -1) {
+            ball.x = buckets[bucketInContactIndex].x
+            ball.y = buckets[bucketInContactIndex].bottomY - bucketSpecs.widthThreshold
+            ball.vx = 0
+            ball.vy = 0
+            sounds.playLanding()
+          }
+
           dispatch(incDroppedBallsCount())
           return false
         }
         // Draw ball
         ctx.beginPath()
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
         ctx.fill()
         ctx.closePath()
         return true
@@ -272,10 +271,11 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
+      fetchBalance()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
       dispatch(closePlayingPlinkoGame())
     }
-  }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch])
+  }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch, fetchBalance])
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
