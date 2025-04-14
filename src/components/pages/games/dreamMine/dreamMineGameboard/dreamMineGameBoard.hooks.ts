@@ -5,10 +5,13 @@ import { endMineGame, setDreamMineConfig } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
 import { useMemo, useState } from 'react'
+import { celebratingAnimation } from '../../common/animations'
 
 const useDreamMineGameBoardHelper = () => {
   const breakBlockSound = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/break.mp3'], volume: 1.0, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 1.0, preload: true }), [])
+  const celebrationSound = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/celebration.mp3'], volume: 1.0, preload: true }), [])
+
   const { mineConfig } = useSelector((state) => state.mine)
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
@@ -32,10 +35,11 @@ const useDreamMineGameBoardHelper = () => {
     await backoffMine({ id: mineConfig.currentGameId })
       .unwrap()
       .then((res) => {
+        celebrationSound.play()
         refetchList()
         fetchBalance()
         dispatch(setDreamMineConfig({ currentGameStatus: 'WON' }))
-        fireworks()
+        celebratingAnimation()
         dispatch(endMineGame({ isWin: true }))
       })
   }

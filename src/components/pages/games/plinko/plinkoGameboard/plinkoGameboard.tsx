@@ -13,9 +13,6 @@ import { toast } from 'react-toastify'
 import { celebratingAnimation } from '../../common/animations'
 import usePlinkoGameBoardHelper, { PlinkoSoundsType } from './plinkoGameBoard.hooks'
 
-// TODO: Update buckets colors
-// TODO: Add 'Drop Here' Text to canvas; Only show it when user is allowed to drop.
-
 function lerpColor(a: string, b: string, amount: number) {
   const ah = parseInt(a.replace('#', ''), 16)
   const ar = (ah >> 16) & 0xff,
@@ -101,7 +98,6 @@ export default function PlinkoGameBoard() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Show "Drop Here" if player can drop
       if (!gameRef.current.length && userStatusRef.current === 'PLAYING') {
         ctx.font = 'bolder 16px Arial'
         ctx.textAlign = 'center'
@@ -114,7 +110,7 @@ export default function PlinkoGameBoard() {
       pegsRef.current.forEach((peg) => {
         ctx.beginPath()
         ctx.arc(peg.x, peg.y, peg.radius, 0, Math.PI * 2)
-        ctx.fillStyle = '#798998' // Color for the pegs
+        ctx.fillStyle = '#798998'
         ctx.fill()
         ctx.closePath()
       })
@@ -253,7 +249,6 @@ export default function PlinkoGameBoard() {
           }
           if (landingBucketIndex !== -1) {
             sounds.playLanding()
-            celebratingAnimation()
             ball.x = buckets[landingBucketIndex].x
             ball.y = buckets[landingBucketIndex].bottomY - bucketSpecs.widthThreshold
             const velocityAtImpact = Math.sqrt(ball.vx ** 2 + ball.vy ** 2)
@@ -272,16 +267,11 @@ export default function PlinkoGameBoard() {
 
         ctx.save()
 
-        // const ballColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
-        const bucketIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
-        const targetColor = bucketColors[bucketIndex] ?? 'black'
-
-        // Update targetColor if needed
+        const targetColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
         if (targetColor !== ball.targetColor) {
           ball.targetColor = targetColor
         }
 
-        // Smoothly interpolate current color toward target
         ball.color = lerpColor(ball.color, ball.targetColor, 0.1)
         const ballColor = ball.color
 
@@ -396,7 +386,9 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
+      sounds.playCelebration()
       fetchBalance()
+      celebratingAnimation()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
       userStatusRef.current = 'FINISHED'
       setTimeout(() => {

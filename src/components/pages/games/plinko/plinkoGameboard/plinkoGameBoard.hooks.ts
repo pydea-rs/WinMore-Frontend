@@ -1,4 +1,3 @@
-import { setPlayingPlinkoGameStatus } from '@/store/slices/plinko/plinko.slice'
 import { IPlinkoState } from '@/store/slices/plinko/plinko.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
 import { Howl } from 'howler'
@@ -14,19 +13,12 @@ const usePlinkoGameBoardHelper = () => {
   const dropSoundTile = useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/drop.wav'], volume: 1, preload: true }), [])
 
   const landSoundTile = useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/land.mp3'], volume: 1, preload: true }), [])
+  const celebrationSoundTile = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/celebration.mp3'], volume: 1, preload: true }), [])
+
   const collisionSounds = [
     useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/collision1.mp3'], volume: 1, preload: true }), []),
     useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/collision2.mp3'], volume: 1, preload: true }), []),
   ]
-  const winHandler = () => {
-    dispatch(setPlayingPlinkoGameStatus('FINISHED'))
-    // fireworks()
-    // dispatch(endPlinkoGame({ hasWon: true })) // FIXME
-  }
-
-  const lostHandler = () => {
-    // dispatch(endPlinkoGame({ hasWon: false })) // FIXME
-  }
 
   return {
     plinkoConfig,
@@ -34,6 +26,7 @@ const usePlinkoGameBoardHelper = () => {
       playDrop: () => configs.sound && dropSoundTile.play(),
       playLanding: () => configs.sound && landSoundTile.play(),
       playCollision: (index: number) => configs.sound && collisionSounds[index].play(),
+      playCelebration: () => configs.sound && celebrationSoundTile.play(),
     },
   }
 }
