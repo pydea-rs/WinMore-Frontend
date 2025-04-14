@@ -91,7 +91,9 @@ export default function DreamMineGameBoard() {
               )}
               {!mineConfig.isStarted && mineConfig.isGameOver ? (
                 <div className="absolute inset-1/2 z-10 w-fit h-fit -translate-x-[50%]">
-                  <span className="block whitespace-nowrap text-red-700 font-bold text-2xl">Game Over</span>
+                  <span className={`block whitespace-nowrap text-${mineConfig.currentGameStatus === 'LOST' ? 'red' : 'green'}-700 font-bold text-2xl`}>
+                    {mineConfig.currentGameStatus === 'LOST' ? 'Game Over' : 'Congrats!'}
+                  </span>
                 </div>
               ) : (
                 <></>

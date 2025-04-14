@@ -10,6 +10,7 @@ import { toFixedEfficient } from '@/utils/numerix'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
+import { celebratingAnimation } from '../../common/animations'
 import usePlinkoGameBoardHelper, { PlinkoSoundsType } from './plinkoGameBoard.hooks'
 
 // TODO: Update buckets colors
@@ -39,28 +40,34 @@ export default function PlinkoGameBoard() {
   const [finishPlinkoGameMutation, { isLoading: isFinishing }] = useFinishPlinkoGameMutation()
   const { fetchBalance } = useWalletStateHelper()
   const { refetch: getMyOngoinGame } = useGetMePlayingPlinkoGamesQuery({})
-
   const dispatch = useDispatch()
+  const userStatusRef = useRef<'NONE' | 'PLAYING' | 'DROPPING' | 'FINISHED'>('NONE')
 
   const getGameStateColor = useCallback(() => {
-    switch (plinkoConfig.playing?.status) {
+    switch (userStatusRef.current) {
       case 'FINISHED':
         return {
           colorFrom: '#1db954',
-          colorTo: '#1db954',
+          colorTo: 'cyan',
+        }
+      case 'PLAYING':
+        return {
+          colorFrom: 'red',
+          colorTo: 'lightcoral',
         }
       case 'DROPPING':
         return {
-          colorFrom: '#ffaa40',
-          colorTo: '#ffaa40',
+          colorFrom: 'pink',
+          colorTo: '#FF00FF',
         }
       default:
         return {
-          colorFrom: '#ffaa40',
-          colorTo: '#ffaa40',
+          colorFrom: 'orange',
+          colorTo: 'coral',
         }
     }
-  }, [plinkoConfig.playing])
+  }, [userStatusRef])
+
   const { sounds } = usePlinkoGameBoardHelper()
   const canvasRef = useRef(null)
   const gameRef = useRef<
@@ -75,6 +82,7 @@ export default function PlinkoGameBoard() {
   >([])
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
+  const bucketShakeStatesRef = useRef<{ [bucketIndex: number]: { time: number; velocity: number } }>({})
 
   useEffect(() => {
     if (!canvasRef.current || !plinkoConfig.rules) return
@@ -92,6 +100,16 @@ export default function PlinkoGameBoard() {
       if (!ctx) return
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Show "Drop Here" if player can drop
+      if (!gameRef.current.length && userStatusRef.current === 'PLAYING') {
+        ctx.font = 'bolder 16px Arial'
+        ctx.textAlign = 'center'
+        ctx.fillStyle = 'white'
+        ctx.fillText('Drop Here', pegsRef.current[1].x, 40)
+        ctx.font = 'bolder 30px Arial'
+        ctx.fillText('↓', pegsRef.current[1].x, 70)
+      }
 
       pegsRef.current.forEach((peg) => {
         ctx.beginPath()
@@ -114,7 +132,38 @@ export default function PlinkoGameBoard() {
         return gradient
       }
 
+      const now = Date.now()
+
       for (let i = 0; i < buckets.length; i++) {
+        const shakeStart = bucketShakeStatesRef.current[i]?.time ?? 0
+        const velocity = bucketShakeStatesRef.current[i]?.velocity ?? 0
+        const timeSinceShake = now - shakeStart
+        const baseAmplitude = 5 * (Math.PI / 180)
+        const maxAmplitude = 12 * (Math.PI / 180)
+        const baseDuration = 600
+        const maxDuration = 1200
+        const velocityFactor = velocity / 5
+        const shakeAngleAmplitude = baseAmplitude + (maxAmplitude - baseAmplitude) * velocityFactor
+        const shakeDuration = baseDuration + (maxDuration - baseDuration) * velocityFactor
+
+        const progress = timeSinceShake / shakeDuration
+
+        let shakeAngle = 0
+
+        if (progress < 1) {
+          shakeAngle = Math.sin(progress * Math.PI * 4) * shakeAngleAmplitude * (1 - progress)
+        }
+
+        ctx.save()
+
+        const pivotX = (buckets[i].topLeftX + buckets[i].topRightX) / 2
+        const pivotY = buckets[i].y
+
+        // Apply rotation around top center
+        ctx.translate(pivotX, pivotY)
+        ctx.rotate(shakeAngle)
+        ctx.translate(-pivotX, -pivotY)
+
         ctx.beginPath()
         ctx.moveTo(buckets[i].topLeftX, buckets[i].y)
         ctx.lineTo(buckets[i].topRightX, buckets[i].y)
@@ -129,7 +178,6 @@ export default function PlinkoGameBoard() {
         )
 
         ctx.lineTo(buckets[i].bottomLeftX + bucketSpecs.cornerRadius, buckets[i].y + bucketSpecs.height)
-
         ctx.arcTo(
           buckets[i].bottomLeftX,
           buckets[i].y + bucketSpecs.height,
@@ -143,7 +191,7 @@ export default function PlinkoGameBoard() {
         ctx.fillStyle = createGradient(ctx, bucketColors[i], bucketColors[i])
         ctx.fill()
 
-        // Add subtle inner shadow
+        // Shadow
         ctx.save()
         ctx.clip()
         ctx.shadowBlur = 10
@@ -157,6 +205,8 @@ export default function PlinkoGameBoard() {
         ctx.textAlign = 'center'
         ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 5)
         ctx.fillText('X', buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 30)
+
+        ctx.restore()
       }
 
       gameRef.current = gameRef.current.filter(({ ball, physx, sounds }) => {
@@ -183,32 +233,40 @@ export default function PlinkoGameBoard() {
             } else {
               ball.vx = Math.min(ball.vx, -0.001)
             }
-
-            sounds.playCollision(+!!(ball.rapidImpacts?.[j] ?? 0))
+            if (!ball.rapidImpacts?.[j] || ball.rapidImpacts?.[j] < 5) {
+              sounds.playCollision(+!!(ball.rapidImpacts?.[j] ?? 0))
+            } // TODO: Or maybe player another sound?
             ball.rapidImpacts[j] = (ball.rapidImpacts?.[j] ?? 0) + 1
             ball.vy = (Math.sin(angle) * physx.ground.vy) / ball.rapidImpacts[j]
           }
         }
 
         if (ball.y >= buckets[0].y + bucketSpecs.heightThreshold) {
-          let bucketInContactIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
+          let landingBucketIndex = buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)
 
-          if (bucketInContactIndex === -1) {
+          if (landingBucketIndex === -1) {
             if (ball.x >= buckets[0].topLeftX - bucketSpecs.widthThreshold && ball.x <= buckets[0].topRightX) {
-              bucketInContactIndex = 0
+              landingBucketIndex = 0
             } else if (ball.x <= buckets[buckets.length - 1].topRightX + bucketSpecs.widthThreshold && ball.x >= buckets[buckets.length - 1].topLeftX) {
-              bucketInContactIndex = buckets.length - 1
+              landingBucketIndex = buckets.length - 1
             }
           }
-          if (bucketInContactIndex !== -1) {
-            ball.x = buckets[bucketInContactIndex].x
-            ball.y = buckets[bucketInContactIndex].bottomY - bucketSpecs.widthThreshold
+          if (landingBucketIndex !== -1) {
+            sounds.playLanding()
+            celebratingAnimation()
+            ball.x = buckets[landingBucketIndex].x
+            ball.y = buckets[landingBucketIndex].bottomY - bucketSpecs.widthThreshold
+            const velocityAtImpact = Math.sqrt(ball.vx ** 2 + ball.vy ** 2)
+            bucketShakeStatesRef.current[landingBucketIndex] = {
+              time: Date.now(),
+              velocity: velocityAtImpact,
+            }
             ball.vx = 0
             ball.vy = 0
-            sounds.playLanding()
           }
 
           dispatch(incDroppedBallsCount())
+          userStatusRef.current = 'PLAYING'
           return false
         }
 
@@ -290,6 +348,7 @@ export default function PlinkoGameBoard() {
       },
       sounds,
     })
+    userStatusRef.current = 'DROPPING'
   }
 
   useEffect(() => {
@@ -300,7 +359,9 @@ export default function PlinkoGameBoard() {
     if (!plinkoConfig.playing) {
       return
     }
+
     if (!isDropping && plinkoConfig.playing.status === 'NOT_DROPPED_YET') {
+      userStatusRef.current = 'PLAYING'
       ;(async () => {
         if (plinkoConfig.playing) {
           await dropPlinkoBallsMutation({
@@ -311,6 +372,9 @@ export default function PlinkoGameBoard() {
     }
   }, [plinkoConfig.playing, isDropping, plinkoConfig.rules, dropPlinkoBallsMutation, getMyOngoinGame])
 
+  useEffect(() => {
+    if (plinkoConfig.playing && userStatusRef.current === 'NONE') userStatusRef.current = 'PLAYING'
+  }, [plinkoConfig.playing])
   useEffect(() => {
     if (!plinkoConfig.playing) return
     if (
@@ -334,7 +398,10 @@ export default function PlinkoGameBoard() {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
       fetchBalance()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
-
+      userStatusRef.current = 'FINISHED'
+      setTimeout(() => {
+        userStatusRef.current = 'NONE'
+      }, 3000) // TODO: Seems not making any difference in border beam color so remove it?
       // TODO: Add win animation and sound
       dispatch(closePlayingPlinkoGame())
     }
