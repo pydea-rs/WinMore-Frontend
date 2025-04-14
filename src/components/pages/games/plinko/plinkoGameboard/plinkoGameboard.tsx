@@ -363,8 +363,11 @@ export default function PlinkoGameBoard() {
   }, [plinkoConfig.playing, isDropping, plinkoConfig.rules, dropPlinkoBallsMutation, getMyOngoinGame])
 
   useEffect(() => {
-    if (plinkoConfig.playing && userStatusRef.current === 'NONE') userStatusRef.current = 'PLAYING'
+    if (plinkoConfig.playing && userStatusRef.current === 'NONE') {
+      userStatusRef.current = 'PLAYING'
+    }
   }, [plinkoConfig.playing])
+
   useEffect(() => {
     if (!plinkoConfig.playing) return
     if (
@@ -393,8 +396,8 @@ export default function PlinkoGameBoard() {
       userStatusRef.current = 'FINISHED'
       setTimeout(() => {
         userStatusRef.current = 'NONE'
-      }, 3000) // TODO: Seems not making any difference in border beam color so remove it?
-      // TODO: Add win animation and sound
+      }, 3000)
+
       dispatch(closePlayingPlinkoGame())
     }
   }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch, fetchBalance])
