@@ -348,7 +348,15 @@ export default function PlinkoGameBoard() {
             <canvas ref={canvasRef} onClick={handleCanvasClick} />
           </div>
 
-          <BorderBeam className="rounded-[20px]" duration={3} size={350} borderWidth={3} colorFrom={getGameStateColor().colorFrom} colorTo={getGameStateColor().colorTo} />
+          <BorderBeam
+            className="rounded-[10px]"
+            duration={3}
+            anchor={65}
+            size={300}
+            borderWidth={4}
+            colorFrom={getGameStateColor().colorFrom}
+            colorTo={getGameStateColor().colorTo}
+          />
         </motion.div>
       </CardBody>
     </Card>
