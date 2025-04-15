@@ -4,20 +4,19 @@ import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '..
 
 export interface IMineGameDetail {
   betToken: IAvailableTokens
-  createdAt: string
+  createdAt: Date
   chainId: number
   currentRow: number
   nulls: number[]
-  finishedAt: null
+  finishedAt: Date
   id: number
   initialBet: number
   mode: IGameDifficultyVariants
   rowsCount: number
   stake: number
-  startedAt: null
   status: IMineGameStatus
   success?: boolean // FIXME: Separate /mine response type from DreamMineGame type
-  updatedAt: string
+  updatedAt: Date
   time: number
   multiplier: number
   user: {

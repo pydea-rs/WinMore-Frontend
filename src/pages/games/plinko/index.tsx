@@ -3,6 +3,7 @@ import { Spinner } from '@/components/common/spinner/spinner'
 import GameLayout from '@/components/layouts/game.layout'
 import PlinkoConfigForm from '@/components/pages/games/plinko/plinkoConfigForm/plinkoConfigForm'
 import PlinkoGameBoard from '@/components/pages/games/plinko/plinkoGameboard/plinkoGameboard'
+import PlinkoHistory from '@/components/pages/games/plinko/plinkoHistory'
 import { useAuth } from '@/hooks/useAuth'
 import NotFoundPage from '@/pages/404'
 import { useGetPlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
@@ -90,7 +91,7 @@ const Plinko = () => {
               )}
             </div>
           </section>
-          {/* <PlinkoHistory /> FIXME: Add plinko leader board */}
+          <PlinkoHistory />
         </>
       )}
     </>

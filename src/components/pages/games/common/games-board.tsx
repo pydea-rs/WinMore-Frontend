@@ -15,10 +15,10 @@ import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { BaseProps } from '@/types/global.types'
 import { toCapitalCase } from '@/utils/textTools'
 import { getTimePassed } from '@/utils/timeAndDate'
-import { GamesBoardProps } from './games-board.types'
+import { IGamesBoardProps } from './games-board.types'
 
-const GamesBoard: BaseProps<GamesBoardProps> = (props) => {
-  const { data } = props
+const GamesBoard: BaseProps<IGamesBoardProps> = (props) => {
+  const { data, children } = props
 
   return (
     <Card responsive>
@@ -59,7 +59,7 @@ const GamesBoard: BaseProps<GamesBoardProps> = (props) => {
                           <TableDataWrapper className="min-w-20 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
                               <DicesIcon className="hidden lg:inline-block w-6" />
-                              <span>Dream Mine</span>
+                              <span>{children}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
@@ -90,7 +90,7 @@ const GamesBoard: BaseProps<GamesBoardProps> = (props) => {
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                              <span>x{game.multiplier.toFixed(2)}</span>
+                              <span>x{typeof game.multiplier === 'number' ? game.multiplier.toFixed(2) : game.multiplier}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>

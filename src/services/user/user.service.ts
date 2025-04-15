@@ -23,6 +23,7 @@ import {
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
 import { IGetMineGamesListPayload, IMineGameDetail } from '../games/mine/mine.service.types'
+import { IGetPlinkoGamesListPayload, IPlinkoGame } from '../games/plinko/plinko.service.types'
 import {
   IIsUserPlayingPayload,
   IIsUserPlayingResponse,
@@ -185,6 +186,17 @@ export const UserService = createApi({
         }
       },
     }),
+    userPlinkoGamesList: builder.query<BaseResponse<IPlinkoGame[]>, IGetPlinkoGamesListPayload>({
+      query(arg) {
+        const { games } = getApiRoute()
+        return {
+          method: 'GET',
+          url: games.plinko.myHistory.path,
+          params: arg,
+          sendAuthorization: true,
+        }
+      },
+    }),
     userWallet: builder.query<BaseResponse<IUserWalletResponse>, IUserWalletPayload>({
       query(arg) {
         const { user } = getApiRoute()
@@ -227,6 +239,7 @@ export const {
   useGetUserTokenBalanceMutation,
   useWithdrawMutation,
   useUserMineGamesListQuery,
+  useUserPlinkoGamesListQuery,
   useUserWalletQuery,
   useUserTransactionHistoryQuery,
 } = UserService

@@ -32,7 +32,6 @@ export interface ICurrentMineGame {
   mode: IGameDifficultyVariants
   rowsCount: number
   stake: number
-  startedAt: string
   status: IMineGameStatus
   updatedAt: string
   userId: number

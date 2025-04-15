@@ -5,17 +5,19 @@ import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
-import { useUserMineGamesListQuery } from '@/services/user/user.service'
+import { useGetPlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
+import { expandPlinkoGameData, IFinishedPlinkoGame } from '@/services/games/plinko/plinko.service.types'
+import { useUserPlinkoGamesListQuery } from '@/services/user/user.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import GamesBoard from '../../common/games-board'
+import { IGameBoardRow } from '../../common/games-board.types'
 
 type TabsType = 'all' | 'lucky' | 'mine'
 
-const DreamMineHistory: React.FC<ElementProps> = (props) => {
+const PlinkoHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
 
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
@@ -23,9 +25,12 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
 
   const { isAuthorized } = useAuth()
 
-  const { data: userMineGamesList } = useUserMineGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
+  const { data: userMineGamesList } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
-  const { data, refetch } = useMineGamesListQuery({
+  const [userGamesExpanded, setUserGamesExpanded] = useState<IGameBoardRow[]>([])
+  const [dataExpanded, setDataExpanded] = useState<IGameBoardRow[]>([])
+
+  const { data, refetch } = useGetPlinkoGamesListQuery({
     take: 10,
     sort,
     order: orderDescending ? 'desc' : 'asc',
@@ -35,6 +40,14 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const classList = classNames({
     [`${className}`]: className,
   })
+
+  useEffect(() => {
+    setDataExpanded(expandPlinkoGameData(data?.data.length ? (data.data as IFinishedPlinkoGame[]) : []))
+  }, [data])
+
+  useEffect(() => {
+    setUserGamesExpanded(expandPlinkoGameData(userMineGamesList?.data.length ? (userMineGamesList.data as IFinishedPlinkoGame[]) : []))
+  }, [userMineGamesList])
 
   useEffect(() => {
     refetch()
@@ -73,7 +86,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
           </TabHeader>
 
           <TabBody className="">
-            <GamesBoard data={currentTab === 'mine' && isAuthorized ? userMineGamesList : data}>Dream Mine</GamesBoard>
+            <GamesBoard data={{ data: currentTab === 'mine' && isAuthorized ? userGamesExpanded : dataExpanded, status: '', message: '' }}>Plinko</GamesBoard>
           </TabBody>
         </Tab>
         <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20 pointer-events-none" />
@@ -82,4 +95,4 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   )
 }
 
-export default DreamMineHistory
+export default PlinkoHistory
