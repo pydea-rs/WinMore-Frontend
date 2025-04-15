@@ -1,6 +1,6 @@
 import Container from '@/components/common/container/container'
 import MainLayout from '@/components/layouts/main.layout'
-import HomeGameHistory from '@/components/pages/home/homeGameHistory/homeGameHistory'
+import HomeGameHistory from '@/components/pages/home/homeGameHistory'
 import TopGames from '@/components/pages/home/top-games/top-game'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'

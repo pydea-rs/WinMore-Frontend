@@ -1,5 +1,6 @@
-import { IMineGameStatus, IMineModeVariants } from '@/store/slices/mine/mine.slice.types'
+import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { IGameDifficultyVariants } from './common/games.types'
 
 export interface IGetGamesListPayload extends IPaginationPayload {
   status?: IMineGameStatus
@@ -13,7 +14,7 @@ export interface IGameDetail {
   initialBet: number
   token: IAvailableTokens
   chainId: number
-  mode: IMineModeVariants
+  mode: IGameDifficultyVariants
   rowsCount: number
   currentRow: number
   stake: number

@@ -1,36 +1,51 @@
 import Container from '@/components/common/container/container'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
-import TabContent from '@/components/common/tab/tabContent/tabContent'
 import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
-import { useAuth } from '@/hooks/useAuth'
-import { useGamesListQuery } from '@/services/games/games.service'
+import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useState } from 'react'
-import AllBets from './allBets/allBets'
-import LuckyBets from './luckyBets/luckyBets'
+import { useEffect, useState } from 'react'
+import GamesBoard from '../../games/common/games-board'
 
-const HomeGameHistory: React.FC<ElementProps> = (props) => {
+type TabsType = 'all' | 'lucky'
+
+const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
-  const { isAuthorized } = useAuth()
+
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
-  const { data, refetch } = useGamesListQuery({
+  const [orderDescending, setOrderDescending] = useState<boolean>(true)
+  const { data, refetch } = useMineGamesListQuery({
     take: 10,
     sort,
-    // order,
+    order: orderDescending ? 'desc' : 'asc',
   })
+  const [currentTab, setCurrentTab] = useState<TabsType>('all')
 
   const classList = classNames({
     [`${className}`]: className,
   })
 
-  const handleSort = (sort: 'lucky' | 'rollers' | undefined) => {
-    setSort(sort)
+  useEffect(() => {
     refetch()
+  }, [sort, refetch, orderDescending])
+
+  const setTab = (tab: TabsType) => {
+    if (currentTab === tab || !orderDescending) {
+      setOrderDescending((order) => !order)
+    }
+    switch (tab) {
+      case 'lucky':
+        setSort('lucky')
+        break
+      default:
+        setSort(undefined)
+        break
+    }
+    setCurrentTab(tab)
   }
 
   return (
@@ -45,17 +60,12 @@ const HomeGameHistory: React.FC<ElementProps> = (props) => {
 
         <Tab className="mb-8">
           <TabHeader>
-            <TabItem onClick={() => handleSort(undefined)}>All BETS</TabItem>
-            <TabItem onClick={() => handleSort('lucky')}>LUCKY BETS</TabItem>
+            <TabItem onClick={() => setTab('all')}>All BETS</TabItem>
+            <TabItem onClick={() => setTab('lucky')}>LUCKY BETS</TabItem>
           </TabHeader>
 
           <TabBody className="">
-            <TabContent>
-              <AllBets data={data} />
-            </TabContent>
-            <TabContent>
-              <LuckyBets data={data} />
-            </TabContent>
+            <GamesBoard data={data} />
           </TabBody>
         </Tab>
         <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20 pointer-events-none" />
@@ -64,4 +74,4 @@ const HomeGameHistory: React.FC<ElementProps> = (props) => {
   )
 }
 
-export default HomeGameHistory
+export default DreamMineHistory
