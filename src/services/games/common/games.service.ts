@@ -3,7 +3,7 @@ import { BaseResponse } from '@/services/base/request-interface'
 import { getApiRoute } from '@/services/base/routes'
 
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { IGetGamesListPayload, IGetGamesListResponse } from './games.service.types'
+import { IGetGamesListPayload, IGetGamesListResponse } from './games.types'
 
 export const GamesService = createApi({
   reducerPath: 'gamesService',

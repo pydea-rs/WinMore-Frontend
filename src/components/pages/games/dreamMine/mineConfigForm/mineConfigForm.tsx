@@ -16,8 +16,9 @@ import CentIcon from '@/components/icons/cent/cent'
 import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { useAuth } from '@/hooks/useAuth'
 import { useHelper } from '@/hooks/usehelper'
-import { DREAM_MINE_ROCKS_COUNT, IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
+import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/games.types'
 import { useGetDreamMineRulesQuery, usePostMineBetMutation } from '@/services/games/mine/mine.service'
+import { DREAM_MINE_ROCKS_COUNT } from '@/services/games/mine/mine.service.types'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
@@ -35,7 +36,7 @@ const MineConfigForm = () => {
   const { configs } = useSelector((state) => state.configs)
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
-  const { data: rulesData, refetch, isLoading: isRefetching } = useGetDreamMineRulesQuery({})
+  const { data: rulesData, refetch } = useGetDreamMineRulesQuery({})
 
   const { fetchBalance, currentToken } = useWalletStateHelper()
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })

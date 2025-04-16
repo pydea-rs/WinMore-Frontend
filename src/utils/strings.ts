@@ -15,3 +15,12 @@ export function truncate(text: string, maxLength: number, truncationStyle: 'end'
       throw new Error('Invalid truncation style')
   }
 }
+
+export function toCapitalCase(phrase?: string) {
+  return phrase?.length
+    ? phrase
+        .split('_')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ')
+    : ''
+}

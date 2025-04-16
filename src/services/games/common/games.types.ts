@@ -1,6 +1,18 @@
+import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
+import { IPaginationPayload } from '@/types/global.types'
+import { IMineGameDetail } from '../mine/mine.service.types'
+import { IPlinkoGame } from '../plinko/plinko.service.types'
+
 export type ExtraCommonGameStatus = 'GAINED' | 'FINISHED' | 'ALL'
 
 export type IGameDifficultyVariants = 'EASY' | 'MEDIUM' | 'HARD'
+
+export type GeneralGameStatusType = IMineGameStatus | ExtraCommonGameStatus
+export interface IGetGamesListPayload extends IPaginationPayload {
+  status?: GeneralGameStatusType
+}
+
+export type IGetGamesListResponse = { plinkos: IPlinkoGame[]; dreamMines: IMineGameDetail[] }
 
 export interface IGameDifficultyMode {
   label: IGameDifficultyVariants
@@ -15,10 +27,4 @@ export interface IMultipliers {
   EASY: number[]
   MEDIUM: number[]
   HARD: number[]
-}
-
-export const DREAM_MINE_ROCKS_COUNT: Record<IGameDifficultyVariants, number> = {
-  EASY: 4,
-  MEDIUM: 3,
-  HARD: 2,
 }

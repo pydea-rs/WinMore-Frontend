@@ -27,12 +27,20 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
 
   const { isAuthorized } = useAuth()
 
-  const { data: userMineGamesList, refetch: refetchMyGames } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
+  const {
+    data: userMineGamesList,
+    refetch: refetchMyGames,
+    isUninitialized: isMyGamesFetchingUninitialized,
+  } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
   const [userGamesExpanded, setUserGamesExpanded] = useState<IGameBoardRow[]>([])
   const [dataExpanded, setDataExpanded] = useState<IGameBoardRow[]>([])
 
-  const { data, refetch } = useGetPlinkoGamesListQuery({
+  const {
+    data,
+    refetch,
+    isUninitialized: isAllGamesFetchingUninitialized,
+  } = useGetPlinkoGamesListQuery({
     take: 10,
     sort,
     order: orderDescending ? 'desc' : 'asc',
@@ -41,9 +49,14 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
   const plinkoConfig: IPlinkoState = useSelector((state: any) => state.plinko.plinkoConfig)
 
   useEffect(() => {
-    refetch()
-    refetchMyGames()
-  }, [plinkoConfig.playing, refetch, refetchMyGames])
+    if (currentTab !== 'mine') {
+      if (!isAllGamesFetchingUninitialized) {
+        refetch()
+      }
+    } else if (!isMyGamesFetchingUninitialized) {
+      refetchMyGames()
+    }
+  }, [currentTab, plinkoConfig.playing, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
 
   const classList = classNames({
     [`${className}`]: className,
@@ -56,10 +69,6 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
   useEffect(() => {
     setUserGamesExpanded(expandPlinkoGameData(userMineGamesList?.data.length ? (userMineGamesList.data as IFinishedPlinkoGame[]) : []))
   }, [userMineGamesList])
-
-  useEffect(() => {
-    refetch()
-  }, [sort, refetch, orderDescending])
 
   const setTab = (tab: TabsType) => {
     if (currentTab === tab || !orderDescending) {

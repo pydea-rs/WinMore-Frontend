@@ -7,6 +7,7 @@ import TimeFastIcon from '@/components/icons/timeFast/timeFast'
 import { useAuth } from '@/hooks/useAuth'
 import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { useUserMineGamesListQuery } from '@/services/user/user.service'
+import { useSelector } from '@/store/store'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -17,15 +18,24 @@ type TabsType = 'all' | 'lucky' | 'mine'
 
 const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
+  const { mineConfig } = useSelector((state) => state.mine)
 
   const [sort, setSort] = useState<'lucky' | 'rollers'>()
   const [orderDescending, setOrderDescending] = useState<boolean>(true)
 
   const { isAuthorized } = useAuth()
 
-  const { data: userMineGamesList } = useUserMineGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
+  const {
+    data: userMineGamesList,
+    refetch: refetchMyGames,
+    isUninitialized: isMyGamesFetchingUninitialized,
+  } = useUserMineGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
-  const { data, refetch } = useMineGamesListQuery({
+  const {
+    data,
+    refetch,
+    isUninitialized: isAllGamesFetchingUninitialized,
+  } = useMineGamesListQuery({
     take: 10,
     sort,
     order: orderDescending ? 'desc' : 'asc',
@@ -37,8 +47,22 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   })
 
   useEffect(() => {
-    refetch()
-  }, [sort, refetch, orderDescending])
+    if (currentTab !== 'mine') {
+      if (!isAllGamesFetchingUninitialized) {
+        refetch()
+      }
+    } else if (!isMyGamesFetchingUninitialized && currentTab === 'mine') {
+      refetchMyGames()
+    }
+  }, [mineConfig.currentGameStatus, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
+
+  useEffect(() => {
+    if (currentTab !== 'mine') {
+      refetch()
+    } else {
+      refetchMyGames()
+    }
+  }, [currentTab, refetchMyGames, refetch])
 
   const setTab = (tab: TabsType) => {
     if (currentTab === tab || !orderDescending) {

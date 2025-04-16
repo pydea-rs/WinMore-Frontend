@@ -1,6 +1,6 @@
 import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
 import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
-import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
+import { GeneralGameStatusType, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
 
 export interface IMineGameDetail {
   betToken: IAvailableTokens
@@ -48,5 +48,11 @@ export interface IMineBlockPayload {
 }
 
 export interface IGetMineGamesListPayload extends IPaginationPayload {
-  status?: IMineGameStatus | ExtraCommonGameStatus
+  status?: GeneralGameStatusType
+}
+
+export const DREAM_MINE_ROCKS_COUNT: Record<IGameDifficultyVariants, number> = {
+  EASY: 4,
+  MEDIUM: 3,
+  HARD: 2,
 }
