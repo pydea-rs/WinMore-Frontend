@@ -62,18 +62,16 @@ const QuickAccess: React.FC<ElementProps> = (props) => {
         }}
       >
         <div className="w-fit flex flex-col gap-4 ">
-          <Link href={internalLinks.games.mine.path}>
-            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.mine.slug) ? '!bg-gradient-gray' : ''}`}>
+          <Link href={internalLinks.games.plinko.path}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.plinko.slug) ? '!bg-gradient-gray' : ''}`}>
               <CasinoIcon className="w-6 h-6" />
             </Button>
           </Link>
-          {
-            <Link href={internalLinks.games.plinko.path}>
-              <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.plinko.slug) ? '!bg-gradient-gray' : ''}`}>
-                <ConstructionTool className="w-6 h-6" />
-              </Button>
-            </Link>
-          }
+          <Link href={internalLinks.games.mine.path}>
+            <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-primary/90 ${gameIsAlreadyOn(internalLinks.games.mine.slug) ? '!bg-gradient-gray' : ''}`}>
+              <ConstructionTool className="w-6 h-6" />
+            </Button>
+          </Link>
           <hr style={{ border: '1px solid #333' }} />
           {socialMediaItems.map(({ url, Icon }, idx) => (
             <Link href={url || '#'} key={idx}>
