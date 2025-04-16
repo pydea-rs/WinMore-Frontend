@@ -75,7 +75,7 @@ const axiosBaseQuery =
       }
     } catch (axiosError) {
       let err = axiosError as AxiosError<{ data: null; message: string[]; status?: number }>
-
+      console.log(err)
       toast.error(err.response?.data.message)
       throw err
     }

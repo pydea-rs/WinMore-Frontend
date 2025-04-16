@@ -28,11 +28,8 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
     formState: { errors },
   } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '', referrerCode: '' } })
   const [registerMutation, {}] = useRegisterUserMutation()
-  const onSubmit: SubmitHandler<UserForm> = (data) => {
-    registerMutation({
-      email: data.email,
-      name: data.name,
-    })
+  const onSubmit: SubmitHandler<UserForm> = ({ email, referrerCode, name }) => {
+    registerMutation({ email, name, referrerCode })
   }
 
   return (
