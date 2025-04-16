@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Container from '@/components/common/container/container'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
@@ -19,28 +20,28 @@ type TabsType = 'all' | 'lucky' | 'mine'
 const DreamMineHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
   const { mineConfig } = useSelector((state) => state.mine)
-
-  const [sort, setSort] = useState<'lucky' | 'rollers'>()
   const [orderDescending, setOrderDescending] = useState<boolean>(true)
 
   const { isAuthorized } = useAuth()
+  const [currentTab, setCurrentTab] = useState<TabsType>('all')
 
   const {
     data: userMineGamesList,
     refetch: refetchMyGames,
     isUninitialized: isMyGamesFetchingUninitialized,
+    isFetching: myGamesFetching,
   } = useUserMineGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
   const {
     data,
     refetch,
     isUninitialized: isAllGamesFetchingUninitialized,
+    isFetching: allGamesFetching,
   } = useMineGamesListQuery({
     take: 10,
-    sort,
+    sort: currentTab !== 'lucky' ? undefined : 'lucky',
     order: orderDescending ? 'desc' : 'asc',
   })
-  const [currentTab, setCurrentTab] = useState<TabsType>('all')
 
   const classList = classNames({
     [`${className}`]: className,
@@ -48,33 +49,21 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
 
   useEffect(() => {
     if (currentTab !== 'mine') {
-      if (!isAllGamesFetchingUninitialized) {
+      if (!isAllGamesFetchingUninitialized && !allGamesFetching) {
         refetch()
       }
-    } else if (!isMyGamesFetchingUninitialized && currentTab === 'mine') {
+    } else if (!isMyGamesFetchingUninitialized && !myGamesFetching) {
       refetchMyGames()
     }
-  }, [mineConfig.currentGameStatus, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
-
-  useEffect(() => {
-    if (currentTab !== 'mine') {
-      refetch()
-    } else {
-      refetchMyGames()
-    }
-  }, [currentTab, refetchMyGames, refetch])
+  }, [mineConfig.currentGameStatus, currentTab])
 
   const setTab = (tab: TabsType) => {
-    if (currentTab === tab || !orderDescending) {
+    if (currentTab === tab) {
       setOrderDescending((order) => !order)
+      return
     }
-    switch (tab) {
-      case 'lucky':
-        setSort('lucky')
-        break
-      default:
-        setSort(undefined)
-        break
+    if (!orderDescending) {
+      setOrderDescending(true)
     }
     setCurrentTab(tab)
   }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Container from '@/components/common/container/container'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
@@ -22,7 +23,6 @@ type TabsType = 'all' | 'lucky' | 'mine'
 const PlinkoHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
 
-  const [sort, setSort] = useState<'lucky' | 'rollers'>()
   const [orderDescending, setOrderDescending] = useState<boolean>(true)
 
   const { isAuthorized } = useAuth()
@@ -31,32 +31,24 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
     data: userMineGamesList,
     refetch: refetchMyGames,
     isUninitialized: isMyGamesFetchingUninitialized,
+    isFetching: myGamesFetching,
   } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
   const [userGamesExpanded, setUserGamesExpanded] = useState<IGameBoardRow[]>([])
   const [dataExpanded, setDataExpanded] = useState<IGameBoardRow[]>([])
+  const [currentTab, setCurrentTab] = useState<TabsType>('all')
 
   const {
     data,
     refetch,
     isUninitialized: isAllGamesFetchingUninitialized,
+    isFetching: allGamesFetching,
   } = useGetPlinkoGamesListQuery({
     take: 10,
-    sort,
+    sort: currentTab !== 'lucky' ? undefined : 'lucky',
     order: orderDescending ? 'desc' : 'asc',
   })
-  const [currentTab, setCurrentTab] = useState<TabsType>('all')
   const plinkoConfig: IPlinkoState = useSelector((state: any) => state.plinko.plinkoConfig)
-
-  useEffect(() => {
-    if (currentTab !== 'mine') {
-      if (!isAllGamesFetchingUninitialized) {
-        refetch()
-      }
-    } else if (!isMyGamesFetchingUninitialized) {
-      refetchMyGames()
-    }
-  }, [currentTab, plinkoConfig.playing, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
 
   const classList = classNames({
     [`${className}`]: className,
@@ -70,17 +62,23 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
     setUserGamesExpanded(expandPlinkoGameData(userMineGamesList?.data.length ? (userMineGamesList.data as IFinishedPlinkoGame[]) : []))
   }, [userMineGamesList])
 
-  const setTab = (tab: TabsType) => {
-    if (currentTab === tab || !orderDescending) {
-      setOrderDescending((order) => !order)
+  useEffect(() => {
+    if (currentTab !== 'mine') {
+      if (!isAllGamesFetchingUninitialized && !allGamesFetching) {
+        refetch()
+      }
+    } else if (!isMyGamesFetchingUninitialized && !myGamesFetching) {
+      refetchMyGames()
     }
-    switch (tab) {
-      case 'lucky':
-        setSort('lucky')
-        break
-      default:
-        setSort(undefined)
-        break
+  }, [plinkoConfig.playing, currentTab])
+
+  const setTab = (tab: TabsType) => {
+    if (currentTab === tab) {
+      setOrderDescending((order) => !order)
+      return
+    }
+    if (!orderDescending) {
+      setOrderDescending(true)
     }
     setCurrentTab(tab)
   }

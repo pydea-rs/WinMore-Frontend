@@ -8,7 +8,7 @@ import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import GamesBoard from '../../games/common/games-board'
 
 type TabsType = 'all' | 'lucky'
@@ -29,13 +29,20 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
     [`${className}`]: className,
   })
 
-  useEffect(() => {
-    refetch()
-  }, [sort, refetch, orderDescending])
-
+  // useEffect(() => {
+  // if (currentTab !== 'mine') {
+  // if (!isAllGamesFetchingUninitialized) {
+  // refetch()
+  // }
+  // } else if (!isMyGamesFetchingUninitialized) {
+  // refetchMyGames()
+  // }
+  // }, [currentTab, plinkoConfig.playing, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
+  //
   const setTab = (tab: TabsType) => {
     if (currentTab === tab || !orderDescending) {
       setOrderDescending((order) => !order)
+      return
     }
     switch (tab) {
       case 'lucky':
