@@ -1,4 +1,5 @@
-import { IAddress, IAvailableTokens, IPaginationPayload, Nullable } from '@/types/global.types'
+import { IAddress, IAvailableTokens, Nullable } from '@/types/global.types'
+import { IPaginationPayload } from '../base/common.types'
 import { IMineGameDetail } from '../games/mine/mine.service.types'
 import { IMePlayingPlinkoGame } from '../games/plinko/plinko.service.types'
 

@@ -1,5 +1,6 @@
+import { IPaginationPayload } from '@/services/base/common.types'
 import { IPlinkoStatus } from '@/store/slices/plinko/plinko.slice.types'
-import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { IAvailableTokens } from '@/types/global.types'
 import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
 import { BucketsDataType, PegsDataType, PlinkoBallType, PlinkoGameBoardBoxType } from './physx.types'
 

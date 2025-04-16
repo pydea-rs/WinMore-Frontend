@@ -1,5 +1,6 @@
+import { IPaginationPayload } from '@/services/base/common.types'
 import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
-import { IAvailableTokens, IPaginationPayload } from '@/types/global.types'
+import { IAvailableTokens } from '@/types/global.types'
 import { GeneralGameStatusType, IGameDifficultyVariants, IMultipliers } from '../common/games.types'
 
 export interface IMineGameDetail {

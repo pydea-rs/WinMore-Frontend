@@ -18,10 +18,10 @@ import {
   IGetUserInfoPayload,
   IGetUserInfoResponse,
   IRegisterUserPayload,
-  IRegisterUserResponse,
 } from '@/types/auth/user.types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../base/axiosBaseQuery'
+import { IVoidResponse } from '../base/common.types'
 import { IGetMineGamesListPayload, IMineGameDetail } from '../games/mine/mine.service.types'
 import { IGetPlinkoGamesListPayload, IPlinkoGame } from '../games/plinko/plinko.service.types'
 import {
@@ -68,7 +68,7 @@ export const UserService = createApi({
         } catch (err) {}
       },
     }),
-    registerUser: builder.mutation<BaseResponse<IRegisterUserResponse>, IRegisterUserPayload>({
+    registerUser: builder.mutation<BaseResponse<IVoidResponse>, IRegisterUserPayload>({
       query: (args) => {
         const { user } = getApiRoute()
         return {

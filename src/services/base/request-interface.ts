@@ -8,11 +8,3 @@ export interface BaseResponse<T> {
   message: string
   data: T
 }
-export interface IErrorResponse {
-  response: {
-    data: {
-      code: number
-      message: string
-    }
-  }
-}

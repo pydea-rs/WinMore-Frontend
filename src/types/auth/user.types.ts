@@ -24,8 +24,9 @@ export interface IGetUserInfoResponse {
 export interface IRegisterUserPayload {
   name: string
   email: string
+  referrerCode?: string
 }
-export interface IRegisterUserResponse {}
+
 export interface IEditUserProfilePayload {
   name?: string
   email?: string
@@ -40,7 +41,6 @@ export interface IEditUserProfileResponse {
   updatedAt: string
 }
 
-// Get User Current Balance
 export type IGetUserBalanceResponse = number
 export interface IGetUserCurrentBalancePayload {
   token: string

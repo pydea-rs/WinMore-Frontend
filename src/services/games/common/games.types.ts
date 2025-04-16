@@ -1,5 +1,5 @@
+import { IPaginationPayload } from '@/services/base/common.types'
 import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
-import { IPaginationPayload } from '@/types/global.types'
 import { IMineGameDetail } from '../mine/mine.service.types'
 import { IPlinkoGame } from '../plinko/plinko.service.types'
 

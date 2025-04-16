@@ -1,6 +1,6 @@
 import { useMultiStepModal } from '@/components/common/multipleStepModal/multipleStepModal.hook'
 import MultipleStepModalGroup from '@/components/common/multipleStepModal/multipleStepModalGroup/multipleStepModalGroup'
-import { CompleteUserDataCard } from '@/components/snippets/cards/completeUserData/completeUserData'
+import { CompleteUserDataCard } from '@/components/snippets/cards/completeUserData'
 import { ConnectToWalletCard } from '@/components/snippets/cards/connectToWallet/connectToWallet'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'

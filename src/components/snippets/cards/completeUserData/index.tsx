@@ -11,6 +11,7 @@ import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Input } from '@/components/common/form/textInput/textInput'
 import DisabledIcon from '@/components/icons/disabled'
 import EmailIcon from '@/components/icons/email'
+import ReferralCodeIcon from '@/components/icons/referral-code'
 import SingleUserIcon from '@/components/icons/singleUser'
 import { useRegisterUserMutation } from '@/services/user/user.service'
 import Image from 'next/image'
@@ -64,7 +65,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="Type here" id="2-1" />
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type here" id="2-1" />
                     {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
@@ -82,7 +83,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="example@crypto.com" id="2-2" />
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" id="2-2" />
                     {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
@@ -91,7 +92,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
 
             <FormGroup>
               <Label htmlFor="2-2" className="flex items-center gap-x-2">
-                <EmailIcon />
+                <ReferralCodeIcon />
                 <span>
                   Referrer Code <sub>(optional)</sub>
                 </span>
@@ -102,7 +103,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="EXAMPLE8" id="2-2" />
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="EXAMPLE8" id="2-2" />
                     {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
