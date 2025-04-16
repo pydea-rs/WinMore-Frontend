@@ -1,56 +1,58 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Container from '@/components/common/container/container'
 import Tab from '@/components/common/tab/tab'
 import TabBody from '@/components/common/tab/tabBody/tabBody'
 import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import TimeFastIcon from '@/components/icons/timeFast/timeFast'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useGetAllGamesListQuery } from '@/services/games/common/games.service'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import GamesBoard from '../../games/common/games-board'
+import { combineGames, IGameBoardRow } from '../../games/common/games-board.types'
 
 type TabsType = 'all' | 'lucky'
 
-const DreamMineHistory: React.FC<ElementProps> = (props) => {
+const AllGamesHistory: React.FC<ElementProps> = (props) => {
   const { className } = props
-
-  const [sort, setSort] = useState<'lucky' | 'rollers'>()
   const [orderDescending, setOrderDescending] = useState<boolean>(true)
-  const { data, refetch } = useMineGamesListQuery({
+  const [dataExpanded, setDataExpanded] = useState<IGameBoardRow[]>([])
+  const [currentTab, setCurrentTab] = useState<TabsType>('all')
+
+  const {
+    data,
+    refetch,
+    isUninitialized: isAllGamesFetchingUninitialized,
+    isFetching: allGamesFetching,
+  } = useGetAllGamesListQuery({
     take: 10,
-    sort,
+    sort: currentTab !== 'lucky' ? undefined : 'lucky',
     order: orderDescending ? 'desc' : 'asc',
   })
-  const [currentTab, setCurrentTab] = useState<TabsType>('all')
 
   const classList = classNames({
     [`${className}`]: className,
   })
 
-  // useEffect(() => {
-  // if (currentTab !== 'mine') {
-  // if (!isAllGamesFetchingUninitialized) {
-  // refetch()
-  // }
-  // } else if (!isMyGamesFetchingUninitialized) {
-  // refetchMyGames()
-  // }
-  // }, [currentTab, plinkoConfig.playing, refetch, refetchMyGames, isAllGamesFetchingUninitialized, isMyGamesFetchingUninitialized])
-  //
+  useEffect(() => {
+    setDataExpanded(combineGames(data?.data ?? { plinkos: [], dreamMines: [] }, { sort: currentTab !== 'lucky' ? undefined : 'lucky', take: 10, isDescending: orderDescending }))
+  }, [data])
+
+  useEffect(() => {
+    if (!isAllGamesFetchingUninitialized && !allGamesFetching) {
+      refetch()
+    }
+  }, [currentTab])
+
   const setTab = (tab: TabsType) => {
-    if (currentTab === tab || !orderDescending) {
+    if (currentTab === tab) {
       setOrderDescending((order) => !order)
       return
     }
-    switch (tab) {
-      case 'lucky':
-        setSort('lucky')
-        break
-      default:
-        setSort(undefined)
-        break
+    if (!orderDescending) {
+      setOrderDescending(true)
     }
     setCurrentTab(tab)
   }
@@ -72,7 +74,7 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
           </TabHeader>
 
           <TabBody className="">
-            <GamesBoard data={data} />
+            <GamesBoard data={{ data: dataExpanded, status: '', message: '' }}>Game</GamesBoard>
           </TabBody>
         </Tab>
         <Image alt="shape" src="/assets/images/dimond-red.svg" width={69} height={95} className="hidden sm:block absolute -bottom-6 -right-2 z-20 pointer-events-none" />
@@ -81,4 +83,4 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
   )
 }
 
-export default DreamMineHistory
+export default AllGamesHistory

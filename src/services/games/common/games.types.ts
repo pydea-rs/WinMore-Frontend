@@ -12,7 +12,14 @@ export interface IGetGamesListPayload extends IPaginationPayload {
   status?: GeneralGameStatusType
 }
 
-export type IGetGamesListResponse = { plinkos: IPlinkoGame[]; dreamMines: IMineGameDetail[] }
+export interface IMyPlayingGamesListResponse {
+  plinko?: IPlinkoGame
+  dreamMine?: IMineGameDetail
+}
+export interface IGamesListResponse {
+  plinkos: IPlinkoGame[]
+  dreamMines: IMineGameDetail[]
+}
 
 export interface IGameDifficultyMode {
   label: IGameDifficultyVariants

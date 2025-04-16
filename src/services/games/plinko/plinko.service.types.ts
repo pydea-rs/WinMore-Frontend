@@ -91,7 +91,8 @@ export const expandPlinkoGameData = (games: IFinishedPlinkoGame[]) => {
   return games.map(({ plinkoBalls, ...game }) => ({
     ...game,
     initialBet: game.initialBet * game.ballsCount,
-    multiplier: game.profit != null ? game.profit : '?',
+    multiplier: game.profit ?? null,
     betToken: game.token,
+    name: 'Plinko',
   }))
 }

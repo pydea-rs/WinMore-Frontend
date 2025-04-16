@@ -112,6 +112,9 @@ export const getApiRoute = () => {
         mePlaying: {
           path: 'games/me-playing',
         },
+        myHistory: {
+          path: 'games/my-history',
+        },
       },
     },
   }

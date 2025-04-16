@@ -14,6 +14,7 @@ import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { BaseProps } from '@/types/global.types'
 import { getTimePassed } from '@/utils/date'
+import { approximate } from '@/utils/numerix'
 import { toCapitalCase } from '@/utils/strings'
 import { IGamesBoardProps } from './games-board.types'
 
@@ -57,9 +58,9 @@ const GamesBoard: BaseProps<IGamesBoardProps> = (props) => {
                       <TableRow className="text-center" key={game.id}>
                         <TableData>
                           <TableDataWrapper className="min-w-20 bg-opacity-40">
-                            <div className="flex items-center justify-center gap-x-2  h-[40px]">
+                            <div className="flex items-center justify-left gap-x-2 pl-3 lg:pl-10 h-[40px]">
                               <DicesIcon className="hidden lg:inline-block w-6" />
-                              <span>{children}</span>
+                              <span>{game.name || children}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
@@ -90,7 +91,7 @@ const GamesBoard: BaseProps<IGamesBoardProps> = (props) => {
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                              <span>{typeof game.multiplier === 'number' ? 'x' + game.multiplier.toFixed(2) : game.multiplier}</span>
+                              <span>{game.multiplier != null ? 'x' + approximate(game.multiplier, 'floor', 2) : game.multiplier}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
