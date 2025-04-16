@@ -30,16 +30,18 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
   const [updateUserProfileMutation, {}] = useUpdateUserProfileMutation() // TODO: in api service section, replace get user call with this endpoint response usage
   const onSubmit: SubmitHandler<UserForm> = (data) => {
     const payload = {
-      ...(user?.email?.toLowerCase() !== data?.email.toLowerCase() ? { email: data.email } : {}),
-      ...(user?.name !== data?.name ? { name: data.name } : {}),
+      ...(data?.email?.length && user?.email?.toLowerCase() !== data.email.toLowerCase() ? { email: data.email } : {}),
+      ...(data?.name?.length && user?.name !== data.name ? { name: data.name } : {}),
     }
     if (!Object.keys(payload)?.length) {
       toast.error('No changes has been made to apply!')
       return
     }
     updateUserProfileMutation(payload).then((res) => {
-      toast.success('Successfully saved!')
-      onClose()
+      if (!res.error) {
+        toast.success('Successfully saved!')
+        onClose()
+      }
     })
   }
 
@@ -70,11 +72,15 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: false,
+                  minLength: { value: 3, message: 'Name is too short!' },
+                  maxLength: { value: 256, message: 'Name is too long!' },
+                }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type your name here..." id="2-1" />
-                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type here" id="2-1" />
+                    {fieldState.error && <TextForm variant="invalid">{fieldState.error.message}</TextForm>}
                   </Fragment>
                 )}
               />
@@ -88,11 +94,18 @@ export const EditProfileData: React.FC<{ onClose: () => void }> = (props) => {
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: false,
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Invalid email address',
+                  },
+                  maxLength: { value: 256, message: 'Email address too long!' },
+                }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" id="2-2" />
-                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@winmore.com" id="2-2" />
+                    {fieldState.error && <TextForm variant="invalid">{fieldState.error.message}</TextForm>}
                   </Fragment>
                 )}
               />

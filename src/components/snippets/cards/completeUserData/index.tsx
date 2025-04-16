@@ -87,6 +87,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: 'Invalid email address',
                   },
+                  maxLength: { value: 256, message: 'Email address too long!' },
                 }}
                 render={({ field, fieldState }) => (
                   <Fragment>
