@@ -22,6 +22,7 @@ import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
+import { isDevelopmentMode } from '@/utils/dev'
 import { approximate, createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -167,6 +168,7 @@ export default function PlinkoConfigForm() {
                 ...(plinkoConfig.rules?.minBetAmount
                   ? { min: { value: plinkoConfig.rules?.minBetAmount, message: `Can not bet below ${plinkoConfig.rules.minBetAmount}$.` } }
                   : {}),
+                validate: (value) => isDevelopmentMode() || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>
@@ -275,14 +277,12 @@ export default function PlinkoConfigForm() {
                     render={({ field }) => (
                       <Radio
                         disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
-                        // new props
                         checked={field.value === row}
                         onChange={(e) => {
                           field.onChange(Number(e.target.value))
                           dispatch(setPlinkoSelectedConfigRule({ rules: rulesList?.data ?? [], selectedRow: row, selectedMode: plinkoConfig.mode }))
                         }}
                         blockClassName="w-[calc(100/5*1%)]"
-                        // new props ends
                         id={`row-${row.toString()}`}
                         name="game-rows"
                         value={row.toString()}
