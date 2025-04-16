@@ -1,12 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
+import { IGeneralResponseTemplate } from '@/services/base/common.types'
 import { BucketsDataType, PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { useDropPlinkoBallsMutation, useFinishPlinkoGameMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
-import { closePlayingPlinkoGame, incDroppedBallsCount } from '@/store/slices/plinko/plinko.slice'
+import { closePlayingPlinkoGame, incDroppedBallsCount, setPlayingPlinkoGameStatus } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch } from '@/store/store'
 import { toFixedEfficient } from '@/utils/numerix'
+import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
@@ -341,6 +344,22 @@ export default function PlinkoGameBoard() {
     userStatusRef.current = 'DROPPING'
   }
 
+  const handleUnexpectedEvents = (ex?: AxiosError<IGeneralResponseTemplate>, specialStatusToFinish: number | null = null) => {
+    const error = ex?.response?.data
+    if (error?.status === 400) {
+      const message = error.message instanceof Array ? error.message[0] : error.message
+      if (message.toLowerCase().includes('finished')) {
+        dispatch(setPlayingPlinkoGameStatus('FINISHED'))
+      } else {
+        getMyOngoinGame()
+      }
+    } else if (specialStatusToFinish && error?.status === specialStatusToFinish) {
+      dispatch(setPlayingPlinkoGameStatus('FINISHED'))
+    } else {
+      dispatch(closePlayingPlinkoGame())
+    }
+  }
+
   useEffect(() => {
     if (!plinkoConfig.playing || (plinkoConfig.playing.status !== 'NOT_DROPPED_YET' && !plinkoConfig.playing.balls.length)) {
       getMyOngoinGame()
@@ -354,13 +373,17 @@ export default function PlinkoGameBoard() {
       userStatusRef.current = 'PLAYING'
       ;(async () => {
         if (plinkoConfig.playing) {
-          await dropPlinkoBallsMutation({
-            id: plinkoConfig.playing.id,
-          }).unwrap()
+          try {
+            await dropPlinkoBallsMutation({
+              id: plinkoConfig.playing.id,
+            }).unwrap()
+          } catch (ex) {
+            handleUnexpectedEvents(ex as AxiosError<IGeneralResponseTemplate>)
+          }
         }
       })()
     }
-  }, [plinkoConfig.playing, isDropping, plinkoConfig.rules, dropPlinkoBallsMutation, getMyOngoinGame])
+  }, [plinkoConfig.playing, plinkoConfig.rules])
 
   useEffect(() => {
     if (plinkoConfig.playing && userStatusRef.current === 'NONE') {
@@ -379,13 +402,17 @@ export default function PlinkoGameBoard() {
     ) {
       ;(async () => {
         if (plinkoConfig.playing) {
-          await finishPlinkoGameMutation({
-            id: plinkoConfig.playing.id,
-          }).unwrap()
+          try {
+            await finishPlinkoGameMutation({
+              id: plinkoConfig.playing.id,
+            }).unwrap()
+          } catch (ex) {
+            handleUnexpectedEvents(ex as AxiosError<IGeneralResponseTemplate>)
+          }
         }
       })()
     }
-  }, [plinkoConfig.playing?.droppedCount, plinkoConfig.playing, isDropping, isFinishing, finishPlinkoGameMutation])
+  }, [plinkoConfig.playing?.droppedCount, plinkoConfig.playing])
 
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {

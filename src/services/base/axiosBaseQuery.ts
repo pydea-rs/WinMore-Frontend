@@ -2,6 +2,7 @@ import { RootState } from '@/store/store'
 import { BaseQueryFn } from '@reduxjs/toolkit/query'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { toast } from 'react-toastify'
+import { IGeneralResponseTemplate } from './common.types'
 
 export const axiosInstance: AxiosInstance = axios.create({ baseURL: process.env.BASE_URL })
 axiosInstance.interceptors.request.use((config) => {
@@ -74,7 +75,7 @@ const axiosBaseQuery =
         },
       }
     } catch (axiosError) {
-      let err = axiosError as AxiosError<{ data: null; message: string[] | string; status?: number }>
+      let err = axiosError as AxiosError<IGeneralResponseTemplate>
       ;(err.response?.data?.message instanceof Array ? err.response.data.message : [err.response?.data.message]).forEach((msg) => toast.error(msg))
       throw err
     }

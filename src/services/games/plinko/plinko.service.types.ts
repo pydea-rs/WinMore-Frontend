@@ -5,15 +5,11 @@ import { ExtraCommonGameStatus, IGameDifficultyVariants, IMultipliers } from '..
 import { BucketsDataType, PegsDataType, PlinkoBallType, PlinkoGameBoardBoxType } from './physx.types'
 
 export interface IDroppingPlinkoBall {
-  id: number
   gameId: number
   dropSpecs: PlinkoBallType
 }
 
 export interface IPlinkoBall extends IDroppingPlinkoBall {
-  createdAt: Date
-  updatedAt: Date
-  userId: number
   user?: {
     name: string
     id: number

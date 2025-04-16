@@ -12,3 +12,9 @@ export interface IPaginationPayload {
 }
 
 export interface IVoidResponse {}
+
+export interface IGeneralResponseTemplate {
+  data: null
+  message: string[] | string
+  status?: number
+}
