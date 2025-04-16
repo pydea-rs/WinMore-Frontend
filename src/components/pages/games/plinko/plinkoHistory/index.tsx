@@ -8,10 +8,12 @@ import { useAuth } from '@/hooks/useAuth'
 import { useGetPlinkoGamesListQuery } from '@/services/games/plinko/plinko.service'
 import { expandPlinkoGameData, IFinishedPlinkoGame } from '@/services/games/plinko/plinko.service.types'
 import { useUserPlinkoGamesListQuery } from '@/services/user/user.service'
+import { IPlinkoState } from '@/store/slices/plinko/plinko.slice.types'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import GamesBoard from '../../common/games-board'
 import { IGameBoardRow } from '../../common/games-board.types'
 
@@ -25,7 +27,7 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
 
   const { isAuthorized } = useAuth()
 
-  const { data: userMineGamesList } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
+  const { data: userMineGamesList, refetch: refetchMyGames } = useUserPlinkoGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
 
   const [userGamesExpanded, setUserGamesExpanded] = useState<IGameBoardRow[]>([])
   const [dataExpanded, setDataExpanded] = useState<IGameBoardRow[]>([])
@@ -36,6 +38,12 @@ const PlinkoHistory: React.FC<ElementProps> = (props) => {
     order: orderDescending ? 'desc' : 'asc',
   })
   const [currentTab, setCurrentTab] = useState<TabsType>('all')
+  const plinkoConfig: IPlinkoState = useSelector((state: any) => state.plinko.plinkoConfig)
+
+  useEffect(() => {
+    refetch()
+    refetchMyGames()
+  }, [plinkoConfig.playing, refetch, refetchMyGames])
 
   const classList = classNames({
     [`${className}`]: className,

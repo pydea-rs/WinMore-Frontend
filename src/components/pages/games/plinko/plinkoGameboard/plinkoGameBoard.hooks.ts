@@ -1,12 +1,11 @@
 import { IPlinkoState } from '@/store/slices/plinko/plinko.slice.types'
-import { useDispatch, useSelector } from '@/store/store'
+import { useSelector } from '@/store/store'
 import { Howl } from 'howler'
 import { useMemo } from 'react'
 
 export type PlinkoSoundsType = { playDrop: () => number | false; playLanding: () => number | false; playCollision: (index: number) => number | false }
 
 const usePlinkoGameBoardHelper = () => {
-  const dispatch = useDispatch()
   const plinkoConfig: IPlinkoState = useSelector((state: any) => state.plinko.plinkoConfig)
   const { configs } = useSelector((state) => state.configs)
 

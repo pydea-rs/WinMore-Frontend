@@ -90,7 +90,7 @@ const GamesBoard: BaseProps<IGamesBoardProps> = (props) => {
                         <TableData>
                           <TableDataWrapper className="min-w-28 bg-opacity-40">
                             <div className="flex items-center justify-center gap-x-2  h-[40px]">
-                              <span>x{typeof game.multiplier === 'number' ? game.multiplier.toFixed(2) : game.multiplier}</span>
+                              <span>{typeof game.multiplier === 'number' ? 'x' + game.multiplier.toFixed(2) : game.multiplier}</span>
                             </div>
                           </TableDataWrapper>
                         </TableData>
