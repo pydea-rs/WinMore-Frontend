@@ -4,7 +4,7 @@ import { logout } from '@/store/slices/auth/auth.slice'
 import { setWalletConnectorName, updateCurrentTokenBalance } from '@/store/slices/currency/currency.slice'
 import { useDispatch } from '@/store/store'
 import { ISIWEMessage } from '@/types/auth/auth.types'
-import { getHostName } from '@/utils/getHostname.utils'
+import { getHostName } from '@/utils/router'
 import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -93,7 +93,6 @@ export const useAuth = () => {
   }
 
   const logoutAndDisconnect = () => {
-    // const domain = getHostName()
     deleteCookie('token')
     localStorage.clear()
     dispatch(updateCurrentTokenBalance(0))

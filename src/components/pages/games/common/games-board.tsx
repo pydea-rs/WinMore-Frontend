@@ -13,8 +13,8 @@ import CentIcon from '@/components/icons/cent/cent'
 import DicesIcon from '@/components/icons/dices/dices'
 import SingleUserIcon from '@/components/icons/singleUser/singleUser'
 import { BaseProps } from '@/types/global.types'
-import { toCapitalCase } from '@/utils/textTools'
-import { getTimePassed } from '@/utils/timeAndDate'
+import { getTimePassed } from '@/utils/date'
+import { toCapitalCase } from '@/utils/strings'
 import { IGamesBoardProps } from './games-board.types'
 
 const GamesBoard: BaseProps<IGamesBoardProps> = (props) => {

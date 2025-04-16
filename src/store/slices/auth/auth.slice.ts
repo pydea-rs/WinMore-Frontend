@@ -21,7 +21,6 @@ export const authSlice = createSlice({
       const cookieExpiration = new Date(decodedToken.exp * 1000) // 'exp' is in seconds
 
       setCookie('token', action.payload, {
-        //  domain: getDomain(),
         expires: cookieExpiration,
       })
       state.token = action.payload
