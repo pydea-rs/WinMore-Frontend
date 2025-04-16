@@ -2,14 +2,16 @@ import { Avatar } from '@/components/common/avatar/avatar'
 import Modal from '@/components/common/modal/modal'
 import { setUserTimezone } from '@/store/slices/configs/configs.slice'
 import { useDispatch, useSelector } from '@/store/store'
+import { copyToClipboard } from '@/utils/strings'
 import { Button } from '@headlessui/react'
 import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState } from 'react'
 import { BsWallet2 } from 'react-icons/bs'
+import { FaUserFriends } from 'react-icons/fa'
 import { FiCopy } from 'react-icons/fi'
 import { MdOutlineAccessTime } from 'react-icons/md'
-import { toast } from 'react-toastify'
+import LoginRequiredPage from '../common/LoginRequiredPage'
 import { EditProfileData } from './edit/editProfileData'
 
 const UserProfile = () => {
@@ -21,22 +23,11 @@ const UserProfile = () => {
   const deviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
   const dispatch = useDispatch()
 
-  const copyWalletAddress = async () => {
-    try {
-      if (user?.wallet) {
-        await navigator.clipboard.writeText(user?.wallet)
-        toast.success('Copied!.')
-      }
-    } catch (err) {
-      toast.error('Copy Failed! Maybe try again after refresh!')
-    }
-  }
-
   const handleChangeTimezone = () => {
     dispatch(setUserTimezone(configs.timezone.toLowerCase() === 'utc' ? deviceTimezone : 'UTC'))
   }
-
-  return (
+  console.log(connectorName)
+  return user ? (
     <div className="p-4 sm:py-6 lg:py-10 bg-dark-900 rounded-2xl shadow-lg space-y-6">
       {/* Profile Header */}
       <div className="profile-avatar-background relative bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 rounded-xl p-6 flex items-center">
@@ -51,8 +42,8 @@ const UserProfile = () => {
         </div>
 
         <div className="text-center">
-          <h3 className="text-white text-xl font-bold">{user?.name}</h3>
-          <p className="text-gray-200">{user?.email}</p>
+          <h3 className="text-white text-xl font-bold">{user.name}</h3>
+          <p className="text-gray-200">{user.email}</p>
           <Avatar className="mx-auto mt-2" size="sm" src={`/assets/images/wallets/${connectorName}.svg`} alt={connectorName || 'Unknown Wallet Connector'} />
         </div>
 
@@ -64,10 +55,23 @@ const UserProfile = () => {
           <BsWallet2 color="white" className="text-green-400 text-2xl profile-large-icons" />
           <div>
             <h4 className="text-white font-bold">Wallet</h4>
-            <p className="text-gray-400 text-xs">{user?.wallet}</p>
+            <p className="text-gray-400 text-xs">{user.wallet}</p>
           </div>
         </div>
-        {Boolean(user?.wallet?.length) && <FiCopy onClick={copyWalletAddress} className="wallet-address-copy-icon text-gray-400 cursor-pointer" />}
+        {Boolean(user.wallet?.length) && <FiCopy onClick={() => copyToClipboard(user.wallet)} className="wallet-address-copy-icon text-gray-400 cursor-pointer" />}
+      </div>
+
+      <div className="flex items-center justify-between bg-dark-800 rounded-xl">
+        <div className="flex items-center space-x-4 profile-wallet-section">
+          <FaUserFriends color="white" className="text-green-400 text-2xl profile-large-icons" />
+          <div>
+            <h4 className="text-white font-bold">Referral Code</h4>
+            <p className="text-gray-400 text-xs">{user.profile?.referralCode}</p>
+          </div>
+        </div>
+        {Boolean(user.profile?.referralCode?.length) && (
+          <FiCopy onClick={() => copyToClipboard(user.profile.referralCode)} className="wallet-address-copy-icon text-gray-400 cursor-pointer" />
+        )}
       </div>
 
       <div className="flex items-center justify-between bg-dark-800 rounded-xl">
@@ -88,6 +92,8 @@ const UserProfile = () => {
         <EditProfileData onClose={() => setIsEditProfileOpen(false)} />
       </Modal>
     </div>
+  ) : (
+    <LoginRequiredPage />
   )
 }
 

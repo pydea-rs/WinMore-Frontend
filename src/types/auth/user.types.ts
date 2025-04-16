@@ -2,6 +2,14 @@ import { IAddress } from '../global.types'
 
 export interface IGetUserInfoPayload {}
 
+export interface IProfile {
+  avatar: string | null
+  createdAt: string
+  id: number
+  updatedAt: string
+  userId: number
+  referralCode: string
+}
 export interface IGetUserInfoResponse {
   admin: boolean
   createdAt: string
@@ -10,13 +18,7 @@ export interface IGetUserInfoResponse {
   lastLoginAt: string
   name: string | null
   updatedAt: string
-  profile: {
-    avatar: string | null
-    createdAt: string
-    id: number
-    updatedAt: string
-    userId: number
-  }
+  profile: IProfile
   wallet: { address: IAddress; createdAt: string; id: number; ownerId: number; updatedAt: string }
 }
 // Register User

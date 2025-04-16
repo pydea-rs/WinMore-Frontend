@@ -1,9 +1,10 @@
+import { IProfile } from '@/types/auth/user.types'
 import { IAddress } from '@/types/global.types'
 
 export interface IUser {
   id: number
   name: string | null
-  avatar: string | null
+  profile: IProfile
   email: string | null
   wallet: IAddress
 }

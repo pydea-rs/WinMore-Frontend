@@ -3,7 +3,7 @@ import UserProfile from '@/components/pages/profile'
 import { useAuth } from '@/hooks/useAuth'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import LoginRequiredPage from '../../components/pages/common/MustLoginFirst'
+import LoginRequiredPage from '../../components/pages/common/LoginRequiredPage'
 
 const User = () => {
   const { isAuthorized, token } = useAuth()

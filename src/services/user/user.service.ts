@@ -53,9 +53,10 @@ export const UserService = createApi({
         try {
           const { data } = await queryFulfilled
           const { email, name, profile, wallet, id } = data.data
+
           dispatch(
             setUser({
-              avatar: profile.avatar,
+              profile,
               email,
               name,
               id,

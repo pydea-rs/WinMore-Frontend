@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify'
+
 export function truncate(text: string, maxLength: number, truncationStyle: 'end' | 'center' = 'end') {
   if (text.length <= maxLength) {
     return text
@@ -23,4 +25,15 @@ export function toCapitalCase(phrase?: string) {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ')
     : ''
+}
+
+export const copyToClipboard = async (text: string) => {
+  try {
+    if (text?.length) {
+      await navigator.clipboard.writeText(text)
+      toast.success('Copied!.')
+    }
+  } catch (err) {
+    toast.error('Copy Failed! Maybe try again after refresh!')
+  }
 }

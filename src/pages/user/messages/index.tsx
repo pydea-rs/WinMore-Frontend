@@ -1,6 +1,6 @@
 import Container from '@/components/common/container/container'
 import ComingSoonPage from '@/components/pages/common/ComingSoonPage'
-import LoginRequiredPage from '@/components/pages/common/MustLoginFirst'
+import LoginRequiredPage from '@/components/pages/common/LoginRequiredPage'
 import { useAuth } from '@/hooks/useAuth'
 import { useDispatch } from '@/store/store'
 import Head from 'next/head'

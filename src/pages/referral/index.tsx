@@ -1,5 +1,5 @@
 import ComingSoonPage from '@/components/pages/common/ComingSoonPage'
-import LoginRequiredPage from '@/components/pages/common/MustLoginFirst'
+import LoginRequiredPage from '@/components/pages/common/LoginRequiredPage'
 import { useAuth } from '@/hooks/useAuth'
 import { useDispatch } from '@/store/store'
 
