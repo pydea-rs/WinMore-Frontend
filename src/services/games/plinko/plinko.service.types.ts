@@ -38,6 +38,7 @@ export interface IPlinkoGameBase {
   prize: number
   status: IPlinkoStatus
   finishedAt?: Date
+  profit?: number
 }
 export interface IPlinkoGame extends IPlinkoGameBase {
   user?: {
@@ -52,7 +53,7 @@ export interface IFinishedPlinkoGame extends IPlinkoGameBase {
     name: string
     id: number
   }
-  plinkoBalls: ILandedPlinkoBall[]
+  plinkoBalls?: ILandedPlinkoBall[]
 }
 
 export interface IPlinkoRules {
@@ -86,32 +87,11 @@ export interface IMePlayingPlinkoGame extends IPlinkoGameBase {
   plinkoBalls: IDroppingPlinkoBall[]
 }
 
-// export const expandPlinkoGameData = (games: IFinishedPlinkoGame[]) => {
-//   const gameList: IGameBoardRow[] = []
-//   for (const { plinkoBalls, ...game } of games) {
-//     if (plinkoBalls?.length) {
-//       for (const ball of plinkoBalls) {
-//         gameList.push({
-//           ...game,
-//           multiplier: ball.scoredMultiplier,
-//           betToken: game.token,
-//         })
-//       }
-//     } else {
-//       gameList.push({
-//         ...game,
-//         multiplier: '?',
-//         betToken: game.token,
-//       })
-//     }
-//   }
-
-//   return gameList
-// }
 export const expandPlinkoGameData = (games: IFinishedPlinkoGame[]) => {
   return games.map(({ plinkoBalls, ...game }) => ({
     ...game,
-    multiplier: plinkoBalls?.length ? Math.max(...plinkoBalls.map((item) => item.scoredMultiplier)) : '?',
+    initialBet: game.initialBet * game.ballsCount,
+    multiplier: game.profit != null ? game.profit : '?',
     betToken: game.token,
   }))
 }
