@@ -161,7 +161,9 @@ export default function PlinkoConfigForm() {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
-                ...(plinkoConfig.rules?.maxBetAmount ? { max: { value: plinkoConfig.rules?.maxBetAmount, message: `Bets must not exceed ${plinkoConfig}$ for now.` } } : {}),
+                ...(plinkoConfig.rules?.maxBetAmount
+                  ? { max: { value: plinkoConfig.rules?.maxBetAmount, message: `Bets must not exceed ${plinkoConfig.rules?.maxBetAmount}$ for now.` } }
+                  : {}),
                 ...(plinkoConfig.rules?.minBetAmount
                   ? { min: { value: plinkoConfig.rules?.minBetAmount, message: `Can not bet below ${plinkoConfig.rules.minBetAmount}$.` } }
                   : {}),

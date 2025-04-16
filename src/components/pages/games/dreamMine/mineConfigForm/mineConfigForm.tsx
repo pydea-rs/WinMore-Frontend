@@ -109,11 +109,11 @@ const MineConfigForm = () => {
       }
       const betAmount = +mineConfig.betAmount.split(',').join('')
       if (currentRowsRules?.maxBetAmount && betAmount > currentRowsRules.maxBetAmount) {
-        toast.error('Bets must not exceed 2$ for now!')
+        toast.error(`Bets must not exceed ${currentRowsRules.maxBetAmount}$ for now!`)
         return
       }
       if (currentRowsRules?.minBetAmount && betAmount < currentRowsRules.minBetAmount) {
-        toast.error('Bets must not exceed 2$ for now!')
+        toast.error(`Can not bet below ${currentRowsRules.minBetAmount}$.`)
         return
       }
       try {
@@ -162,7 +162,9 @@ const MineConfigForm = () => {
               control={gameControl}
               rules={{
                 required: { value: true, message: "It's required" },
-                ...(currentRowsRules?.maxBetAmount ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules}$ for now.` } } : {}),
+                ...(currentRowsRules?.maxBetAmount
+                  ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules.maxBetAmount}$ for now.` } }
+                  : {}),
                 ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not bet below ${currentRowsRules.minBetAmount}$.` } } : {}),
                 // validate: (value) => parseFloat(value) <= currentTokenBalance || `Bet amount cannot exceed ${currentTokenBalance}`,
               }}
