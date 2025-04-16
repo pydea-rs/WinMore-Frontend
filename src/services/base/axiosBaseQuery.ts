@@ -74,9 +74,8 @@ const axiosBaseQuery =
         },
       }
     } catch (axiosError) {
-      let err = axiosError as AxiosError<{ data: null; message: string[]; status?: number }>
-      console.log(err)
-      toast.error(err.response?.data.message)
+      let err = axiosError as AxiosError<{ data: null; message: string[] | string; status?: number }>
+      ;(err.response?.data?.message instanceof Array ? err.response.data.message : [err.response?.data.message]).forEach((msg) => toast.error(msg))
       throw err
     }
   }

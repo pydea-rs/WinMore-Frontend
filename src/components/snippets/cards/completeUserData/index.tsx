@@ -29,7 +29,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
   } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '', referrerCode: '' } })
   const [registerMutation, {}] = useRegisterUserMutation()
   const onSubmit: SubmitHandler<UserForm> = ({ email, referrerCode, name }) => {
-    registerMutation({ email, name, referrerCode })
+    registerMutation({ email, name, ...(referrerCode?.length ? { referrerCode } : {}) })
   }
 
   return (
@@ -59,11 +59,15 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: 'This field is required!',
+                  minLength: { value: 3, message: 'Name is too short!' },
+                  maxLength: { value: 256, message: 'Name is too long!' },
+                }}
                 render={({ field, fieldState }) => (
                   <Fragment>
                     <Input {...field} invalid={Boolean(fieldState.error)} placeholder="Type here" id="2-1" />
-                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                    {fieldState.error && <TextForm variant="invalid">{fieldState.error.message}</TextForm>}
                   </Fragment>
                 )}
               />
@@ -77,11 +81,17 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: 'This field is required!',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Invalid email address',
+                  },
+                }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@crypto.com" id="2-2" />
-                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                    <Input {...field} invalid={Boolean(fieldState.error)} placeholder="example@winmore.com" id="2-2" />
+                    {fieldState.error && <TextForm variant="invalid">{fieldState.error.message}</TextForm>}
                   </Fragment>
                 )}
               />
@@ -97,11 +107,15 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
               <Controller
                 name="referrerCode"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: false,
+                  minLength: { value: 8, message: 'Referral code can not be shorter than 8 characters!' },
+                  maxLength: { value: 10, message: 'Referral Code can not be longer than 10 characters!' },
+                }}
                 render={({ field, fieldState }) => (
                   <Fragment>
                     <Input {...field} invalid={Boolean(fieldState.error)} placeholder="EXAMPLE8" id="2-2" />
-                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                    {fieldState.error && <TextForm variant="invalid">{fieldState.error.message}</TextForm>}
                   </Fragment>
                 )}
               />
@@ -128,7 +142,7 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                         , Gambling is not forbidden by my local authorities and Im at least 18 years old.
                       </span>
                     </Label>
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                    {fieldState.error && <TextForm variant="invalid">You must accept our conditions to continue!</TextForm>}
                   </CheckboxGroup>
                 )}
               />
