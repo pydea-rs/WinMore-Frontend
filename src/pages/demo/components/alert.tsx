@@ -5,7 +5,7 @@ import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
 import Container from '@/components/common/container/container'
-import WarningIcon from '@/components/icons/warning/warning'
+import WarningIcon from '@/components/icons/warning'
 import { toast } from 'react-toastify'
 
 const toastMessages = {

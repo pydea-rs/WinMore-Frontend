@@ -9,7 +9,7 @@ import Header from '../common/header/header'
 import HeaderSimple from '../common/header/header-simple/header-simple'
 import MenuSticky from '../common/menuSticky/menuSticky'
 import Navbar from '../common/navbar/navbar'
-import QuickAccess from '../common/quickAccess/quickAccess'
+import QuickAccess from '../common/quickAccess'
 
 const GameLayout: BaseProps = (props) => {
   const { children } = props

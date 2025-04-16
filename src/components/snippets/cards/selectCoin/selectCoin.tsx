@@ -12,8 +12,8 @@ import SelectButton from '@/components/common/form/select/selectButton/selectBut
 import SelectIcon from '@/components/common/form/select/selectIcon/selectIcon'
 import SelectList from '@/components/common/form/select/selectList/selectList'
 import SelectOption from '@/components/common/form/select/selectOption/selectOption'
-import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import DisabledIcon from '@/components/icons/disabled/disabled'
+import ChevronDownIcon from '@/components/icons/chevronDown'
+import DisabledIcon from '@/components/icons/disabled'
 
 import { updateCurrentTokenBalance, updateNetwork, updateToken } from '@/store/slices/currency/currency.slice'
 import { useDispatch, useSelector } from '@/store/store'

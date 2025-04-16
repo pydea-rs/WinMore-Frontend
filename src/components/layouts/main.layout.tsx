@@ -7,7 +7,7 @@ import FooterMenu from '../common/footer/footer-menu/footer-menu'
 import Header from '../common/header/header'
 import MenuSticky from '../common/menuSticky/menuSticky'
 import Navbar from '../common/navbar/navbar'
-import QuickAccess from '../common/quickAccess/quickAccess'
+import QuickAccess from '../common/quickAccess'
 
 const MainLayout: BaseProps = (props) => {
   const { children } = props

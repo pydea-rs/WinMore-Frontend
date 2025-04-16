@@ -9,9 +9,9 @@ import { FormGroup } from '@/components/common/form/formGroup/fromGroup'
 import { Label } from '@/components/common/form/label/label'
 import { TextForm } from '@/components/common/form/textForm/textForm'
 import { Input } from '@/components/common/form/textInput/textInput'
-import DisabledIcon from '@/components/icons/disabled/disabled'
-import EmailIcon from '@/components/icons/email/email'
-import SingleUserIcon from '@/components/icons/singleUser/singleUser'
+import DisabledIcon from '@/components/icons/disabled'
+import EmailIcon from '@/components/icons/email'
+import SingleUserIcon from '@/components/icons/singleUser'
 import { useRegisterUserMutation } from '@/services/user/user.service'
 import Image from 'next/image'
 import { Fragment } from 'react'
@@ -19,13 +19,13 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { CompleteUserDataProps, UserForm } from './completeUserData.types'
 
 export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => {
-  const { isOpenModal, onCloseModal, onComplete } = props
+  const { onCloseModal } = props
 
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '' } })
+  } = useForm<UserForm>({ defaultValues: { confirm: false, email: '', name: '', referrerCode: '' } })
   const [registerMutation, {}] = useRegisterUserMutation()
   const onSubmit: SubmitHandler<UserForm> = (data) => {
     registerMutation({
@@ -64,8 +64,8 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 rules={{ required: true }}
                 render={({ field, fieldState }) => (
                   <Fragment>
-                    <Input {...field} invalid={!!fieldState.error} placeholder="type here" id="2-1" />
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                    <Input {...field} invalid={!!fieldState.error} placeholder="Type here" id="2-1" />
+                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
               />
@@ -83,7 +83,27 @@ export const CompleteUserDataCard: React.FC<CompleteUserDataProps> = (props) => 
                 render={({ field, fieldState }) => (
                   <Fragment>
                     <Input {...field} invalid={!!fieldState.error} placeholder="example@crypto.com" id="2-2" />
-                    {fieldState.error && <TextForm variant="invalid">This field is require!</TextForm>}
+                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
+                  </Fragment>
+                )}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="2-2" className="flex items-center gap-x-2">
+                <EmailIcon />
+                <span>
+                  Referrer Code <sub>(optional)</sub>
+                </span>
+              </Label>
+              <Controller
+                name="referrerCode"
+                control={control}
+                rules={{ required: true }}
+                render={({ field, fieldState }) => (
+                  <Fragment>
+                    <Input {...field} invalid={!!fieldState.error} placeholder="EXAMPLE8" id="2-2" />
+                    {fieldState.error && <TextForm variant="invalid">This field is required!</TextForm>}
                   </Fragment>
                 )}
               />

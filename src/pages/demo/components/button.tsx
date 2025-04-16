@@ -7,16 +7,16 @@ import { HoldToActionContent } from '@/components/common/holdToAction/holdToActi
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import { useHoldToAction } from '@/components/common/holdToAction/holdToActionProvider.hook'
 import { Spinner } from '@/components/common/spinner/spinner'
-import ArrowRightIcon from '@/components/icons/arrowRight/arrowRight'
-import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
-import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency/cryptoCurrency'
-import DiceThreeIcon from '@/components/icons/diceThree/diceThree'
-import DoneIcon from '@/components/icons/done/done.icon'
-import MetaMaxIcon from '@/components/icons/metaMax/metaMax'
-import MoneyIcon from '@/components/icons/money/money'
-import SingleUserIcon from '@/components/icons/singleUser/singleUser'
-import SphereIcon from '@/components/icons/sphere/sphere'
+import ArrowRightIcon from '@/components/icons/arrowRight'
+import ChevronDownIcon from '@/components/icons/chevronDown'
+import ChevronRightIcon from '@/components/icons/chevronRight'
+import CryptoCurrencyIcon from '@/components/icons/cryptoCurrency'
+import DiceThreeIcon from '@/components/icons/diceThree'
+import DoneIcon from '@/components/icons/done'
+import MetaMaskIcon from '@/components/icons/metaMask'
+import MoneyIcon from '@/components/icons/money'
+import SingleUserIcon from '@/components/icons/singleUser'
+import SphereIcon from '@/components/icons/sphere'
 import classNames from 'classnames'
 
 const ButtonComponentDemo = () => {
@@ -203,48 +203,48 @@ const ButtonComponentDemo = () => {
           <div className="flex flex-col items-start gap-y-2">
             <Button kind="primary" className="w-36" variant="primary">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" /> Primary
+                <MetaMaskIcon className="flex-shrink-0" /> Primary
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="secondary">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Secondary
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="success">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Success
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="info">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Info
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="warning">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Warning
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="danger">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Danger
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="white">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 White
               </div>
             </Button>
             <Button kind="primary" className="w-36" variant="dark">
               <div className="flex items-center gap-x-2">
-                <MetaMaxIcon className="flex-shrink-0" />
+                <MetaMaskIcon className="flex-shrink-0" />
                 Dark
               </div>
             </Button>
@@ -349,7 +349,7 @@ const ButtonComponentDemo = () => {
                 Web 3 Wallets
               </div>
               <div className="flex items-center gap-x-1">
-                <MetaMaxIcon className="mr-0" />
+                <MetaMaskIcon className="mr-0" />
                 <ChevronRightIcon />
               </div>
             </Button>

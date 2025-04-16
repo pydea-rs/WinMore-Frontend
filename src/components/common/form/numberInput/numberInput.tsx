@@ -1,5 +1,5 @@
-import ChevronDownIcon from '@/components/icons/chevronDown/chevronDown'
-import ChevronUpIcon from '@/components/icons/chevronUp/chevronUp'
+import ChevronDownIcon from '@/components/icons/chevronDown'
+import ChevronUpIcon from '@/components/icons/chevronUp'
 import { BaseProps } from '@/types/global.types'
 import { NumericFormat } from 'react-number-format'
 import { useNumberInputHook } from './numberInput.hooks'

@@ -6,6 +6,7 @@ export interface CompleteUserDataProps {
 export interface UserForm {
   name: string
   email: string
+  referrerCode: string
   confirm: boolean
   isOpen: boolean
   onClose: () => void

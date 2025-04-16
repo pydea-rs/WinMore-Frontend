@@ -5,7 +5,7 @@ import { CardBody } from '@/components/common/card/card-body/card-body'
 import { CardHeader } from '@/components/common/card/card-header/card-header'
 import { CardTitle } from '@/components/common/card/card-title/card-title'
 import { Spinner } from '@/components/common/spinner/spinner'
-import DisabledIcon from '@/components/icons/disabled/disabled'
+import DisabledIcon from '@/components/icons/disabled'
 import { config } from '@/configs/wagmi.config'
 import { useAuth } from '@/hooks/useAuth'
 import classNames from 'classnames'
@@ -59,7 +59,7 @@ export const ConnectToWalletCard: React.FC<ConnectToWalletCardProps> = (props) =
                   </div>
                 )}
                 <div className={classNames({ invisible: isPendingForSign, 'flex items-center gap-x-2': true })}>
-                  {/* <MetaMaxIcon className="flex-shrink-0" />  */}
+                  {/* <MetaMaskIcon className="flex-shrink-0" />  */}
                   <Avatar size="md" src={`/assets/images/wallets/${wallet.name}.svg` || ''} alt={wallet.name} />
                   Connect {wallet.name}
                 </div>

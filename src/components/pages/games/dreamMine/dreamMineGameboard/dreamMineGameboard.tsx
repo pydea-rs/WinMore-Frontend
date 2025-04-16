@@ -6,7 +6,7 @@ import { HoldToActionComplete } from '@/components/common/holdToAction/holdToAct
 import { HoldToActionContent } from '@/components/common/holdToAction/holdToActionContent/holdToActionContent'
 import { HoldToActionProvider } from '@/components/common/holdToAction/holdToActionProvider'
 import { Spinner } from '@/components/common/spinner/spinner'
-import DoneIcon from '@/components/icons/done/done.icon'
+import DoneIcon from '@/components/icons/done'
 import { IMineGameStatus } from '@/store/slices/mine/mine.slice.types'
 import { Nullable } from '@/types/global.types'
 import { createNumberArray } from '@/utils/numerix'

@@ -9,9 +9,9 @@ import DropdownButton from '@/components/common/dropdown/dropdownButton/dropdown
 import DropdownItem from '@/components/common/dropdown/dropdownItem/dropdownItem'
 import DropdownList from '@/components/common/dropdown/dropdownList/dropdownList'
 import DropdownMenuButton from '@/components/common/dropdown/dropdownMenuButton/dropdownMenuButton'
-import ChevronRightIcon from '@/components/icons/chevronRight/chevronRight'
-import LogoutIcon from '@/components/icons/logout/logout'
-import MoneyIcon from '@/components/icons/money/money'
+import ChevronRightIcon from '@/components/icons/chevronRight'
+import LogoutIcon from '@/components/icons/logout'
+import MoneyIcon from '@/components/icons/money'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const DropdownComponentDemo = () => {
