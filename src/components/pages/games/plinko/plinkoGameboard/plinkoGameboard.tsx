@@ -421,10 +421,6 @@ export default function PlinkoGameBoard() {
       celebratingAnimation()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
       userStatusRef.current = 'FINISHED'
-      setTimeout(() => {
-        userStatusRef.current = 'NONE'
-      }, 3000)
-
       dispatch(closePlayingPlinkoGame())
     }
   }, [plinkoConfig.playing, plinkoConfig.playing?.prize, plinkoConfig.playing?.status, dispatch, fetchBalance])
