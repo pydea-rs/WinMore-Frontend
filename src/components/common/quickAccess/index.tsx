@@ -17,7 +17,6 @@ const QuickAccess: React.FC<ElementProps> = (props) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { isAtSubPath } = useRouterTools()
 
-  console.warn('RENDERED')
   const variants = {
     open: { top: '20px' },
     closed: { top: '140px' },

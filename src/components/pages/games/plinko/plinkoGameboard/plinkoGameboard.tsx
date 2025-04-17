@@ -96,7 +96,7 @@ export default function PlinkoGameBoard() {
     pegsRef.current = plinkoConfig.rules.pegs.coords
     bucketsRef.current = plinkoConfig.rules.buckets
 
-    function update() {
+    function updateBoardDraw() {
       if (!ctx) return
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -208,6 +208,28 @@ export default function PlinkoGameBoard() {
         ctx.restore()
       }
 
+      requestAnimationFrame(updateBoardDraw)
+    }
+
+    updateBoardDraw()
+  }, [plinkoConfig.rules, plinkoConfig.mode.label])
+
+  const ballAnimationRef = useRef<number>()
+
+  const redrawBall = () => {
+    if (!canvasRef.current || !plinkoConfig.rules) return
+    const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#FF4D6D', '#FFC107']
+    const canvas: HTMLCanvasElement = canvasRef.current
+    const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
+
+    canvas.height = plinkoConfig.rules.board.height ?? 200
+    canvas.width = plinkoConfig.rules.board.width ?? 600
+
+    pegsRef.current = plinkoConfig.rules.pegs.coords
+    bucketsRef.current = plinkoConfig.rules.buckets
+    const { coords: buckets, specs: bucketSpecs } = bucketsRef.current
+
+    function updateBall() {
       gameRef.current = gameRef.current.filter(({ ball, physx, sounds }) => {
         ball.vy += physx.g
         ball.vy *= physx.fk
@@ -267,6 +289,7 @@ export default function PlinkoGameBoard() {
           userStatusRef.current = 'PLAYING'
           return false
         }
+        if (!ctx) return
 
         ctx.save()
 
@@ -312,12 +335,13 @@ export default function PlinkoGameBoard() {
 
         return true
       })
-
-      requestAnimationFrame(update)
+      return requestAnimationFrame(updateBall)
     }
-
-    update()
-  }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label])
+    if (ballAnimationRef.current) {
+      cancelAnimationFrame(ballAnimationRef.current)
+    }
+    ballAnimationRef.current = updateBall()
+  }
 
   const handleCanvasClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (
@@ -341,6 +365,8 @@ export default function PlinkoGameBoard() {
       },
       sounds,
     })
+
+    redrawBall()
     userStatusRef.current = 'DROPPING'
   }
 
