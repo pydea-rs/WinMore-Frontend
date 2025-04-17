@@ -83,6 +83,7 @@ export default function PlinkoGameBoard() {
   const pegsRef = useRef<{ x: number; y: number; radius: number }[]>([])
   const bucketsRef = useRef<BucketsDataType>({} as BucketsDataType)
   const bucketShakeStatesRef = useRef<{ [bucketIndex: number]: { time: number; velocity: number } }>({})
+  const animationRef = useRef<number>()
 
   useEffect(() => {
     if (!canvasRef.current || !plinkoConfig.rules) return
@@ -313,7 +314,11 @@ export default function PlinkoGameBoard() {
         return true
       })
 
-      requestAnimationFrame(update)
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = undefined
+      }
+      animationRef.current = requestAnimationFrame(update)
     }
 
     update()
