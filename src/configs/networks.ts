@@ -55,16 +55,16 @@ export const networks: INetwork[] = [
     ],
   },
   {
-    chainId: 1, // Ethereum Mainnet Chain ID
-    name: 'Ethereum',
-    rpcUrl: 'https://rpc.ankr.com/eth', // Replace with your Infura project ID
-    icon: '/assets/images/chains/ETH.png',
+    chainId: 10143, // Ethereum Mainnet Chain ID
+    name: 'Monad Testnet',
+    rpcUrl: 'https://testnet-rpc.monad.xyz/', // Replace with your Infura project ID
+    icon: '/assets/images/chains/Monad Testnet.jpeg',
     tokens: [
       {
         id: 1,
         symbol: 'USDT',
         name: 'Tether USD',
-        contractAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+        contractAddress: '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
         icon: '/assets/images/tokens/USDT.png',
         isNativeToken: false,
         balance: 0,
@@ -73,14 +73,14 @@ export const networks: INetwork[] = [
         id: 2,
         symbol: 'USDC',
         name: 'USD Coin',
-        contractAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        contractAddress: '0xf817257fed379853cDe0fa4F97AB987181B1E5Ea',
         icon: '/assets/images/tokens/USDC.png',
         isNativeToken: false,
         balance: 0,
       },
     ],
   },
-]
+] // FIXME: UPDATE THIS TO FETCH FROM SERVER
 
 export const secondaryNetworks: INetwork[] = [
   {
