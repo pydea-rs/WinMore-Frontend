@@ -82,6 +82,22 @@ export default function PlinkoConfigForm() {
   }, [rulesList?.data, plinkoConfig.rows, plinkoConfig.mode])
   const { data: UserData } = useGetUserInfoQuery({}, { skip: !isAuthorized })
 
+  useEffect(() => {
+    if (!plinkoConfig.playing || !rulesList?.data?.length) {
+      return
+    }
+    const { playing } = plinkoConfig
+    if (plinkoConfig.rows !== playing.rows || plinkoConfig.mode.label !== playing.mode) {
+      dispatch(
+        setPlinkoSelectedConfigRule({
+          rules: rulesList?.data,
+          selectedRow: playing.rows,
+          selectedMode: { label: playing.mode, value: ['EASY', 'MEDIUM', 'HARD'].findIndex((x) => x === playing.mode) + 1 },
+        }),
+      )
+    }
+  }, [plinkoConfig.playing, rulesList, dispatch, plinkoConfig])
+
   const handleSubmit = async (values: IPlinkoConfigForm) => {
     if (!isAuthorized || !UserData?.data.profile || !UserData?.data.name) {
       dispatch(triggerModal({ modal: 'login', trigger: true }))

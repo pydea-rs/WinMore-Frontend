@@ -1,4 +1,4 @@
-import { IGameDifficultyMode } from '@/services/games/common/games.types'
+import { IGameDifficultyMode, IGameDifficultyVariants } from '@/services/games/common/games.types'
 import { PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { IPlinkoRules } from '@/services/games/plinko/plinko.service.types'
 import { Nullable } from '@/types/global.types'
@@ -11,6 +11,8 @@ export interface IPlayingPlinkoGame {
   balls: PlinkoBallType[]
   droppedCount: number
   prize: Nullable<number>
+  rows: number
+  mode: IGameDifficultyVariants
 }
 
 export interface IPlinkoState {

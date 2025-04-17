@@ -56,6 +56,8 @@ export const plinkoSlice = createSlice({
         id: action.payload.id,
         prize: action.payload.prize,
         status: action.payload.status,
+        rows: action.payload.rowsCount,
+        mode: action.payload.mode,
       }
     },
     setPlayingPlinkoBalls: (state: StateType, action: PayloadAction<PlinkoBallType[]>) => {
