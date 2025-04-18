@@ -2,9 +2,35 @@ import { INetwork } from '@/types/global.types'
 
 export const networks: INetwork[] = [
   {
+    chainId: 1, // Polygon Mainnet Chain ID
+    name: 'Ethereum Mainnet',
+    rpcUrl: 'https://ultra-black-tab.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Mainnet RPC URL
+    icon: '/assets/images/chains/ETH.png',
+    tokens: [
+      {
+        id: 1,
+        symbol: 'USDT',
+        name: 'Tether USD',
+        contractAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT on Polygon mainnet
+        icon: '/assets/images/tokens/USDT.png',
+        isNativeToken: false,
+        balance: 0,
+      },
+      {
+        id: 2,
+        symbol: 'USDC',
+        name: 'USD Coin',
+        contractAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC on Polygon mainnet
+        icon: '/assets/images/tokens/USDC.png',
+        isNativeToken: false,
+        balance: 0,
+      },
+    ],
+  },
+  {
     chainId: 137, // Polygon Mainnet Chain ID
     name: 'Polygon Mainnet',
-    rpcUrl: 'https://rpc-mainnet.maticvigil.com', // Mainnet RPC URL
+    rpcUrl: 'https://ultra-black-tab.matic.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Mainnet RPC URL
     icon: '/assets/images/chains/Polygon Mainnet.png',
     tokens: [
       {
@@ -31,7 +57,7 @@ export const networks: INetwork[] = [
     chainId: 8453, // Base Mainnet Chain ID
     name: 'Base',
     // rpcUrl: 'https://mainnet.base.org', // RPC URL for Base Mainnet
-    rpcUrl: 'https://rpc.ankr.com/base',
+    rpcUrl: 'https://ultra-black-tab.base-mainnet.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b',
     icon: '/assets/images/chains/BASE.png',
     tokens: [
       {
@@ -57,7 +83,7 @@ export const networks: INetwork[] = [
   {
     chainId: 10143, // Ethereum Mainnet Chain ID
     name: 'Monad Testnet',
-    rpcUrl: 'https://testnet-rpc.monad.xyz/', // Replace with your Infura project ID
+    rpcUrl: 'https://ultra-black-tab.monad-testnet.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Replace with your Infura project ID
     icon: '/assets/images/chains/Monad Testnet.jpeg',
     tokens: [
       {
