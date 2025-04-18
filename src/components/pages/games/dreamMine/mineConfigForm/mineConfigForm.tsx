@@ -23,7 +23,6 @@ import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { setDreamMineConfig, setDreamMineGameMode, startMineGame } from '@/store/slices/mine/mine.slice'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
 import { useDispatch, useSelector } from '@/store/store'
-import { isDevelopmentMode } from '@/utils/dev'
 import { approximate, createNumberArray, getMinMaxRows } from '@/utils/numerix'
 import { Howl } from 'howler'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -167,7 +166,7 @@ const MineConfigForm = () => {
                   ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules.maxBetAmount}$ for now.` } }
                   : {}),
                 ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not bet below ${currentRowsRules.minBetAmount}$.` } } : {}),
-                validate: (value) => isDevelopmentMode() || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
+                // FIXME: validate: (value) => isDevelopmentMode() || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>

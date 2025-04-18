@@ -42,7 +42,6 @@ export const useAuth = () => {
     const domain = getHostName()
 
     if (!domain) {
-      console.error('Domain is undefined')
       toast.error('Domain is undefined')
       return
     }
