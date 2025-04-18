@@ -30,6 +30,7 @@ export interface IUserWalletResponse {
   [chainId: number]: TokenBalances
 }
 
+export type MainTransactionTypes = 'INGAME' | 'WITHDRAWAL' | 'DEPOSIT'
 // User Transaction History
 export interface ITransaction {
   amount: number
@@ -69,9 +70,11 @@ export interface ITransaction {
   }
   status: 'PENDING' | 'FAILED' | 'REVERTED' | 'SUCCESSFUL'
   token: IAvailableTokens
-  type: 'INGAME' | 'WITHDRAWAL' | 'DEPOSIT'
+  type: MainTransactionTypes
   updatedAt: string
 }
 
-export interface IUserTransactionHistoryPayload extends IPaginationPayload {}
+export interface IUserTransactionHistoryPayload extends IPaginationPayload {
+  type: MainTransactionTypes | 'BLOCKCHAIN' | 'ALL'
+}
 export type IUserTransactionHistoryResponse = ITransaction[]

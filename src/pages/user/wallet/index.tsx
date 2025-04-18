@@ -7,6 +7,7 @@ import TabItem from '@/components/common/tab/tabItem/tabItem'
 import LoginRequiredPage from '@/components/pages/common/LoginRequiredPage'
 import { useAuth } from '@/hooks/useAuth'
 import { useUserTransactionHistoryQuery } from '@/services/user/user.service'
+import { MainTransactionTypes } from '@/services/user/user.service.types'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
@@ -17,8 +18,7 @@ const Wallet = () => {
   const { isAuthorized, token } = useAuth()
   const router = useRouter()
   const { query } = router
-  const type = query.type as string
-  const { data } = useUserTransactionHistoryQuery({ type }, { skip: !isAuthorized, pollingInterval: 20000 })
+  const { data } = useUserTransactionHistoryQuery({ type: query.type as MainTransactionTypes | 'BLOCKCHAIN' | 'ALL' }, { skip: !isAuthorized, pollingInterval: 20000 })
 
   if (!isAuthorized || !token?.length) {
     return <LoginRequiredPage />
