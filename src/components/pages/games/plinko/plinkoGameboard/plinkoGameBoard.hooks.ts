@@ -13,6 +13,7 @@ const usePlinkoGameBoardHelper = () => {
 
   const landSoundTile = useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/land.mp3'], volume: 1, preload: true }), [])
   const celebrationSoundTile = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/celebration.mp3'], volume: 1, preload: true }), [])
+  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 1.0, preload: true }), [])
 
   const collisionSounds = [
     useMemo(() => new Howl({ src: ['/assets/games/plinko/sounds/collision1.mp3'], volume: 1, preload: true }), []),
@@ -26,6 +27,7 @@ const usePlinkoGameBoardHelper = () => {
       playLanding: () => configs.sound && landSoundTile.play(),
       playCollision: (index: number) => configs.sound && collisionSounds[index].play(),
       playCelebration: () => configs.sound && celebrationSoundTile.play(),
+      playError: () => configs.sound && errorSoundHowl.play(),
     },
   }
 }

@@ -44,6 +44,7 @@ const MineConfigForm = () => {
 
   const [mineBetMutation, { isLoading }] = usePostMineBetMutation()
   const placeBetSound = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
+  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 1.0, preload: true }), [])
 
   useEffect(() => {
     refetch()
@@ -121,7 +122,10 @@ const MineConfigForm = () => {
         fetchBalance()
         onStart()
       } catch (error) {
-        // toast.error(error.message)
+        // toast.error((error as Error).message)
+        if (configs.sound) {
+          errorSoundHowl.play()
+        }
       }
     }
   }

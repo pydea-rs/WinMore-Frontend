@@ -37,6 +37,7 @@ export default function PlinkoConfigForm() {
   const { currentToken, fetchBalance } = useWalletStateHelper()
   const { plinkoConfig } = useSelector((state) => state.plinko)
   const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
+  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 1.0, preload: true }), [])
 
   const [rows, setRows] = useState([] as number[])
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
@@ -111,7 +112,6 @@ export default function PlinkoConfigForm() {
         return
       }
       try {
-        if (configs.sound) betSoundHowl.play()
         await plinkoPlaceBetMutation({
           betAmount,
           mode: plinkoConfig.mode.label,
@@ -120,9 +120,15 @@ export default function PlinkoConfigForm() {
           chainId: currentToken.chain,
           ballsCount: plinkoConfig.numberOfBets ?? 1,
         }).unwrap()
+        if (configs.sound) {
+          betSoundHowl.play()
+        }
         fetchBalance()
       } catch (error) {
-        toast.error((error as Error).message)
+        // toast.error((error as Error).message)
+        if (configs.sound) {
+          errorSoundHowl.play()
+        }
       }
     }
   }

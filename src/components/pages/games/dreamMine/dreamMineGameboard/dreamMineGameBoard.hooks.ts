@@ -11,6 +11,7 @@ const useDreamMineGameBoardHelper = () => {
   const breakBlockSound = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/break.mp3'], volume: 1.0, preload: true }), [])
   const bomb = useMemo(() => new Howl({ src: ['/assets/games/mine/sounds/bomb.mp3'], volume: 1.0, preload: true }), [])
   const celebrationSound = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/celebration.mp3'], volume: 1.0, preload: true }), [])
+  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 1.0, preload: true }), [])
 
   const { mineConfig } = useSelector((state) => state.mine)
   const { configs } = useSelector((state) => state.configs)
@@ -75,7 +76,7 @@ const useDreamMineGameBoardHelper = () => {
       winHandler()
     }
   }
-  return { winHandler, lostHandler, onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading }
+  return { winHandler, lostHandler, onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading, playErrorSound: () => configs.sound && errorSoundHowl.play() }
 }
 
 export default useDreamMineGameBoardHelper

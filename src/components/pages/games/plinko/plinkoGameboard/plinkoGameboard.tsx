@@ -333,6 +333,7 @@ export default function PlinkoGameBoard() {
       gameRef.current?.length ||
       plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length
     ) {
+      sounds.playError()
       return
     }
 

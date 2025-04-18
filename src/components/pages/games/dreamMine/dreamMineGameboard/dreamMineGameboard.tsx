@@ -17,7 +17,7 @@ import { Fragment } from 'react'
 import useDreamMineGameBoardHelper from './dreamMineGameBoard.hooks'
 
 export default function DreamMineGameBoard() {
-  const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading } = useDreamMineGameBoardHelper()
+  const { onCheckBlock, onClaim, mineConfig, loadingBlock, isMineBlockLoading, playErrorSound } = useDreamMineGameBoardHelper()
   const blockPerRows = createNumberArray(1, mineConfig.mode.value)
 
   const getGameStateColor = (status: Nullable<IMineGameStatus>) => {
@@ -137,7 +137,11 @@ export default function DreamMineGameBoard() {
                                 key={block}
                                 whileTap={{ scale: 1.1 }}
                                 onClick={() => {
-                                  row + 1 === mineConfig.activeRow && !isMineBlockLoading ? onCheckBlock(block, row + 1) : null
+                                  if (row + 1 === mineConfig.activeRow && !isMineBlockLoading) {
+                                    onCheckBlock(block, row + 1)
+                                  } else {
+                                    playErrorSound()
+                                  }
                                 }}
                                 // className={`transition-all flex-shrink-0 ${currentRowSelectedItem?.status === 'GOLD' ? 'block-gold' : `block-${block}`}`}>
                                 className={`transition-all flex-shrink-0 block-stone`}
