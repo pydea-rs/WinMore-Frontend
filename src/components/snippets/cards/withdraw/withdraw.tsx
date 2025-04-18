@@ -65,7 +65,7 @@ export const WithdrawCard: React.FC<WithdrawCardProps> = (props) => {
           toast.success(res.message)
         }
       })
-      .catch((err) => console.error(err))
+      .catch((err) => toast.error((err as Error).message))
     dispatch(triggerWithdrawModal({ data: null, trigger: false }))
   }
 

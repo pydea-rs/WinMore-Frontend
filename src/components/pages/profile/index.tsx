@@ -26,7 +26,7 @@ const UserProfile = () => {
   const handleChangeTimezone = () => {
     dispatch(setUserTimezone(configs.timezone.toLowerCase() === 'utc' ? deviceTimezone : 'UTC'))
   }
-  console.log(connectorName)
+
   return user ? (
     <div className="p-4 sm:py-6 lg:py-10 bg-dark-900 rounded-2xl shadow-lg space-y-6">
       {/* Profile Header */}
