@@ -3,6 +3,7 @@ import { BorderBeam } from '@/components/common/borderBeam/borderBeam'
 import { Card } from '@/components/common/card/card'
 import { CardBody } from '@/components/common/card/card-body/card-body'
 import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
+import { useAuth } from '@/hooks/useAuth'
 import { IGeneralResponseTemplate } from '@/services/base/common.types'
 import { BucketsDataType, PlinkoBallType } from '@/services/games/plinko/physx.types'
 import { useDropPlinkoBallsMutation, useFinishPlinkoGameMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
@@ -39,7 +40,8 @@ export default function PlinkoGameBoard() {
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
   const [finishPlinkoGameMutation, { isLoading: isFinishing }] = useFinishPlinkoGameMutation()
   const { fetchBalance } = useWalletStateHelper()
-  const { refetch: getMyOngoinGame } = useGetMePlayingPlinkoGamesQuery({})
+  const { isAuthorized } = useAuth()
+  const { refetch: getMyOngoinGame, isUninitialized } = useGetMePlayingPlinkoGamesQuery({}, { skip: !isAuthorized })
   const dispatch = useDispatch()
   const userStatusRef = useRef<'NONE' | 'PLAYING' | 'DROPPING' | 'FINISHED'>('NONE')
 
@@ -356,7 +358,7 @@ export default function PlinkoGameBoard() {
       const message = error.message instanceof Array ? error.message[0] : error.message
       if (message.toLowerCase().includes('finished')) {
         dispatch(setPlayingPlinkoGameStatus('FINISHED'))
-      } else {
+      } else if (!isUninitialized) {
         getMyOngoinGame()
       }
     } else if (specialStatusToFinish && error?.status === specialStatusToFinish) {
@@ -368,7 +370,7 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (!plinkoConfig.playing || (plinkoConfig.playing.status !== 'NOT_DROPPED_YET' && !plinkoConfig.playing.balls.length)) {
-      getMyOngoinGame()
+      !isUninitialized && getMyOngoinGame()
       return
     }
     if (!plinkoConfig.playing) {
@@ -433,17 +435,17 @@ export default function PlinkoGameBoard() {
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
-      <CardBody className="p-4 sm:p-6">
+      <CardBody className="p-1 sm:p-6">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <div>
+          <div className="p-4">
             <canvas ref={canvasRef} onClick={handleCanvasClick} />
           </div>
 
           <BorderBeam
-            className="rounded-[10px]"
+            className="rounded-[20px]"
             duration={3}
             anchor={65}
-            size={300}
+            size={400}
             borderWidth={4}
             colorFrom={getGameStateColor().colorFrom}
             colorTo={getGameStateColor().colorTo}

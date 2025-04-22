@@ -36,7 +36,7 @@ const useDreamMineGameBoardHelper = () => {
     await backoffMine({ id: mineConfig.currentGameId })
       .unwrap()
       .then((res) => {
-        celebrationSound.play()
+        if (configs.sound) celebrationSound.play()
         refetchList()
         fetchBalance()
         dispatch(setDreamMineConfig({ currentGameStatus: 'WON' }))
