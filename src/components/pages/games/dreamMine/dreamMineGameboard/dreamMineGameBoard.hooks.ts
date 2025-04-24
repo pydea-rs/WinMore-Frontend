@@ -1,6 +1,6 @@
 import useWalletStateHelper from '@/components/pages/wallet/walletStateHelper'
 import { useAuth } from '@/hooks/useAuth'
-import { useBackoffMineMutation, useMineBlockMutation, useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { useBackoffMineMutation, useMineBlockMutation } from '@/services/games/mine/mine.service'
 import { endMineGame, setDreamMineConfig } from '@/store/slices/mine/mine.slice'
 import { IBlock } from '@/store/slices/mine/mine.slice.types'
 import { useDispatch, useSelector } from '@/store/store'
@@ -20,12 +20,7 @@ const useDreamMineGameBoardHelper = () => {
   const [mineBlockMutation, { isLoading: isMineBlockLoading }] = useMineBlockMutation()
   const { fetchBalance } = useWalletStateHelper()
   const [loadingBlock, setLoadingBlock] = useState<{ index: number; row: number } | null>(null)
-  const { refetch: refetchList } = useMineGamesListQuery(
-    {
-      take: 10,
-    },
-    { skip: !isAuthorized },
-  )
+
   const [backoffMine] = useBackoffMineMutation()
 
   const winHandler = async () => {
@@ -37,9 +32,7 @@ const useDreamMineGameBoardHelper = () => {
       .unwrap()
       .then((res) => {
         if (configs.sound) celebrationSound.play()
-        refetchList()
         fetchBalance()
-        dispatch(setDreamMineConfig({ currentGameStatus: 'WON' }))
         celebratingAnimation()
         dispatch(endMineGame({ isWin: true }))
       })
@@ -62,8 +55,7 @@ const useDreamMineGameBoardHelper = () => {
           dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks }))
           lostHandler()
         } else {
-          dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks }))
-          dispatch(setDreamMineConfig({ activeRow: mineConfig.activeRow + 1 }))
+          dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks, activeRow: mineConfig.activeRow + 1 }))
         }
       } finally {
         setLoadingBlock(null) // Clear the loading block

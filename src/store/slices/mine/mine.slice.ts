@@ -64,6 +64,7 @@ export const mineSlice = createSlice({
       state.mineConfig.isGameOver = true
       state.mineConfig.isStarted = false
       state.mineConfig.currentGameStatus = action.payload.isWin ? (action.payload.flawless ? 'FLAWLESS_WIN' : 'WON') : 'LOST'
+      state.mineConfig.currentGameId = null
     },
   },
 })

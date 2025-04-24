@@ -6,9 +6,9 @@ import TabHeader from '@/components/common/tab/tabHeader/tabHeader'
 import TabItem from '@/components/common/tab/tabItem/tabItem'
 import TimeFastIcon from '@/components/icons/timeFast'
 import { useAuth } from '@/hooks/useAuth'
-import { useMineGamesListQuery } from '@/services/games/mine/mine.service'
-import { useUserMineGamesListQuery } from '@/services/user/user.service'
-import { useSelector } from '@/store/store'
+import { MineService, useMineGamesListQuery } from '@/services/games/mine/mine.service'
+import { UserService, useUserMineGamesListQuery } from '@/services/user/user.service'
+import { useDispatch, useSelector } from '@/store/store'
 import { ElementProps } from '@/types/elements.types'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -31,6 +31,8 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
     isUninitialized: isMyGamesFetchingUninitialized,
     isFetching: myGamesFetching,
   } = useUserMineGamesListQuery({ take: 10, order: orderDescending ? 'desc' : 'asc' }, { skip: !isAuthorized })
+
+  const dispatch = useDispatch()
 
   const {
     data,
@@ -56,6 +58,55 @@ const DreamMineHistory: React.FC<ElementProps> = (props) => {
       refetchMyGames()
     }
   }, [mineConfig.currentGameStatus, currentTab])
+
+  useEffect(() => {
+    if (mineConfig.currentGameStatus !== 'ONGOING' || mineConfig.currentGameId == null || !mineConfig.activeRow) {
+      return
+    }
+    if (currentTab !== 'mine') {
+      const nextMultiplier = mineConfig.mode?.multipliers?.[mineConfig.activeRow - 1]
+      // This is just to prevent unnecessary request when client has the data, but if the value was invalid any how, refetch:
+      if (nextMultiplier != null) {
+        dispatch(
+          MineService.util.updateQueryData(
+            'mineGamesList',
+            {
+              take: 10,
+              sort: currentTab !== 'lucky' ? undefined : 'lucky',
+              order: orderDescending ? 'desc' : 'asc',
+            },
+            (draft) => {
+              if (draft?.data?.length) {
+                const myGame = draft.data.find((game) => game.id === mineConfig.currentGameId)
+                if (myGame) {
+                  myGame.multiplier = nextMultiplier
+                }
+              }
+            },
+          ),
+        )
+      } else if (!isAllGamesFetchingUninitialized && !allGamesFetching) {
+        refetch()
+      }
+    } else if (isAuthorized) {
+      const nextMultiplier = mineConfig.mode?.multipliers?.[mineConfig.activeRow - 1]
+
+      if (nextMultiplier != null) {
+        dispatch(
+          UserService.util.updateQueryData('userMineGamesList', { take: 10, order: orderDescending ? 'desc' : 'asc' }, (draft) => {
+            if (draft?.data?.length) {
+              const myGame = draft.data.find((game) => game.id === mineConfig.currentGameId)
+              if (myGame) {
+                myGame.multiplier = nextMultiplier
+              }
+            }
+          }),
+        )
+      } else if (!isMyGamesFetchingUninitialized && !myGamesFetching) {
+        refetchMyGames()
+      }
+    }
+  }, [mineConfig.activeRow])
 
   const setTab = (tab: TabsType) => {
     if (currentTab === tab) {
