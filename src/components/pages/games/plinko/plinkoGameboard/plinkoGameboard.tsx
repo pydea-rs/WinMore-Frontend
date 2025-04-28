@@ -424,10 +424,12 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
-      sounds.playCelebration()
       fetchBalance()
-      celebratingAnimation()
       toast.success(`You won ${plinkoConfig.playing.prize}$.`)
+      if (plinkoConfig.playing?.prize && plinkoConfig.playing.prize > +plinkoConfig.betAmount) {
+        sounds.playCelebration()
+        celebratingAnimation()
+      }
       userStatusRef.current = 'FINISHED'
       dispatch(closePlayingPlinkoGame())
     }

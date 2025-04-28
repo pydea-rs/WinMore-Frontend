@@ -1,6 +1,6 @@
 import confetti from 'canvas-confetti'
 
-export const celebratingAnimation = (duration: number = 9000) => {
+export const celebratingAnimation = (duration: number = 3000) => {
   const animationEnd = Date.now() + duration
   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
 

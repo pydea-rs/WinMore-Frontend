@@ -37,8 +37,8 @@ export default function PlinkoConfigForm() {
   const { data: rulesList } = useGetPlinkoRulesQuery({})
   const { currentToken, fetchBalance } = useWalletStateHelper()
   const { plinkoConfig } = useSelector((state) => state.plinko)
-  const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 1.0, preload: true }), [])
-  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 1.0, preload: true }), [])
+  const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 0.7, preload: true }), [])
+  const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 0.7, preload: true }), [])
 
   const [rows, setRows] = useState([] as number[])
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
