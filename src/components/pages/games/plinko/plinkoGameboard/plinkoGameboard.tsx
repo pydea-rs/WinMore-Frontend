@@ -437,7 +437,7 @@ export default function PlinkoGameBoard() {
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
-      <CardBody className="p-1 sm:p-6">
+      <CardBody className="p-1 sm:p-6 bg-opacity-60">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="p-4">
             <canvas ref={canvasRef} onClick={handleCanvasClick} />
