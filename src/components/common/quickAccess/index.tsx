@@ -10,8 +10,6 @@ import { useEffect, useState } from 'react'
 import { Button } from '../button/button'
 import Container from '../container/container'
 
-const socialMediaItems = Object.values(socialMediaLinks).filter(({ url }) => url)
-
 const QuickAccess: React.FC<ElementProps> = (props) => {
   const { className } = props
   const [isScrolled, setIsScrolled] = useState(false)
@@ -72,8 +70,8 @@ const QuickAccess: React.FC<ElementProps> = (props) => {
             </Button>
           </Link>
           <hr style={{ border: '1px solid #333' }} />
-          {socialMediaItems.map(({ url, Icon }, idx) => (
-            <Link href={url || '#'} key={idx}>
+          {socialMediaLinks.map(({ url, Icon }, idx) => (
+            <Link href={url} key={idx}>
               <Button kind="primary" variant="info" className={`w-14 h-14 hover:!bg-warning/90`}>
                 <Icon className="w-6 h-6" />
               </Button>

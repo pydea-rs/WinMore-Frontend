@@ -8,7 +8,7 @@ import { BaseProps } from '@/types/global.types'
 export type SocialMediaItemType = {
   title: string
   slug: string
-  url: string | null
+  url: string
   Icon: BaseProps<ElementProps>
 }
 
@@ -113,29 +113,33 @@ export const internalLinks = {
   },
 }
 
-export const socialMediaLinks: Record<string, SocialMediaItemType> = {
-  telegram: {
-    slug: 'telegram',
-    title: 'Telegram',
-    url: null,
-    Icon: TelegramIcon,
-  },
-  x: {
+export const socialMediaLinks: SocialMediaItemType[] = [
+  {
     slug: 'x-twitter',
     title: 'X',
     url: 'https://x.com/winmore_xyz',
     Icon: XIcon,
   },
-  discord: {
+  {
     slug: 'discord',
     title: 'Discord',
     url: 'https://discord.gg/MA98WqRjbd',
     Icon: DiscordIcon,
   },
-  instagram: {
+]
+
+export const allSocialMediaLinks: SocialMediaItemType[] = [
+  ...socialMediaLinks,
+  {
+    slug: 'telegram',
+    title: 'Telegram',
+    url: '',
+    Icon: TelegramIcon,
+  },
+  {
     slug: 'instagram',
     title: 'Instagram',
-    url: null,
+    url: '',
     Icon: InstagramIcon,
   },
-}
+]

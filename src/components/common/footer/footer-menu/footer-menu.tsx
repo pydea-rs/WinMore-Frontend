@@ -57,14 +57,12 @@ const FooterMenu: BaseProps<IFooterMenu> = (props) => {
             ]
           : []),
       ],
-      socialMedia: Object.values(socialMediaLinks)
-        .filter(({ url }) => url)
-        .map(({ title, url, Icon }, idx) => ({
-          id: `wm55${idx + 4}6533`,
-          title,
-          link: url || '',
-          Icon,
-        })),
+      socialMedia: socialMediaLinks.map(({ title, url, Icon }, idx) => ({
+        id: `wm55${idx + 4}6533`,
+        title,
+        link: url,
+        Icon,
+      })),
     },
   })
 
