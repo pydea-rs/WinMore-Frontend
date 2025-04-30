@@ -91,7 +91,7 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (!canvasRef.current || !plinkoConfig.rules) return
-    const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#FF4D6D', '#FFC107']
+    const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#2D305D', '#5E65C3', '#00C853', '#FF4D6D', '#FFC107']
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
