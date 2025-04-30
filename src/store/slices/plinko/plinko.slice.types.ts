@@ -22,6 +22,7 @@ export interface IPlinkoState {
   betAmount: string
   rules: Nullable<IPlinkoRules>
   playing: Nullable<IPlayingPlinkoGame>
+  autoplay?: boolean
 }
 export interface StateType {
   plinkoConfig: IPlinkoState

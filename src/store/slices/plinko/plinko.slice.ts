@@ -105,6 +105,9 @@ export const plinkoSlice = createSlice({
     setPlinkoDifficultyMode: (state: StateType, action: PayloadAction<IGameDifficultyMode>) => {
       state.plinkoConfig.mode = action.payload
     },
+    setPlinkoAutoplayMode: (state: StateType, action: PayloadAction<boolean>) => {
+      state.plinkoConfig.autoplay = action.payload
+    },
   },
 })
 
@@ -119,6 +122,7 @@ export const {
   setPlinkoGamePrizeAmount,
   closePlayingPlinkoGame,
   setPlinkoSelectedConfigRule,
+  setPlinkoAutoplayMode,
 } = plinkoSlice.actions
 
 export default plinkoSlice.reducer

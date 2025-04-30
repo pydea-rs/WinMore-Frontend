@@ -20,7 +20,7 @@ import { IGameDifficultyVariants, IGameMode } from '@/services/games/common/game
 import { useGetPlinkoRulesQuery, usePostPlinkoBetMutation } from '@/services/games/plinko/plinko.service'
 import { useGetUserInfoQuery } from '@/services/user/user.service'
 import { triggerModal } from '@/store/slices/modal/modal.slice'
-import { setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
+import { setPlinkoAutoplayMode, setPlinkoConfig, setPlinkoDifficultyMode, setPlinkoSelectedConfigRule } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch, useSelector } from '@/store/store'
 import { isDevelopmentMode } from '@/utils/dev'
 import { approximate, createNumberArray, getMinMaxRows } from '@/utils/numerix'
@@ -44,7 +44,6 @@ export default function PlinkoConfigForm() {
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
   const { addDecimalNumbers, formatNumber, subDecimalNumbers } = useHelper()
-
   const [modes, setModes] = useState<IGameMode[]>([])
 
   const {
@@ -167,7 +166,14 @@ export default function PlinkoConfigForm() {
   return (
     <Card className="max-w-[390px] lg:max-w-[430px] w-full">
       <CardHeader>
-        <CardTitle>MANUAL</CardTitle>
+        <CardTitle asElement={true}>
+          <h3 className={plinkoConfig.autoplay ? 'unselected' : 'selected'} onClick={() => dispatch(setPlinkoAutoplayMode(false))}>
+            MANUAL
+          </h3>
+          <h3 className={!plinkoConfig.autoplay ? 'unselected' : 'selected'} onClick={() => dispatch(setPlinkoAutoplayMode(true))}>
+            AUTOMATIC
+          </h3>
+        </CardTitle>
         <SoundTogglerButton disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized} />
       </CardHeader>
       <CardBody>
