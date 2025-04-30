@@ -46,7 +46,6 @@ export default function PlinkoGameBoard() {
   const dispatch = useDispatch()
   const userStatusRef = useRef<'NONE' | 'PLAYING' | 'DROPPING' | 'FINISHED'>('NONE')
   const [autoplayTimerId, setAutoplayTimerId] = useState<Timeout | null>(null)
-  const [ballsFell, setBallsFell] = useState(0)
 
   const getGameStateColor = useCallback(() => {
     switch (userStatusRef.current) {
@@ -330,13 +329,14 @@ export default function PlinkoGameBoard() {
   }, [plinkoConfig.rules, dispatch, plinkoConfig.mode.label])
 
   const handleCanvasClick = (skipErrorSound = false) => {
+    const totalBallsFell = (plinkoConfig.playing?.droppedCount ?? 0) + gameRef.current.length
     if (
       !canvasRef.current ||
       !plinkoConfig.rules ||
       !plinkoConfig.playing ||
       isDropping ||
-      (!plinkoConfig.autoplay ? gameRef.current?.length : ballsFell > plinkoConfig.playing.balls.length) ||
-      plinkoConfig.playing.droppedCount >= plinkoConfig.playing.balls.length
+      totalBallsFell >= plinkoConfig.playing.balls.length ||
+      (!plinkoConfig.autoplay && gameRef.current?.length)
     ) {
       if (!skipErrorSound) sounds.playError()
       return false
@@ -344,7 +344,7 @@ export default function PlinkoGameBoard() {
 
     sounds.playDrop()
     gameRef.current.push({
-      ball: { ...plinkoConfig.playing.balls[ballsFell], rapidImpacts: [], color: 'black', targetColor: 'black' },
+      ball: { ...plinkoConfig.playing.balls[totalBallsFell], rapidImpacts: [], color: 'black', targetColor: 'black' },
       physx: {
         ground: { vx: plinkoConfig.rules.horizontalSpeedFactor, vy: plinkoConfig.rules.verticalSpeedFactor },
         g: plinkoConfig.rules.gravity,
@@ -352,26 +352,21 @@ export default function PlinkoGameBoard() {
       },
       sounds,
     })
-    setBallsFell((x) => x + 1)
+
     userStatusRef.current = 'DROPPING'
     return true
   }
 
   useEffect(() => {
-    if (
-      !plinkoConfig.playing ||
-      plinkoConfig.playing.status === 'FINISHED' ||
-      !plinkoConfig.playing.balls.length ||
-      plinkoConfig.playing.droppedCount >= plinkoConfig.numberOfBets ||
-      ballsFell >= plinkoConfig.numberOfBets
-    ) {
+    const totalBallsFell = (plinkoConfig.playing?.droppedCount ?? 0) + gameRef.current.length
+    if (!plinkoConfig.playing || plinkoConfig.playing.status === 'FINISHED' || !plinkoConfig.playing.balls.length || totalBallsFell >= plinkoConfig.numberOfBets) {
       if (autoplayTimerId) {
         clearInterval(autoplayTimerId)
         setAutoplayTimerId(null)
       }
       return
     }
-    if (plinkoConfig.autoplay && ballsFell < plinkoConfig.numberOfBets) {
+    if (plinkoConfig.autoplay && totalBallsFell < plinkoConfig.numberOfBets) {
       if (!autoplayTimerId) {
         setAutoplayTimerId(
           setInterval(() => {
@@ -379,7 +374,7 @@ export default function PlinkoGameBoard() {
               clearInterval(autoplayTimerId)
               setAutoplayTimerId(null)
             }
-          }, 1000),
+          }, 1500),
         )
       }
     } else if (autoplayTimerId) {
@@ -418,7 +413,6 @@ export default function PlinkoGameBoard() {
       ;(async () => {
         if (plinkoConfig.playing) {
           try {
-            setBallsFell(0)
             await dropPlinkoBallsMutation({
               id: plinkoConfig.playing.id,
             }).unwrap()
@@ -462,10 +456,12 @@ export default function PlinkoGameBoard() {
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
       fetchBalance()
-      if (plinkoConfig.playing.prize && plinkoConfig.playing.prize > +plinkoConfig.betAmount) {
+      if (plinkoConfig.playing.prize) {
         toast.success(`You won ${approximate(plinkoConfig.playing.prize, 'floor', 4)}$.`)
-        sounds.playCelebration()
-        celebratingAnimation()
+        if (plinkoConfig.playing.prize && plinkoConfig.playing.prize > +plinkoConfig.betAmount * plinkoConfig.numberOfBets) {
+          sounds.playCelebration()
+          celebratingAnimation()
+        }
       }
       userStatusRef.current = 'FINISHED'
       dispatch(closePlayingPlinkoGame())
@@ -477,7 +473,7 @@ export default function PlinkoGameBoard() {
       <CardBody className="p-1 sm:p-6 bg-opacity-60">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="p-4">
-            <canvas ref={canvasRef} onClick={() => handleCanvasClick()} />
+            <canvas ref={canvasRef} onClick={() => (!plinkoConfig.autoplay ? handleCanvasClick() : sounds.playError())} />
           </div>
 
           <BorderBeam
