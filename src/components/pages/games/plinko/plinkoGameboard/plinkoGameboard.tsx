@@ -9,7 +9,7 @@ import { BucketsDataType, PlinkoBallType } from '@/services/games/plinko/physx.t
 import { useDropPlinkoBallsMutation, useFinishPlinkoGameMutation, useGetMePlayingPlinkoGamesQuery } from '@/services/games/plinko/plinko.service'
 import { closePlayingPlinkoGame, incDroppedBallsCount, setPlayingPlinkoGameStatus } from '@/store/slices/plinko/plinko.slice'
 import { useDispatch } from '@/store/store'
-import { toFixedEfficient } from '@/utils/numerix'
+import { approximate, toFixedEfficient } from '@/utils/numerix'
 import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef } from 'react'
@@ -266,7 +266,7 @@ export default function PlinkoGameBoard() {
             ball.vy = 0
           }
 
-          dispatch(incDroppedBallsCount())
+          dispatch(incDroppedBallsCount(landingBucketIndex))
           userStatusRef.current = 'PLAYING'
           return false
         }
@@ -425,8 +425,8 @@ export default function PlinkoGameBoard() {
   useEffect(() => {
     if (plinkoConfig.playing && plinkoConfig.playing.status === 'FINISHED') {
       fetchBalance()
-      toast.success(`You won ${plinkoConfig.playing.prize}$.`)
-      if (plinkoConfig.playing?.prize && plinkoConfig.playing.prize > +plinkoConfig.betAmount) {
+      if (plinkoConfig.playing.prize && plinkoConfig.playing.prize > +plinkoConfig.betAmount) {
+        toast.success(`You won ${approximate(plinkoConfig.playing.prize, 'floor', 4)}$.`)
         sounds.playCelebration()
         celebratingAnimation()
       }

@@ -35,7 +35,7 @@ const Mine = () => {
       ) : (
         <>
           <section className="relative mb-20">
-            <Container className="relative z-[300] overflow-x-visible ">
+            <Container className="relative z-[300] overflow-x-visible">
               <div className="flex flex-wrap gap-y-6">
                 <aside className="flex justify-center lg:justify-start w-full lg:max-w-[430px] lg:pt-6 order-2">
                   <MineConfigForm />

@@ -67,9 +67,15 @@ export const plinkoSlice = createSlice({
       state.plinkoConfig.playing.balls = action.payload
       state.plinkoConfig.playing.status = 'DROPPING'
     },
-    incDroppedBallsCount: (state: StateType, action: PayloadAction<void>) => {
+    incDroppedBallsCount: (state: StateType, action: PayloadAction<number>) => {
       if (!state.plinkoConfig?.playing || (state.plinkoConfig.playing?.droppedCount ?? 0) >= state.plinkoConfig.numberOfBets) {
         return
+      }
+      if (state.plinkoConfig.rules && action.payload >= 0 && action.payload < (state.plinkoConfig.rules.multipliers[state.plinkoConfig.mode.label]?.length ?? 0)) {
+        if (state.plinkoConfig.playing.prize == null) {
+          state.plinkoConfig.playing.prize = 0
+        }
+        state.plinkoConfig.playing.prize += state.plinkoConfig.rules.multipliers[state.plinkoConfig.mode.label][action.payload] * +state.plinkoConfig.betAmount
       }
       state.plinkoConfig.playing.droppedCount++
     },

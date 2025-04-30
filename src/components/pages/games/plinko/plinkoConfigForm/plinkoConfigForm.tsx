@@ -34,13 +34,13 @@ export default function PlinkoConfigForm() {
   const dispatch = useDispatch()
   const { isAuthorized } = useAuth()
   const { configs } = useSelector((state) => state.configs)
-  const { data: rulesList } = useGetPlinkoRulesQuery({})
-  const { currentToken, fetchBalance } = useWalletStateHelper()
   const { plinkoConfig } = useSelector((state) => state.plinko)
+  const [rows, setRows] = useState([] as number[])
+
   const betSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/place.mp3'], volume: 0.7, preload: true }), [])
   const errorSoundHowl = useMemo(() => new Howl({ src: ['/assets/games/common/sounds/error.mp3'], volume: 0.7, preload: true }), [])
-
-  const [rows, setRows] = useState([] as number[])
+  const { currentToken, fetchBalance } = useWalletStateHelper()
+  const { data: rulesList } = useGetPlinkoRulesQuery({})
   const [plinkoPlaceBetMutation, { isLoading }] = usePostPlinkoBetMutation()
 
   const { addDecimalNumbers, formatNumber, subDecimalNumbers } = useHelper()
@@ -233,9 +233,11 @@ export default function PlinkoConfigForm() {
                     <NumberInput
                       disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED') || !isAuthorized}
                       onChange={(event) => {
-                        const val = parseInt(event.target.value) || 1
-                        dispatch(setPlinkoConfig({ numberOfBets: val }))
-                        onChange(val)
+                        if (!plinkoConfig.playing || plinkoConfig.playing.status === 'FINISHED') {
+                          const val = parseInt(event.target.value) || 1
+                          dispatch(setPlinkoConfig({ numberOfBets: val }))
+                          onChange(val)
+                        }
                       }}
                       onIncrease={() => handleBetsIncrease(value)}
                       onDecrease={() => handleBetsDecrease(value)}
@@ -318,21 +320,42 @@ export default function PlinkoConfigForm() {
             </RadioGroup>
           </FormGroup>
 
-          <Button
-            kind="primary"
-            type="submit"
-            className="rounded-xl md:rounded-2xl"
-            size="lg"
-            disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED' && !isLoading) || !isAuthorized}
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <div className="flex items-center gap-x-2">
-                <CasinoSquareIcon className="w-6" /> <span> Place BET</span>
+          {plinkoConfig.playing && plinkoConfig.numberOfBets > 1 ? (
+            <FormGroup>
+              <Label>Game Stats</Label>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                  <span className="text-sm text-gray-300">Balls Dropped</span>
+                  <span className="font-medium">
+                    {plinkoConfig.playing.droppedCount || 0} / {plinkoConfig.numberOfBets}
+                  </span>
+                </div>
+                {plinkoConfig.playing.prize !== null && (
+                  <div className="flex justify-between items-center p-3 bg-dark-600 rounded-lg">
+                    <span className="text-sm text-gray-300">Current Prize</span>
+                    <span className="font-medium text-warning">{plinkoConfig.playing.prize.toFixed(2)}$</span>
+                  </div>
+                )}
               </div>
-            )}
-          </Button>
+            </FormGroup>
+          ) : (
+            <Button
+              kind="primary"
+              type="submit"
+              className="rounded-xl md:rounded-2xl"
+              size="lg"
+              disabled={(plinkoConfig.playing && plinkoConfig.playing.status !== 'FINISHED' && !isLoading) || !isAuthorized}
+            >
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <div className="flex items-center gap-x-2">
+                  <CasinoSquareIcon className="w-6" /> <span> Place BET</span>
+                </div>
+              )}
+            </Button>
+          )}
         </form>
       </CardBody>
     </Card>
