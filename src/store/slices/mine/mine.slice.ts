@@ -1,7 +1,7 @@
 import { IGameDifficultyMode } from '@/services/games/common/games.types'
 import { IDreamMineRules } from '@/services/games/mine/mine.service.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IUpdateMineConfig, StateType } from './mine.slice.types'
+import { IBlock, IUpdateMineConfig, StateType } from './mine.slice.types'
 
 const initialState: StateType = {
   mineConfig: {
@@ -60,10 +60,11 @@ export const mineSlice = createSlice({
       state.mineConfig.activeRow = 1
       state.mineConfig.currentGameStatus = 'ONGOING'
     },
-    endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean; flawless?: boolean }>) => {
+    endMineGame: (state: StateType, action: PayloadAction<{ isWin: boolean; flawless?: boolean; blocks: IBlock[] }>) => {
       state.mineConfig.isGameOver = true
       state.mineConfig.isStarted = false
       state.mineConfig.currentGameStatus = action.payload.isWin ? (action.payload.flawless ? 'FLAWLESS_WIN' : 'WON') : 'LOST'
+      state.mineConfig.selectedBlocks = action.payload.blocks
       state.mineConfig.currentGameId = null
     },
   },

@@ -68,7 +68,7 @@ export default function DreamMineGameBoard() {
 
   return (
     <Card className="w-full max-w-[410px]">
-      <CardBody className="p-4 sm:p-6">
+      <CardBody className="p-4 sm:p-6 bg-opacity-60">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="w-full relative overflow-hidden translucent shadow-xl p-4 rounded-lg">
             <div className="relative flex flex-col gap-y-4">
@@ -137,7 +137,7 @@ export default function DreamMineGameBoard() {
                                 key={block}
                                 whileTap={{ scale: 1.1 }}
                                 onClick={() => {
-                                  if (row + 1 === mineConfig.activeRow && !isMineBlockLoading) {
+                                  if (mineConfig.currentGameStatus === 'ONGOING' && row + 1 === mineConfig.activeRow && !isMineBlockLoading) {
                                     onCheckBlock(block, row + 1)
                                   } else {
                                     playErrorSound()

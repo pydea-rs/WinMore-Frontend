@@ -31,14 +31,15 @@ const useDreamMineGameBoardHelper = () => {
     await backoffMine({ id: mineConfig.currentGameId })
       .unwrap()
       .then((res) => {
+        const blocks = res.data.nulls.map((nullIndex, rowIndex) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }) as IBlock)
+        dispatch(endMineGame({ isWin: true, blocks }))
         if (configs.sound) celebrationSound.play()
         fetchBalance()
         celebratingAnimation()
-        dispatch(endMineGame({ isWin: true }))
       })
   }
-  const lostHandler = () => {
-    dispatch(endMineGame({ isWin: false }))
+  const lostHandler = (blocks: IBlock[]) => {
+    dispatch(endMineGame({ isWin: false, blocks }))
     fetchBalance()
   }
 
@@ -52,8 +53,7 @@ const useDreamMineGameBoardHelper = () => {
         const previousBlocks = data.nulls.map((nullIndex, rowIndex) => ({ index: nullIndex, row: rowIndex + 1, status: 'NULL' }) as IBlock)
         if (!data.success) {
           if (configs.sound) bomb.play()
-          dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks }))
-          lostHandler()
+          lostHandler(previousBlocks)
         } else {
           dispatch(setDreamMineConfig({ selectedBlocks: previousBlocks, activeRow: mineConfig.activeRow + 1 }))
         }
