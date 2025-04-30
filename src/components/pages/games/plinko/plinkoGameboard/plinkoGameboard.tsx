@@ -130,7 +130,7 @@ export default function PlinkoGameBoard() {
       const { coords: buckets, specs: bucketSpecs } = bucketsRef.current
 
       const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
-        const gradient = ctx.createLinearGradient(0, 0, bucketSpecs.width, bucketSpecs.height)
+        const gradient = ctx.createLinearGradient(0, 0, bucketsRef.current.coords[0].topRightX - bucketsRef.current.coords[0].topLeftX, bucketSpecs.height)
         gradient.addColorStop(0, colorFrom)
         gradient.addColorStop(1, colorTo)
         return gradient
@@ -205,10 +205,9 @@ export default function PlinkoGameBoard() {
         ctx.restore()
 
         ctx.fillStyle = 'white'
-        ctx.font = 'bold 16px Arial'
+        ctx.font = 'bolder 13px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 5)
-        ctx.fillText('X', buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 30)
+        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}x`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold)
 
         ctx.restore()
       }
