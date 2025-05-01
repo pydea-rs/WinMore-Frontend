@@ -403,9 +403,6 @@ export default function PlinkoGameBoard() {
       !isUninitialized && getMyOngoinGame()
       return
     }
-    if (!plinkoConfig.playing) {
-      return
-    }
 
     if (!isDropping && plinkoConfig.playing.status === 'NOT_DROPPED_YET') {
       userStatusRef.current = 'PLAYING'
@@ -424,17 +421,10 @@ export default function PlinkoGameBoard() {
   }, [plinkoConfig.playing, plinkoConfig.rules])
 
   useEffect(() => {
-    if (plinkoConfig.playing && userStatusRef.current === 'NONE') {
-      userStatusRef.current = 'PLAYING'
-    }
-  }, [plinkoConfig.playing])
-
-  useEffect(() => {
-    if (!plinkoConfig.playing) return
     if (
       !isDropping &&
       !isFinishing &&
-      plinkoConfig.playing.balls.length &&
+      plinkoConfig.playing?.balls.length &&
       plinkoConfig.playing.droppedCount === plinkoConfig.playing.balls.length &&
       plinkoConfig.playing.status !== 'FINISHED'
     ) {
