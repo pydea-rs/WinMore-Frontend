@@ -36,6 +36,51 @@ function lerpColor(a: string, b: string, amount: number) {
   return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)
 }
 
+const bucketColors = [
+  ['#9F6EFF', '#7A5FFF'],
+  ['#5E65C3', '#3E4EAA'],
+  ['#FF4D6D', '#FF6D91'],
+  ['#FFA726', '#FF7043'],
+  ['#00C853', '#64DD17'],
+  ['#1E88E5', '#42A5F5'],
+  ['#FF6D00', '#FF8F00'],
+  ['#FF6D00', '#FF8F00'],
+  ['#1E88E5', '#42A5F5'],
+  ['#00C853', '#64DD17'],
+  ['#FFA726', '#FF7043'],
+  ['#FF4D6D', '#FF6D91'],
+  ['#5E65C3', '#3E4EAA'],
+  ['#9F6EFF', '#7A5FFF'],
+]
+// const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string, height: number, width: number) => {
+//   const gradient = ctx.createLinearGradient(0, 0, width, height)
+//   gradient.addColorStop(0, colorFrom)
+//   gradient.addColorStop(1, colorTo)
+//   return gradient
+// }
+// function createGradient(ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string, height: number) {
+//   const gradient = ctx.createLinearGradient(0, 0, 0, height)
+//   gradient.addColorStop(0, colorFrom)
+//   gradient.addColorStop(1, colorTo)
+//   return gradient
+// }
+function createGradient(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, color1: string, color2: string) {
+  // Gradient at approx 105°
+  const angleRad = 105.27 * (Math.PI / 180)
+  const dx = Math.cos(angleRad) * width
+  const dy = Math.sin(angleRad) * height
+
+  const x0 = x
+  const y0 = y
+  const x1 = x + dx
+  const y1 = y + dy
+
+  const gradient = ctx.createLinearGradient(x0, y0, x1, y1)
+  gradient.addColorStop(0, color1)
+  gradient.addColorStop(1, color2)
+  return gradient
+}
+
 export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
@@ -91,13 +136,12 @@ export default function PlinkoGameBoard() {
 
   useEffect(() => {
     if (!canvasRef.current || !plinkoConfig.rules) return
-    const bucketColors = ['#2D305D', '#5E65C3', '#FF4D6D', '#FFC107', '#00C853', '#1E88E5', '#FF6D00', '#2D305D', '#5E65C3', '#2D305D', '#5E65C3', '#00C853', '#FF4D6D', '#FFC107']
+
     const canvas: HTMLCanvasElement = canvasRef.current
     const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
 
     canvas.height = plinkoConfig.rules.board.height ?? 200
     canvas.width = plinkoConfig.rules.board.width ?? 600
-
     pegsRef.current = plinkoConfig.rules.pegs.coords
     bucketsRef.current = plinkoConfig.rules.buckets
 
@@ -128,14 +172,6 @@ export default function PlinkoGameBoard() {
       }
 
       const { coords: buckets, specs: bucketSpecs } = bucketsRef.current
-
-      const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string) => {
-        const gradient = ctx.createLinearGradient(0, 0, bucketsRef.current.coords[0].topRightX - bucketsRef.current.coords[0].topLeftX, bucketSpecs.height)
-        gradient.addColorStop(0, colorFrom)
-        gradient.addColorStop(1, colorTo)
-        return gradient
-      }
-
       const now = Date.now()
 
       for (let i = 0; i < buckets.length; i++) {
@@ -192,7 +228,16 @@ export default function PlinkoGameBoard() {
         ctx.lineTo(buckets[i].topLeftX, buckets[i].y)
         ctx.closePath()
 
-        ctx.fillStyle = createGradient(ctx, bucketColors[i], bucketColors[i])
+        // ctx.fillStyle = createGradient(ctx, bucketColors[i][0], bucketColors[i][1])
+        ctx.fillStyle = createGradient(
+          ctx,
+          buckets[i].topLeftX,
+          buckets[i].y,
+          buckets[i].topRightX - buckets[i].topLeftX,
+          bucketSpecs.height,
+          bucketColors[i][0],
+          bucketColors[i][1],
+        )
         ctx.fill()
 
         // Shadow
@@ -274,7 +319,7 @@ export default function PlinkoGameBoard() {
 
         ctx.save()
 
-        const targetColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)] ?? 'black'
+        const targetColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)]?.[0] ?? 'black'
         if (targetColor !== ball.targetColor) {
           ball.targetColor = targetColor
         }
