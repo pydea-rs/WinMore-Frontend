@@ -12,7 +12,7 @@ import { useDispatch } from '@/store/store'
 import { approximate, toFixedEfficient } from '@/utils/numerix'
 import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Timeout } from 'react-number-format/types/types'
 import { toast } from 'react-toastify'
 import { celebratingAnimation } from '../../common/animations'
@@ -37,38 +37,27 @@ function lerpColor(a: string, b: string, amount: number) {
 }
 
 const bucketColors = [
-  ['#9F6EFF', '#7A5FFF'],
-  ['#5E65C3', '#3E4EAA'],
-  ['#FF4D6D', '#FF6D91'],
-  ['#FFA726', '#FF7043'],
-  ['#00C853', '#64DD17'],
-  ['#1E88E5', '#42A5F5'],
-  ['#FF6D00', '#FF8F00'],
-  ['#FF6D00', '#FF8F00'],
-  ['#1E88E5', '#42A5F5'],
-  ['#00C853', '#64DD17'],
-  ['#FFA726', '#FF7043'],
-  ['#FF4D6D', '#FF6D91'],
-  ['#5E65C3', '#3E4EAA'],
-  ['#9F6EFF', '#7A5FFF'],
+  ['#2D305D', '#5E65C3'],
+  ['#5548FF', '#F543FF'],
+  ['#FF3682', '#F543FF'],
+  ['#FFAA00', '#F543FF'],
+  ['#1AA9FD', '#1DB954'],
+  ['#A1F3FF', '#1B40AB'],
+  ['#FFAA00', '#FF3682'],
+  ['#FF3682', '#FFAA00'],
+  ['#1B40AB', '#A1F3FF'],
+  ['#1DB954', '#1AA9FD'],
+  ['#F543FF', '#FFAA00'],
+  ['#F543FF', '#FF3682'],
+  ['#F543FF', '#5548FF'],
+  ['#5E65C3', '#2D305D'],
 ]
-// const createGradient = (ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string, height: number, width: number) => {
-//   const gradient = ctx.createLinearGradient(0, 0, width, height)
-//   gradient.addColorStop(0, colorFrom)
-//   gradient.addColorStop(1, colorTo)
-//   return gradient
-// }
-// function createGradient(ctx: CanvasRenderingContext2D, colorFrom: string, colorTo: string, height: number) {
-//   const gradient = ctx.createLinearGradient(0, 0, 0, height)
-//   gradient.addColorStop(0, colorFrom)
-//   gradient.addColorStop(1, colorTo)
-//   return gradient
-// }
+
 function createGradient(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, color1: string, color2: string) {
   // Gradient at approx 105°
   const angleRad = 105.27 * (Math.PI / 180)
-  const dx = Math.cos(angleRad) * width
-  const dy = Math.sin(angleRad) * height
+  const dx = Math.sin(angleRad) * width
+  const dy = (Math.cos(angleRad) * height) / 10
 
   const x0 = x
   const y0 = y
@@ -81,6 +70,33 @@ function createGradient(ctx: CanvasRenderingContext2D, x: number, y: number, wid
   return gradient
 }
 
+type GameStateColorType = 'NONE' | 'PLAYING' | 'DROPPING' | 'FINISHED'
+
+const getGameStateColor = (status: GameStateColorType) => {
+  switch (status) {
+    case 'FINISHED':
+      return {
+        colorFrom: '#1db954',
+        colorTo: 'cyan',
+      }
+    case 'PLAYING':
+      return {
+        colorFrom: 'red',
+        colorTo: 'lightcoral',
+      }
+    case 'DROPPING':
+      return {
+        colorFrom: 'pink',
+        colorTo: '#FF00FF',
+      }
+    default:
+      return {
+        colorFrom: 'orange',
+        colorTo: 'coral',
+      }
+  }
+}
+
 export default function PlinkoGameBoard() {
   const { plinkoConfig } = usePlinkoGameBoardHelper()
   const [dropPlinkoBallsMutation, { isLoading: isDropping }] = useDropPlinkoBallsMutation()
@@ -89,33 +105,8 @@ export default function PlinkoGameBoard() {
   const { isAuthorized } = useAuth()
   const { refetch: getMyOngoinGame, isUninitialized } = useGetMePlayingPlinkoGamesQuery({}, { skip: !isAuthorized })
   const dispatch = useDispatch()
-  const userStatusRef = useRef<'NONE' | 'PLAYING' | 'DROPPING' | 'FINISHED'>('NONE')
+  const userStatusRef = useRef<GameStateColorType>('NONE')
   const [autoplayTimerId, setAutoplayTimerId] = useState<Timeout | null>(null)
-
-  const getGameStateColor = useCallback(() => {
-    switch (userStatusRef.current) {
-      case 'FINISHED':
-        return {
-          colorFrom: '#1db954',
-          colorTo: 'cyan',
-        }
-      case 'PLAYING':
-        return {
-          colorFrom: 'red',
-          colorTo: 'lightcoral',
-        }
-      case 'DROPPING':
-        return {
-          colorFrom: 'pink',
-          colorTo: '#FF00FF',
-        }
-      default:
-        return {
-          colorFrom: 'orange',
-          colorTo: 'coral',
-        }
-    }
-  }, [userStatusRef])
 
   const { sounds } = usePlinkoGameBoardHelper()
   const canvasRef = useRef(null)
@@ -205,10 +196,17 @@ export default function PlinkoGameBoard() {
         ctx.translate(-pivotX, -pivotY)
 
         ctx.beginPath()
-        ctx.moveTo(buckets[i].topLeftX, buckets[i].y)
-        ctx.lineTo(buckets[i].topRightX, buckets[i].y)
+        // Start at the top-left corner (after the arc)
+        ctx.moveTo(buckets[i].topLeftX + bucketSpecs.cornerRadius, buckets[i].y)
 
+        // Top edge with rounded corners
+        ctx.lineTo(buckets[i].topRightX - bucketSpecs.cornerRadius, buckets[i].y)
+        ctx.arcTo(buckets[i].topRightX, buckets[i].y, buckets[i].topRightX, buckets[i].y + bucketSpecs.cornerRadius, bucketSpecs.cornerRadius)
+
+        // Right side
         ctx.lineTo(buckets[i].bottomRightX, buckets[i].y + bucketSpecs.height - bucketSpecs.cornerRadius)
+
+        // Bottom-right corner
         ctx.arcTo(
           buckets[i].bottomRightX,
           buckets[i].y + bucketSpecs.height,
@@ -217,7 +215,10 @@ export default function PlinkoGameBoard() {
           bucketSpecs.cornerRadius,
         )
 
+        // Bottom edge
         ctx.lineTo(buckets[i].bottomLeftX + bucketSpecs.cornerRadius, buckets[i].y + bucketSpecs.height)
+
+        // Bottom-left corner
         ctx.arcTo(
           buckets[i].bottomLeftX,
           buckets[i].y + bucketSpecs.height,
@@ -225,10 +226,14 @@ export default function PlinkoGameBoard() {
           buckets[i].y + bucketSpecs.height - bucketSpecs.cornerRadius,
           bucketSpecs.cornerRadius,
         )
-        ctx.lineTo(buckets[i].topLeftX, buckets[i].y)
-        ctx.closePath()
 
-        // ctx.fillStyle = createGradient(ctx, bucketColors[i][0], bucketColors[i][1])
+        // Left side
+        ctx.lineTo(buckets[i].topLeftX, buckets[i].y + bucketSpecs.cornerRadius)
+
+        // Top-left corner
+        ctx.arcTo(buckets[i].topLeftX, buckets[i].y, buckets[i].topLeftX + bucketSpecs.cornerRadius, buckets[i].y, bucketSpecs.cornerRadius)
+
+        ctx.closePath()
         ctx.fillStyle = createGradient(
           ctx,
           buckets[i].topLeftX,
@@ -244,15 +249,16 @@ export default function PlinkoGameBoard() {
         ctx.save()
         ctx.clip()
         ctx.shadowBlur = 10
-        ctx.shadowColor = 'rgba(0,0,0,0.5)'
+        // ctx.shadowColor = 'rgba(0,0,0,0.5)'
         ctx.shadowOffsetY = 5
         ctx.fill()
         ctx.restore()
 
         ctx.fillStyle = 'white'
-        ctx.font = 'bolder 13px Arial'
+        ctx.font = 'bold 12px DejaVu Sans'
         ctx.textAlign = 'center'
-        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}x`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold)
+        ctx.fillText(`${toFixedEfficient(plinkoConfig.rules.multipliers[plinkoConfig.mode.label][i])}`, buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold)
+        ctx.fillText('X', buckets[i].x, buckets[i].y + bucketSpecs.heightThreshold + 20)
 
         ctx.restore()
       }
@@ -319,7 +325,7 @@ export default function PlinkoGameBoard() {
 
         ctx.save()
 
-        const targetColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)]?.[0] ?? 'black'
+        const targetColor = bucketColors[buckets.findIndex((b) => ball.x >= b.topLeftX && ball.x <= b.topRightX)]?.[0] ?? '#FFFFFF'
         if (targetColor !== ball.targetColor) {
           ball.targetColor = targetColor
         }
@@ -504,21 +510,13 @@ export default function PlinkoGameBoard() {
 
   return (
     <Card className={`w - full max - w - [${plinkoConfig.rules?.board?.width ?? 600}px] mt - 10`}>
-      <CardBody className="p-1 sm:p-6 bg-opacity-60">
+      <CardBody className="p-1 bg-opacity-60">
         <motion.div className="rounded-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="p-4">
             <canvas ref={canvasRef} onClick={() => (!plinkoConfig.autoplay ? handleCanvasClick() : sounds.playError())} />
           </div>
 
-          <BorderBeam
-            className="rounded-[20px]"
-            duration={3}
-            anchor={65}
-            size={400}
-            borderWidth={4}
-            colorFrom={getGameStateColor().colorFrom}
-            colorTo={getGameStateColor().colorTo}
-          />
+          <BorderBeam className="rounded-[20px]" duration={3} anchor={65} size={400} borderWidth={4} {...getGameStateColor(userStatusRef.current)} />
         </motion.div>
       </CardBody>
     </Card>

@@ -37,10 +37,10 @@ const Mine = () => {
           <section className="relative mb-20">
             <Container className="relative z-[300] overflow-x-visible">
               <div className="flex flex-wrap gap-y-6">
-                <aside className="flex justify-center lg:justify-start w-full lg:max-w-[430px] lg:pt-6 order-2">
+                <aside className="flex justify-center lg:justify-start w-full lg:max-w-[430px] lg:pt-6 order-1">
                   <MineConfigForm />
                 </aside>
-                <div className="flex justify-center lg:justify-end flex-grow order-1 lg:order-2 pt-6 lg:pt-0 ">
+                <div className="flex justify-center lg:justify-end flex-grow order-2 pt-6 lg:pt-0">
                   <DreamMineGameBoard />
                 </div>
               </div>
