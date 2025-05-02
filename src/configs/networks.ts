@@ -4,7 +4,7 @@ export const networks: INetwork[] = [
   {
     chainId: 1, // Polygon Mainnet Chain ID
     name: 'Ethereum Mainnet',
-    rpcUrl: 'https://ultra-black-tab.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Mainnet RPC URL
+    rpcUrl: 'https://ethereum.publicnode.com', // Mainnet RPC URL
     icon: '/assets/images/chains/ETH.png',
     tokens: [
       {
@@ -30,7 +30,7 @@ export const networks: INetwork[] = [
   {
     chainId: 137, // Polygon Mainnet Chain ID
     name: 'Polygon Mainnet',
-    rpcUrl: 'https://ultra-black-tab.matic.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Mainnet RPC URL
+    rpcUrl: 'https://polygon-rpc.com', // Mainnet RPC URL
     icon: '/assets/images/chains/Polygon Mainnet.png',
     tokens: [
       {
@@ -57,7 +57,7 @@ export const networks: INetwork[] = [
     chainId: 8453, // Base Mainnet Chain ID
     name: 'Base',
     // rpcUrl: 'https://mainnet.base.org', // RPC URL for Base Mainnet
-    rpcUrl: 'https://ultra-black-tab.base-mainnet.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b',
+    rpcUrl: 'https://mainnet.base.org',
     icon: '/assets/images/chains/BASE.png',
     tokens: [
       {
@@ -81,9 +81,9 @@ export const networks: INetwork[] = [
     ],
   },
   {
-    chainId: 10143, // Ethereum Mainnet Chain ID
+    chainId: 10143, // Monad testnet Chain ID
     name: 'Monad Testnet',
-    rpcUrl: 'https://ultra-black-tab.monad-testnet.quiknode.pro/82ccb7a304990b72b78bbce8890c9ae0a033c67b', // Replace with your Infura project ID
+    rpcUrl: 'https://testnet-rpc.monad.xyz', // Replace with your Infura project ID
     icon: '/assets/images/chains/Monad Testnet.jpeg',
     tokens: [
       {
@@ -164,7 +164,7 @@ export const secondaryNetworks: INetwork[] = [
   {
     chainId: 11155111, // Sepolia Testnet Chain ID
     name: 'Sepolia',
-    rpcUrl: 'https://rough-aged-valley.ethereum-sepolia.quiknode.pro/7854d3f5a76f771a510ba06ed1a95a58f1416ee5', // Replace with your actual Infura project ID
+    rpcUrl: 'https://rpc2.sepolia.org', //  TODO: In case of re-adding sepolia, remember to use a bettter rpc.
     icon: '/assets/images/chains/Sepolia.png',
     tokens: [
       {
