@@ -171,7 +171,7 @@ const MineConfigForm = () => {
                   ? { max: { value: currentRowsRules?.maxBetAmount, message: `Bets must not exceed ${currentRowsRules.maxBetAmount}$ for now.` } }
                   : {}),
                 ...(currentRowsRules?.minBetAmount ? { min: { value: currentRowsRules?.minBetAmount, message: `Can not bet below ${currentRowsRules.minBetAmount}$.` } } : {}),
-                validate: (value) => isDevelopmentMode() || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
+                validate: (value) => isDevelopmentMode() || UserData?.data?.admin || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>

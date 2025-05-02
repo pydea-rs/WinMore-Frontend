@@ -196,7 +196,7 @@ export default function PlinkoConfigForm() {
                 ...(plinkoConfig.rules?.minBetAmount
                   ? { min: { value: plinkoConfig.rules?.minBetAmount, message: `Can not bet below ${plinkoConfig.rules.minBetAmount}$.` } }
                   : {}),
-                validate: (value) => isDevelopmentMode() || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
+                validate: (value) => isDevelopmentMode() || UserData?.data?.admin || parseFloat(value) <= currentToken.balance || `This amount exceeds your current chain balance!`,
               }}
               render={({ field: { onChange, onBlur, value }, fieldState }) => (
                 <>
